@@ -6,7 +6,6 @@
 #' Otherwise, defaults to `docs`
 #'
 #' @return A character vector of output files
-#' @export
 #'
 #' @examples
 lp_convert_bookdown = function(path = ".", bookdown_dir = NULL) {
@@ -27,8 +26,8 @@ lp_convert_bookdown = function(path = ".", bookdown_dir = NULL) {
   }
   dir.create(bookdown_dir, showWarnings = FALSE)
   bibs = list.files(pattern = ".bib", path = path, full.names = TRUE)
-  
-  
+
+
   bookdown_files = sub("[.]R?md$", ".md", basename(files))
   bookdown_files = file.path(bookdown_dir, bookdown_files)
   if (!all(file.exists(bookdown_files))) {
@@ -36,12 +35,12 @@ lp_convert_bookdown = function(path = ".", bookdown_dir = NULL) {
   }
   manu_dir = file.path(path, "manuscript")
   dir.create(manu_dir, showWarnings = FALSE, recursive = TRUE)
-  
+
   outfiles = file.path(manu_dir, basename(bookdown_files))
   file.copy(bookdown_files, outfiles, overwrite = TRUE)
-  
+
   file.copy(bibs, manu_dir, overwrite = TRUE)
-  
+
   outfiles = outfiles[ file.exists(outfiles) ]
   outfiles = normalizePath(outfiles, winslash = "/", mustWork = TRUE)
   # need to run this for the citations
@@ -49,7 +48,7 @@ lp_convert_bookdown = function(path = ".", bookdown_dir = NULL) {
   if (length(bibs) > 0) {
     options = paste0("--bibliography=", basename(bibs))
   }
-  lapply(outfiles, rmarkdown::pandoc_convert, 
+  lapply(outfiles, rmarkdown::pandoc_convert,
          options = options,
          to = "markdown_strict", citeproc = TRUE,
          verbose = TRUE)

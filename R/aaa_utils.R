@@ -31,54 +31,6 @@ length0_to_NA = function(x) {
 }
 
 
-drive_information = function(id,
-                             timezone = "America/New_York",
-                             ...) {
-  name = gs_name = NULL
-  rm(list = c("name", "gs_name"))
-
-  authorized = check_didactr_auth(...)
-  drive_info = googledrive::drive_get(id = id)
-
-  if (nrow(drive_info) > 0) {
-    drive_info = drive_info %>%
-      dplyr::rename(gs_name = name) %>%
-      dplyr::mutate(course_info = gs_name)
-
-    mod_time_gs = sapply(drive_info$drive_resource,
-                         function(x) {
-                           x$modifiedTime
-                         })
-    drive_info$mod_time_gs = lubridate::ymd_hms(
-      mod_time_gs)
-    drive_info$mod_time_gs = lubridate::with_tz(
-      drive_info$mod_time_gs,
-      tzone = timezone)
-    drive_info$drive_resource = NULL
-  } else {
-    return(NULL)
-  }
-  return(drive_info)
-}
-
-
-drive_find_folder = function(
-  pattern = "^cds",
-  ..., shared_with_me = FALSE) {
-
-  args = list(...)
-  args$pattern = pattern
-  if (shared_with_me) {
-    if ("q" %in% names(args)) {
-      warning("q is overridden when finding")
-    }
-    args$q = "sharedWithMe"
-  }
-  args$type = "folder"
-  do.call(googledrive::drive_find, args = args)
-}
-
-
 #' Google Slides Helper Functions
 #'
 #' @param file markdown file for manuscript
@@ -215,32 +167,6 @@ na_false = function(test) {
 na_true = function(test) {
   test[ is.na(test)] = TRUE
   test
-}
-
-add_gh_collaborator = function(owner, repo,
-                               collaborator = "leanpub",
-                               auth_token) {
-  if (!requireNamespace("gh", quietly = TRUE)) {
-    stop("gh package required for add_gh_collaborator")
-  }
-  lapply(collaborator, function(collab) {
-    gh::gh(paste0(
-      "PUT /repos/", owner, "/",
-      repo, "/collaborators/",
-      collab), .token = auth_token)
-  })
-  res = gh::gh(paste0(
-    "GET /repos/", owner, "/",
-    repo, "/collaborators"), .token = auth_token)
-  collabs = sapply(res, function(x) {
-    x$login
-  })
-  result = collaborator %in% collabs
-  names(result) = collaborator
-  if (!all(result)) {
-    warning("Not all collaborators have been added!")
-  }
-  result
 }
 
 
