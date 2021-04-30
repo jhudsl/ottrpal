@@ -62,7 +62,11 @@ gs_png_download = function(url, output_dir = ".", overwrite = TRUE) {
 
 #' @export
 #' @rdname gs_png_url
-include_slide = function(url, output_dir = ".", overwrite = TRUE) {
+#' @param ... for \code{include_slide}, options passed to
+#' [knitr::include_graphics()]
+include_slide = function(url,
+                         output_dir =  knitr::opts_chunk$get("fig.path"),
+                         overwrite = TRUE, ...) {
   outfile = gs_png_download(url, output_dir, overwrite = overwrite)
-  knitr::include_graphics(outfile)
+  knitr::include_graphics(outfile, ...)
 }

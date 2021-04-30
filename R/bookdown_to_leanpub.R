@@ -36,6 +36,7 @@ bookdown_destination = function(path = ".") {
     output_dir = "docs"
   }
   full_output_dir = file.path(root_dir, output_dir)
+  dir.create(full_output_dir, showWarnings = FALSE, recursive = TRUE)
   full_output_dir = normalizePath(full_output_dir, winslash = "/")
   full_output_dir
 }
@@ -57,8 +58,10 @@ copy_directory_contents = function(from, to) {
 copy_resources = function(path = ".", output_dir = "manuscript") {
   path = bookdown_path(path)
   res_image_dir = file.path(path, "resources/images")
-  manuscript_image_dir = normalizePath(file.path(output_dir, "resources/images"))
-  dir.create(manuscript_image_dir, showWarnings = FALSE)
+  dir.create(res_image_dir, showWarnings = FALSE, recursive = TRUE)
+  manuscript_image_dir = file.path(output_dir, "resources/images")
+  dir.create(manuscript_image_dir, showWarnings = FALSE, recursive = TRUE)
+  manuscript_image_dir = normalizePath(manuscript_image_dir)
   if (file.exists(res_image_dir)) {
     copy_directory_contents(res_image_dir, manuscript_image_dir)
   }
@@ -66,7 +69,7 @@ copy_resources = function(path = ".", output_dir = "manuscript") {
 
 copy_docs = function(path = ".", output_dir = "manuscript") {
   path = bookdown_destination(path)
-  R.utils::copyDirectory(path, output_dir, recursive = TRUE)
+  R.utils::copyDirectory(path, output_dir, recursive = TRUE, overwrite = TRUE)
 }
 
 copy_bib = function(path = ".", output_dir = "manuscript") {

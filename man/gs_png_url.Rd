@@ -13,7 +13,12 @@ get_slide_page(url)
 
 gs_png_download(url, output_dir = ".", overwrite = TRUE)
 
-include_slide(url, output_dir = ".", overwrite = TRUE)
+include_slide(
+  url,
+  output_dir = knitr::opts_chunk$get("fig.path"),
+  overwrite = TRUE,
+  ...
+)
 }
 \arguments{
 \item{url}{URL to Google Slide}
@@ -21,6 +26,9 @@ include_slide(url, output_dir = ".", overwrite = TRUE)
 \item{output_dir}{path to output png}
 
 \item{overwrite}{should the slide PNG be overwritten?}
+
+\item{...}{for \code{include_slide}, options passed to
+[knitr::include_graphics()]}
 }
 \value{
 A character vector of URLs

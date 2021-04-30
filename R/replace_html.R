@@ -200,10 +200,10 @@ margin_to_align = function(x) {
 
 build_image = function(src, ..., caption = NULL, embed = NULL,
                        fullbleed = FALSE) {
-  myenv = list(...)
-  myenv$caption = caption
-  myenv$src = src
-  myenv$embed = embed
+  myenv = list(...,
+               caption = caption,
+               embed = embed,
+               src = src)
   myenv = as.environment(myenv)
   x = c('alt: "{alt}",',
         'height: "{height}",',
