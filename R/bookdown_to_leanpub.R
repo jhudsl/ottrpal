@@ -17,7 +17,15 @@ bookdown_file =  function(path = ".") {
 
 bookdown_rmd_files = function(path = ".") {
   spec = get_bookdown_spec(path)
-  spec$rmd_files
+  files = spec$rmd_files
+  if (is.null(files) || all(is.na(files)) || length(files) == 0) {
+    warning("No bookdown specification of the files, using ",
+            "list.files(pattern ='.Rmd')")
+    root_dir = bookdown_path(path = path)
+    files = list.files(pattern = "[.]Rmd", ignore.case = TRUE,
+                       path = root_dir, full.names = FALSE)
+  }
+  return(files)
 }
 
 bookdown_destination = function(path = ".") {
@@ -43,7 +51,7 @@ bookdown_destination = function(path = ".") {
 copy_directory_contents = function(from, to) {
   x = list.files(path = from, full.names = TRUE, all.files = TRUE,
                  recursive = TRUE)
-  file.copy(x, to, recursive = TRUE)
+  file.copy(x, to, recursive = TRUE, overwrite = TRUE)
 }
 
 copy_resources = function(path = ".", output_dir = "manuscript") {
@@ -51,7 +59,22 @@ copy_resources = function(path = ".", output_dir = "manuscript") {
   res_image_dir = file.path(path, "resources/images")
   manuscript_image_dir = normalizePath(file.path(output_dir, "resources/images"))
   dir.create(manuscript_image_dir, showWarnings = FALSE)
-  copy_directory_contents(res_image_dir, manuscript_image_dir)
+  if (file.exists(res_image_dir)) {
+    copy_directory_contents(res_image_dir, manuscript_image_dir)
+  }
+}
+
+copy_docs = function(path = ".", output_dir = "manuscript") {
+  path = bookdown_destination(path)
+  R.utils::copyDirectory(path, output_dir, recursive = TRUE)
+}
+
+copy_bib = function(path = ".", output_dir = "manuscript") {
+  path = bookdown_path(path)
+  files = list.files(path = path, full.names = TRUE, pattern = ".bib$")
+  if (length(files) > 0) {
+    file.copy(files, output_dir, overwrite = TRUE)
+  }
 }
 
 
@@ -61,7 +84,7 @@ copy_resources = function(path = ".", output_dir = "manuscript") {
 #' @param path path to the bookdown book, must have a `_bookdown.yml` file
 #' @param output_dir output directory to put files.  It should likely be
 #' relative to path
-#' @param render if `TRUE`, then [rmarkdown::render()] will be run on each Rmd.
+#' @param render if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.
 #' @param verbose print diagnostic messages
 #'
 #' @return A list of output files and diagnostics
@@ -69,8 +92,8 @@ copy_resources = function(path = ".", output_dir = "manuscript") {
 #'
 #' @examples
 bookdown_to_leanpub = function(path = ".",
-                               output_dir = "manuscript",
                                render = TRUE,
+                               output_dir = "manuscript",
                                verbose = TRUE) {
 
   rmd_regex = "[.][R|r]md$"
@@ -81,55 +104,74 @@ bookdown_to_leanpub = function(path = ".",
   on.exit({
     setwd(owd)
   })
+  rmd_files = bookdown_rmd_files(path = path)
+  if (render) {
+    input = rmd_files[grepl("index", rmd_files, ignore.case = TRUE)][1]
+    if (length(input) == 0 || is.na(input)) {
+      input = rmd_files[1]
+    }
+    output_format = bookdown::gitbook(pandoc_args = "--citeproc")
+    # output_format$pandoc$to = output_format$pandoc$from
+    output_format$pandoc$args = c(output_format$pandoc$args, "--citeproc")
+    bookdown::render_book(input = input, output_format = output_format)
+  }
 
-
+  # may be irrelevant since copy_docs does everything
   copy_resources(path, output_dir = output_dir)
+  copy_docs(path, output_dir = output_dir)
+  copy_bib(path, output_dir = output_dir)
   # FIXME Can also use bookdown_rmd_files
-  rmd_files = list.files(pattern = rmd_regex)
+  # rmd_files = list.files(pattern = rmd_regex)
 
 
   bib_files = list.files(pattern = "[.]bib$")
   if (length(bib_files) > 0) {
-    pandoc_args = paste0("--bibliography=", normalizePath(bib_files))
+    pandoc_args = paste0("--bibliography=", path.expand(normalizePath(bib_files)))
   } else {
     pandoc_args = NULL
   }
 
-  output_files = NULL
-  run_env = new.env()
-  for (file in rmd_files) {
+  # run_env = new.env()
+  md_files = sub(rmd_regex, ".md", rmd_files, ignore.case = TRUE)
+  md_files = file.path(output_dir, basename(md_files))
 
-    output_file = sub(rmd_regex, ".md", file, ignore.case = TRUE)
-    if (render) {
-      rmarkdown::render(
-        file,
-        output_file = output_file,
-        output_dir = output_dir,
-        intermediates_dir = output_dir,
-        envir = run_env,
-        output_format = rmarkdown::output_format(
-          knitr = rmarkdown::knitr_options(
-            opts_chunk = list(fig.path = "resources/images/")
-          ),
-          pandoc = rmarkdown::pandoc_options(
-            # to = "markdown_strict+autolink_bare_uris+tex_math_single_backslash",
-            to = "markdown+autolink_bare_uris+tex_math_single_backslash",
-            args = c(pandoc_args, "--citeproc")
-          )
-        )
-      )
+  for (file in md_files) {
+
+    # if (render) {
+    #   rmarkdown::render(
+    #     file,
+    #     output_file = output_file,
+    #     output_dir = output_dir,
+    #     intermediates_dir = output_dir,
+    #     envir = run_env,
+    #     output_format = rmarkdown::output_format(
+    #       knitr = rmarkdown::knitr_options(
+    #         opts_chunk = list(fig.path = "resources/images/")
+    #       ),
+    #       pandoc = rmarkdown::pandoc_options(
+    #         # to = "markdown_strict+autolink_bare_uris+tex_math_single_backslash",
+    #         to = "gfm+autolink_bare_uris",
+    #         args = c(pandoc_args, "--citeproc")
+    #       )
+    #     )
+    #   )
+    # }
+    infile = normalizePath(file)
+    infile = replace_single_html(infile)
+    if (length(bib_files) > 0) {
+      writeLines(simple_references(infile, bib_files, add_reference_header = TRUE),
+                 con = infile, sep = "\n")
     }
-    infile = normalizePath(file.path(output_dir, output_file))
-    output_files = c(output_files, infile)
-    rmarkdown::pandoc_convert(
-      input = infile,
-      output = infile,
-      options = pandoc_args,
-      to = "markdown_strict+autolink_bare_uris+tex_math_single_backslash",
-      citeproc = TRUE,
-      verbose = verbose)
+    # rmarkdown::pandoc_convert(
+    #   input = infile,
+    #   output = infile,
+    #   options = pandoc_args,
+    #   to = "markdown_strict+autolink_bare_uris+tex_math_single_backslash",
+    #   # to = "markdown_strict+autolink_bare_uris+tex_math_single_backslash",
+    #   citeproc = TRUE,
+    #   verbose = verbose)
   }
-  L = list(output_files = output_files)
+  L = list(output_files = md_files)
   return(L)
 }
 
@@ -156,10 +198,40 @@ bookdown_to_book_txt = function(
     setwd(owd)
   })
   rmd_regex = "[.][R|r]md$"
-
-  stop("Not done - need to fix quizzes")
   rmd_files = bookdown_rmd_files(path = path)
   md_files = sub(rmd_regex, ".md", rmd_files, ignore.case = TRUE)
+  md_df = tibble::tibble(
+    file = md_files,
+    order = seq_along(md_files)
+  )
+  quiz_files = paste0("quiz-", md_files)
+  bad_quiz_files = paste0("quiz_", md_files)
+  if (any(file.exists(file.path(output_dir, bad_quiz_files)))) {
+    warning("Naming convention for quizzes is quiz-, not quiz_",
+            ", please correct")
+  }
+  # add 0.5 so it's after the correct md file
+  quiz_df = tibble::tibble(
+    file = quiz_files,
+    order = seq_along(quiz_files) + 0.5
+  )
+  bad_quiz_df = tibble::tibble(
+    file = bad_quiz_files,
+    order = seq_along(bad_quiz_files) + 0.5
+  )
+  quiz_df = dplyr::bind_rows(quiz_df, bad_quiz_df)
+  rm(list = c("bad_quiz_files", "bad_quiz_df"))
+  quiz_df = quiz_df %>%
+    dplyr::arrange(order)
+  df = dplyr::bind_rows(md_df, quiz_df) %>%
+    rm(list = c("bad_quiz_files", "bad_quiz_df"))
+
+  # quiz_df = quiz_df %>%
+  #   dplyr::mutate(file = file.path(output_dir, file))
+
+
+  stop("Not done - need to fix quizzes")
+
   book_txt = file.path(output_dir, "Book.txt")
   if (file.exists(book_txt)) {
     x = readLines(book_txt)

@@ -17,3 +17,4 @@ vignettes/.httr-oauth$
 ^docs$
 ^cran-comments\.md$
 ^R/youtube$
+^run_test\.R$

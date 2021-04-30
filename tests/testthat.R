@@ -1,4 +1,4 @@
 library(testthat)
-library(didactr)
+library(leanbuild)
 
-test_check("didactr")
+test_check("leanbuild")

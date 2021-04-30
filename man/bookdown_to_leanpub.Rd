@@ -6,18 +6,18 @@
 \usage{
 bookdown_to_leanpub(
   path = ".",
-  output_dir = "manuscript",
   render = TRUE,
+  output_dir = "manuscript",
   verbose = TRUE
 )
 }
 \arguments{
 \item{path}{path to the bookdown book, must have a `_bookdown.yml` file}
 
+\item{render}{if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.}
+
 \item{output_dir}{output directory to put files.  It should likely be
 relative to path}
-
-\item{render}{if `TRUE`, then [rmarkdown::render()] will be run on each Rmd.}
 
 \item{verbose}{print diagnostic messages}
 }

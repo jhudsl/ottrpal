@@ -128,16 +128,6 @@ list_one_file = function(x, ending = "pdf") {
 
 
 
-mod_time_to_tz_time = function(x, timezone) {
-  mod_times = file.info(x)$mtime
-  mod_times = lubridate::ymd_hms(mod_times, tz = Sys.timezone())
-  mod_times = lubridate::with_tz(mod_times, tzone = timezone)
-  return(mod_times)
-}
-
-
-
-
 
 png_pattern = function() {
   paste0("^!\\[.+\\]\\((?!\\.png)\\)|",

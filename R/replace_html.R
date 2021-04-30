@@ -5,6 +5,46 @@ get_html_element = function(x, element = "img") {
   nodes = rvest::html_nodes(doc, xpath = paste0("//", element))
   nodes
 }
+
+
+get_figure_div = function(x) {
+  div = get_html_element(x, element = 'div[@class="figure"]')
+  types = div %>%
+    rvest::html_elements(xpath = ".//img|.//iframe") %>%
+    rvest::html_name()
+  img = div %>%
+    rvest::html_elements(xpath = ".//img|.//iframe") %>%
+    rvest::html_attrs()
+  # missing something - not a img or iframe
+  stopifnot(length(img) == length(div))
+  div_aligns = div %>%
+    rvest::html_attr(name = "style")
+  div_aligns = trimws(sub("text-align: ", "", div_aligns))
+  # markua
+  div_aligns[div_aligns == "center"] = "middle"
+  div_aligns[is.na(div_aligns)] = "middle"
+  captions = div %>%
+    rvest::html_elements(xpath = './p[@class="caption"]') %>%
+    rvest::html_text()
+  img = mapply(function(x, y) {
+    c(x, caption = y)
+  }, img, captions, SIMPLIFY = FALSE)
+  img = mapply(function(x, y) {
+    c(x, element_type = y)
+  }, img, types, SIMPLIFY = FALSE)
+  img = mapply(function(x, y) {
+    y[y %in% ""] = NA_character_
+    if (!all(is.na(y))) {
+      x = c(x, align = y)
+    }
+    x
+  }, img, div_aligns, SIMPLIFY = FALSE)
+
+  return(img)
+}
+
+
+
 get_html_attr = function(x, element = "img", name = "src") {
   x = get_html_element(x, element = element)
   rvest::html_attr(x, name)
@@ -31,16 +71,61 @@ get_img_alt = function(x) {
 
 
 
+
+find_figure_div = function(x) {
+  regex = paste0('<div class="figure"')
+  start = grep(regex, x = x)
+  regex = paste0('</div>')
+  end = grep(regex, x = x)
+  stopifnot(length(start) == length(end))
+  div_index = cbind(start = start, end = end)
+  diff = div_index[,2] - div_index[,1]
+  if (any(diff < 0)) {
+    stop("Something is wrong with the `div` tags")
+  }
+  if (any(diff > 10)) {
+    warning("Some divs may be off, could happen with long captions, but",
+            ", just a warning")
+  }
+  # indices = mapply(function(x, y) {
+  #   seq(x, y)
+  # }, start, end, SIMPLIFY = TRUE)
+  # indices = c(indices)
+  # indices
+  div_index
+}
+
+
 find_iframe = function(x) {
   regex = paste0('<iframe')
   grepl(regex,  x )
 }
 
-
 find_img = function(x) {
   regex = paste0('<img')
   xx = grepl(regex, x = x)
 }
+
+find_caption = function(x) {
+  regex = paste0('<p class="caption"')
+  caption_start = grep(regex, x = x)
+  regex = paste0('</p>')
+  caption_end = grep(regex, x = x)
+  stopifnot(length(caption_start) == length(caption_end))
+  indices = mapply(function(x, y) {
+    seq(x, y)
+  }, caption_start, caption_end, SIMPLIFY = TRUE)
+  indices = c(indices)
+  indices
+}
+
+get_caption = function(x, element = "p") {
+  x = paste(x, collapse = "\n")
+  doc = xml2::read_html(x)
+  nodes = rvest::html_nodes(doc, xpath = paste0("//", element))
+  rvest::html_text(nodes)
+}
+
 
 # don't need this as
 # https://leanpub.com/markua/read#leanpub-auto-adding-a-link-around-an-image
@@ -51,6 +136,13 @@ find_img = function(x) {
 # }
 na_empty = function(x) {
   x[is.na(x)] = ""
+  x
+}
+
+empty_to_null = function(x) {
+  if (all(x == "")) {
+    x = NULL
+  }
   x
 }
 
@@ -71,19 +163,124 @@ get_margin = function(x) {
   if (length(margin) > 0) {
     margin = strsplit(margin, " ")[[1]]
   }
+  if (
+    (length(margin) == 0 || all(margin == "")) ||
+    (length(margin) == 1 && margin == "auto")
+  ) {
+    margin = rep("auto", 4)
+  }
   margin = c(margin, rep("0", length = 4-length(margin)))
   names(margin) = c("top", "right", "bottom", "left")
   margin
 }
 
+remove_div = function(x) {
+  regex = paste0('^<(/|)div.*>\\s*$')
+  gsub(pattern = regex, replacement = "", x)
+}
+
+margin_to_align = function(x) {
+  stopifnot(length(x) == 4)
+  names(x) = c("top", "right", "bottom", "left")
+  right = x["right"]
+  left = x["left"]
+  if (right == "0" & left == "auto") {
+    return("right")
+  }
+  if (left == "0" & right == "auto") {
+    return("left")
+  }
+  if (left == right) {
+    return("middle")
+  }
+  warning("don't know what the alignment should be, defaulting to middle")
+  return("middle")
+}
 
 
-replace_single_html = function(file) {
-  stopifnot(length(file) == 1 && file.exists(file))
-  x = readLines(file, warn = FALSE)
-  image_index = find_img(x)
-  images = x[image_index]
-  attributes = c("src", "alt", "height", "width", "style")
+build_image = function(src, ..., caption = NULL, embed = NULL,
+                       fullbleed = FALSE) {
+  myenv = list(...)
+  myenv$caption = caption
+  myenv$src = src
+  myenv = as.environment(myenv)
+  x = c('alt: "{alt}",',
+        'height: "{height}",',
+        'width: "{width}",',
+        'align: "{align}"',
+        'embed: "{embed}"'
+  )
+  if (fullbleed == "" || is.na(fullbleed)) {
+    fullbleed = FALSE
+  }
+  x = sapply(x, glue::glue, .envir = myenv)
+  x = unlist(sapply(x, as.character))
+  x = c(x, if (fullbleed) 'fullbleed: true')
+  x = paste(x, collapse = " ")
+  x = paste0("{", x, "}\n")
+  x = paste0(x, paste0("![", myenv$caption, "](", myenv$src, ")"))
+  x
+}
+
+replace_div_data = function(x, fullbleed = FALSE) {
+  div_index = find_figure_div(x)
+  if (NROW(div_index) == 0) {
+    return(x)
+  }
+  div_indices = mapply(function(x, y) {
+    seq(x, y)
+  }, div_index[,1], div_index[,2], SIMPLIFY = FALSE)
+  # no nested divs
+  stopifnot(!anyDuplicated(unlist(div_indices)))
+  divs = lapply(div_indices, function(ind) {
+    x[ind]
+  })
+  images = lapply(divs, get_figure_div)
+  out_images = sapply(images, function(ii) {
+    attributes = c("src", "alt", "height",
+                   "width", "style", "caption", "title",
+                   "embed")
+    if (length(ii) == 1) ii = ii[[1]]
+    args = as.list(ii)
+    for (iattr in attributes) {
+      if (!iattr %in% names(args)) {
+        args[iattr] = ""
+      }
+    }
+    args = lapply(args, empty_to_null)
+    do.call(build_image, args = args)
+  })
+  first_div_index = sapply(div_indices, dplyr::first)
+  x[first_div_index] = out_images
+  remove_div_indices = c(unlist(sapply(div_indices, function(x) x[-1])))
+  x = x[-remove_div_indices]
+  # just so \n is again right
+  ttfile = tempfile(fileext = ".txt")
+  writeLines(x, ttfile);
+  x = readLines(ttfile)
+  x
+}
+
+replace_image_data = function(x, element = c("img", "iframe"), fullbleed = FALSE) {
+  element = match.arg(element)
+  func = switch(element,
+                img = find_img,
+                iframe = find_iframe)
+  image_logical = func(x)
+  if (!any(image_logical)) {
+    return(x)
+  }
+  image_index = which(image_logical)
+  image_df = data.frame(start = c(0, image_index-1),
+                        end = c(image_index, length(x) +1))
+  image_df$number = c(0, seq_along(image_index))
+  image_df = image_df[image_df$number > 0,]
+  images = x[image_logical]
+  # need to do some subsetting
+
+
+  attributes = c("src", "alt", "height", "width", "style",
+                 "caption", "title", "fullbleed")
   # style="display: block; margin: auto;" is center
   image_attributes = lapply(images, function(x) {
     out = lapply(attributes, function(name) {
@@ -91,32 +288,58 @@ replace_single_html = function(file) {
     })
     names(out) = attributes
     out$margin = get_margin(out$style)
+    if (is.null(out$caption) && !is.null(out$title)) {
+      out$caption = out$title
+    }
+    out$align = margin_to_align(out$margin)
+    out = lapply(out, empty_to_null)
     out
   })
 
-  build_image = function(src, alt, height, width, align) {
 
-  }
-
+  out_images = sapply(image_attributes, function(args) {
+    do.call(build_image, args = args)
+  })
+  out_images = c(unlist(out_images))
+  stopifnot(length(out_images) == length(image_index))
+  out_x = x
+  out_x[image_logical] = out_images
+  ttfile = tempfile(fileext = ".txt")
+  writeLines(out_x, ttfile);
+  x = readLines(ttfile)
+  x
 }
+
 
 
 
 #' Replace HTML and other Tags in Leanpub Markdown
 #'
-#' @param path path to the bookdown book, must have a `_bookdown.yml` file
-#' @param output_dir output directory to put files.  It should likely be
-#' relative to path
-#' @param verbose print diagnostic messages
+#' @param path path to the markdown files that need replacement.
 #'
 #' @return A list of output files and diagnostics
 #' @export
-#'
-#' @examples
 replace_html = function(path = "manuscript",
+                        fullbleed = FALSE,
                         verbose = TRUE) {
   md_files = list.files(path = path, pattern = "[.]md$", ignore.case = TRUE,
                         full.names = TRUE)
-  md_files = lapply(md_files, replace_single_html)
-
+  md_files = lapply(md_files, replace_single_html, fullbleed = fullbleed)
+  return(md_files)
 }
+
+#' @param file individual markdown file
+#' @export
+#' @rdname replace_html
+replace_single_html = function(file, fullbleed = FALSE) {
+  stopifnot(length(file) == 1 && file.exists(file))
+  x = readLines(file, warn = FALSE)
+  x = replace_div_data(x, fullbleed = fullbleed)
+  x = replace_image_data(x, element = "img", fullbleed = fullbleed)
+  x = replace_image_data(x, element = "iframe", fullbleed = fullbleed)
+
+  # need to actually do changes
+  writeLines(x, con = file)
+  return(file)
+}
+

@@ -2,17 +2,17 @@
 % Please edit documentation in R/replace_html.R
 \name{replace_html}
 \alias{replace_html}
+\alias{replace_single_html}
 \title{Replace HTML and other Tags in Leanpub Markdown}
 \usage{
-replace_html(path = "manuscript", verbose = TRUE)
+replace_html(path = "manuscript", fullbleed = FALSE, verbose = TRUE)
+
+replace_single_html(file, fullbleed = FALSE)
 }
 \arguments{
-\item{path}{path to the bookdown book, must have a `_bookdown.yml` file}
+\item{path}{path to the markdown files that need replacement.}
 
-\item{verbose}{print diagnostic messages}
-
-\item{output_dir}{output directory to put files.  It should likely be
-relative to path}
+\item{file}{individual markdown file}
 }
 \value{
 A list of output files and diagnostics

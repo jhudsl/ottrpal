@@ -26,7 +26,7 @@ gs_to_drive_pngs = function(
     overwrite = TRUE) {
     id = ariExtra::get_slide_id(id)
     # pdf_file = ariExtra::download_gs_file(id = path, out_type = "pdf")
-    result = gs_convert(
+    result = didactr::gs_convert(
         id,
         PPTX = FALSE,
         use_gs_pngs = FALSE,
@@ -36,7 +36,7 @@ gs_to_drive_pngs = function(
                        paste0("id=", id, "&page_id=", basename(result$images)))
     file.rename(result$images, images)
 
-    if (is_dribble(folder_name)) {
+    if (googledrive::is_dribble(folder_name)) {
         trans_fol = folder_name
     } else {
         # folder_name = id

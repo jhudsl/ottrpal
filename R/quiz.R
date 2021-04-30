@@ -1,8 +1,3 @@
-check_img = function(x) {
-  # NONE OF THESE
-  "</img>"
-}
-
 find_quiz_indices = function(x) {
   start = grep("^\\s*\\{\\s*quiz", x)
   end = grep("^\\s*\\{\\s*/\\s*quiz", x)
@@ -16,3 +11,4 @@ find_quiz_indices = function(x) {
   }
   out
 }
+

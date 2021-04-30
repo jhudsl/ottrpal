@@ -1,5 +1,5 @@
 Package: leanbuild
-Version: 0.1.0
+Version: 0.1.1
 Title: Tools for Creating Automated Courses
 Description: Leverages the 'bookdown' package and other tools to create courses
   that can be hosted on Leanpub.
@@ -16,41 +16,25 @@ License: GPL-3
 Imports:
     googledrive,
     dplyr,
-    httpuv,
-    tuber (>= 0.9.7.9002),
     httr,
     jsonlite,
-    lubridate,
-    tidyr,
     utils,
-    ari (>= 0.2.2.1),
     ariExtra (>= 0.3.0),
     tibble,
-    text2speech,
     rmarkdown,
-    rgoogleslides (>= 0.3.1.9000),
-    googleAuthR,
-    usethis (>= 1.4.0.9000),
-    methods,
-    magrittr,
-    gargle,
     xml2,
-    rvest
-Suggests: 
-    english,
-    knitr,
-    covr,
-    gh,
-    pdftools,
-    animation,
-    testthat,
-    stringr,
-    tuneR,
-    rstudioapi,
-    git2r,
+    rvest,
+    R.utils,
+    bookdown,
+    glue,
+    curl,
+    rprojroot,
+    magrittr,
     yaml,
-    googleLanguageR,
-    aws.signature
+    didactr
+Suggests: 
+    knitr,
+    testthat
 Encoding: UTF-8
 LazyData: true
 Remotes: 

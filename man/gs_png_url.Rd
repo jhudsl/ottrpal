@@ -2,24 +2,31 @@
 % Please edit documentation in R/gs_png.R
 \name{gs_png_url}
 \alias{gs_png_url}
-\title{Title}
+\alias{get_slide_page}
+\alias{gs_png_download}
+\title{Get Google Slide PNG URL}
 \usage{
-gs_png_url(id, slide_id)
+gs_png_url(url)
+
+get_slide_page(url)
+
+gs_png_download(url, output_dir = ".")
 }
 \arguments{
-\item{slide_id}{}
+\item{url}{URL to Google Slide}
+
+\item{output_dir}{path to output png}
 }
 \value{
-
+A character vector of URLs
 }
 \description{
-Title
+Get Google Slide PNG URL
 }
 \examples{
 url = paste0("https://docs.google.com/presentation/d/",
 "12DPZgPteQBwgal6kSPP58zhPhjZ7QSPZLe3NkA8M3eo/edit",
 "#slide=id.gc8648f14c3_0_397&t=4")
 id = ariExtra::get_slide_id(url)
-slide_id = get_slide_page(url)
-gs_png_url(id, slide_id)
+gs_png_url(url)
 }
