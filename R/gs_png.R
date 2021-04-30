@@ -46,13 +46,23 @@ get_slide_page = function(url) {
 #' @export
 #' @rdname gs_png_url
 #' @param output_dir path to output png
-gs_png_download = function(url, output_dir = ".") {
+#' @param overwrite should the slide PNG be overwritten?
+gs_png_download = function(url, output_dir = ".", overwrite = TRUE) {
   id = ariExtra::get_slide_id(url)
   slide_id = get_slide_page(url)
   url = gs_png_url(url)
+  dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   outfile = file.path(output_dir, paste0(id, "_", slide_id, ".png"))
-  curl::curl_download(url, destfile = outfile, quiet = FALSE)
+  if (!file.exists(outfile) || overwrite) {
+    curl::curl_download(url, destfile = outfile, quiet = FALSE)
+  }
   stopifnot(file.exists(outfile))
   outfile
 }
 
+#' @export
+#' @rdname gs_png_url
+include_slide = function(url, output_dir = ".", overwrite = TRUE) {
+  outfile = gs_png_download(url, output_dir, overwrite = overwrite)
+  knitr::include_graphics(outfile)
+}

@@ -4,18 +4,23 @@
 \alias{gs_png_url}
 \alias{get_slide_page}
 \alias{gs_png_download}
+\alias{include_slide}
 \title{Get Google Slide PNG URL}
 \usage{
 gs_png_url(url)
 
 get_slide_page(url)
 
-gs_png_download(url, output_dir = ".")
+gs_png_download(url, output_dir = ".", overwrite = TRUE)
+
+include_slide(url, output_dir = ".", overwrite = TRUE)
 }
 \arguments{
 \item{url}{URL to Google Slide}
 
 \item{output_dir}{path to output png}
+
+\item{overwrite}{should the slide PNG be overwritten?}
 }
 \value{
 A character vector of URLs
