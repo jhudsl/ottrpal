@@ -39,7 +39,7 @@ get_slide_page = function(url) {
     slide_id = sub("&.*", "", slide_id)
     slide_id = sub("^id[.]", "", slide_id)
   }
-  stopifnot(length(slide) > 0 && nchar(slide_id) > 0)
+  stopifnot(length(slide_id) > 0 && nchar(slide_id) > 0)
   slide_id
 }
 

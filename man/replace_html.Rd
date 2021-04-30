@@ -12,6 +12,10 @@ replace_single_html(file, fullbleed = FALSE)
 \arguments{
 \item{path}{path to the markdown files that need replacement.}
 
+\item{fullbleed}{should the image have the attribute `fullbleed: true`?}
+
+\item{verbose}{print diagnostic messages}
+
 \item{file}{individual markdown file}
 }
 \value{

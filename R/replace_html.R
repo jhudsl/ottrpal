@@ -316,6 +316,8 @@ replace_image_data = function(x, element = c("img", "iframe"), fullbleed = FALSE
 #' Replace HTML and other Tags in Leanpub Markdown
 #'
 #' @param path path to the markdown files that need replacement.
+#' @param fullbleed should the image have the attribute `fullbleed: true`?
+#' @param verbose print diagnostic messages
 #'
 #' @return A list of output files and diagnostics
 #' @export
