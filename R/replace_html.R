@@ -203,6 +203,7 @@ build_image = function(src, ..., caption = NULL, embed = NULL,
   myenv = list(...)
   myenv$caption = caption
   myenv$src = src
+  myenv$embed = embed
   myenv = as.environment(myenv)
   x = c('alt: "{alt}",',
         'height: "{height}",',
@@ -210,7 +211,10 @@ build_image = function(src, ..., caption = NULL, embed = NULL,
         'align: "{align}"',
         'embed: "{embed}"'
   )
-  if (fullbleed == "" || is.na(fullbleed)) {
+  if (is.null(fullbleed) ||
+      length(fullbleed) == 0 ||
+      fullbleed == "" ||
+      is.na(fullbleed)) {
     fullbleed = FALSE
   }
   x = sapply(x, glue::glue, .envir = myenv)

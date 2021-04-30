@@ -90,7 +90,6 @@ copy_bib = function(path = ".", output_dir = "manuscript") {
 #' @return A list of output files and diagnostics
 #' @export
 #'
-#' @examples
 bookdown_to_leanpub = function(path = ".",
                                render = TRUE,
                                output_dir = "manuscript",
