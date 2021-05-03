@@ -8,6 +8,7 @@ bookdown_to_leanpub(
   path = ".",
   render = TRUE,
   output_dir = "manuscript",
+  remove_resources_start = FALSE,
   verbose = TRUE
 )
 }
@@ -18,6 +19,9 @@ bookdown_to_leanpub(
 
 \item{output_dir}{output directory to put files.  It should likely be
 relative to path}
+
+\item{remove_resources_start}{remove the word `resources/` at the front
+of any image path.}
 
 \item{verbose}{print diagnostic messages}
 }
