@@ -64,7 +64,18 @@ extract_meta = function(x) {
 #'
 #' @examples
 #'
-#'
+#' x = c('{quiz, id: quiz_00_filename}',
+#' "### Lesson Name quiz",
+#' "{choose-answers: 4}",
+#' "? What do you think?",
+#' "C) The answer to this one",
+#' "o) Not the answer",
+#' "o) Not the answer either",
+#' "C) Another correct answer",
+#' "m) Mandatory different answer",
+#' "{/quiz}")
+#' out = parse_quiz(x)
+#' check_quiz_attributes(out)
 parse_quiz = function(x) {
 
   answer = meta = repeated = question = number = NULL
@@ -77,6 +88,7 @@ parse_quiz = function(x) {
   }
   stopifnot(length(df) >= 2)
   quiz_meta = df[1]
+  quiz_meta = sub("\\{\\s*quiz(,|)", "{", quiz_meta)
 
   # remove the "/quiz"
   df = df[2:(length(df)-1)]
@@ -124,9 +136,11 @@ parse_quiz = function(x) {
     dplyr::select(-answer, -meta)
   meta = df$x[df$type == "metadata"]
   meta = extract_meta(meta)
+  quiz_meta = extract_meta(quiz_meta)[[1]]
   L = list(
     data = df,
-    metadata = meta
+    question_metadata = meta,
+    quiz_metadata = quiz_meta
   )
   L
 }
@@ -162,4 +176,105 @@ find_quiz_indices = function(x) {
 }
 
 
+#' Check Quiz Information
+#'
+#' @param x The output from [leanbuild::parse_quiz]
+#'
+#' @return A logical
+#' @export
+#'
+#' @examples
+#'
+#' x = c('{quiz, id: quiz_00_filename}',
+#' "### Lesson Name quiz",
+#' "{choose-answers: 4}",
+#' "? What do you think?",
+#' "C) The answer to this one",
+#' "o) Not the answer",
+#' "o) Not the answer either",
+#' "C) Another correct answer",
+#' "m) Mandatory different answer",
+#' "{/quiz}")
+#' out = parse_quiz(x)
+#' check_quiz_attributes(out)
+#' check_quiz_answers(out)
+#' @rdname check_quiz
+check_quiz_attributes = function(x) {
 
+  quiz_metadata = x$quiz_metadata
+  quiz_metadata = tibble::as_tibble(quiz_metadata)
+
+
+  quiz_attributes = c("version",
+                      "attempts",
+                      "case-sensitive",
+                      "id",
+                      "points",
+                      "random-choice-order",
+                      "random-question-order",
+                      "start-at",
+                      "version")
+
+  result = TRUE
+  if (NROW(quiz_metadata) > 0) {
+    sd = setdiff(colnames(quiz_metadata), quiz_attributes)
+    if (length(sd) > 0) {
+      warning(
+        paste0("quiz has attributes that seem not for questions:",
+               paste(sd, collapse = ", "))
+      )
+      result = FALSE
+    }
+  }
+  return(result)
+}
+
+#' @export
+#' @rdname check_quiz
+#' @param verbose print diagnostic messages
+check_quiz_answers = function(x, verbose = TRUE) {
+  type = answer = meta = repeated = question = number = NULL
+  rm(list = c("number", "question", "repeated", "answer",
+              "meta", "type"))
+
+  out = x$data
+  quiz_question_attributes = c("choose-answers",
+                               "points",
+                               "random-choice-order")
+
+  if (is.null(out)) {
+    return(TRUE)
+  }
+  result = TRUE
+  out = out %>%
+    dplyr::filter(question >= 1)
+  out = split(out, out$question)
+  out = lapply(out, function(r) {
+    question_name = unique(paste0("question_", r$question))
+    if (verbose > 1) {
+      message(question_name)
+    }
+    meta = r %>%
+      dplyr::filter(type == "metadata")
+    meta = extract_meta(meta$original)
+    meta = dplyr::bind_rows(lapply(meta, tibble::as_tibble))
+    if (NROW(meta) > 0) {
+      sd = setdiff(colnames(meta), quiz_question_attributes)
+      if (length(sd) > 0) {
+        warning(
+          paste0(question_name, " has attributes that seem not for questions:",
+                 paste(sd, collapse = ", "))
+        )
+        result <<- FALSE
+      }
+    }
+    r = r %>%
+      dplyr::filter(type == "answer")
+    if (NROW(r) == 0) {
+      result <<- FALSE
+      warning(paste0(question_name, " has no listed answers"))
+    }
+    return(NULL)
+  })
+  return(result)
+}

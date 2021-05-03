@@ -8,6 +8,7 @@ bookdown_to_leanpub(
   path = ".",
   render = TRUE,
   output_dir = "manuscript",
+  make_book_txt = TRUE,
   remove_resources_start = FALSE,
   verbose = TRUE
 )
@@ -19,6 +20,9 @@ bookdown_to_leanpub(
 
 \item{output_dir}{output directory to put files.  It should likely be
 relative to path}
+
+\item{make_book_txt}{Should [leanbuild::bookdown_to_book_txt()] be run
+to create a `Book.txt` in the output directory?}
 
 \item{remove_resources_start}{remove the word `resources/` at the front
 of any image path.}
