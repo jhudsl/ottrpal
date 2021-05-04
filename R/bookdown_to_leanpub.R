@@ -82,6 +82,7 @@ copy_bib = function(path = ".", output_dir = "manuscript") {
 
 
 
+
 #' Convert Bookdown to Leanpub
 #'
 #' @param path path to the bookdown book, must have a `_bookdown.yml` file

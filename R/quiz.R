@@ -53,6 +53,7 @@ extract_meta = function(x) {
   out
 }
 
+
 #' Parse Quiz
 #'
 #' @param x A single filename or a vector of the contents of the markdown
@@ -77,9 +78,12 @@ extract_meta = function(x) {
 #' out = parse_quiz(x)
 #' check_quiz_attributes(out)
 parse_quiz = function(x) {
-
+  if (length(x) == 1 && file.exists(x)) {
+    x = readLines(x, warn = FALSE)
+  }
   answer = meta = repeated = question = number = NULL
   rm(list = c("number", "question", "repeated", "answer", "meta"))
+
   df = extract_quiz(x)
 
 
@@ -88,6 +92,7 @@ parse_quiz = function(x) {
   }
   stopifnot(length(df) >= 2)
   quiz_meta = df[1]
+  full_quiz_spec = quiz_meta
   quiz_meta = sub("\\{\\s*quiz(,|)", "{", quiz_meta)
 
   # remove the "/quiz"
@@ -140,6 +145,7 @@ parse_quiz = function(x) {
   L = list(
     data = df,
     question_metadata = meta,
+    original_quiz_specification = full_quiz_spec,
     quiz_metadata = quiz_meta
   )
   L
@@ -200,7 +206,9 @@ find_quiz_indices = function(x) {
 #' check_quiz_answers(out)
 #' @rdname check_quiz
 check_quiz_attributes = function(x) {
-
+  if (length(x) == 1 && file.exists(x)) {
+    x = parse_quiz(x)
+  }
   quiz_metadata = x$quiz_metadata
   quiz_metadata = tibble::as_tibble(quiz_metadata)
 
@@ -277,4 +285,70 @@ check_quiz_answers = function(x, verbose = TRUE) {
     return(NULL)
   })
   return(result)
+}
+
+
+
+quiz_md_files = function(path = "manuscript") {
+  files = list.files(pattern = "quiz.*[.]md", ignore.case = TRUE,
+                     path = path, full.names = FALSE)
+  return(files)
+}
+
+
+
+#' Check Quizzes
+#'
+#' @param path either a path to the directory of quizzes or a full path to a
+#' quiz markdown file
+#'
+#' @return A list of logical indicators
+#' @export
+#'
+#' @examples
+#'
+#' x = c('{quiz, id: quiz_00_filename}',
+#' "### Lesson Name quiz",
+#' "{choose-answers: 4}",
+#' "? What do you think?",
+#' "C) The answer to this one",
+#' "o) Not the answer",
+#' "o) Not the answer either",
+#' "C) Another correct answer",
+#' "m) Mandatory different answer",
+#' "{/quiz}")
+#' tdir = tempfile()
+#' dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
+#' tfile = tempfile(pattern = "quiz_", fileext = ".md", tmpdir = tdir)
+#' writeLines(x, tfile)
+#' check_quizzes(path = tdir)
+#'
+#' check_quiz(x)
+check_quizzes = function(path = "manuscript") {
+  owd = getwd()
+  setwd(path)
+  on.exit({
+    setwd(owd)
+  })
+  files = quiz_md_files(path = path)
+  if (length(files) == 0) return(TRUE)
+  result = lapply(files, check_quiz)
+  names(result) = files
+  result = sapply(result, function(x) {
+    all(x$quiz_answer_output & x$quiz_spec_output)
+  })
+  return(result)
+}
+
+#' @export
+#' @rdname check_quizzes
+check_quiz = function(path) {
+  out = parse_quiz(path)
+  quiz_spec_output = check_quiz_attributes(out)
+  quiz_answer_output = check_quiz_answers(out)
+  return(list(
+    quiz_df = out,
+    quiz_answer_output = quiz_answer_output,
+    quiz_spec_output = quiz_spec_output
+  ))
 }
