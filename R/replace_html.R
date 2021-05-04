@@ -199,7 +199,12 @@ margin_to_align = function(x) {
 
 
 build_image = function(src, ..., caption = NULL, embed = NULL,
-                       fullbleed = FALSE) {
+                       fullbleed = FALSE,
+                       remove_resources_start = TRUE) {
+  if (remove_resources_start) {
+    src = gsub("^resources/", "", src)
+  }
+
   myenv = list(...,
                caption = caption,
                embed = embed,
@@ -226,7 +231,7 @@ build_image = function(src, ..., caption = NULL, embed = NULL,
   x
 }
 
-replace_div_data = function(x, fullbleed = FALSE) {
+replace_div_data = function(x, fullbleed = FALSE, remove_resources_start = TRUE) {
   div_index = find_figure_div(x)
   if (NROW(div_index) == 0) {
     return(x)
@@ -252,6 +257,7 @@ replace_div_data = function(x, fullbleed = FALSE) {
       }
     }
     args = lapply(args, empty_to_null)
+    args$remove_resources_start = remove_resources_start
     do.call(build_image, args = args)
   })
   first_div_index = sapply(div_indices, dplyr::first)
@@ -265,7 +271,8 @@ replace_div_data = function(x, fullbleed = FALSE) {
   x
 }
 
-replace_image_data = function(x, element = c("img", "iframe"), fullbleed = FALSE) {
+replace_image_data = function(x, element = c("img", "iframe"), fullbleed = FALSE,
+                              remove_resources_start = TRUE) {
   element = match.arg(element)
   func = switch(element,
                 img = find_img,
@@ -288,7 +295,7 @@ replace_image_data = function(x, element = c("img", "iframe"), fullbleed = FALSE
   # style="display: block; margin: auto;" is center
   image_attributes = lapply(images, function(x) {
     out = lapply(attributes, function(name) {
-      na_empty(get_img_attr(x = x, name = name))
+      na_empty(get_html_attr(x = x, name = name, element = element))
     })
     names(out) = attributes
     out$margin = get_margin(out$style)
@@ -302,6 +309,7 @@ replace_image_data = function(x, element = c("img", "iframe"), fullbleed = FALSE
 
 
   out_images = sapply(image_attributes, function(args) {
+    args$remove_resources_start = remove_resources_start
     do.call(build_image, args = args)
   })
   out_images = c(unlist(out_images))
@@ -321,28 +329,48 @@ replace_image_data = function(x, element = c("img", "iframe"), fullbleed = FALSE
 #'
 #' @param path path to the markdown files that need replacement.
 #' @param fullbleed should the image have the attribute `fullbleed: true`?
+#' @param remove_resources_start remove the word `resources/` at the front
+#' of any image path.
 #' @param verbose print diagnostic messages
 #'
 #' @return A list of output files and diagnostics
 #' @export
 replace_html = function(path = "manuscript",
+                        remove_resources_start = TRUE,
                         fullbleed = FALSE,
                         verbose = TRUE) {
   md_files = list.files(path = path, pattern = "[.]md$", ignore.case = TRUE,
                         full.names = TRUE)
-  md_files = lapply(md_files, replace_single_html, fullbleed = fullbleed)
+  md_files = lapply(md_files, replace_single_html, fullbleed = fullbleed,
+                    verbose = verbose)
   return(md_files)
 }
 
 #' @param file individual markdown file
 #' @export
 #' @rdname replace_html
-replace_single_html = function(file, fullbleed = FALSE) {
+replace_single_html = function(file,
+                               remove_resources_start = TRUE,
+                               fullbleed = FALSE, verbose = TRUE) {
   stopifnot(length(file) == 1 && file.exists(file))
   x = readLines(file, warn = FALSE)
-  x = replace_div_data(x, fullbleed = fullbleed)
-  x = replace_image_data(x, element = "img", fullbleed = fullbleed)
-  x = replace_image_data(x, element = "iframe", fullbleed = fullbleed)
+  if (verbose) {
+    message("Replacing Div data")
+  }
+  x = replace_div_data(x, fullbleed = fullbleed,
+                       remove_resources_start = remove_resources_start)
+
+  if (verbose) {
+    message("Replacing image data")
+  }
+  x = replace_image_data(x, element = "img", fullbleed = fullbleed,
+                         remove_resources_start = remove_resources_start)
+
+  if (verbose) {
+    message("Replacing iframe data")
+  }
+  x = replace_image_data(x, element = "iframe", fullbleed = fullbleed,
+                         remove_resources_start = remove_resources_start)
 
   # need to actually do changes
   writeLines(x, con = file)

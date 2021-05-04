@@ -82,6 +82,7 @@ copy_bib = function(path = ".", output_dir = "manuscript") {
 
 
 
+
 #' Convert Bookdown to Leanpub
 #'
 #' @param path path to the bookdown book, must have a `_bookdown.yml` file
@@ -89,6 +90,10 @@ copy_bib = function(path = ".", output_dir = "manuscript") {
 #' relative to path
 #' @param render if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.
 #' @param verbose print diagnostic messages
+#' @param remove_resources_start remove the word `resources/` at the front
+#' of any image path.
+#' @param make_book_txt Should [leanbuild::bookdown_to_book_txt()] be run
+#' to create a `Book.txt` in the output directory?
 #'
 #' @return A list of output files and diagnostics
 #' @export
@@ -96,6 +101,8 @@ copy_bib = function(path = ".", output_dir = "manuscript") {
 bookdown_to_leanpub = function(path = ".",
                                render = TRUE,
                                output_dir = "manuscript",
+                               make_book_txt = TRUE,
+                               remove_resources_start = FALSE,
                                verbose = TRUE) {
 
   rmd_regex = "[.][R|r]md$"
@@ -108,6 +115,9 @@ bookdown_to_leanpub = function(path = ".",
   })
   rmd_files = bookdown_rmd_files(path = path)
   if (render) {
+    if (verbose) {
+      message("Rendering the Book")
+    }
     input = rmd_files[grepl("index", rmd_files, ignore.case = TRUE)][1]
     if (length(input) == 0 || is.na(input)) {
       input = rmd_files[1]
@@ -119,8 +129,17 @@ bookdown_to_leanpub = function(path = ".",
   }
 
   # may be irrelevant since copy_docs does everything
+  if (verbose) {
+    message("Copying Resources")
+  }
   copy_resources(path, output_dir = output_dir)
+  if (verbose) {
+    message("Copying Docs folder")
+  }
   copy_docs(path, output_dir = output_dir)
+  if (verbose) {
+    message("Copying bib files")
+  }
   copy_bib(path, output_dir = output_dir)
   # FIXME Can also use bookdown_rmd_files
   # rmd_files = list.files(pattern = rmd_regex)
@@ -159,8 +178,12 @@ bookdown_to_leanpub = function(path = ".",
     #   )
     # }
     infile = normalizePath(file)
-    infile = replace_single_html(infile)
+    infile = replace_single_html(infile, verbose = verbose > 1,
+                                 remove_resources_start = remove_resources_start)
     if (length(bib_files) > 0) {
+      if (verbose > 1) {
+        message("Making references")
+      }
       writeLines(simple_references(infile, bib_files, add_reference_header = TRUE),
                  con = infile, sep = "\n")
     }
@@ -173,7 +196,14 @@ bookdown_to_leanpub = function(path = ".",
     #   citeproc = TRUE,
     #   verbose = verbose)
   }
+  out = NULL
+  if (make_book_txt) {
+    out = bookdown_to_book_txt(  path = path,
+                                 output_dir = output_dir,
+                                 verbose = verbose)
+  }
   L = list(output_files = md_files)
+  L$book_txt_output = out
   return(L)
 }
 
@@ -185,14 +215,16 @@ bookdown_to_leanpub = function(path = ".",
 #' relative to path
 #' @param verbose print diagnostic messages
 #'
-#' @return A list of output files and diagnostics
+#' @return A list of output files in order, the book text file name, and diagnostics
 #' @export
-#'
-#' @examples
 bookdown_to_book_txt = function(
   path = ".",
   output_dir = "manuscript",
   verbose = TRUE) {
+
+  index = full_file = NULL
+  rm(list = c("full_file", "index"))
+
   path = bookdown_path(path)
   owd = getwd()
   setwd(path)
@@ -204,7 +236,7 @@ bookdown_to_book_txt = function(
   md_files = sub(rmd_regex, ".md", rmd_files, ignore.case = TRUE)
   md_df = tibble::tibble(
     file = md_files,
-    order = seq_along(md_files)
+    index = seq_along(md_files)
   )
   quiz_files = paste0("quiz-", md_files)
   bad_quiz_files = paste0("quiz_", md_files)
@@ -215,33 +247,34 @@ bookdown_to_book_txt = function(
   # add 0.5 so it's after the correct md file
   quiz_df = tibble::tibble(
     file = quiz_files,
-    order = seq_along(quiz_files) + 0.5
+    index = seq_along(quiz_files) + 0.5
   )
   bad_quiz_df = tibble::tibble(
     file = bad_quiz_files,
-    order = seq_along(bad_quiz_files) + 0.5
+    index = seq_along(bad_quiz_files) + 0.5
   )
   quiz_df = dplyr::bind_rows(quiz_df, bad_quiz_df)
   rm(list = c("bad_quiz_files", "bad_quiz_df"))
   quiz_df = quiz_df %>%
-    dplyr::arrange(order)
-  df = dplyr::bind_rows(md_df, quiz_df) %>%
-    rm(list = c("bad_quiz_files", "bad_quiz_df"))
+    dplyr::arrange(index)
+  df = dplyr::bind_rows(md_df, quiz_df)
+  rm(list = c("quiz_df"))
 
-  # quiz_df = quiz_df %>%
-  #   dplyr::mutate(file = file.path(output_dir, file))
-
-
-  stop("Not done - need to fix quizzes")
+  df = df %>%
+    dplyr::arrange(index)
+  df = df %>%
+    dplyr::mutate(full_file = file.path(output_dir, file))
+  df = df %>%
+    dplyr::filter(file.exists(full_file))
 
   book_txt = file.path(output_dir, "Book.txt")
-  if (file.exists(book_txt)) {
-    x = readLines(book_txt)
-    quiz = x[grepl("quiz.md", x)]
-  }
   # need to fix about quiz
-  writeLines(md_files, book_txt)
-  return(book_txt)
+  writeLines(df$file, book_txt)
+  L = list(
+    md_order = df,
+    book_file = book_txt
+  )
+  return(L)
 }
 
 

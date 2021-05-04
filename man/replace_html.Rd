@@ -5,12 +5,25 @@
 \alias{replace_single_html}
 \title{Replace HTML and other Tags in Leanpub Markdown}
 \usage{
-replace_html(path = "manuscript", fullbleed = FALSE, verbose = TRUE)
+replace_html(
+  path = "manuscript",
+  remove_resources_start = TRUE,
+  fullbleed = FALSE,
+  verbose = TRUE
+)
 
-replace_single_html(file, fullbleed = FALSE)
+replace_single_html(
+  file,
+  remove_resources_start = TRUE,
+  fullbleed = FALSE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{path}{path to the markdown files that need replacement.}
+
+\item{remove_resources_start}{remove the word `resources/` at the front
+of any image path.}
 
 \item{fullbleed}{should the image have the attribute `fullbleed: true`?}
 

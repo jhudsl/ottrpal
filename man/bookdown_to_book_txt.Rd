@@ -15,7 +15,7 @@ relative to path}
 \item{verbose}{print diagnostic messages}
 }
 \value{
-A list of output files and diagnostics
+A list of output files in order, the book text file name, and diagnostics
 }
 \description{
 Convert Bookdown to Leanpub
