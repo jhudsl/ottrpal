@@ -202,7 +202,8 @@ bookdown_to_leanpub = function(path = ".",
                                  output_dir = output_dir,
                                  verbose = verbose)
   }
-  L = list(output_files = md_files)
+  L = list(output_files = md_files,
+           full_output_files = normalizePath(md_files, winslash = "/"))
   L$book_txt_output = out
   return(L)
 }
