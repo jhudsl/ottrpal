@@ -18,3 +18,4 @@ vignettes/.httr-oauth$
 ^cran-comments\.md$
 ^R/youtube$
 ^run_test\.R$
+^\.github$
