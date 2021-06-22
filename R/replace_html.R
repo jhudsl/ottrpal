@@ -158,6 +158,9 @@ split_style = function(x) {
 }
 
 get_margin = function(x) {
+  if (length(x) == 0) {
+    x = ""
+  }
   out = split_style(x)
   margin = out$margin
   if (length(margin) > 0) {
@@ -299,6 +302,14 @@ replace_image_data = function(x, element = c("img", "iframe"), fullbleed = FALSE
       na_empty(get_html_attr(x = x, name = name, element = element))
     })
     names(out) = attributes
+    if (length(unlist(out) == 0)) {
+      # when <p align = "center>
+      msg = paste0(
+        "There may be an HTML issue in this text, when",
+        " looking for ", element, " elements")
+      message(msg)
+      warning(msg)
+    }
     out$margin = get_margin(out$style)
     if (is.null(out$caption) && !is.null(out$title)) {
       out$caption = out$title
