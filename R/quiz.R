@@ -355,6 +355,7 @@ check_attributes = function(x, verbose = TRUE) {
 #'
 #' @param path either a path to the directory of quizzes or a full path to a
 #' quiz markdown file
+#' @param verbose print diagnostic messages
 #'
 #' @return A list of logical indicators
 #' @export

@@ -12,6 +12,8 @@ check_quiz(path, verbose = TRUE)
 \arguments{
 \item{path}{either a path to the directory of quizzes or a full path to a
 quiz markdown file}
+
+\item{verbose}{print diagnostic messages}
 }
 \value{
 A list of logical indicators

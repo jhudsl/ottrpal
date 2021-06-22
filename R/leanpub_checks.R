@@ -26,7 +26,7 @@ leanpub_check = function(path = ".",
   L = list(
     extra_book_result = extra_book_result,
     html_result = html_result,
-    attribute_result = attribute_result,
+    attribute_result = attribute_result
   )
   return(L)
 }
