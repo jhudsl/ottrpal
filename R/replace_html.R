@@ -307,8 +307,8 @@ replace_image_data = function(x, element = c("img", "iframe"), fullbleed = FALSE
       msg = paste0(
         "There may be an HTML issue in this text, when",
         " looking for ", element, " elements")
-      message(msg)
-      warning(msg)
+      # message(msg)
+      # warning(msg)
     }
     out$margin = get_margin(out$style)
     if (is.null(out$caption) && !is.null(out$title)) {
