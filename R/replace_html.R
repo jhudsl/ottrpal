@@ -74,9 +74,9 @@ get_img_alt = function(x) {
 
 find_figure_div = function(x) {
   regex = paste0('<div class="figure"')
-  start = grep(regex, x = x)
+  start = which(grepl(regex, x = x) & !grepl("^<!--", trimws(x)))
   regex = paste0('</div>')
-  end = grep(regex, x = x)
+  end = which(grepl(regex, x = x) & !grepl("^<!--", trimws(x)))
   stopifnot(length(start) == length(end))
   div_index = cbind(start = start, end = end)
   diff = div_index[,2] - div_index[,1]
@@ -98,12 +98,12 @@ find_figure_div = function(x) {
 
 find_iframe = function(x) {
   regex = paste0('<iframe')
-  grepl(regex,  x )
+  grepl(regex,  x ) & !grepl("^<!--", trimws(x))
 }
 
 find_img = function(x) {
   regex = paste0('<img')
-  xx = grepl(regex, x = x)
+  xx = grepl(regex, x = x) & !grepl("^<!--", trimws(x))
 }
 
 find_caption = function(x) {
@@ -287,6 +287,7 @@ replace_image_data = function(x, element = c("img", "iframe"), fullbleed = FALSE
   image_df$number = c(0, seq_along(image_index))
   image_df = image_df[image_df$number > 0,]
   images = x[image_logical]
+
   # need to do some subsetting
 
 
