@@ -198,6 +198,9 @@ bookdown_to_leanpub = function(path = ".",
   }
   out = NULL
   if (make_book_txt) {
+    if (verbose > 1) {
+      message("Running bookdown_to_book_txt")
+    }
     out = bookdown_to_book_txt(  path = path,
                                  output_dir = output_dir,
                                  verbose = verbose)

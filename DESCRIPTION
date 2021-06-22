@@ -1,5 +1,5 @@
 Package: leanbuild
-Version: 0.1.1
+Version: 0.1.2
 Title: Tools for Creating Automated Courses
 Description: Leverages the 'bookdown' package and other tools to create courses
   that can be hosted on Leanpub.

@@ -54,7 +54,7 @@ extract_meta = function(x) {
 }
 
 
-#' Parse Quiz
+#' Parse Quiz and Other Checking Functions
 #'
 #' @param x A single filename or a vector of the contents of the markdown
 #' file
@@ -69,11 +69,13 @@ extract_meta = function(x) {
 #' "### Lesson Name quiz",
 #' "{choose-answers: 4}",
 #' "? What do you think?",
+#' "",
 #' "C) The answer to this one",
 #' "o) Not the answer",
 #' "o) Not the answer either",
 #' "C) Another correct answer",
 #' "m) Mandatory different answer",
+#' "",
 #' "{/quiz}")
 #' out = parse_quiz(x)
 #' check_quiz_attributes(out)
@@ -99,7 +101,8 @@ parse_quiz = function(x) {
   df = df[2:(length(df)-1)]
   df = tibble::tibble(
     original = df,
-    x = trimws(df, which = "left")
+    x = trimws(df, which = "left"),
+    index = 1:length(df)
   )
   # df = df %>%
   # dplyr::filter(!x %in% "")
@@ -191,9 +194,9 @@ find_quiz_indices = function(x) {
 #'
 #' @examples
 #'
-#' x = c('{quiz, id: quiz_00_filename}',
+#' x = c('{quiz, id: quiz_00_filename, choose-answers: 4}',
 #' "### Lesson Name quiz",
-#' "{choose-answers: 4}",
+#' "{choose-answers: 4, attempts: 25}",
 #' "? What do you think?",
 #' "C) The answer to this one",
 #' "o) Not the answer",
@@ -203,10 +206,22 @@ find_quiz_indices = function(x) {
 #' "{/quiz}")
 #' out = parse_quiz(x)
 #' check_quiz_attributes(out)
-#' check_quiz_answers(out)
-#' @rdname check_quiz
-check_quiz_attributes = function(x) {
-  if (length(x) == 1 && file.exists(x)) {
+#' check_quiz_question_attributes(out)
+#'
+#' x = c('{quiz, id: quiz_00_filename, choose-answers: 4}',
+#' "### Lesson Name quiz",
+#' "{choose-answers: 4, attempts: 25}",
+#' "",
+#' "? What do you think?",
+#' "! The answer to this one",
+#' "{/quiz}")
+#' out = parse_quiz(x)
+#' check_quiz_attributes(out)
+#' check_quiz_question_attributes(out)
+#'
+#' @rdname parse_quiz
+check_quiz_attributes = function(x, verbose = TRUE) {
+  if (is.character(x)) {
     x = parse_quiz(x)
   }
   quiz_metadata = x$quiz_metadata
@@ -227,10 +242,12 @@ check_quiz_attributes = function(x) {
   if (NROW(quiz_metadata) > 0) {
     sd = setdiff(colnames(quiz_metadata), quiz_attributes)
     if (length(sd) > 0) {
-      warning(
-        paste0("quiz has attributes that seem not for questions:",
-               paste(sd, collapse = ", "))
-      )
+      msg = paste0("quiz has attributes not specified as appropriate for quizzes:",
+                   paste(sd, collapse = ", "))
+      if (verbose) {
+        message(msg)
+      }
+      warning(msg)
       result = FALSE
     }
   }
@@ -238,9 +255,9 @@ check_quiz_attributes = function(x) {
 }
 
 #' @export
-#' @rdname check_quiz
+#' @rdname parse_quiz
 #' @param verbose print diagnostic messages
-check_quiz_answers = function(x, verbose = TRUE) {
+check_quiz_question_attributes = function(x, verbose = TRUE) {
   type = answer = meta = repeated = question = number = NULL
   rm(list = c("number", "question", "repeated", "answer",
               "meta", "type"))
@@ -269,10 +286,13 @@ check_quiz_answers = function(x, verbose = TRUE) {
     if (NROW(meta) > 0) {
       sd = setdiff(colnames(meta), quiz_question_attributes)
       if (length(sd) > 0) {
-        warning(
-          paste0(question_name, " has attributes that seem not for questions:",
-                 paste(sd, collapse = ", "))
-        )
+        msg = paste0(question_name,
+                     " has attributes that aren't relevant for questions: ",
+                     paste(sd, collapse = ", "))
+        if (verbose) {
+          message(msg)
+        }
+        warning(msg)
         result <<- FALSE
       }
     }
@@ -280,7 +300,11 @@ check_quiz_answers = function(x, verbose = TRUE) {
       dplyr::filter(type == "answer")
     if (NROW(r) == 0) {
       result <<- FALSE
-      warning(paste0(question_name, " has no listed answers"))
+      msg = paste0(question_name, " has no listed answers")
+      if (verbose) {
+        message(msg)
+      }
+      warning(msg)
     }
     return(NULL)
   })
@@ -295,7 +319,37 @@ quiz_md_files = function(path = "manuscript") {
   return(files)
 }
 
-
+#' @export
+#' @rdname parse_quiz
+check_attributes = function(x, verbose = TRUE) {
+  if (is.character(x)) {
+    x = parse_quiz(x)
+  }
+  if (is.list(x) && "data" %in% names(x)) {
+    x = x$data
+  }
+  index = original = lead_type = type = NULL
+  rm(list = c("lead_type", "type", "original", "index"))
+  bad = x %>%
+    dplyr::mutate(lead_type = dplyr::lead(type)) %>%
+    dplyr::filter(type == "metadata" & !lead_type %in% "question")
+  if (NROW(bad) > 0) {
+    bad = bad %>%
+      dplyr::select(original, index) %>%
+      as.data.frame()
+    msg = paste0(
+      "Attributes with the next line ",
+      "not being a question!  Some may be ",
+      "false positives if images are in quizzes")
+    if (verbose) {
+      message(msg)
+    }
+    warning(msg)
+    print(bad)
+    return(FALSE)
+  }
+  return(TRUE)
+}
 
 #' Check Quizzes
 #'
@@ -324,7 +378,8 @@ quiz_md_files = function(path = "manuscript") {
 #' check_quizzes(path = tdir)
 #'
 #' check_quiz(x)
-check_quizzes = function(path = "manuscript") {
+check_quizzes = function(path = "manuscript",
+                         verbose = TRUE) {
   owd = getwd()
   setwd(path)
   on.exit({
@@ -332,7 +387,12 @@ check_quizzes = function(path = "manuscript") {
   })
   files = quiz_md_files(path = path)
   if (length(files) == 0) return(TRUE)
-  result = lapply(files, check_quiz)
+  result = lapply(files, function(x) {
+    if (verbose) {
+      message("Checking ", x)
+    }
+    check_quiz(x, verbose = verbose)
+  })
   names(result) = files
   result = sapply(result, function(x) {
     all(x$quiz_answer_output & x$quiz_spec_output)
@@ -342,13 +402,21 @@ check_quizzes = function(path = "manuscript") {
 
 #' @export
 #' @rdname check_quizzes
-check_quiz = function(path) {
+check_quiz = function(path, verbose = TRUE) {
   out = parse_quiz(path)
   quiz_spec_output = check_quiz_attributes(out)
-  quiz_answer_output = check_quiz_answers(out)
+  quiz_answer_output = check_quiz_question_attributes(
+    out, verbose = verbose)
+  quiz_attribute_output = check_attributes(out)
   return(list(
     quiz_df = out,
     quiz_answer_output = quiz_answer_output,
+    quiz_question_follow_attribute = quiz_attribute_output,
     quiz_spec_output = quiz_spec_output
   ))
 }
+
+
+## Anything that starts with a `{` the next line should be a question
+#
+# add SO MUHC verbosity to everything

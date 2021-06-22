@@ -5,9 +5,9 @@
 \alias{check_quiz}
 \title{Check Quizzes}
 \usage{
-check_quizzes(path = "manuscript")
+check_quizzes(path = "manuscript", verbose = TRUE)
 
-check_quiz(path)
+check_quiz(path, verbose = TRUE)
 }
 \arguments{
 \item{path}{either a path to the directory of quizzes or a full path to a
