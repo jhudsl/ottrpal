@@ -30,17 +30,18 @@ Imports:
     curl,
     rprojroot,
     magrittr,
-    yaml,
-    didactr
+    yaml
 Suggests: 
+    didactr,
     knitr,
     testthat
 Encoding: UTF-8
 LazyData: true
 Remotes: 
-    muschellij2/ari, 
-    muschellij2/ariExtra, 
-    muschellij2/text2speech,
+    jhudsl/ari, 
+    jhudsl/ariExtra, 
+    jhudsl/text2speech,
+    jhudsl/didactr,
     hairizuanbinnoorazman/rgoogleslides
 ByteCompile: true
 Type: Package
