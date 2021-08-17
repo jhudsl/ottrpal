@@ -30,7 +30,9 @@ Imports:
     curl,
     rprojroot,
     magrittr,
-    yaml
+    yaml,
+    here,
+    stringr
 Suggests: 
     didactr,
     knitr,

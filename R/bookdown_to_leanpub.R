@@ -104,6 +104,7 @@ bookdown_to_leanpub = function(path = ".",
                                make_book_txt = TRUE,
                                remove_resources_start = FALSE,
                                verbose = TRUE) {
+  source(build_leanpub_embed_files.R)
 
   rmd_regex = "[.][R|r]md$"
 
@@ -212,6 +213,7 @@ bookdown_to_leanpub = function(path = ".",
            full_output_files = normalizePath(md_files, winslash = "/"))
   L$book_txt_output = out
   return(L)
+  source(build_leanpub_video.R)
 }
 
 
