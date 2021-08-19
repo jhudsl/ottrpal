@@ -8,7 +8,7 @@
 set_knitr_image_path = function(verbose = FALSE) {
   fp <- knitr::fig_path()
   fp <- dirname(fp)
-  fp <- paste0("images/", fp, "/")
+  fp <- paste0("resources/images/", fp, "/")
   if (verbose) {
     message(paste0("figpath is ", fp))
   }
