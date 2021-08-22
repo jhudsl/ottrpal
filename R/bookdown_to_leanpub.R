@@ -122,7 +122,7 @@ bookdown_to_leanpub = function(path = ".",
     if (length(input) == 0 || is.na(input)) {
       input = rmd_files[1]
     }
-    output_format = bookdown::gitbook(pandoc_args = rmarkdown:::pandoc_citeproc())
+    output_format = bookdown::gitbook(pandoc_args = "--citeproc")
     # output_format$pandoc$to = output_format$pandoc$from
     output_format$pandoc$args = c(output_format$pandoc$args, "--citeproc")
     bookdown::render_book(input = input, output_format = output_format)
