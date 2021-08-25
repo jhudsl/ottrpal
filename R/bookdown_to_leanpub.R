@@ -108,11 +108,11 @@ bookdown_to_leanpub = function(path = ".",
   rmd_regex = "[.][R|r]md$"
 
   path = bookdown_path(path)
-  owd = getwd()
-  setwd(path)
-  on.exit({
-    setwd(owd)
-  })
+  #owd = getwd()
+  #setwd(path)
+  #on.exit({
+  #  setwd(owd)
+  #})
   rmd_files = bookdown_rmd_files(path = path)
   if (render) {
     if (verbose) {
@@ -233,11 +233,11 @@ bookdown_to_book_txt = function(
   rm(list = c("full_file", "index"))
 
   path = bookdown_path(path)
-  owd = getwd()
-  setwd(path)
-  on.exit({
-    setwd(owd)
-  })
+  #owd = getwd()
+  #setwd(path)
+  #on.exit({
+  # setwd(owd)
+  #})
   rmd_regex = "[.][R|r]md$"
   rmd_files = bookdown_rmd_files(path = path)
   md_files = sub(rmd_regex, ".md", rmd_files, ignore.case = TRUE)
