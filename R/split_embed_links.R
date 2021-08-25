@@ -47,9 +47,9 @@ split_links <- function(rmd_file) {
   #   rmd_file: the path to an Rmd
   #
   # Returns:
-  #   Rmd with updated embedded links with the name `leanpub_ready_` prefix 
+  #   Rmd with updated embedded links with the name `leanpub_ready_` prefix
   # in the filename
-  
+
   # we want the pipe
   `%>%` <- dplyr::`%>%`
 

@@ -12,66 +12,75 @@
 #'
 #' @examples
 #' \dontrun{
-#' url = paste0("https://docs.google.com/presentation/d/",
-#' "1ywZbtFacZK0UIsnt2g-sheC9du_rw_7XZ1FX4rRt27M",
-#' "/export/png?",
-#' "id=1ywZbtFacZK0UIsnt2g-sheC9du_rw_7XZ1FX4rRt27M&pageid=g325fd519ca_0_5")
+#' url <- paste0(
+#'   "https://docs.google.com/presentation/d/",
+#'   "1ywZbtFacZK0UIsnt2g-sheC9du_rw_7XZ1FX4rRt27M",
+#'   "/export/png?",
+#'   "id=1ywZbtFacZK0UIsnt2g-sheC9du_rw_7XZ1FX4rRt27M&pageid=g325fd519ca_0_5"
+#' )
 #'
-#' out = gs_to_drive_pngs(url)
+#' out <- gs_to_drive_pngs(url)
 #' }
-gs_to_drive_pngs = function(
+gs_to_drive_pngs <- function(
+                             id,
+                             folder_name = "leanpub_pngs",
+                             verbose = TRUE,
+                             overwrite = TRUE) {
+  id <- ariExtra::get_slide_id(id)
+  # pdf_file = ariExtra::download_gs_file(id = path, out_type = "pdf")
+  if (!requireNamespace("didactr", quietly = TRUE)) {
+    stop(
+      "please install didactr for gs_to_drive_pngs: \n",
+      "remotes::install_github('jhudsl/didactr')"
+    )
+  }
+  result <- didactr::gs_convert(
     id,
-    folder_name = "leanpub_pngs",
-    verbose = TRUE,
-    overwrite = TRUE) {
-    id = ariExtra::get_slide_id(id)
-    # pdf_file = ariExtra::download_gs_file(id = path, out_type = "pdf")
-    if (!requireNamespace("didactr", quietly = TRUE)) {
-        stop("please install didactr for gs_to_drive_pngs: \n",
-             "remotes::install_github('jhudsl/didactr')")
+    PPTX = FALSE,
+    use_gs_pngs = FALSE,
+    use_gs_ids = TRUE
+  )
+
+  images <- file.path(
+    dirname(result$images),
+    paste0("id=", id, "&page_id=", basename(result$images))
+  )
+  file.rename(result$images, images)
+
+  if (googledrive::is_dribble(folder_name)) {
+    trans_fol <- folder_name
+  } else {
+    # folder_name = id
+    trans_fol <- googledrive::drive_find(
+      pattern = folder_name,
+      type = "folder", n_max = 100,
+      verbose = TRUE
+    )
+    if (nrow(trans_fol) == 0) {
+      trans_fol <- googledrive::drive_mkdir(
+        folder_name,
+        verbose = verbose
+      )
     }
-    result = didactr::gs_convert(
-        id,
-        PPTX = FALSE,
-        use_gs_pngs = FALSE,
-        use_gs_ids = TRUE)
-
-    images = file.path(dirname(result$images),
-                       paste0("id=", id, "&page_id=", basename(result$images)))
-    file.rename(result$images, images)
-
-    if (googledrive::is_dribble(folder_name)) {
-        trans_fol = folder_name
-    } else {
-        # folder_name = id
-        trans_fol = googledrive::drive_find(
-            pattern = folder_name,
-            type = "folder", n_max = 100,
-            verbose = TRUE)
-        if (nrow(trans_fol) == 0) {
-            trans_fol = googledrive::drive_mkdir(
-                folder_name,
-                verbose = verbose)
-        }
-        if (nrow(trans_fol) > 1) {
-            warning("Multiple folders found, choosing first one")
-            print(trans_fol[1,])
-        }
-        trans_fol = trans_fol[1,]
+    if (nrow(trans_fol) > 1) {
+      warning("Multiple folders found, choosing first one")
+      print(trans_fol[1, ])
     }
+    trans_fol <- trans_fol[1, ]
+  }
 
-    output = lapply(images, function(image) {
-        out = googledrive::drive_upload(
-            media = image,
-            path = trans_fol,
-            name = basename(image),
-            overwrite = overwrite,
-            verbose = verbose > 1
-        )
-    })
-    result$images = images
-    output = do.call(rbind, output)
-    output$url = sapply(output$drive_resource, `[[`, "webViewLink")
-    result$upload_output = output
-    result
+  output <- lapply(images, function(image) {
+    out <- googledrive::drive_upload(
+      media = image,
+      path = trans_fol,
+      name = basename(image),
+      overwrite = overwrite,
+      verbose = verbose > 1
+    )
+  })
+  result$images <- images
+  output <- do.call(rbind, output)
+  output$url <- sapply(output$drive_resource, `[[`, "webViewLink")
+  result$upload_output <- output
+  result
 }

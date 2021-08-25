@@ -1,41 +1,41 @@
 
-get_html_element = function(x, element = "img") {
-  x = paste(x, collapse = "\n")
-  doc = xml2::read_html(x)
-  nodes = rvest::html_nodes(doc, xpath = paste0("//", element))
+get_html_element <- function(x, element = "img") {
+  x <- paste(x, collapse = "\n")
+  doc <- xml2::read_html(x)
+  nodes <- rvest::html_nodes(doc, xpath = paste0("//", element))
   nodes
 }
 
 
-get_figure_div = function(x) {
-  div = get_html_element(x, element = 'div[@class="figure"]')
-  types = div %>%
+get_figure_div <- function(x) {
+  div <- get_html_element(x, element = 'div[@class="figure"]')
+  types <- div %>%
     rvest::html_elements(xpath = ".//img|.//iframe") %>%
     rvest::html_name()
-  img = div %>%
+  img <- div %>%
     rvest::html_elements(xpath = ".//img|.//iframe") %>%
     rvest::html_attrs()
   # missing something - not a img or iframe
   stopifnot(length(img) == length(div))
-  div_aligns = div %>%
+  div_aligns <- div %>%
     rvest::html_attr(name = "style")
-  div_aligns = trimws(sub("text-align: ", "", div_aligns))
+  div_aligns <- trimws(sub("text-align: ", "", div_aligns))
   # markua
-  div_aligns[div_aligns == "center"] = "middle"
-  div_aligns[is.na(div_aligns)] = "middle"
-  captions = div %>%
+  div_aligns[div_aligns == "center"] <- "middle"
+  div_aligns[is.na(div_aligns)] <- "middle"
+  captions <- div %>%
     rvest::html_elements(xpath = './p[@class="caption"]') %>%
     rvest::html_text()
-  img = mapply(function(x, y) {
+  img <- mapply(function(x, y) {
     c(x, caption = y)
   }, img, captions, SIMPLIFY = FALSE)
-  img = mapply(function(x, y) {
+  img <- mapply(function(x, y) {
     c(x, element_type = y)
   }, img, types, SIMPLIFY = FALSE)
-  img = mapply(function(x, y) {
-    y[y %in% ""] = NA_character_
+  img <- mapply(function(x, y) {
+    y[y %in% ""] <- NA_character_
     if (!all(is.na(y))) {
-      x = c(x, align = y)
+      x <- c(x, align = y)
     }
     x
   }, img, div_aligns, SIMPLIFY = FALSE)
@@ -45,47 +45,49 @@ get_figure_div = function(x) {
 
 
 
-get_html_attr = function(x, element = "img", name = "src") {
-  x = get_html_element(x, element = element)
+get_html_attr <- function(x, element = "img", name = "src") {
+  x <- get_html_element(x, element = element)
   rvest::html_attr(x, name)
 }
 
-get_iframe_attr = function(x, name = "src") {
-  x = get_html_attr(x, element = "iframe", name = name)
+get_iframe_attr <- function(x, name = "src") {
+  x <- get_html_attr(x, element = "iframe", name = name)
 }
 
-get_img_attr = function(x, name = "src") {
-  x = get_html_attr(x, element = "img", name = name)
+get_img_attr <- function(x, name = "src") {
+  x <- get_html_attr(x, element = "img", name = name)
 }
 
-get_iframe_src = get_iframe_attr
-get_img_src = get_img_attr
+get_iframe_src <- get_iframe_attr
+get_img_src <- get_img_attr
 
-get_iframe_alt = function(x) {
+get_iframe_alt <- function(x) {
   get_iframe_attr(x, name = "alt")
 }
 
-get_img_alt = function(x) {
+get_img_alt <- function(x) {
   get_img_attr(x, name = "alt")
 }
 
 
 
 
-find_figure_div = function(x) {
-  regex = paste0('<div class="figure"')
-  start = which(grepl(regex, x = x) & !grepl("^<!--", trimws(x)))
-  regex = paste0('</div>')
-  end = which(grepl(regex, x = x) & !grepl("^<!--", trimws(x)))
+find_figure_div <- function(x) {
+  regex <- paste0('<div class="figure"')
+  start <- which(grepl(regex, x = x) & !grepl("^<!--", trimws(x)))
+  regex <- paste0("</div>")
+  end <- which(grepl(regex, x = x) & !grepl("^<!--", trimws(x)))
   stopifnot(length(start) == length(end))
-  div_index = cbind(start = start, end = end)
-  diff = div_index[,2] - div_index[,1]
+  div_index <- cbind(start = start, end = end)
+  diff <- div_index[, 2] - div_index[, 1]
   if (any(diff < 0)) {
     stop("Something is wrong with the `div` tags")
   }
   if (any(diff > 10)) {
-    warning("Some divs may be off, could happen with long captions, but",
-            ", just a warning")
+    warning(
+      "Some divs may be off, could happen with long captions, but",
+      ", just a warning"
+    )
   }
   # indices = mapply(function(x, y) {
   #   seq(x, y)
@@ -96,33 +98,34 @@ find_figure_div = function(x) {
 }
 
 
-find_iframe = function(x) {
-  regex = paste0('<iframe')
-  grepl(regex,  x ) & !grepl("^<!--", trimws(x))
+find_iframe <- function(x) {
+  regex <- paste0("<iframe")
+  grepl(regex, x) & !grepl("^<!--", trimws(x))
 }
 
-find_img = function(x) {
-  regex = paste0('<img')
-  xx = grepl(regex, x = x) & !grepl("^<!--", trimws(x))
+find_img <- function(x) {
+  regex <- paste0("<img")
+  xx <- grepl(regex, x = x) & !grepl("^<!--", trimws(x))
 }
 
-find_caption = function(x) {
-  regex = paste0('<p class="caption"')
-  caption_start = grep(regex, x = x)
-  regex = paste0('</p>')
-  caption_end = grep(regex, x = x)
+
+find_caption <- function(x) {
+  regex <- paste0('<p class="caption"')
+  caption_start <- grep(regex, x = x)
+  regex <- paste0("</p>")
+  caption_end <- grep(regex, x = x)
   stopifnot(length(caption_start) == length(caption_end))
-  indices = mapply(function(x, y) {
+  indices <- mapply(function(x, y) {
     seq(x, y)
   }, caption_start, caption_end, SIMPLIFY = TRUE)
-  indices = c(indices)
+  indices <- c(indices)
   indices
 }
 
-get_caption = function(x, element = "p") {
-  x = paste(x, collapse = "\n")
-  doc = xml2::read_html(x)
-  nodes = rvest::html_nodes(doc, xpath = paste0("//", element))
+get_caption <- function(x, element = "p") {
+  x <- paste(x, collapse = "\n")
+  doc <- xml2::read_html(x)
+  nodes <- rvest::html_nodes(doc, xpath = paste0("//", element))
   rvest::html_text(nodes)
 }
 
@@ -134,59 +137,59 @@ get_caption = function(x, element = "p") {
 #   regex = "\\[!\\["
 #   # image_tag <- "{alt: 'an image', width=80%}"
 # }
-na_empty = function(x) {
-  x[is.na(x)] = ""
+na_empty <- function(x) {
+  x[is.na(x)] <- ""
   x
 }
 
-empty_to_null = function(x) {
+empty_to_null <- function(x) {
   if (all(x == "")) {
-    x = NULL
+    x <- NULL
   }
   x
 }
 
-split_style = function(x) {
-  xx = strsplit(x, ";")[[1]]
-  xx = strsplit(xx, ":")
-  xx = lapply(xx, trimws)
-  xx = lapply(xx, gsub, pattern = "\\s+", replacement = " ")
-  att = sapply(xx, function(x) x[1])
-  xx = lapply(xx, function(x) x[2:length(x)])
-  names(xx) = att
+split_style <- function(x) {
+  xx <- strsplit(x, ";")[[1]]
+  xx <- strsplit(xx, ":")
+  xx <- lapply(xx, trimws)
+  xx <- lapply(xx, gsub, pattern = "\\s+", replacement = " ")
+  att <- sapply(xx, function(x) x[1])
+  xx <- lapply(xx, function(x) x[2:length(x)])
+  names(xx) <- att
   xx
 }
 
-get_margin = function(x) {
+get_margin <- function(x) {
   if (length(x) == 0) {
-    x = ""
+    x <- ""
   }
-  out = split_style(x)
-  margin = out$margin
+  out <- split_style(x)
+  margin <- out$margin
   if (length(margin) > 0) {
-    margin = strsplit(margin, " ")[[1]]
+    margin <- strsplit(margin, " ")[[1]]
   }
   if (
     (length(margin) == 0 || all(margin == "")) ||
-    (length(margin) == 1 && margin == "auto")
+      (length(margin) == 1 && margin == "auto")
   ) {
-    margin = rep("auto", 4)
+    margin <- rep("auto", 4)
   }
-  margin = c(margin, rep("0", length = 4-length(margin)))
-  names(margin) = c("top", "right", "bottom", "left")
+  margin <- c(margin, rep("0", length = 4 - length(margin)))
+  names(margin) <- c("top", "right", "bottom", "left")
   margin
 }
 
-remove_div = function(x) {
-  regex = paste0('^<(/|)div.*>\\s*$')
+remove_div <- function(x) {
+  regex <- paste0("^<(/|)div.*>\\s*$")
   gsub(pattern = regex, replacement = "", x)
 }
 
-margin_to_align = function(x) {
+margin_to_align <- function(x) {
   stopifnot(length(x) == 4)
-  names(x) = c("top", "right", "bottom", "left")
-  right = x["right"]
-  left = x["left"]
+  names(x) <- c("top", "right", "bottom", "left")
+  right <- x["right"]
+  left <- x["left"]
   if (right == "0" & left == "auto") {
     return("right")
   }
@@ -201,136 +204,156 @@ margin_to_align = function(x) {
 }
 
 
-build_image = function(src, ..., caption = NULL, embed = NULL,
-                       fullbleed = FALSE,
-                       remove_resources_start = TRUE) {
+build_image <- function(src, ..., caption = NULL, embed = NULL,
+                        fullbleed = FALSE,
+                        remove_resources_start = TRUE) {
   if (remove_resources_start) {
-    src = gsub("^resources/", "", src)
+    src <- gsub("^resources/", "", src)
   }
 
-  myenv = list(...,
-               caption = caption,
-               embed = embed,
-               src = src)
-  myenv = as.environment(myenv)
-  x = c('alt: "{alt}",',
-        'height: "{height}",',
-        'width: "{width}",',
-        'align: "{align}"',
-        'embed: "{embed}"'
+  myenv <- list(...,
+    caption = caption,
+    embed = embed,
+    src = src
+  )
+  myenv <- as.environment(myenv)
+  x <- c(
+    'alt: "{alt}",',
+    'height: "{height}",',
+    'width: "{width}",',
+    'align: "{align}"',
+    'embed: "{embed}"'
   )
   if (is.null(fullbleed) ||
-      length(fullbleed) == 0 ||
-      fullbleed == "" ||
-      is.na(fullbleed)) {
-    fullbleed = FALSE
+    length(fullbleed) == 0 ||
+    fullbleed == "" ||
+    is.na(fullbleed)) {
+    fullbleed <- FALSE
   }
-  x = sapply(x, glue::glue, .envir = myenv)
-  x = unlist(sapply(x, as.character))
-  x = c(x, if (fullbleed) 'fullbleed: true')
-  x = paste(x, collapse = " ")
-  x = paste0("{", x, "}\n")
-  x = paste0(x, paste0("![", myenv$caption, "](", myenv$src, ")"))
+  x <- sapply(x, glue::glue, .envir = myenv)
+  x <- unlist(sapply(x, as.character))
+  x <- c(x, if (fullbleed) "fullbleed: true")
+  x <- paste(x, collapse = " ")
+  x <- paste0("{", x, "}\n")
+  x <- paste0(x, paste0("![", myenv$caption, "](", myenv$src, ")"))
   x
 }
 
-replace_div_data = function(x, fullbleed = FALSE, remove_resources_start = TRUE) {
-  div_index = find_figure_div(x)
+replace_div_data <- function(x, fullbleed = FALSE, remove_resources_start = TRUE) {
+  div_index <- find_figure_div(x)
   if (NROW(div_index) == 0) {
     return(x)
   }
-  div_indices = mapply(function(x, y) {
+  div_indices <- mapply(function(x, y) {
     seq(x, y)
-  }, div_index[,1], div_index[,2], SIMPLIFY = FALSE)
+  }, div_index[, 1], div_index[, 2], SIMPLIFY = FALSE)
   # no nested divs
   stopifnot(!anyDuplicated(unlist(div_indices)))
-  divs = lapply(div_indices, function(ind) {
+  divs <- lapply(div_indices, function(ind) {
     x[ind]
   })
-  images = lapply(divs, get_figure_div)
-  out_images = sapply(images, function(ii) {
-    attributes = c("src", "alt", "height",
-                   "width", "style", "caption", "title",
-                   "embed")
-    if (length(ii) == 1) ii = ii[[1]]
-    args = as.list(ii)
+  images <- lapply(divs, get_figure_div)
+  out_images <- sapply(images, function(ii) {
+    attributes <- c(
+      "src", "alt", "height",
+      "width", "style", "caption", "title",
+      "embed"
+    )
+    if (length(ii) == 1) ii <- ii[[1]]
+    args <- as.list(ii)
     for (iattr in attributes) {
       if (!iattr %in% names(args)) {
-        args[iattr] = ""
+        args[iattr] <- ""
       }
     }
-    args = lapply(args, empty_to_null)
-    args$remove_resources_start = remove_resources_start
+    args <- lapply(args, empty_to_null)
+    args$remove_resources_start <- remove_resources_start
     do.call(build_image, args = args)
   })
-  first_div_index = sapply(div_indices, dplyr::first)
-  x[first_div_index] = out_images
-  remove_div_indices = c(unlist(sapply(div_indices, function(x) x[-1])))
-  x = x[-remove_div_indices]
+  first_div_index <- sapply(div_indices, dplyr::first)
+  x[first_div_index] <- out_images
+  remove_div_indices <- c(unlist(sapply(div_indices, function(x) x[-1])))
+  x <- x[-remove_div_indices]
   # just so \n is again right
-  ttfile = tempfile(fileext = ".txt")
-  writeLines(x, ttfile);
-  x = readLines(ttfile)
+  ttfile <- tempfile(fileext = ".txt")
+  writeLines(x, ttfile)
+  x <- readLines(ttfile)
   x
 }
 
-replace_image_data = function(x, element = c("img", "iframe"), fullbleed = FALSE,
-                              remove_resources_start = TRUE) {
-  element = match.arg(element)
-  func = switch(element,
-                img = find_img,
-                iframe = find_iframe)
-  image_logical = func(x)
+replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALSE,
+                               remove_resources_start = TRUE) {
+  element <- match.arg(element)
+  func <- switch(element,
+    img = find_img,
+    iframe = find_iframe
+  )
+  image_logical <- func(x)
   if (!any(image_logical)) {
     return(x)
   }
-  image_index = which(image_logical)
-  image_df = data.frame(start = c(0, image_index-1),
-                        end = c(image_index, length(x) +1))
-  image_df$number = c(0, seq_along(image_index))
-  image_df = image_df[image_df$number > 0,]
-  images = x[image_logical]
+  image_index <- which(image_logical)
+  image_df <- data.frame(
+    start = c(0, image_index - 1),
+    end = c(image_index, length(x) + 1)
+  )
+  image_df$number <- c(0, seq_along(image_index))
+  image_df <- image_df[image_df$number > 0, ]
+  images <- x[image_logical]
 
   # need to do some subsetting
 
 
-  attributes = c("src", "alt", "height", "width", "style",
-                 "caption", "title", "fullbleed")
+  attributes <- c(
+    "src", "alt", "height", "width", "style",
+    "caption", "title", "fullbleed"
+  )
   # style="display: block; margin: auto;" is center
-  image_attributes = lapply(images, function(x) {
-    out = lapply(attributes, function(name) {
+  image_attributes <- lapply(images, function(x) {
+    out <- lapply(attributes, function(name) {
       na_empty(get_html_attr(x = x, name = name, element = element))
     })
-    names(out) = attributes
+    names(out) <- attributes
+    
+    # If it has a youtube embed link, switch to the watch format link
+    if (grepl("https://www.youtube.com/embed", out$src)) {
+      out$src <- paste0("https://www.youtube.com/watch?v=",
+                        stringr::word(out$src, 
+                                      sep = "https://www.youtube.com/embed/", 
+                                      start = 2)
+                        )
+    }
+    
     if (length(unlist(out) == 0)) {
       # when <p align = "center>
-      msg = paste0(
+      msg <- paste0(
         "There may be an HTML issue in this text, when",
-        " looking for ", element, " elements")
+        " looking for ", element, " elements"
+      )
       # message(msg)
       # warning(msg)
     }
-    out$margin = get_margin(out$style)
+    out$margin <- get_margin(out$style)
     if (is.null(out$caption) && !is.null(out$title)) {
-      out$caption = out$title
+      out$caption <- out$title
     }
-    out$align = margin_to_align(out$margin)
-    out = lapply(out, empty_to_null)
+    out$align <- margin_to_align(out$margin)
+    out <- lapply(out, empty_to_null)
     out
   })
 
 
-  out_images = sapply(image_attributes, function(args) {
-    args$remove_resources_start = remove_resources_start
+  out_images <- sapply(image_attributes, function(args) {
+    args$remove_resources_start <- remove_resources_start
     do.call(build_image, args = args)
   })
-  out_images = c(unlist(out_images))
+  out_images <- c(unlist(out_images))
   stopifnot(length(out_images) == length(image_index))
-  out_x = x
-  out_x[image_logical] = out_images
-  ttfile = tempfile(fileext = ".txt")
-  writeLines(out_x, ttfile);
-  x = readLines(ttfile)
+  out_x <- x
+  out_x[image_logical] <- out_images
+  ttfile <- tempfile(fileext = ".txt")
+  writeLines(out_x, ttfile)
+  x <- readLines(ttfile)
   x
 }
 
@@ -347,65 +370,75 @@ replace_image_data = function(x, element = c("img", "iframe"), fullbleed = FALSE
 #'
 #' @return A list of output files and diagnostics
 #' @export
-replace_html = function(path = "manuscript",
-                        remove_resources_start = TRUE,
-                        fullbleed = FALSE,
-                        verbose = TRUE) {
-  md_files = list.files(path = path, pattern = "[.]md$", ignore.case = TRUE,
-                        full.names = TRUE)
-  md_files = lapply(md_files, replace_single_html, fullbleed = fullbleed,
-                    verbose = verbose)
+replace_html <- function(path = "manuscript",
+                         remove_resources_start = TRUE,
+                         fullbleed = FALSE,
+                         verbose = TRUE) {
+  md_files <- list.files(
+    path = path, pattern = "[.]md$", ignore.case = TRUE,
+    full.names = TRUE
+  )
+  md_files <- lapply(md_files, replace_single_html,
+    fullbleed = fullbleed,
+    verbose = verbose
+  )
   return(md_files)
 }
 
 #' @param file individual markdown file
 #' @export
 #' @rdname replace_html
-replace_single_html = function(file,
-                               remove_resources_start = TRUE,
-                               fullbleed = FALSE, verbose = TRUE) {
+replace_single_html <- function(file,
+                                remove_resources_start = TRUE,
+                                fullbleed = FALSE, verbose = TRUE) {
   stopifnot(length(file) == 1 && file.exists(file))
-  x = readLines(file, warn = FALSE)
+  x <- readLines(file, warn = FALSE)
   if (verbose) {
     message("Replacing Div data")
   }
-  x = replace_div_data(x, fullbleed = fullbleed,
-                       remove_resources_start = remove_resources_start)
+  x <- replace_div_data(x,
+    fullbleed = fullbleed,
+    remove_resources_start = remove_resources_start
+  )
 
   if (verbose) {
     message("Replacing image data")
   }
-  x = replace_image_data(x, element = "img", fullbleed = fullbleed,
-                         remove_resources_start = remove_resources_start)
+  x <- replace_image_data(x,
+    element = "img", fullbleed = fullbleed,
+    remove_resources_start = remove_resources_start
+  )
 
   if (verbose) {
     message("Replacing iframe data")
   }
-  x = replace_image_data(x, element = "iframe", fullbleed = fullbleed,
-                         remove_resources_start = remove_resources_start)
+  x <- replace_image_data(x,
+    element = "iframe", fullbleed = fullbleed,
+    remove_resources_start = remove_resources_start
+  )
 
   if (verbose) {
     message("Printing links")
   }
-  # PRINT OUT LINKS FROM HTML 
-  x <- print_links(x
-                  # IF YOUTUBE FIX TO BE WATCH LINK
-                  )
-  
+  # PRINT OUT LINKS FROM HTML
+  x <- print_links(
+    x
+    # IF YOUTUBE FIX TO BE WATCH LINK
+  )
+
   if (verbose) {
     message("Fixing youtube tags")
   }
-  # EDIT YOUTUB TAGS TO HAVE 
+  # EDIT YOUTUB TAGS TO HAVE
   # Edit youtube tags
   index <- intersect(grep("youtube", x), grep("\\{", x))
-  x[index] <- gsub("\\{", 
-                  "{type: video, poster: 'http://img.youtube.com/vi/VOCYL-FNbr0/mqdefault.jpg', ", 
-                  x[index])
-  
+  x[index] <- gsub(
+    "\\{",
+    "{type: video, poster: 'http://img.youtube.com/vi/VOCYL-FNbr0/mqdefault.jpg', ",
+    x[index]
+  )
+
   # need to actually do changes
   writeLines(x, con = file)
   return(file)
 }
-
-
-
