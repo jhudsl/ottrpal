@@ -222,6 +222,8 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
     'height: "{height}",',
     'width: "{width}",',
     'align: "{align}"',
+    'type: "{type}"',
+    'poster: "{poster}"',
     'embed: "{embed}"'
   )
   if (is.null(fullbleed) ||
@@ -257,7 +259,7 @@ replace_div_data <- function(x, fullbleed = FALSE, remove_resources_start = TRUE
     attributes <- c(
       "src", "alt", "height",
       "width", "style", "caption", "title",
-      "embed"
+      "embed", "type", "poster"
     )
     if (length(ii) == 1) ii <- ii[[1]]
     args <- as.list(ii)
@@ -306,7 +308,7 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
 
   attributes <- c(
     "src", "alt", "height", "width", "style",
-    "caption", "title", "fullbleed"
+    "caption", "title", "fullbleed", "type", "poster"
   )
   # style="display: block; margin: auto;" is center
   image_attributes <- lapply(images, function(x) {
@@ -321,7 +323,10 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
                         stringr::word(out$src, 
                                       sep = "https://www.youtube.com/embed/", 
                                       start = 2)
-                        )
+      )
+      # If it's youtube put this image in the tag
+      out$type <- "video"
+      out$poster <- "http://img.youtube.com/vi/VOCYL-FNbr0/mqdefault.jpg"
     }
     
     if (length(unlist(out) == 0)) {
@@ -347,6 +352,7 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
     args$remove_resources_start <- remove_resources_start
     do.call(build_image, args = args)
   })
+  
   out_images <- c(unlist(out_images))
   stopifnot(length(out_images) == length(image_index))
   out_x <- x
