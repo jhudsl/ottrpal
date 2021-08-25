@@ -21,7 +21,7 @@ split_embed <- function(to_replace_embed) {
 }
 
 # to change from embed to watch for lines about youtube videos
-split_youtube <- function(utube) {
+fix_youtube <- function(utube) {
   # Create a Markua readable line with a link given an original line with a youtube link
   #
   # Args:
@@ -58,7 +58,7 @@ split_links <- function(rmd_file) {
 
   # Read in file
   rmd_lines <- data.frame(
-    original_line = readLines(paste0(path, "/", rmd_file))
+    original_line = readLines(rmd_file)
   ) %>%
     dplyr::mutate(
       ws_trimmed = trimws(original_line),

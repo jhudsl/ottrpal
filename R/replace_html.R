@@ -383,22 +383,29 @@ replace_single_html = function(file,
   }
   x = replace_image_data(x, element = "iframe", fullbleed = fullbleed,
                          remove_resources_start = remove_resources_start)
+
+  if (verbose) {
+    message("Printing links")
+  }
+  # PRINT OUT LINKS FROM HTML 
+  x <- print_links(x
+                  # IF YOUTUBE FIX TO BE WATCH LINK
+                  )
   
   if (verbose) {
     message("Fixing youtube tags")
   }
+  # EDIT YOUTUB TAGS TO HAVE 
   # Edit youtube tags
-  index = intersect(grep("youtube", x), grep("{", x))
-  x[index] = gsub("{", 
-                  "{type: video, poster: 'http://img.youtube.com/vi/VOCYL-FNbr0/mqdefault.jpg'}", 
+  index <- intersect(grep("youtube", x), grep("\\{", x))
+  x[index] <- gsub("\\{", 
+                  "{type: video, poster: 'http://img.youtube.com/vi/VOCYL-FNbr0/mqdefault.jpg', ", 
                   x[index])
   
   # need to actually do changes
   writeLines(x, con = file)
   return(file)
 }
-
-replace_youtube_tags <- function(x = gsub("{", {type: video, poster: 'http://img.youtube.com/vi/VOCYL-FNbr0/mqdefault.jpg'}")
 
 
 
