@@ -2,28 +2,28 @@
 # get script path and number of paragraphs
 paragraph_from_script <- function(x) {
   if (file.exists(x)) {
-    para = readLines(x, warn = FALSE)
-    para = trimws(para)
-    para = para[!para %in% c("", " ")]
+    para <- readLines(x, warn = FALSE)
+    para <- trimws(para)
+    para <- para[!para %in% c("", " ")]
     return(para)
-  } else{
+  } else {
     return(NA)
   }
 }
 
-n_para = function(x) {
-  x = paragraph_from_script(x)
+n_para <- function(x) {
+  x <- paragraph_from_script(x)
   if (length(x) == 0) {
     return(0)
   }
   ifelse(all(is.na(x)), NA, length(x))
 }
 
-length0 = function(x) {
+length0 <- function(x) {
   length(x) == 0
 }
 
-length0_to_NA = function(x) {
+length0_to_NA <- function(x) {
   if (length0(x)) {
     x <- NA
   }
@@ -38,38 +38,39 @@ length0_to_NA = function(x) {
 #' @return A scalar character vector
 #' @export
 #' @rdname gs_helpers
-gs_id_from_slide = function(file) {
+gs_id_from_slide <- function(file) {
   if (!file.exists(file)) {
     return(NA_character_)
   }
-  x = readLines(file, warn = FALSE)
-  ind = grep(x, pattern = "\\[(S|s)lides\\]")
+  x <- readLines(file, warn = FALSE)
+  ind <- grep(x, pattern = "\\[(S|s)lides\\]")
   if (length(ind) > 0) {
-    x = x[ind]
+    x <- x[ind]
   } else {
-    x = x[grep(x, pattern = ".*presentation/d/")]
-
+    x <- x[grep(x, pattern = ".*presentation/d/")]
   }
   if (!any(grepl("http", x))) {
     return(NA_character_)
   }
-  x = sub(".*\\(\\s*(http.*)\\s*\\).*", "\\1", x)
-  x = unlist(sapply(x, function(r) httr::parse_url(r)$path))
-  x = sub("/edit$", "", x)
-  x = sub("/export/.*", "", x)
-  x = basename(x)
-  x = stats::na.omit(x)
-  x = x[ nchar(x) > 5 ]
-  ux = unique(x)
+  x <- sub(".*\\(\\s*(http.*)\\s*\\).*", "\\1", x)
+  x <- unlist(sapply(x, function(r) httr::parse_url(r)$path))
+  x <- sub("/edit$", "", x)
+  x <- sub("/export/.*", "", x)
+  x <- basename(x)
+  x <- stats::na.omit(x)
+  x <- x[nchar(x) > 5]
+  ux <- unique(x)
   if (length(ux) > 1) {
-    warning(paste0("Multiple sheets identified! Taking most frequent.",
-                   "  Please check ",
-                   file))
-    x = sort(table(x), decreasing = TRUE)
-    x = names(x)[1]
+    warning(paste0(
+      "Multiple sheets identified! Taking most frequent.",
+      "  Please check ",
+      file
+    ))
+    x <- sort(table(x), decreasing = TRUE)
+    x <- names(x)[1]
     # x = x[1]
   } else {
-    x = ux
+    x <- ux
   }
   if (length(x) == 0 || grepl("\\(\\)", x)) {
     return(NA_character_)
@@ -85,10 +86,10 @@ gs_id_from_slide = function(file) {
 ######################################
 #' @export
 #' @rdname gs_helpers
-get_image_link_from_slide = function(file) {
-  x = readLines(file, warn = FALSE)
-  x = grep(x, pattern = "!\\[.*\\]\\(((resources/|)images.*)\\)", value = TRUE)
-  x = sub(x, pattern = "!\\[(.*)\\]\\(((resources/|)images.*)\\)", replacement = "\\1")
+get_image_link_from_slide <- function(file) {
+  x <- readLines(file, warn = FALSE)
+  x <- grep(x, pattern = "!\\[.*\\]\\(((resources/|)images.*)\\)", value = TRUE)
+  x <- sub(x, pattern = "!\\[(.*)\\]\\(((resources/|)images.*)\\)", replacement = "\\1")
   # if (length(x) == 0) {
   #   return(NA)
   # }
@@ -101,10 +102,10 @@ get_image_link_from_slide = function(file) {
 ######################################
 #' @export
 #' @rdname gs_helpers
-get_image_from_slide = function(file) {
-  x = readLines(file, warn = FALSE)
-  x = grep(x, pattern = "!\\[.*\\]\\(((resources/|)images.*)\\)", value = TRUE)
-  x = sub(x, pattern = "!\\[.*\\]\\(((resources/|)images.*)\\)", replacement = "\\1")
+get_image_from_slide <- function(file) {
+  x <- readLines(file, warn = FALSE)
+  x <- grep(x, pattern = "!\\[.*\\]\\(((resources/|)images.*)\\)", value = TRUE)
+  x <- sub(x, pattern = "!\\[.*\\]\\(((resources/|)images.*)\\)", replacement = "\\1")
   # if (length(x) == 0) {
   #   return(NA)
   # }
@@ -112,50 +113,57 @@ get_image_from_slide = function(file) {
 }
 
 
-list_one_file = function(x, ending = "pdf") {
-  pdfs = list.files(
+list_one_file <- function(x, ending = "pdf") {
+  pdfs <- list.files(
     pattern = paste0("[.]", ending),
     path = x,
-    full.names = TRUE)
+    full.names = TRUE
+  )
   if (length(pdfs) > 1) {
-    warning(paste0(x, " had more than one ", ending, "! ",
-                   "Only grabbing first"))
-    pdfs = pdfs[1]
+    warning(paste0(
+      x, " had more than one ", ending, "! ",
+      "Only grabbing first"
+    ))
+    pdfs <- pdfs[1]
   }
-  pdfs = length0_to_NA(pdfs)
+  pdfs <- length0_to_NA(pdfs)
   return(pdfs)
 }
 
 
 
 
-png_pattern = function() {
-  paste0("^!\\[.+\\]\\((?!\\.png)\\)|",
-         "^!\\[\\]\\((?!\\.png)\\)|",
-         "^!\\[.+\\]\\((?!\\.png)\\)|",
-         "!\\[.+\\]\\(.+[^.png]\\)|",
-         "^!\\[.+\\]\\(https\\:\\/\\/www\\.youtu.+\\)")
+png_pattern <- function() {
+  paste0(
+    "^!\\[.+\\]\\((?!\\.png)\\)|",
+    "^!\\[\\]\\((?!\\.png)\\)|",
+    "^!\\[.+\\]\\((?!\\.png)\\)|",
+    "!\\[.+\\]\\(.+[^.png]\\)|",
+    "^!\\[.+\\]\\(https\\:\\/\\/www\\.youtu.+\\)"
+  )
 }
 
-yt_pattern = function() {
-  paste0("^!\\[.+\\]\\(https\\:\\/\\/www\\.youtu.+\\)|",
-         "^!\\[.+\\]\\(https\\:\\/\\/youtu.+\\)")
+yt_pattern <- function() {
+  paste0(
+    "^!\\[.+\\]\\(https\\:\\/\\/www\\.youtu.+\\)|",
+    "^!\\[.+\\]\\(https\\:\\/\\/youtu.+\\)"
+  )
 }
 
-is.Token = function(token) {
+is.Token <- function(token) {
   inherits(token, "Token") ||
     (inherits(token, "request") &&
-       inherits(token$auth_token, "Token"))
+      inherits(token$auth_token, "Token"))
 }
 
 
-na_false = function(test) {
-  test[ is.na(test)] = FALSE
+na_false <- function(test) {
+  test[is.na(test)] <- FALSE
   test
 }
 
-na_true = function(test) {
-  test[ is.na(test)] = TRUE
+na_true <- function(test) {
+  test[is.na(test)] <- TRUE
   test
 }
 
@@ -180,24 +188,27 @@ sys_type <- function() {
 }
 
 
-png_url = function(id, page_id) {
+png_url <- function(id, page_id) {
   paste0(
     "https://docs.google.com/presentation/d/",
     id, "/export/png?id=", id,
-    "&pageid=", page_id)
+    "&pageid=", page_id
+  )
 }
 
-download_png_urls = function(urls) {
-  res = vapply(urls, function(url) {
-    tfile = tempfile(fileext = ".png")
-    out = httr::GET(url, httr::write_disk(tfile),
-                    httr::content_type(".png"))
+download_png_urls <- function(urls) {
+  res <- vapply(urls, function(url) {
+    tfile <- tempfile(fileext = ".png")
+    out <- httr::GET(
+      url, httr::write_disk(tfile),
+      httr::content_type(".png")
+    )
     httr::stop_for_status(out)
-    ctype = out$headers$`content-type`
-    ctype = strsplit(ctype, " ")[[1]]
-    ctype = sub(";$", "", ctype)
+    ctype <- out$headers$`content-type`
+    ctype <- strsplit(ctype, " ")[[1]]
+    ctype <- sub(";$", "", ctype)
     if (any(ctype == "text/html") &&
-        !any(grepl("png", ctype))) {
+      !any(grepl("png", ctype))) {
       stop("Output is not a PNG!")
     }
     tfile

@@ -5,7 +5,7 @@
 #'
 #' @return NULL
 #' @export
-set_knitr_image_path = function(verbose = FALSE) {
+set_knitr_image_path <- function(verbose = FALSE) {
   fp <- knitr::fig_path()
   fp <- dirname(fp)
   fp <- paste0("resources/images/", fp, "/")
