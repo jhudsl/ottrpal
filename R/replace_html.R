@@ -108,7 +108,6 @@ find_img <- function(x) {
   xx <- grepl(regex, x = x) & !grepl("^<!--", trimws(x))
 }
 
-
 find_caption <- function(x) {
   regex <- paste0('<p class="caption"')
   caption_start <- grep(regex, x = x)
@@ -332,7 +331,6 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
       out$type <- "video"
       out$poster <- "http://img.youtube.com/vi/VOCYL-FNbr0/mqdefault.jpg"
     }
-    
     if (length(unlist(out) == 0)) {
       # when <p align = "center>
       msg <- paste0(
@@ -356,7 +354,7 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
     args$remove_resources_start <- remove_resources_start
     do.call(build_image, args = args)
   })
-  
+
   out_images <- c(unlist(out_images))
   stopifnot(length(out_images) == length(image_index))
   out_x <- x

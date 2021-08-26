@@ -112,10 +112,9 @@ bookdown_to_leanpub <- function(path = ".",
                                 verbose = TRUE) {
   rmd_regex <- "[.][R|r]md$"
 
-  path = bookdown_path(path)
+  path <- bookdown_path(path)
 
-  rmd_files = bookdown_rmd_files(path = path)
-  
+  rmd_files <- bookdown_rmd_files(path = path)
   if (render) {
     if (verbose) {
       message("Rendering the Book")
@@ -242,12 +241,12 @@ bookdown_to_book_txt <- function(
   index <- full_file <- NULL
   rm(list = c("full_file", "index"))
 
-  path = bookdown_path(path)
-  
-  rmd_regex = "[.][R|r]md$"
-  rmd_files = bookdown_rmd_files(path = path)
-  md_files = sub(rmd_regex, ".md", rmd_files, ignore.case = TRUE)
-  md_df = tibble::tibble(
+  path <- bookdown_path(path)
+
+  rmd_regex <- "[.][R|r]md$"
+  rmd_files <- bookdown_rmd_files(path = path)
+  md_files <- sub(rmd_regex, ".md", rmd_files, ignore.case = TRUE)
+  md_df <- tibble::tibble(
     file = md_files,
     index = seq_along(md_files)
   )
