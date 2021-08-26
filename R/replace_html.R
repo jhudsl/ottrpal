@@ -273,9 +273,14 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
   # Default is to not use a !
   link <- paste0("[", words, "](", myenv$src, ").")
   
-  # But if its an image, use use !
+  # But if its an image or video, use use !
   if (!is.null(element)) {
     if (element == "img") {
+      link <- paste0("![", words, "](", myenv$src, ").")
+      } 
+  }
+  if (!is.null(myenv$type)) {
+    if (myenv$type == "video") {
       link <- paste0("![", words, "](", myenv$src, ").")
       } 
     }
