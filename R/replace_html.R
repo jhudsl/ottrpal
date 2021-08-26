@@ -365,10 +365,10 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
     names(out) <- attributes
     
     # If it has a youtube embed link, switch to the watch format link
-    if (grepl("https://www.youtube.com/embed", out$src)) {
+    if (grepl("www.youtube.com/embed", out$src)) {
       out$src <- paste0("https://www.youtube.com/watch?v=",
                         strsplit(out$src,
-                                 split = "https://www.youtube.com/embed/")[[1]][2]
+                                 split = "www.youtube.com/embed/")[[1]][2]
       )
       # If it's youtube put this image in the tag
       out$type <- "video"
