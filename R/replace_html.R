@@ -237,7 +237,11 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
   x <- c(x, if (fullbleed) "fullbleed: true")
   x <- paste(x, collapse = " ")
   x <- paste0("{", x, "}\n")
-  x <- paste0(x, paste0("![", myenv$caption, "](", myenv$src, ")"))
+  if (!is.null(myenv$caption)) {
+    x <- paste0(x, paste0("![", myenv$caption, "](", myenv$src, ")"))
+  } else {
+    x <- paste0(x, paste0("![See this link.](", myenv$src, ")"))
+  }
   x
 }
 
