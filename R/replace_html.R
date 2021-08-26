@@ -205,7 +205,7 @@ margin_to_align <- function(x) {
 
 build_image <- function(src, ..., caption = NULL, embed = NULL,
                         fullbleed = FALSE,
-                        remove_resources_start = TRUE) {
+                        remove_resources_start = TRUE, element = NULL) {
   if (remove_resources_start) {
     src <- gsub("^resources/", "", src)
   }
@@ -256,16 +256,24 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
   # If caption was set, use that for link
   if (!is.null(myenv$caption)) {
     words <-  myenv$caption
-  } else { 
+  } else if (!is.null(myenv$type)) {
+    if (myenv$type == "video") words <- "Click on the lower right corner to expand the screen"
+  } else if (!is.null(element)) {
+    if (element == "img") {
+      words <- ""
+    }
+  } else {
     words <- "Check out this link"
   }
 
   # If its an image, use ! otherwise don't
-  if (!is.null(element) | element == "img") {
-    link <- paste0("![", words, "](", myenv$src, ").")
-  } else {
-    link <- paste0("[", words, "](", myenv$src, ").")
-  } 
+  if (!is.null(element)) {
+    if (element == "img") {
+      link <- paste0("![", words, "](", myenv$src, ").")
+      } else {
+      link <- paste0("[", words, "](", myenv$src, ").")
+      }
+  }
   
   # Tack on the link
   specs <- paste0(specs, link)
@@ -273,7 +281,8 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
   return(specs)
 }
 
-replace_div_data <- function(x, fullbleed = FALSE, remove_resources_start = TRUE) {
+replace_div_data <- function(x, fullbleed = FALSE, remove_resources_start = TRUE, 
+                             element = NULL) {
   div_index <- find_figure_div(x)
   if (NROW(div_index) == 0) {
     return(x)
@@ -302,6 +311,7 @@ replace_div_data <- function(x, fullbleed = FALSE, remove_resources_start = TRUE
     }
     args <- lapply(args, empty_to_null)
     args$remove_resources_start <- remove_resources_start
+    args$element <- element
     do.call(build_image, args = args)
   })
   first_div_index <- sapply(div_indices, dplyr::first)
@@ -380,6 +390,7 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
 
   out_images <- sapply(image_attributes, function(args) {
     args$remove_resources_start <- remove_resources_start
+    args$element <- element
     do.call(build_image, args = args)
   })
 
