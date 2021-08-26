@@ -240,7 +240,7 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
   if (!is.null(myenv$caption)) {
     x <- paste0(x, paste0("![", myenv$caption, "](", myenv$src, ")"))
   } else {
-    x <- paste0(x, paste0("![See this link.](", myenv$src, ")"))
+    x <- paste0(x, paste0("Check out this ![link](", myenv$src, ")."))
   }
   x
 }
