@@ -30,17 +30,17 @@ Imports:
     curl,
     rprojroot,
     magrittr,
-    yaml
+    yaml,
     stringr
-Suggests: 
+Suggests:
     didactr,
     knitr,
     testthat
 Encoding: UTF-8
 LazyData: true
-Remotes: 
-    jhudsl/ari, 
-    jhudsl/ariExtra, 
+Remotes:
+    jhudsl/ari,
+    jhudsl/ariExtra,
     jhudsl/text2speech,
     jhudsl/didactr,
     hairizuanbinnoorazman/rgoogleslides
