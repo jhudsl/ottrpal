@@ -254,26 +254,31 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
   specs <- paste0("{", specs, "}\n")
   
   # If caption was set, use that for link
+  # Default is to set this for a link 
+  words <- "Check out this link"
+  
+  # If a caption is set use that
   if (!is.null(myenv$caption)) {
     words <-  myenv$caption
+    
+  # Otherwise if video use this wording
   } else if (!is.null(myenv$type)) {
     if (myenv$type == "video") words <- "Click on the lower right corner to expand the screen"
+  
+  # Otherwise if image use this wording
   } else if (!is.null(element)) {
-    if (element == "img") {
-      words <- ""
-    }
-  } else {
-    words <- "Check out this link"
+    if (element == "img") words <- ""
   }
 
-  # If its an image, use ! otherwise don't
+  # Default is to not use a !
+  link <- paste0("[", words, "](", myenv$src, ").")
+  
+  # But if its an image, use use !
   if (!is.null(element)) {
     if (element == "img") {
       link <- paste0("![", words, "](", myenv$src, ").")
-      } else {
-      link <- paste0("[", words, "](", myenv$src, ").")
-      }
-  }
+      } 
+    }
   
   # Tack on the link
   specs <- paste0(specs, link)
