@@ -216,7 +216,7 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
     src = src
   )
   myenv <- as.environment(myenv)
-  x <- c(
+  specs <- c(
     'alt: "{alt}",',
     'height: "{height}",',
     'width: "{width}",',
@@ -231,17 +231,46 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
     is.na(fullbleed)) {
     fullbleed <- FALSE
   }
-  x <- sapply(x, glue::glue, .envir = myenv)
-  x <- unlist(sapply(x, as.character))
-  x <- c(x, if (fullbleed) "fullbleed: true")
-  x <- paste(x, collapse = " ")
-  x <- paste0("{", x, "}\n")
+  
+  ## Set defaults for items that haven't been specified
+  
+  # Default for align is center
+  if(is.null(myenv$align)) {myenv$align <- "center"}
+  
+  # Default for width is 100%
+  if(is.null(myenv$width)) {myenv$width <- "100%"}
+  
+  # Put everything together
+  specs <- sapply(specs, glue::glue, .envir = myenv)
+  
+  # Make sure it's coerced as a character
+  specs <- unlist(sapply(specs, as.character))
+  
+  # Set as fullbleed if TRUE
+  specs <- c(specs, if (fullbleed) "fullbleed: true")
+  
+  # Collapse it all together and add a new line
+  specs <- paste(specs, collapse = " ")
+  specs <- paste0("{", specs, "}\n")
+  
+  # If caption was set, use that for link
   if (!is.null(myenv$caption)) {
-    x <- paste0(x, paste0("![", myenv$caption, "](", myenv$src, ")"))
-  } else {
-    x <- paste0(x, paste0("Check out this ![link](", myenv$src, ")."))
+    words <-  myenv$caption
+  } else { 
+    words <- "Check out this link"
   }
-  x
+
+  # If its an image, use ! otherwise don't
+  if (!is.null(element) | element == "img") {
+    link <- paste0("![", words, "](", myenv$src, ").")
+  } else {
+    link <- paste0("[", words, "](", myenv$src, ").")
+  } 
+  
+  # Tack on the link
+  specs <- paste0(specs, link)
+  
+  return(specs)
 }
 
 replace_div_data <- function(x, fullbleed = FALSE, remove_resources_start = TRUE) {
