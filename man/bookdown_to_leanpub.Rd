@@ -10,7 +10,8 @@ bookdown_to_leanpub(
   output_dir = "manuscript",
   make_book_txt = TRUE,
   remove_resources_start = FALSE,
-  verbose = TRUE
+  verbose = TRUE,
+  footer_text = NULL
 )
 }
 \arguments{
@@ -28,6 +29,9 @@ to create a `Book.txt` in the output directory?}
 of any image path.}
 
 \item{verbose}{print diagnostic messages}
+
+\item{footer_text}{Optionally can add a bit of text that will be added to the 
+end of each file before the references section.}
 }
 \value{
 A list of output files and diagnostics

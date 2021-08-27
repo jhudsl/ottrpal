@@ -423,6 +423,8 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
 #' @param fullbleed should the image have the attribute `fullbleed: true`?
 #' @param remove_resources_start remove the word `resources/` at the front
 #' of any image path.
+#' @param footer_text a bit of text that will be added to the 
+#' end of each file before the references section.
 #' @param verbose print diagnostic messages
 #'
 #' @return A list of output files and diagnostics

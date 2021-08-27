@@ -92,6 +92,8 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
 #' of any image path.
 #' @param make_book_txt Should [leanbuild::bookdown_to_book_txt()] be run
 #' to create a `Book.txt` in the output directory?
+#' @param footer_text Optionally can add a bit of text that will be added to the 
+#' end of each file before the references section.
 #'
 #' @return A list of output files and diagnostics
 #' @export
