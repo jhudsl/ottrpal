@@ -27,7 +27,10 @@ jobs:
       # Copy over the latest leanbuild and use that for the run
       - name: Run with latest leanbuild
         uses: |
-          svn export --force https://github.com/${GITHUB_REPOSITORY}.git/branches/${GITHUB_REF#refs/heads/} leanbuild/
+          mkdir leanbuild
 
-          Rscript -e "devtools::load_all('leanbuild') \
-          leanbuild::bookdown_to_leanpub(footer_text = 'check if footer works')"
+          # Copy over the latest leanbuild build
+          svn export https://github.com/${GITHUB_REPOSITORY}.git/branches/${GITHUB_REF#refs/heads/} leanbuild/
+
+          # Run the render
+          Rscript -vanilla .github/render_all.R
