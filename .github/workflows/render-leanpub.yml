@@ -28,9 +28,5 @@ jobs:
       - name: Run with latest leanbuild
         uses: |
           mkdir leanbuild
-
-          # Copy over the latest leanbuild build
           svn export https://github.com/${GITHUB_REPOSITORY}.git/branches/${GITHUB_REF#refs/heads/} leanbuild/
-
-          # Run the render
           Rscript -vanilla .github/render_all.R
