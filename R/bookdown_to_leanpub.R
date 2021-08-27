@@ -182,10 +182,12 @@ bookdown_to_leanpub <- function(path = ".",
       message("Replacing HTML for ", file)
     }
     infile <- normalizePath(file)
+
     infile <- replace_single_html(infile,
       verbose = verbose > 1,
       remove_resources_start = remove_resources_start
     )
+
     if (length(bib_files) > 0) {
       if (verbose > 1) {
         message("Making references for ", file)

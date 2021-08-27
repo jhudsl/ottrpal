@@ -205,7 +205,7 @@ margin_to_align <- function(x) {
 
 build_image <- function(src, ..., caption = NULL, embed = NULL,
                         fullbleed = FALSE,
-                        remove_resources_start = TRUE) {
+                        remove_resources_start = TRUE, element = NULL) {
   if (remove_resources_start) {
     src <- gsub("^resources/", "", src)
   }
@@ -216,11 +216,13 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
     src = src
   )
   myenv <- as.environment(myenv)
-  x <- c(
+  specs <- c(
     'alt: "{alt}",',
     'height: "{height}",',
     'width: "{width}",',
     'align: "{align}"',
+    'type: "{type}"',
+    'poster: "{poster}"',
     'embed: "{embed}"'
   )
   if (is.null(fullbleed) ||
@@ -229,16 +231,68 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
     is.na(fullbleed)) {
     fullbleed <- FALSE
   }
-  x <- sapply(x, glue::glue, .envir = myenv)
-  x <- unlist(sapply(x, as.character))
-  x <- c(x, if (fullbleed) "fullbleed: true")
-  x <- paste(x, collapse = " ")
-  x <- paste0("{", x, "}\n")
-  x <- paste0(x, paste0("![", myenv$caption, "](", myenv$src, ")"))
-  x
+  
+  ## Set defaults for items that haven't been specified
+  
+  # Default for align is center
+  if(is.null(myenv$align)) {myenv$align <- "center"}
+  
+  # Default for width is 100%
+  if(is.null(myenv$width)) {myenv$width <- "100%"}
+  
+  # Put everything together
+  specs <- sapply(specs, glue::glue, .envir = myenv)
+  
+  # Make sure it's coerced as a character
+  specs <- unlist(sapply(specs, as.character))
+  
+  # Set as fullbleed if TRUE
+  specs <- c(specs, if (fullbleed) "fullbleed: true")
+  
+  # Collapse it all together and add a new line
+  specs <- paste(specs, collapse = " ")
+  specs <- paste0("{", specs, "}\n")
+  
+  # If caption was set, use that for link
+  # Default is to set this for a link 
+  words <- "Check out this link"
+  
+  # If a caption is set use that
+  if (!is.null(myenv$caption)) {
+    words <-  myenv$caption
+    
+  # Otherwise if video use this wording
+  } else if (!is.null(myenv$type)) {
+    if (myenv$type == "video") words <- "Click on the lower right corner to expand the screen"
+  
+  # Otherwise if image use this wording
+  } else if (!is.null(element)) {
+    if (element == "img") words <- ""
+  }
+
+  # Default is to not use a !
+  link <- paste0("[", words, "](", myenv$src, ").")
+  
+  # But if its an image or video, use use !
+  if (!is.null(element)) {
+    if (element == "img") {
+      link <- paste0("![", words, "](", myenv$src, ").")
+      } 
+  }
+  if (!is.null(myenv$type)) {
+    if (myenv$type == "video") {
+      link <- paste0("![", words, "](", myenv$src, ").")
+      } 
+    }
+  
+  # Tack on the link
+  specs <- paste0(specs, link)
+  
+  return(specs)
 }
 
-replace_div_data <- function(x, fullbleed = FALSE, remove_resources_start = TRUE) {
+replace_div_data <- function(x, fullbleed = FALSE, remove_resources_start = TRUE, 
+                             element = NULL) {
   div_index <- find_figure_div(x)
   if (NROW(div_index) == 0) {
     return(x)
@@ -256,7 +310,7 @@ replace_div_data <- function(x, fullbleed = FALSE, remove_resources_start = TRUE
     attributes <- c(
       "src", "alt", "height",
       "width", "style", "caption", "title",
-      "embed"
+      "embed", "type", "poster"
     )
     if (length(ii) == 1) ii <- ii[[1]]
     args <- as.list(ii)
@@ -267,6 +321,7 @@ replace_div_data <- function(x, fullbleed = FALSE, remove_resources_start = TRUE
     }
     args <- lapply(args, empty_to_null)
     args$remove_resources_start <- remove_resources_start
+    args$element <- element
     do.call(build_image, args = args)
   })
   first_div_index <- sapply(div_indices, dplyr::first)
@@ -305,7 +360,7 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
 
   attributes <- c(
     "src", "alt", "height", "width", "style",
-    "caption", "title", "fullbleed"
+    "caption", "title", "fullbleed", "type", "poster"
   )
   # style="display: block; margin: auto;" is center
   image_attributes <- lapply(images, function(x) {
@@ -313,6 +368,17 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
       na_empty(get_html_attr(x = x, name = name, element = element))
     })
     names(out) <- attributes
+    
+    # If it has a youtube embed link, switch to the watch format link
+    if (grepl("www.youtube.com/embed", out$src)) {
+      out$src <- paste0("https://www.youtube.com/watch?v=",
+                        strsplit(out$src,
+                                 split = "www.youtube.com/embed/")[[1]][2]
+      )
+      # If it's youtube put this image in the tag
+      out$type <- "video"
+      out$poster <- "http://img.youtube.com/vi/VOCYL-FNbr0/mqdefault.jpg"
+    }
     if (length(unlist(out) == 0)) {
       # when <p align = "center>
       msg <- paste0(
@@ -334,8 +400,10 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
 
   out_images <- sapply(image_attributes, function(args) {
     args$remove_resources_start <- remove_resources_start
+    args$element <- element
     do.call(build_image, args = args)
   })
+
   out_images <- c(unlist(out_images))
   stopifnot(length(out_images) == length(image_index))
   out_x <- x
