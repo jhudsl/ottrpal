@@ -27,8 +27,6 @@ jobs:
       # Copy over the latest leanbuild and use that for the run
       - name: Get latest leanbuild
         run: |
-          sudo apt-get install subversion
-
           # Make directory for it to land in
           mkdir leanbuild
 
