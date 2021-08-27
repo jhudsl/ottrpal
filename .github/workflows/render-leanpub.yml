@@ -23,9 +23,16 @@ jobs:
           repository: jhudsl/DaSL_Course_Template_Leanpub
           token: ${{ secrets.GH_PAT }}
 
+      # Login to Dockerhub
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       # Copy over the latest leanbuild and use that for the run
       - name: Get latest leanbuild
-        uses: |
+        run: |
           sudo apt-get install subversion
 
           # Make directory for it to land in
