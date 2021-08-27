@@ -12,10 +12,18 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    # I have it check out the image that is built from: https://github.com/jhudsl/DaSL_Course_Template_Bookdown/blob/main/docker/Dockerfile
     container:
-      image: rocker/tidyverse:4.0.2
+      image: jhuds/course_template
 
     steps:
+      # Login to Dockerhub
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       # Checks-out the _Leanpub repository to run the checks
       - name: Checkout code from Leanpub test repo
         uses: actions/checkout@v2
@@ -44,7 +52,5 @@ jobs:
       # Run leanpub rendering
       - name: Run leanbuild::bookdown_to_leanpub
         run: |
-          docker run \
-          --mount type=bind,target=/home/rstudio,source=$PWD \
-          jhudsl/course_template \
-          Rscript -vanilla .github/render_all.R
+          Rscript -e "devtools::load_all('leanbuild') \
+          leanbuild::bookdown_to_leanpub(footer_text = 'check if footer works')"
