@@ -27,7 +27,7 @@ jobs:
       # Copy over the latest leanbuild and use that for the run
       - name: Run with latest leanbuild
         uses: |
-          # Copy over leanbuild latest
+        # Copy over leanbuild latest
           svn export --force https://github.com/${GITHUB_REPOSITORY}.git/branches/${GITHUB_REF#refs/heads/} leanbuild/
 
           Rscript -e "devtools::load_all('leanbuild') \
