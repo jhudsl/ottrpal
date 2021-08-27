@@ -3,11 +3,11 @@
 
 name: Render and publish Leanpub
 
-# Triggers the workflow on pull requests for the main branch OR can be manually triggered
+# Triggers the workflow on pull requests for the master branch OR can be manually triggered
 on:
   workflow_dispatch:
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   publish:
