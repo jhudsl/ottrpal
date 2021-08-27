@@ -39,44 +39,49 @@ Check Quiz Information
 }
 \examples{
 
-x = c('{quiz, id: quiz_00_filename}',
-"### Lesson Name quiz",
-"{choose-answers: 4}",
-"? What do you think?",
-"",
-"C) The answer to this one",
-"o) Not the answer",
-"o) Not the answer either",
-"C) Another correct answer",
-"m) Mandatory different answer",
-"",
-"{/quiz}")
-out = parse_quiz(x)
+x <- c(
+  "{quiz, id: quiz_00_filename}",
+  "### Lesson Name quiz",
+  "{choose-answers: 4}",
+  "? What do you think?",
+  "",
+  "C) The answer to this one",
+  "o) Not the answer",
+  "o) Not the answer either",
+  "C) Another correct answer",
+  "m) Mandatory different answer",
+  "",
+  "{/quiz}"
+)
+out <- parse_quiz(x)
 check_quiz_attributes(out)
 
-x = c('{quiz, id: quiz_00_filename, choose-answers: 4}',
-"### Lesson Name quiz",
-"{choose-answers: 4, attempts: 25}",
-"? What do you think?",
-"C) The answer to this one",
-"o) Not the answer",
-"o) Not the answer either",
-"C) Another correct answer",
-"m) Mandatory different answer",
-"{/quiz}")
-out = parse_quiz(x)
-check_quiz_attributes(out)
-check_quiz_question_attributes(out)
-
-x = c('{quiz, id: quiz_00_filename, choose-answers: 4}',
-"### Lesson Name quiz",
-"{choose-answers: 4, attempts: 25}",
-"",
-"? What do you think?",
-"! The answer to this one",
-"{/quiz}")
-out = parse_quiz(x)
+x <- c(
+  "{quiz, id: quiz_00_filename, choose-answers: 4}",
+  "### Lesson Name quiz",
+  "{choose-answers: 4, attempts: 25}",
+  "? What do you think?",
+  "C) The answer to this one",
+  "o) Not the answer",
+  "o) Not the answer either",
+  "C) Another correct answer",
+  "m) Mandatory different answer",
+  "{/quiz}"
+)
+out <- parse_quiz(x)
 check_quiz_attributes(out)
 check_quiz_question_attributes(out)
 
+x <- c(
+  "{quiz, id: quiz_00_filename, choose-answers: 4}",
+  "### Lesson Name quiz",
+  "{choose-answers: 4, attempts: 25}",
+  "",
+  "? What do you think?",
+  "! The answer to this one",
+  "{/quiz}"
+)
+out <- parse_quiz(x)
+check_quiz_attributes(out)
+check_quiz_question_attributes(out)
 }

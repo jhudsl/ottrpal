@@ -23,19 +23,21 @@ Check Quizzes
 }
 \examples{
 
-x = c('{quiz, id: quiz_00_filename}',
-"### Lesson Name quiz",
-"{choose-answers: 4}",
-"? What do you think?",
-"C) The answer to this one",
-"o) Not the answer",
-"o) Not the answer either",
-"C) Another correct answer",
-"m) Mandatory different answer",
-"{/quiz}")
-tdir = tempfile()
+x <- c(
+  "{quiz, id: quiz_00_filename}",
+  "### Lesson Name quiz",
+  "{choose-answers: 4}",
+  "? What do you think?",
+  "C) The answer to this one",
+  "o) Not the answer",
+  "o) Not the answer either",
+  "C) Another correct answer",
+  "m) Mandatory different answer",
+  "{/quiz}"
+)
+tdir <- tempfile()
 dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
-tfile = tempfile(pattern = "quiz_", fileext = ".md", tmpdir = tdir)
+tfile <- tempfile(pattern = "quiz_", fileext = ".md", tmpdir = tdir)
 writeLines(x, tfile)
 check_quizzes(path = tdir)
 

@@ -30,11 +30,13 @@ Convert Google Slides to PNGs and Upload to Drive folder
 }
 \examples{
 \dontrun{
-url = paste0("https://docs.google.com/presentation/d/",
-"1ywZbtFacZK0UIsnt2g-sheC9du_rw_7XZ1FX4rRt27M",
-"/export/png?",
-"id=1ywZbtFacZK0UIsnt2g-sheC9du_rw_7XZ1FX4rRt27M&pageid=g325fd519ca_0_5")
+url <- paste0(
+  "https://docs.google.com/presentation/d/",
+  "1ywZbtFacZK0UIsnt2g-sheC9du_rw_7XZ1FX4rRt27M",
+  "/export/png?",
+  "id=1ywZbtFacZK0UIsnt2g-sheC9du_rw_7XZ1FX4rRt27M&pageid=g325fd519ca_0_5"
+)
 
-out = gs_to_drive_pngs(url)
+out <- gs_to_drive_pngs(url)
 }
 }

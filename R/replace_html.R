@@ -423,21 +423,26 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
 #' @param fullbleed should the image have the attribute `fullbleed: true`?
 #' @param remove_resources_start remove the word `resources/` at the front
 #' of any image path.
+#' @param footer_text a bit of text that will be added to the 
+#' end of each file before the references section.
 #' @param verbose print diagnostic messages
 #'
 #' @return A list of output files and diagnostics
 #' @export
 replace_html <- function(path = "manuscript",
                          remove_resources_start = TRUE,
+                         footer_text = NULL,
                          fullbleed = FALSE,
                          verbose = TRUE) {
   md_files <- list.files(
     path = path, pattern = "[.]md$", ignore.case = TRUE,
     full.names = TRUE
   )
+  
   md_files <- lapply(md_files, replace_single_html,
     fullbleed = fullbleed,
-    verbose = verbose
+    verbose = verbose, 
+    footer_text = footer_text
   )
   return(md_files)
 }
@@ -446,6 +451,7 @@ replace_html <- function(path = "manuscript",
 #' @export
 #' @rdname replace_html
 replace_single_html <- function(file,
+                                footer_text = NULL,
                                 remove_resources_start = TRUE,
                                 fullbleed = FALSE, verbose = TRUE) {
   stopifnot(length(file) == 1 && file.exists(file))
@@ -473,8 +479,14 @@ replace_single_html <- function(file,
     element = "iframe", fullbleed = fullbleed,
     remove_resources_start = remove_resources_start
   )
-
+  
   # need to actually do changes
   writeLines(x, con = file)
+  
+  # Add on footer if it was given
+  if (!is.null(footer_text)) {
+    add_footer(rmd_path = file, 
+               footer_text)
+  }
   return(file)
 }

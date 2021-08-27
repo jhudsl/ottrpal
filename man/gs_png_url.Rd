@@ -37,9 +37,11 @@ A character vector of URLs
 Get Google Slide PNG URL
 }
 \examples{
-url = paste0("https://docs.google.com/presentation/d/",
-"12DPZgPteQBwgal6kSPP58zhPhjZ7QSPZLe3NkA8M3eo/edit",
-"#slide=id.gc8648f14c3_0_397&t=4")
-id = ariExtra::get_slide_id(url)
+url <- paste0(
+  "https://docs.google.com/presentation/d/",
+  "12DPZgPteQBwgal6kSPP58zhPhjZ7QSPZLe3NkA8M3eo/edit",
+  "#slide=id.gc8648f14c3_0_397&t=4"
+)
+id <- ariExtra::get_slide_id(url)
 gs_png_url(url)
 }

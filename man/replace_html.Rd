@@ -8,12 +8,14 @@
 replace_html(
   path = "manuscript",
   remove_resources_start = TRUE,
+  footer_text = NULL,
   fullbleed = FALSE,
   verbose = TRUE
 )
 
 replace_single_html(
   file,
+  footer_text = NULL,
   remove_resources_start = TRUE,
   fullbleed = FALSE,
   verbose = TRUE
@@ -24,6 +26,9 @@ replace_single_html(
 
 \item{remove_resources_start}{remove the word `resources/` at the front
 of any image path.}
+
+\item{footer_text}{a bit of text that will be added to the 
+end of each file before the references section.}
 
 \item{fullbleed}{should the image have the attribute `fullbleed: true`?}
 
