@@ -45,14 +45,6 @@ bookdown_destination <- function(path = ".") {
   full_output_dir
 }
 
-# copy_md_files = function(path = ".") {
-#   path = bookdown_path(path)
-#   files = bookdown_rmd_files(path)
-#   files = sub(rmd_regex, ".md", files)
-#   files = file.path(bookdown_destination(path), files)
-#
-# }
-
 copy_directory_contents <- function(from, to) {
   x <- list.files(
     path = from, full.names = TRUE, all.files = TRUE,
@@ -109,7 +101,8 @@ bookdown_to_leanpub <- function(path = ".",
                                 output_dir = "manuscript",
                                 make_book_txt = TRUE,
                                 remove_resources_start = FALSE,
-                                verbose = TRUE) {
+                                verbose = TRUE, 
+                                footer_text = NULL) {
   rmd_regex <- "[.][R|r]md$"
 
   path <- bookdown_path(path)
@@ -159,25 +152,6 @@ bookdown_to_leanpub <- function(path = ".",
 
   for (file in md_files) {
 
-    # if (render) {
-    #   rmarkdown::render(
-    #     file,
-    #     output_file = output_file,
-    #     output_dir = output_dir,
-    #     intermediates_dir = output_dir,
-    #     envir = run_env,
-    #     output_format = rmarkdown::output_format(
-    #       knitr = rmarkdown::knitr_options(
-    #         opts_chunk = list(fig.path = "resources/images/")
-    #       ),
-    #       pandoc = rmarkdown::pandoc_options(
-    #         # to = "markdown_strict+autolink_bare_uris+tex_math_single_backslash",
-    #         to = "gfm+autolink_bare_uris",
-    #         args = c(pandoc_args, "--citeproc")
-    #       )
-    #     )
-    #   )
-    # }
     if (verbose > 1) {
       message("Replacing HTML for ", file)
     }
@@ -185,7 +159,8 @@ bookdown_to_leanpub <- function(path = ".",
 
     infile <- replace_single_html(infile,
       verbose = verbose > 1,
-      remove_resources_start = remove_resources_start
+      remove_resources_start = remove_resources_start,
+      footer_text = footer_text
     )
 
     if (length(bib_files) > 0) {
@@ -196,14 +171,6 @@ bookdown_to_leanpub <- function(path = ".",
         con = infile, sep = "\n"
       )
     }
-    # rmarkdown::pandoc_convert(
-    #   input = infile,
-    #   output = infile,
-    #   options = pandoc_args,
-    #   to = "markdown_strict+autolink_bare_uris+tex_math_single_backslash",
-    #   # to = "markdown_strict+autolink_bare_uris+tex_math_single_backslash",
-    #   citeproc = TRUE,
-    #   verbose = verbose)
   }
   out <- NULL
   if (make_book_txt) {
