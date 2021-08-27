@@ -1,0 +1,38 @@
+
+# This code was originally written by Josh Shapiro and Candace Savonen
+# for the Childhood Cancer Data Lab, an initiative of Alexs Lemonade Stand Foundation.
+# https://github.com/AlexsLemonade/refinebio-examples/blob/33cdeff66d57f9fe8ee4fcb5156aea4ac2dce07f/.github/workflows/style-and-sp-check.yml#L1
+
+# Adapted for this jhudsl repository by Candace Savonen Apr 2021
+
+name: Render and publish Leanpub
+
+# Controls when the action will run. Triggers the workflow on push
+# events only for the master branch
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  publish:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    container:
+      image: jhuds/course_template
+
+    steps:
+      # Checks-out the _Leanpub repository to run the checks
+      - name: Checkout code from Leanpub repo
+        uses: actions/checkout@v2
+        with:
+          repository: jhudsl/DaSL_Course_Template_Leanpub
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Copy over latest leanbuild
+        uses: |
+          # Copy over leanbuild latest
+          svn export --force https://github.com/${GITHUB_REPOSITORY}.git/branches/${GITHUB_REF#refs/heads/} leanbuild/
+
+          Rscript -e "devtools::load_all('leanbuild') \
+          leanbuild::bookdown_to_leanpub(footer_text = 'check if footer works')"
