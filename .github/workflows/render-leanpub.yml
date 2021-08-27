@@ -12,9 +12,8 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    # I have it check out the image that is built from: https://github.com/jhudsl/DaSL_Course_Template_Bookdown/blob/main/docker/Dockerfile
     container:
-      image: jhuds/course_template
+      image: rocker/tidyverse:4.0.2
 
     steps:
       # Checks-out the _Leanpub repository to run the checks
@@ -25,8 +24,20 @@ jobs:
           token: ${{ secrets.GH_PAT }}
 
       # Copy over the latest leanbuild and use that for the run
-      - name: Run with latest leanbuild
+      - name: Get latest leanbuild
         uses: |
+          sudo apt-get install subversion
+
+          # Make directory for it to land in
           mkdir leanbuild
+
+          # Copy over the latest leanbuild build
           svn export https://github.com/${GITHUB_REPOSITORY}.git/branches/${GITHUB_REF#refs/heads/} leanbuild/
+
+      # Run leanpub rendering
+      - name: Run leanbuild::bookdown_to_leanpub
+        run: |
+          docker run \
+          --mount type=bind,target=/home/rstudio,source=$PWD \
+          jhudsl/course_template \
           Rscript -vanilla .github/render_all.R
