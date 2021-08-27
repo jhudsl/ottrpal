@@ -27,13 +27,13 @@ jobs:
       # Copy over the latest leanbuild and use that for the run
       - name: Get latest leanbuild
         run: |
-          sudo apt-get install  -y --no-install-recommends subversion 
+          sudo apt-get install  -y --no-install-recommends subversion
 
           # Make directory for it to land in
           mkdir leanbuild
 
           # Copy over the latest leanbuild build
-          svn export https://github.com/${GITHUB_REPOSITORY}.git/branches/${GITHUB_REF#refs/heads/} leanbuild/
+          svn export https://github.com/${GITHUB_REPOSITORY}.git/branches/${GITHUB_HEAD_REF} leanbuild/
 
       # Run leanpub rendering
       - name: Run leanbuild::bookdown_to_leanpub
