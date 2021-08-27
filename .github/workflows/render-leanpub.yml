@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     # I have it check out the image that is built from: https://github.com/jhudsl/DaSL_Course_Template_Bookdown/blob/main/docker/Dockerfile
     container:
-      image: jhuds/course_template
+      image: jhudsl/course_template
 
     steps:
       # Login to Dockerhub
