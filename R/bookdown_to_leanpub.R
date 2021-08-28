@@ -21,16 +21,14 @@ get_bookdown_spec <- function(path = ".") {
 
 #' Find main Bookdown directory
 #'
-#' @param path  Where to look for the file. By default looks in current directory. Uses here::here()
+#' @param path  Where to look for the file. By default looks in current directory.
 #'
 #' @return Returns the directory where the _bookdown.yml is contained.
 #' @export
 
 bookdown_path <- function(path = ".") {
   
-  if (!is.null(path)) {
-    here::here(path)
-  }
+  rprojroot::find_root(rprojroot::has_file("_bookdown.yml"), path = path)
   
   path <- dirname(here::here("_bookdown.yml"))
   
@@ -188,7 +186,7 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
 bookdown_to_leanpub <- function(path = ".",
                                 render = TRUE,
                                 output_dir = "manuscript",
-                                make_book_txt = TRUE,
+                                make_book_txt = FALSE,
                                 remove_resources_start = FALSE,
                                 verbose = TRUE, 
                                 footer_text = NULL) {
@@ -198,20 +196,36 @@ bookdown_to_leanpub <- function(path = ".",
 
   # Get the path to the _bookdown.yml
   path <- bookdown_path(path)
-
+  
+  if (verbose) {
+    message(paste0("Looking for bookdown file in ", path))
+  }
   rmd_files <- bookdown_rmd_files(path = path)
+  
+  if (verbose) {
+    message(paste0(c("Processing these files: ", rmd_files), collapse = "\n"))
+  }
+  
   if (render) {
     if (verbose) {
       message("Rendering the Book")
     }
-    input <- rmd_files[grepl("index", rmd_files, ignore.case = TRUE)][1]
-    if (length(input) == 0 || is.na(input)) {
-      input <- rmd_files[1]
+    # Get the index file path
+    index_file <- grep("index", rmd_files, ignore.case = TRUE, value = TRUE)
+    
+    index_file <- normalizePath(index_file)
+    
+    if (length(index_file) == 0 || is.na(index_file)) {
+      index_file <- rmd_files[1]
     }
+    message(paste("index_file is", index_file))
+    
     output_format <- bookdown::gitbook(pandoc_args = "--citeproc")
     # output_format$pandoc$to = output_format$pandoc$from
     output_format$pandoc$args <- c(output_format$pandoc$args, "--citeproc")
-    bookdown::render_book(input = input, output_format = output_format)
+    bookdown::render_book(input = index_file, 
+                          output_format = output_format, 
+                          clean_envir = FALSE)
   }
 
   # may be irrelevant since copy_docs does everything
