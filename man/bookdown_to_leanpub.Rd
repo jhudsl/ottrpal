@@ -8,7 +8,7 @@ bookdown_to_leanpub(
   path = ".",
   render = TRUE,
   output_dir = "manuscript",
-  make_book_txt = TRUE,
+  make_book_txt = FALSE,
   remove_resources_start = FALSE,
   verbose = TRUE,
   footer_text = NULL
