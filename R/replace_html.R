@@ -220,9 +220,9 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
     'alt: "{alt}",',
     'height: "{height}",',
     'width: "{width}",',
-    'align: "{align}"',
-    'type: "{type}"',
-    'poster: "{poster}"',
+    'align: "{align}",',
+    'type: "{type}",',
+    'poster: "{poster}",',
     'embed: "{embed}"'
   )
   if (is.null(fullbleed) ||
