@@ -1,22 +1,68 @@
 
+#' Load in Bookdown specifications from _bookdown.yml
+#'
+#' @param path  Where to look for the _bookdown.yml file. Passes to the bookdown_file() function. By default looks in current directory
+#'
+#' @return The yaml contents using yaml::yaml.load_file()
+#' @export
+
 get_bookdown_spec <- function(path = ".") {
-  file <- bookdown_file(path = path)
+  
+  # Get the file path to _bookdown.yaml
+  file_path <- bookdown_file(path = path)
+  
+  # Read in yaml
   suppressWarnings({
-    out <- yaml::yaml.load_file(file)
+    yaml_contents <- yaml::yaml.load_file(file_path)
   })
-  out
+  
+  return(yaml_contents)
 }
+
+#' Find main Bookdown directory
+#'
+#' @param path  Where to look for the file. By default looks in current directory. Uses here::here()
+#'
+#' @return Returns the directory where the _bookdown.yml is contained.
+#' @export
+
 bookdown_path <- function(path = ".") {
-  rprojroot::find_root(rprojroot::has_file("_bookdown.yml"), path = path)
+  
+  if (!is.null(path)) {
+    here::here(path)
+  }
+  
+  path <- dirname(here::here("_bookdown.yml"))
+  
+  return(path)
 }
 
+#' Find file path to _bookdown.yml
+#'
+#' @param path  Where to look for the _bookdown.yml file. Passes to the bookdown_file() function. By default looks in current directory
+#'
+#' @return The file path to _bookdown.yml
+#' @export
+#' 
 bookdown_file <- function(path = ".") {
+  
   root_dir <- bookdown_path(path = path)
-  file.path(root_dir, "_bookdown.yml")
+  file_path <- file.path(root_dir, "_bookdown.yml")
+  
+  return(file_path)
 }
 
+#' Get file paths all Rmds in the bookdown directory
+#'
+#' @param path  Where to look for the _bookdown.yml file. Passes toget_bookdown_spec() function. By default looks in current directory
+#'
+#' @return The file paths to Rmds listed in the _bookdown.yml file. 
+#' @export
+#' 
 bookdown_rmd_files <- function(path = ".") {
+  
   spec <- get_bookdown_spec(path)
+  
   files <- spec$rmd_files
   if (is.null(files) || all(is.na(files)) || length(files) == 0) {
     warning(
@@ -32,33 +78,74 @@ bookdown_rmd_files <- function(path = ".") {
   return(files)
 }
 
+#' Declare file path to docs/ folder
+#'
+#' @param path  Where to look for the _bookdown.yml file. Passes toget_bookdown_spec() function. By default looks in current directory
+#'
+#' @return The file paths to Rmds listed in the _bookdown.yml file. 
+#' @export
+#'
 bookdown_destination <- function(path = ".") {
+  
+  # Find _bookdown.yml
   root_dir <- bookdown_path(path = path)
+  
+  # Get specs from _bookdown.yml
   spec <- get_bookdown_spec(path = path)
+  
+  # Find output directory declared in the bookdown.yml
   output_dir <- spec$output_dir
+  
+  # If none specified, assume its called docs/
   if (is.null(output_dir)) {
     output_dir <- "docs"
   }
+  # Get the full file path
   full_output_dir <- file.path(root_dir, output_dir)
+  
+  # If the output dir doesn't exist, make it
   dir.create(full_output_dir, showWarnings = FALSE, recursive = TRUE)
+  
+  # Declare full paths
   full_output_dir <- normalizePath(full_output_dir, winslash = "/")
-  full_output_dir
+  
+  return(full_output_dir)
 }
 
+#' Copying directory contents
+#'
+#' @param from  Where the files to copy are located. 
+#' @param to  Where the files to copy are to be copied should go to.  
+#'
+#' @return The file paths to Rmds listed in the _bookdown.yml file. 
+#' @export
+#'
 copy_directory_contents <- function(from, to) {
-  x <- list.files(
+  
+  file_list <- list.files(
     path = from, full.names = TRUE, all.files = TRUE,
     recursive = TRUE
   )
-  file.copy(x, to, recursive = TRUE, overwrite = TRUE)
+  file.copy(file_list, to, recursive = TRUE, overwrite = TRUE)
 }
 
-copy_resources <- function(path = ".", output_dir = "manuscript") {
+copy_resources <- function(path = ".",
+                           images_dir = "resources/images",
+                           output_dir = "manuscript") {
+  
+  # Get file path to bookdown.yml
   path <- bookdown_path(path)
-  res_image_dir <- file.path(path, "resources/images")
+  
+  # Assume image directory is `resources/images`
+  res_image_dir <- file.path(path, images_dir )
+  
+  # Creat the directory if it doesn't exist
   dir.create(res_image_dir, showWarnings = FALSE, recursive = TRUE)
-  manuscript_image_dir <- file.path(output_dir, "resources/images")
+  
+  manuscript_image_dir <- file.path(output_dir, images_dir )
+  
   dir.create(manuscript_image_dir, showWarnings = FALSE, recursive = TRUE)
+  
   manuscript_image_dir <- normalizePath(manuscript_image_dir)
   if (file.exists(res_image_dir)) {
     copy_directory_contents(res_image_dir, manuscript_image_dir)
@@ -105,8 +192,11 @@ bookdown_to_leanpub <- function(path = ".",
                                 remove_resources_start = FALSE,
                                 verbose = TRUE, 
                                 footer_text = NULL) {
+  
+  # Declare regex for finding rmd files
   rmd_regex <- "[.][R|r]md$"
 
+  # Get the path to the _bookdown.yml
   path <- bookdown_path(path)
 
   rmd_files <- bookdown_rmd_files(path = path)
