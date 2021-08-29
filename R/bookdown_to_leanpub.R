@@ -50,10 +50,6 @@ bookdown_file <- function(path = ".") {
   return(file_path)
 }
 
-regex <- switch(type,
-                rmd = "[.][R|r]md$",
-                md = "[.]md$")
-
 #' Look for bookdown file paths
 #'
 #' @param path  Where to look for the _bookdown.yml file. Passes to get_bookdown_spec() function. By default looks in current directory
@@ -62,7 +58,10 @@ regex <- switch(type,
 #' @return The file paths to Rmds listed in the _bookdown.yml file. 
 #' @export
 #' 
-find_bookdown_files <- function(path = ".", type = "rmd") {
+find_bookdown_files <- function(path = ".", 
+                                type = "rmd") {
+  
+  type <- match.arg(type, choices = c("rmd", "bib"))
   
   # Declare regex depending on file type
   regex <- switch(type,
@@ -80,13 +79,15 @@ find_bookdown_files <- function(path = ".", type = "rmd") {
   # Only keep Rmd files
   files <- grep(regex, files, value = TRUE)
   
+  # Get root_dir
+  root_dir <- bookdown_path(path = path)
+  
   # If there's no files listed, print a warning and try to find them
   if (is.null(files) || all(is.na(files)) || length(files) == 0) {
     warning(
-      "_bookdown.yml does not list ", type, " files. Will look for ", type, " files in ", 
-      root_dir
+      paste("_bookdown.yml does not list ", type, " files. Will look for ", type, " files in ", 
+      root_dir)
     )
-    root_dir <- bookdown_path(path = path)
     
     # Try to find Rmd files in the root_dir
     files <- list.files(
@@ -223,7 +224,7 @@ bookdown_to_leanpub <- function(path = ".",
   path <- bookdown_path(path)
   
   if (verbose) {
-    message(paste0("Looking for bookdown file in ", path))
+    message(paste0("Looking for bookdown files in ", path))
   }
   rmd_files <- find_bookdown_files(path = path, type = "rmd")
   
@@ -391,9 +392,9 @@ bookdown_to_book_txt <- function(path = ".",
   
   # need to fix about quiz
   writeLines(df$file, book_txt)
-  L <- list(
+  output_list <- list(
     md_order = df,
     book_file = book_txt
   )
-  return(L)
+  return(output_list)
 }
