@@ -50,35 +50,57 @@ bookdown_file <- function(path = ".") {
   return(file_path)
 }
 
-#' Get file paths all Rmds in the bookdown directory
+regex <- switch(type,
+                rmd = "[.][R|r]md$",
+                md = "[.]md$")
+
+#' Look for bookdown file paths
 #'
-#' @param path  Where to look for the _bookdown.yml file. Passes toget_bookdown_spec() function. By default looks in current directory
-#'
+#' @param path  Where to look for the _bookdown.yml file. Passes to get_bookdown_spec() function. By default looks in current directory
+#' @param type What type of file to extract the list of files for. Either "rmd" or "bib". Default is "rmd".
+#' 
 #' @return The file paths to Rmds listed in the _bookdown.yml file. 
 #' @export
 #' 
-bookdown_rmd_files <- function(path = ".") {
+find_bookdown_files <- function(path = ".", type = "rmd") {
   
+  # Declare regex depending on file type
+  regex <- switch(type,
+                  rmd = "[.][R|r]md$",
+                  bib = "[.]bib$")
+  
+  # Read in _bookdown.yml
   spec <- get_bookdown_spec(path)
   
-  files <- spec$rmd_files
+  # Extract file list
+  files <- switch(type,
+                  rmd = spec$rmd_files,
+                  bib = spec$bibliography)
+  
+  # Only keep Rmd files
+  files <- grep(regex, files, value = TRUE)
+  
+  # If there's no files listed, print a warning and try to find them
   if (is.null(files) || all(is.na(files)) || length(files) == 0) {
     warning(
-      "No bookdown specification of the files, using ",
-      "list.files(pattern ='.Rmd')"
+      "_bookdown.yml does not list ", type, " files. Will look for ", type, " files in ", 
+      root_dir
     )
     root_dir <- bookdown_path(path = path)
+    
+    # Try to find Rmd files in the root_dir
     files <- list.files(
-      pattern = "[.]Rmd", ignore.case = TRUE,
+      pattern = regex, ignore.case = TRUE,
       path = root_dir, full.names = FALSE
     )
   }
+  
   return(files)
 }
 
 #' Declare file path to docs/ folder
 #'
-#' @param path  Where to look for the _bookdown.yml file. Passes toget_bookdown_spec() function. By default looks in current directory
+#' @param path  Where to look for the _bookdown.yml file. Passes to get_bookdown_spec() function. By default looks in current directory
 #'
 #' @return The file paths to Rmds listed in the _bookdown.yml file. 
 #' @export
@@ -203,7 +225,7 @@ bookdown_to_leanpub <- function(path = ".",
   if (verbose) {
     message(paste0("Looking for bookdown file in ", path))
   }
-  rmd_files <- bookdown_rmd_files(path = path)
+  rmd_files <- find_bookdown_files(path = path, type = "rmd")
   
   if (verbose) {
     message(paste0(c("Processing these files: ", rmd_files), collapse = "\n"))
@@ -249,10 +271,8 @@ bookdown_to_leanpub <- function(path = ".",
     message("Copying bib files")
   }
   copy_bib(path, output_dir = output_dir)
-  # FIXME Can also use bookdown_rmd_files
-  # rmd_files = list.files(pattern = rmd_regex)
-
-  bib_files <- list.files(pattern = "[.]bib$")
+  
+  bib_files <- find_bookdown_files(path = path, type = "bib")
   
   if (length(bib_files) > 0) {
     pandoc_args <- paste0("--bibliography=", path.expand(normalizePath(bib_files)))
@@ -321,17 +341,12 @@ bookdown_to_leanpub <- function(path = ".",
 bookdown_to_book_txt <- function(path = ".",
                                  output_dir = "manuscript",
                                  verbose = TRUE) {
-  index <- full_file <- NULL
-  
-  rm(list = c("full_file", "index"))
-
+  # Get path to _bookdown.yml
   path <- bookdown_path(path)
-
-  rmd_regex <- "[.][R|r]md$"
   
-  rmd_files <- bookdown_rmd_files(path = path)
+  rmd_files <- find_bookdown_files(path = path, type = "rmd")
   
-  md_files <- sub(rmd_regex, ".md", rmd_files, ignore.case = TRUE)
+  new_md_filenames <- sub(rmd_regex, ".md", rmd_files, ignore.case = TRUE)
   
   md_df <- tibble::tibble(
     file = md_files,

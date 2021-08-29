@@ -1,31 +1,21 @@
-find_question <- function(x) {
-  grepl("^\\?", x)
-}
 
 extract_number <- function(x) {
-  bad <- !find_question(x)
+  bad <- !grepl("^\\?", x)
   out <- gsub("^\\?(\\d*)\\s*.*", "\\1", x)
   out[bad] <- NA
   out
 }
 
-find_answer <- function(x) {
-  grepl("^([[:alpha:]]\\)|!)", x)
-}
-
-
-find_metadata <- function(x) {
-  grepl("^\\{", x)
-}
-
 # note this is not for general metadata
 # For example, {id: "this is , my id", number: 2}
 # will fail in this example
-extract_meta <- function(x) {
-  x <- trimws(x)
-  x <- sub("^\\{", "", x)
-  x <- sub("\\}$", "", x)
-  x <- strsplit(x, ",")
+extract_meta <- function(tags) {
+  
+  
+  tags <- trimws(tags)
+  tags <- stringr::str_remove_all(tags, "^\\{|\\}$")
+  
+  meta_fields <- strsplit(tags, ",")
   out <- lapply(x, function(xx) {
     xx <- trimws(xx)
     xx <- xx[!xx %in% ""]
@@ -48,7 +38,6 @@ extract_meta <- function(x) {
       xxx <- NULL
     }
     xxx
-    # xxx = unlist(c(xxx))
   })
   out
 }
@@ -92,27 +81,32 @@ parse_quiz <- function(quiz_path) {
 
   quiz_df <- extract_quiz(quiz_content)
 
-
   if (length(quiz_df) == 0) {
     return(NULL)
   }
   stopifnot(length(quiz_df) >= 2)
   
   quiz_meta <- quiz_df[1]
+  
   full_quiz_spec <- quiz_meta
+  
   quiz_meta <- sub("\\{\\s*quiz(,|)", "{", quiz_meta)
 
   # remove the "/quiz"
-  df <- df[2:(length(df) - 1)]
-  df <- tibble::tibble(
-    original = df,
-    x = trimws(df, which = "left"),
-    index = 1:length(df)
-  )
-  # df = df %>%
-  # dplyr::filter(!x %in% "")
-  df <- df %>%
+  quiz_df <- quiz_df[2:(length(quiz_df) - 1)]
+  
+  
+  quiz_df <- tibble::tibble(
+    original = quiz_df,
+    x = trimws(quiz_df, which = "left"),
+    index = 1:length(quiz_df)
+  ) %>%
     dplyr::mutate(
+      dplyr::case_when(
+      grepl("^\\?", x) ~ "question",
+      grepl("^([[:alpha:]]\\)|!)", x) ~ "answer",
+      grepl("^\\{", x) ~ "meta",
+      
       question = find_question(x),
       answer = find_answer(x),
       number = extract_number(x),
