@@ -1,21 +1,31 @@
+find_question <- function(x) {
+  grepl("^\\?", x)
+}
 
 extract_number <- function(x) {
-  bad <- !grepl("^\\?", x)
+  bad <- !find_question(x)
   out <- gsub("^\\?(\\d*)\\s*.*", "\\1", x)
   out[bad] <- NA
   out
 }
 
+find_answer <- function(x) {
+  grepl("^([[:alpha:]]\\)|!)", x)
+}
+
+
+find_metadata <- function(x) {
+  grepl("^\\{", x)
+}
+
 # note this is not for general metadata
 # For example, {id: "this is , my id", number: 2}
 # will fail in this example
-extract_meta <- function(tags) {
-  
-  
-  tags <- trimws(tags)
-  tags <- stringr::str_remove_all(tags, "^\\{|\\}$")
-  
-  meta_fields <- strsplit(tags, ",")
+extract_meta <- function(x) {
+  x <- trimws(x)
+  x <- sub("^\\{", "", x)
+  x <- sub("\\}$", "", x)
+  x <- strsplit(x, ",")
   out <- lapply(x, function(xx) {
     xx <- trimws(xx)
     xx <- xx[!xx %in% ""]
@@ -38,6 +48,7 @@ extract_meta <- function(tags) {
       xxx <- NULL
     }
     xxx
+    # xxx = unlist(c(xxx))
   })
   out
 }
@@ -72,10 +83,11 @@ extract_meta <- function(tags) {
 #' check_quiz_attributes(out)
 parse_quiz <- function(quiz_path) {
   
+  # Read in quiz
   if (length(quiz_path) == 1 && file.exists(quiz_path)) {
     quiz_content <- readLines(quiz_path, warn = FALSE)
   }
-  
+
   answer <- meta <- repeated <- question <- number <- NULL
   rm(list = c("number", "question", "repeated", "answer", "meta"))
 
@@ -87,74 +99,69 @@ parse_quiz <- function(quiz_path) {
   stopifnot(length(quiz_df) >= 2)
   
   quiz_meta <- quiz_df[1]
-  
   full_quiz_spec <- quiz_meta
-  
   quiz_meta <- sub("\\{\\s*quiz(,|)", "{", quiz_meta)
 
-  # remove the "/quiz"
+  # remove the "/quiz" at the end of the file
   quiz_df <- quiz_df[2:(length(quiz_df) - 1)]
   
   
   quiz_df <- tibble::tibble(
     original = quiz_df,
-    x = trimws(quiz_df, which = "left"),
+    trimmed = trimws(quiz_df, which = "left"),
     index = 1:length(quiz_df)
-  ) %>%
+  )
+  quiz_df <- quiz_df %>%
     dplyr::mutate(
-      dplyr::case_when(
-      grepl("^\\?", x) ~ "question",
-      grepl("^([[:alpha:]]\\)|!)", x) ~ "answer",
-      grepl("^\\{", x) ~ "meta",
-      
-      question = find_question(x),
-      answer = find_answer(x),
-      number = extract_number(x),
-      meta = find_metadata(x),
+      question = find_question(trimmed),
+      answer = find_answer(trimmed),
+      number = etrimmedtract_number(trimmed),
+      meta = find_metadata(trimmed),
       number = ifelse(number == "", NA, number),
       repeated = duplicated(number) & !is.na(number)
-    )
-  df <- df %>%
+    ) %>%
     dplyr::select(-number)
-  types <- df %>%
+  
+  types <- quiz_df %>%
     dplyr::select(answer, meta, question)
+  
   types <- rowSums(types, na.rm = TRUE)
+  
   stopifnot(all(types <= 1))
-  df <- df %>%
+  
+  quiz_df <- quiz_df %>%
     dplyr::mutate(
       type = dplyr::case_when(
         question ~ "question",
         answer ~ "answer",
         meta ~ "metadata",
-        trimws(x) == "" ~ "spacing",
+        trimws(trimmed) == "" ~ "spacing",
         TRUE ~ "markdown"
       )
     )
   # trying to caputure ?1 and ?1 for multiple questions
-  df <- df %>%
+  quiz_df <- quiz_df %>%
     dplyr::mutate(
       question = ifelse(repeated, FALSE, question)
-    )
-  df <- df %>%
-    dplyr::mutate(question = cumsum(question))
-  # assign the question number to the next line, as it should be the question
-  df <- df %>%
-    dplyr::mutate(question = ifelse(meta, dplyr::lead(question), question))
-  df <- df %>%
+    ) %>%
+    dplyr::mutate(question = cumsum(question),
+                  # assign the question number to the next line, as it should be the question
+                  question = ifelse(meta, dplyr::lead(question), question)) %>%
     dplyr::select(-answer, -meta)
-  meta <- df$x[df$type == "metadata"]
+  
+  # Get metadata
+  meta <- quiz_df$trimmed[quiz_df$type == "metadata"]
   meta <- extract_meta(meta)
   quiz_meta <- extract_meta(quiz_meta)[[1]]
-  L <- list(
-    data = df,
+  
+  output_list <- list(
+    data = quiz_df,
     question_metadata = meta,
     original_quiz_specification = full_quiz_spec,
     quiz_metadata = quiz_meta
   )
-  L
+  output_list
 }
-
-
 
 
 #' @export
