@@ -81,21 +81,24 @@ extract_meta <- function(x) {
 #' )
 #' out <- parse_quiz(x)
 #' check_quiz_attributes(out)
-parse_quiz <- function(x) {
-  if (length(x) == 1 && file.exists(x)) {
-    x <- readLines(x, warn = FALSE)
+parse_quiz <- function(quiz_path) {
+  
+  if (length(quiz_path) == 1 && file.exists(quiz_path)) {
+    quiz_content <- readLines(quiz_path, warn = FALSE)
   }
+  
   answer <- meta <- repeated <- question <- number <- NULL
   rm(list = c("number", "question", "repeated", "answer", "meta"))
 
-  df <- extract_quiz(x)
+  quiz_df <- extract_quiz(quiz_content)
 
 
-  if (length(df) == 0) {
+  if (length(quiz_df) == 0) {
     return(NULL)
   }
-  stopifnot(length(df) >= 2)
-  quiz_meta <- df[1]
+  stopifnot(length(quiz_df) >= 2)
+  
+  quiz_meta <- quiz_df[1]
   full_quiz_spec <- quiz_meta
   quiz_meta <- sub("\\{\\s*quiz(,|)", "{", quiz_meta)
 

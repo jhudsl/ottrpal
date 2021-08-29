@@ -137,14 +137,15 @@ copy_resources <- function(path = ".",
   # Assume image directory is `resources/images`
   res_image_dir <- file.path(path, images_dir )
   
-  # Creat the directory if it doesn't exist
+  # Create the directory if it doesn't exist
   dir.create(res_image_dir, showWarnings = FALSE, recursive = TRUE)
   
-  manuscript_image_dir <- file.path(output_dir, images_dir )
+  manuscript_image_dir <- file.path(output_dir, images_dir)
   
   dir.create(manuscript_image_dir, showWarnings = FALSE, recursive = TRUE)
   
   manuscript_image_dir <- normalizePath(manuscript_image_dir)
+  
   if (file.exists(res_image_dir)) {
     copy_directory_contents(res_image_dir, manuscript_image_dir)
   }
@@ -170,7 +171,8 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
 #'
 #' @param path path to the bookdown book, must have a `_bookdown.yml` file
 #' @param output_dir output directory to put files.  It should likely be
-#' relative to path
+#' relative to path.
+#' @param output_dir directory where referenced images are sent. Default is 'resources/images'.
 #' @param render if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.
 #' @param verbose print diagnostic messages
 #' @param remove_resources_start remove the word `resources/` at the front
@@ -186,6 +188,7 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
 bookdown_to_leanpub <- function(path = ".",
                                 render = TRUE,
                                 output_dir = "manuscript",
+                                images_path = file.path("resources", "images"),
                                 make_book_txt = FALSE,
                                 remove_resources_start = FALSE,
                                 verbose = TRUE, 
@@ -213,18 +216,21 @@ bookdown_to_leanpub <- function(path = ".",
     # Get the index file path
     index_file <- grep("index", rmd_files, ignore.case = TRUE, value = TRUE)
     
+    # Norma
     index_file <- normalizePath(index_file)
     
     if (length(index_file) == 0 || is.na(index_file)) {
       index_file <- rmd_files[1]
     }
-    message(paste("index_file is", index_file))
     
+    # Set citeproc for references
     output_format <- bookdown::gitbook(pandoc_args = "--citeproc")
-    # output_format$pandoc$to = output_format$pandoc$from
     output_format$pandoc$args <- c(output_format$pandoc$args, "--citeproc")
+    
+    # Render bookdown
     bookdown::render_book(input = index_file, 
                           output_format = output_format, 
+                          # If this is not false then this fails if ran from terminal
                           clean_envir = FALSE)
   }
 
@@ -232,11 +238,13 @@ bookdown_to_leanpub <- function(path = ".",
   if (verbose) {
     message("Copying Resources")
   }
-  copy_resources(path, output_dir = output_dir)
+  copy_docs(images_path, output_dir = output_dir)
+  
   if (verbose) {
     message("Copying Docs folder")
   }
   copy_docs(path, output_dir = output_dir)
+  
   if (verbose) {
     message("Copying bib files")
   }
@@ -244,15 +252,15 @@ bookdown_to_leanpub <- function(path = ".",
   # FIXME Can also use bookdown_rmd_files
   # rmd_files = list.files(pattern = rmd_regex)
 
-
   bib_files <- list.files(pattern = "[.]bib$")
+  
   if (length(bib_files) > 0) {
     pandoc_args <- paste0("--bibliography=", path.expand(normalizePath(bib_files)))
   } else {
     pandoc_args <- NULL
   }
-
-  # run_env = new.env()
+  
+  
   md_files <- sub(rmd_regex, ".md", rmd_files, ignore.case = TRUE)
   md_files <- file.path(output_dir, basename(md_files))
 
@@ -279,6 +287,7 @@ bookdown_to_leanpub <- function(path = ".",
     }
   }
   out <- NULL
+  
   if (make_book_txt) {
     if (verbose > 1) {
       message("Running bookdown_to_book_txt")
@@ -289,16 +298,17 @@ bookdown_to_leanpub <- function(path = ".",
       verbose = verbose
     )
   }
-  L <- list(
+  out_files <- list(
     output_files = md_files,
     full_output_files = normalizePath(md_files, winslash = "/")
   )
-  L$book_txt_output <- out
-  return(L)
+  out_files$book_txt_output <- out
+  
+  return(out_files)
 }
 
 
-#' Convert Bookdown to Leanpub
+#' Create a `Book.txt` in the output directory
 #'
 #' @param path path to the bookdown book, must have a `_bookdown.yml` file
 #' @param output_dir output directory to put files.  It should likely be
@@ -307,24 +317,30 @@ bookdown_to_leanpub <- function(path = ".",
 #'
 #' @return A list of output files in order, the book text file name, and diagnostics
 #' @export
-bookdown_to_book_txt <- function(
-                                 path = ".",
+#' 
+bookdown_to_book_txt <- function(path = ".",
                                  output_dir = "manuscript",
                                  verbose = TRUE) {
   index <- full_file <- NULL
+  
   rm(list = c("full_file", "index"))
 
   path <- bookdown_path(path)
 
   rmd_regex <- "[.][R|r]md$"
+  
   rmd_files <- bookdown_rmd_files(path = path)
+  
   md_files <- sub(rmd_regex, ".md", rmd_files, ignore.case = TRUE)
+  
   md_df <- tibble::tibble(
     file = md_files,
     index = seq_along(md_files)
   )
+  
   quiz_files <- paste0("quiz-", md_files)
   bad_quiz_files <- paste0("quiz_", md_files)
+  
   if (any(file.exists(file.path(output_dir, bad_quiz_files)))) {
     warning(
       "Naming convention for quizzes is quiz-, not quiz_",
@@ -340,21 +356,24 @@ bookdown_to_book_txt <- function(
     file = bad_quiz_files,
     index = seq_along(bad_quiz_files) + 0.5
   )
+  
   quiz_df <- dplyr::bind_rows(quiz_df, bad_quiz_df)
   rm(list = c("bad_quiz_files", "bad_quiz_df"))
+  
   quiz_df <- quiz_df %>%
     dplyr::arrange(index)
+  
   df <- dplyr::bind_rows(md_df, quiz_df)
+  
   rm(list = c("quiz_df"))
 
   df <- df %>%
-    dplyr::arrange(index)
-  df <- df %>%
-    dplyr::mutate(full_file = file.path(output_dir, file))
-  df <- df %>%
+    dplyr::arrange(index) %>%
+    dplyr::mutate(full_file = file.path(output_dir, file)) %>%
     dplyr::filter(file.exists(full_file))
 
   book_txt <- file.path(output_dir, "Book.txt")
+  
   # need to fix about quiz
   writeLines(df$file, book_txt)
   L <- list(
