@@ -260,7 +260,7 @@ convert_footnotes <- function(content) {
   # Now replace end of footnote notation
   content[end_footnote_indices] <- stringr::str_remove(content[end_footnote_indices], "\\]$")
   
-  content <- R.utils::insert(content, end_footnote_indices + 1, "{\\aside}")
+  content <- R.utils::insert(content, end_footnote_indices + 1, "{/aside}")
   } 
   return(content)
 }
