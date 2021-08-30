@@ -9,7 +9,11 @@ Authors@R: c(person(given = "John",family = "Muschelli",
   comment = c(ORCID = "0000-0001-6469-1750")),
   person(given = "Shannon",family = "Ellis",
   email = "shannon0ellis@gmail.com",
-  role = c("aut"))
+  role = c("aut")),
+  person(given = "Candace",family = "Savonen",
+  email = "cansav09@gmail.com",
+  role = c("aut", "cre"),
+  comment = c(ORCID = "0000-0001-6331-7070"))
   )
 Depends: R (>= 3.5.0)
 License: GPL-3
