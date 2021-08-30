@@ -114,7 +114,8 @@ parse_quiz <- function(quiz_path) {
       meta = find_metadata(x),
       number = ifelse(number == "", NA, number),
       repeated = duplicated(number) & !is.na(number)
-    )
+    ))
+  
   df <- df %>%
     dplyr::select(-number)
   types <- df %>%
