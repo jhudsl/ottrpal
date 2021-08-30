@@ -93,6 +93,7 @@ parse_quiz <- function(quiz_path) {
 
   quiz_df <- extract_quiz(quiz_content)
 
+
   if (length(quiz_df) == 0) {
     return(NULL)
   }
@@ -102,21 +103,21 @@ parse_quiz <- function(quiz_path) {
   full_quiz_spec <- quiz_meta
   quiz_meta <- sub("\\{\\s*quiz(,|)", "{", quiz_meta)
 
-  # remove the "/quiz" at the end of the file
-  quiz_df <- quiz_df[2:(length(quiz_df) - 1)]
-  
-  
-  quiz_df <- tibble::tibble(
-    original = quiz_df,
-    trimmed = trimws(quiz_df, which = "left"),
-    index = 1:length(quiz_df)
+  # remove the "/quiz"
+  df <- df[2:(length(df) - 1)]
+  df <- tibble::tibble(
+    original = df,
+    x = trimws(df, which = "left"),
+    index = 1:length(df)
   )
-  quiz_df <- quiz_df %>%
+  # df = df %>%
+  # dplyr::filter(!x %in% "")
+  df <- df %>%
     dplyr::mutate(
-      question = find_question(trimmed),
-      answer = find_answer(trimmed),
-      number = extract_number(trimmed),
-      meta = find_metadata(trimmed),
+      question = find_question(x),
+      answer = find_answer(x),
+      number = extract_number(x),
+      meta = find_metadata(x),
       number = ifelse(number == "", NA, number),
       repeated = duplicated(number) & !is.na(number)
     ) %>%
