@@ -281,7 +281,7 @@ convert_footnotes <- function(content) {
     content <- content[-find_any_middle_lines]
     
     #### Append footnotes to the end of the file
-    content <- append(content, footnotes)
+    content <- append(content, c("\n", footnotes))
     }
   return(content)
 }
