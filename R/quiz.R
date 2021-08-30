@@ -115,7 +115,7 @@ parse_quiz <- function(quiz_path) {
     dplyr::mutate(
       question = find_question(trimmed),
       answer = find_answer(trimmed),
-      number = etrimmedtract_number(trimmed),
+      number = extract_number(trimmed),
       meta = find_metadata(trimmed),
       number = ifelse(number == "", NA, number),
       repeated = duplicated(number) & !is.na(number)
