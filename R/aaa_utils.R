@@ -232,36 +232,41 @@ add_footer <- function(rmd_path, footer_text = NULL) {
 #'
 #' @param content a character vector containing the lines of content from a file read in with readLines()
 #'
-#' @return a character vector containing the content given but with Leanpub formatted foonotes 
+#' @return a character vector containing the content given but with Leanpub formatted foonotes
 #' @export
 #' @rdname footnotes
-#' 
+#'
 convert_footnotes <- function(content) {
-  
+
   # For a vector of content read in, look for Bookdown-formatted footnotes and format them as Leanpub wants them
   start_footnote_indices <- grep("\\^\\[", content)
 
   # Don't bother if there are no footnotes
-  if(length(start_footnote_indices) > 0) {
-  
-  # Replace start of footnote notation with Leanpub friendly format
-  
-  # Remove Bookdown start footnote notation
-  content[start_footnote_indices] <- stringr::str_remove(content[start_footnote_indices], "\\^\\[")
-  
-  # Insert footnote starting tag for Leanpub
-  content <- R.utils::insert(content, start_footnote_indices, "{aside}")
-  
-  # Find the line which the footnote ends at
-  end_footnote_indices <- sapply(start_footnote_indices,
-                                 find_end_of_footnote,
-                                 content = content)
-  
-  # Now replace end of footnote notation
-  content[end_footnote_indices] <- stringr::str_remove(content[end_footnote_indices], "\\]$")
-  
-  content <- R.utils::insert(content, end_footnote_indices + 1, "{/aside}")
-  } 
+  if (length(start_footnote_indices) > 0) {
+
+    # Replace start of footnote notation with Leanpub friendly format
+
+    # Remove Bookdown start footnote notation
+    content[start_footnote_indices] <- stringr::str_replace(content[start_footnote_indices], "\\^\\[", "[^note]: ")
+
+    # Find the line which the footnote ends at
+    end_footnote_indices <- sapply(start_footnote_indices,
+      find_end_of_footnote,
+      content = content
+    )
+
+    # Go through each footnote's indices
+    for (index in 1:length(start_footnote_indices)) {
+
+      # If the footnote is not on one line
+      if (start_footnote_indices[index] != end_footnote_indices[index]) {
+
+        # If footnote is not all in one line, the rest has to be indented
+        # BUT exclude the first line - hence the + 1
+        content[(start_footnote_indices[index] + 1):end_footnote_indices[index]] <- paste0("    ", content[(start_footnote_indices[index] + 1):end_footnote_indices[index]])
+      }
+    }
+  }
   return(content)
 }
 
