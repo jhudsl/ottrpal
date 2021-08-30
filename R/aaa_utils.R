@@ -256,7 +256,7 @@ convert_footnotes <- function(content) {
     footnote_number <- 1:length(start_footnote_indices)
     
     # Build the footnotenotation we will replace the `^[` with
-    footnote_tag <- paste0("[^note ", footnote_number, "]")
+    footnote_tag <- paste0("[^note", footnote_number, "]")
     
     # Collapse multiline footnotes: 
     footnotes <- paste0(trimws(content[start_footnote_indices:end_footnote_indices]), collapse = " ")
