@@ -218,12 +218,68 @@ download_png_urls <- function(urls) {
 
 
 add_footer <- function(rmd_path, footer_text = NULL) {
-  
   if (is.null(footer_text)) {
     stop("Need character string in footer_text argument to append to end of file.")
   }
+
+  write(as.character(footer_text),
+    file = rmd_path,
+    append = TRUE
+  )
+}
+
+convert_footnotes <- function(content) {
   
-  write(as.character(footer_text), 
-        file = rmd_path, 
-        append = TRUE)
+  # For a vector of content read in, look for Bookdown-formatted footnotes and format them as Leanpub wants them
+  start_footnote_indices <- grep("\\^\\[", content)
+
+  # Don't bother if there are no footnotes
+  if(is.null(start_footnote_indices)) {
+    rm(content) 
+    break
+  }
+            
+  # Find the line which the footnote ends at
+  end_footnote_indices <- sapply(start_footnote_indices,
+                                 find_end_of_footnote,
+                                 content = content)
+
+  # Replace footnote notation with Leanpub friendly format
+  
+  # Remove Bookdown start footnote notation
+  content[start_footnote_indices] <- stringr::str_remove(content[start_footnote_indices], "\\^\\[")
+  
+  # Insert footnote starting tag for Leanpub
+  content <- R.utils::insert(content, start_footnote_indices, "{aside}")
+  
+  # Repeat same steps for end of footnote notation
+  content[end_footnote_indices] <- stringr::str_remove(content[end_footnote_indices], "\\]")
+  
+  content <- R.utils::insert(content, end_footnote_indices, "{\\aside}")
+  
+  return(content)
+}
+
+# Given an index of the start of a footnote, find the end of it.
+find_end_of_footnote <- function(start_footnote_index, content) {
+
+  # See if the end of the footnote is in the same line
+  end_bracket <- grepl("\\]", content[start_footnote_index])
+
+  # Keep looking in each next line until we find it.
+  if (end_bracket == FALSE) {
+    footnote_index <- start_footnote_index
+    while (end_bracket == FALSE) {
+      # Add one
+      footnote_index <- footnote_index + 1
+
+      # Look in next line
+      end_bracket <- grepl("*\\]", content[footnote_index])
+
+      if (footnote_index == length(content) && end_bracket == FALSE) {
+        stop(paste("Searched end of file and could not find end of footnote:", content[start_footnote_index]))
+      }
+    }
+    return(footnote_index)
+  }
 }

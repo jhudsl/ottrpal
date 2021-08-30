@@ -479,6 +479,10 @@ replace_single_html <- function(file,
     element = "iframe", fullbleed = fullbleed,
     remove_resources_start = remove_resources_start
   )
+  if (verbose) {
+    message("Convert footnotes")
+  }
+  x <- convert_footnotes(x)
   
   # need to actually do changes
   writeLines(x, con = file)

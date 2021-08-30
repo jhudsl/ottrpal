@@ -297,7 +297,7 @@ bookdown_to_leanpub <- function(path = ".",
       remove_resources_start = remove_resources_start,
       footer_text = footer_text
     )
-
+    
     if (length(bib_files) > 0) {
       if (verbose > 1) {
         message("Making references for ", file)
