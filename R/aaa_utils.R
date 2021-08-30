@@ -237,36 +237,52 @@ add_footer <- function(rmd_path, footer_text = NULL) {
 #' @rdname footnotes
 #'
 convert_footnotes <- function(content) {
-
+  
+  #### Find footnotes
   # For a vector of content read in, look for Bookdown-formatted footnotes and format them as Leanpub wants them
   start_footnote_indices <- grep("\\^\\[", content)
 
   # Don't bother if there are no footnotes
   if (length(start_footnote_indices) > 0) {
-
-    # Replace start of footnote notation with Leanpub friendly format
-
-    # Remove Bookdown start footnote notation
-    content[start_footnote_indices] <- stringr::str_replace(content[start_footnote_indices], "\\^\\[", "[^note]: ")
-
+    
     # Find the line which the footnote ends at
     end_footnote_indices <- sapply(start_footnote_indices,
       find_end_of_footnote,
       content = content
     )
+    
+    ### Build footnotes for the end of the page
+    # Number the footnotes: 
+    footnote_number <- 1:length(start_footnote_indices)
+    
+    # Build the footnotenotation we will replace the `^[` with
+    footnote_tag <- paste0("[^note ", footnote_number, "]")
+    
+    # Collapse multiline footnotes: 
+    footnotes <- paste0(trimws(content[start_footnote_indices:end_footnote_indices]), collapse = " ")
+    
+    # Get rid of bookdown formatting in the footnotes 
+    footnotes <- stringr::str_remove_all(footnotes, "\\^\\[|\\]$")
+    
+    # Add footnote tag at the beginning
+    footnotes <- paste0(footnote_tag, ": ", footnotes)
+    
+    #### Remove footnotes from the middle of the page
+    # Delete anything after a old footnote tag and put the new footnote tag
+    content[start_footnote_indices] <- paste0(stringr::word(content[start_footnote_indices], sep = "\\^\\[", 1), footnote_tag)
+  
+    # Delete end lines
+    content[end_footnote_indices] <- stringr::word(content[end_footnote_indices], sep = "\\]$", 2)
 
-    # Go through each footnote's indices
-    for (index in 1:length(start_footnote_indices)) {
-
-      # If the footnote is not on one line
-      if (start_footnote_indices[index] != end_footnote_indices[index]) {
-
-        # If footnote is not all in one line, the rest has to be indented
-        # BUT exclude the first line - hence the + 1
-        content[(start_footnote_indices[index] + 1):end_footnote_indices[index]] <- paste0("    ", content[(start_footnote_indices[index] + 1):end_footnote_indices[index]])
-      }
+    # Delete middle lines completely 
+    find_any_middle_lines <- setdiff(start_footnote_indices:end_footnote_indices, 
+                                     c(start_footnote_indices, end_footnote_indices))
+    
+    content <- content[-find_any_middle_lines]
+    
+    #### Append footnotes to the end of the file
+    content <- append(content, footnotes)
     }
-  }
   return(content)
 }
 
