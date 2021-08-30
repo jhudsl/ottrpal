@@ -1,7 +1,7 @@
 
 # Adapted for this jhudsl repository by Candace Savonen Aug 2021
 
-name: Render and publish Leanpub
+name: Update Leanpub Upon Merge
 
 # Triggers the workflow AFTER changes to leanbuild have been merged
 on:
@@ -30,7 +30,7 @@ jobs:
           sudo apt-get install  -y --no-install-recommends subversion
 
           # Copy over the latest leanbuild build
-          svn export https://github.com/${GITHUB_REPOSITORY}.git/branches/${GITHUB_HEAD_REF} leanbuild/
+          svn export https://github.com/${GITHUB_REPOSITORY}.git/branches/master leanbuild/
 
       # Run leanpub rendering
       - name: Run leanbuild::bookdown_to_leanpub
@@ -51,7 +51,7 @@ jobs:
           body: |
             ### Description:
              This PR has changes to this repository's files using the latest leanbuild package changes!
-             If they don't look right, file an issue on the leanbuild package: https://github.com/jhudsl/leanbuild/issuesand do not merge. 
+             If they don't look right, file an issue on the leanbuild package: https://github.com/jhudsl/leanbuild/issuesand do not merge.
           labels: |
             automated
           reviewers: $GITHUB_ACTOR
