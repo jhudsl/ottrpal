@@ -5,7 +5,7 @@ Description: Leverages the 'bookdown' package and other tools to create courses
   that can be hosted on Leanpub.
 Authors@R: c(person(given = "John",family = "Muschelli",
   email = "muschellij2@gmail.com",
-  role = c("aut", "cre"),
+  role = c("aut"),
   comment = c(ORCID = "0000-0001-6469-1750")),
   person(given = "Candace",family = "Savonen",
   email = "cansav09@gmail.com",
