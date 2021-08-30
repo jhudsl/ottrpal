@@ -1,31 +1,21 @@
-find_question <- function(x) {
-  grepl("^\\?", x)
-}
 
 extract_number <- function(x) {
-  bad <- !find_question(x)
+  bad <- !grepl("^\\?", x)
   out <- gsub("^\\?(\\d*)\\s*.*", "\\1", x)
   out[bad] <- NA
   out
 }
 
-find_answer <- function(x) {
-  grepl("^([[:alpha:]]\\)|!)", x)
-}
-
-
-find_metadata <- function(x) {
-  grepl("^\\{", x)
-}
-
 # note this is not for general metadata
 # For example, {id: "this is , my id", number: 2}
 # will fail in this example
-extract_meta <- function(x) {
-  x <- trimws(x)
-  x <- sub("^\\{", "", x)
-  x <- sub("\\}$", "", x)
-  x <- strsplit(x, ",")
+extract_meta <- function(tags) {
+  
+  
+  tags <- trimws(tags)
+  tags <- stringr::str_remove_all(tags, "^\\{|\\}$")
+  
+  meta_fields <- strsplit(tags, ",")
   out <- lapply(x, function(xx) {
     xx <- trimws(xx)
     xx <- xx[!xx %in% ""]
@@ -48,7 +38,6 @@ extract_meta <- function(x) {
       xxx <- NULL
     }
     xxx
-    # xxx = unlist(c(xxx))
   })
   out
 }
@@ -81,10 +70,12 @@ extract_meta <- function(x) {
 #' )
 #' out <- parse_quiz(x)
 #' check_quiz_attributes(out)
-parse_quiz <- function(x) {
-  if (length(x) == 1 && file.exists(x)) {
-    x <- readLines(x, warn = FALSE)
+parse_quiz <- function(quiz_path) {
+  
+  if (length(quiz_path) == 1 && file.exists(quiz_path)) {
+    quiz_content <- readLines(quiz_path, warn = FALSE)
   }
+  
   answer <- meta <- repeated <- question <- number <- NULL
   rm(list = c("number", "question", "repeated", "answer", "meta"))
 
@@ -94,71 +85,77 @@ parse_quiz <- function(x) {
   if (length(df) == 0) {
     return(NULL)
   }
-  stopifnot(length(df) >= 2)
-  quiz_meta <- df[1]
+  stopifnot(length(quiz_df) >= 2)
+  
+  quiz_meta <- quiz_df[1]
+  
   full_quiz_spec <- quiz_meta
+  
   quiz_meta <- sub("\\{\\s*quiz(,|)", "{", quiz_meta)
 
   # remove the "/quiz"
-  df <- df[2:(length(df) - 1)]
-  df <- tibble::tibble(
-    original = df,
-    x = trimws(df, which = "left"),
-    index = 1:length(df)
-  )
-  # df = df %>%
-  # dplyr::filter(!x %in% "")
-  df <- df %>%
+  quiz_df <- quiz_df[2:(length(quiz_df) - 1)]
+  
+  
+  quiz_df <- tibble::tibble(
+    original = quiz_df,
+    x = trimws(quiz_df, which = "left"),
+    index = 1:length(quiz_df)
+  ) %>%
     dplyr::mutate(
+      dplyr::case_when(
+      grepl("^\\?", x) ~ "question",
+      grepl("^([[:alpha:]]\\)|!)", x) ~ "answer",
+      grepl("^\\{", x) ~ "meta",
+      
       question = find_question(x),
       answer = find_answer(x),
       number = extract_number(x),
       meta = find_metadata(x),
       number = ifelse(number == "", NA, number),
       repeated = duplicated(number) & !is.na(number)
-    ) %>%
+    )
+  df <- df %>%
     dplyr::select(-number)
-  
-  types <- quiz_df %>%
+  types <- df %>%
     dplyr::select(answer, meta, question)
-  
   types <- rowSums(types, na.rm = TRUE)
-  
   stopifnot(all(types <= 1))
-  
-  quiz_df <- quiz_df %>%
+  df <- df %>%
     dplyr::mutate(
       type = dplyr::case_when(
         question ~ "question",
         answer ~ "answer",
         meta ~ "metadata",
-        trimws(trimmed) == "" ~ "spacing",
+        trimws(x) == "" ~ "spacing",
         TRUE ~ "markdown"
       )
     )
   # trying to caputure ?1 and ?1 for multiple questions
-  quiz_df <- quiz_df %>%
+  df <- df %>%
     dplyr::mutate(
       question = ifelse(repeated, FALSE, question)
-    ) %>%
-    dplyr::mutate(question = cumsum(question),
-                  # assign the question number to the next line, as it should be the question
-                  question = ifelse(meta, dplyr::lead(question), question)) %>%
+    )
+  df <- df %>%
+    dplyr::mutate(question = cumsum(question))
+  # assign the question number to the next line, as it should be the question
+  df <- df %>%
+    dplyr::mutate(question = ifelse(meta, dplyr::lead(question), question))
+  df <- df %>%
     dplyr::select(-answer, -meta)
-  
-  # Get metadata
-  meta <- quiz_df$trimmed[quiz_df$type == "metadata"]
+  meta <- df$x[df$type == "metadata"]
   meta <- extract_meta(meta)
   quiz_meta <- extract_meta(quiz_meta)[[1]]
-  
-  output_list <- list(
-    data = quiz_df,
+  L <- list(
+    data = df,
     question_metadata = meta,
     original_quiz_specification = full_quiz_spec,
     quiz_metadata = quiz_meta
   )
-  output_list
+  L
 }
+
+
 
 
 #' @export
