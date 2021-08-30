@@ -228,16 +228,21 @@ add_footer <- function(rmd_path, footer_text = NULL) {
   )
 }
 
+#' Convert Bookdown footnotes to Leanpub-formatted footnotes
+#'
+#' @param content a character vector containing the lines of content from a file read in with readLines()
+#'
+#' @return a character vector containing the content given but with Leanpub formatted foonotes 
+#' @export
+#' @rdname footnotes
+#' 
 convert_footnotes <- function(content) {
   
   # For a vector of content read in, look for Bookdown-formatted footnotes and format them as Leanpub wants them
   start_footnote_indices <- grep("\\^\\[", content)
 
   # Don't bother if there are no footnotes
-  if(is.null(start_footnote_indices)) {
-    rm(content) 
-    break
-  }
+  if(length(start_footnote_indices) > 0) {
   
   # Replace start of footnote notation with Leanpub friendly format
   
@@ -256,7 +261,7 @@ convert_footnotes <- function(content) {
   content[end_footnote_indices] <- stringr::str_remove(content[end_footnote_indices], "\\]$")
   
   content <- R.utils::insert(content, end_footnote_indices + 1, "{\\aside}")
-  
+  } 
   return(content)
 }
 
