@@ -11,7 +11,7 @@ Authors@R: c(person(given = "John",family = "Muschelli",
   email = "cansav09@gmail.com",
   role = c("aut", "cre"),
   comment = c(ORCID = "0000-0001-6331-7070")), 
-  person(given = "Carrie",family = "Wright",
+  person(given = "Carrie", family = "Wright",
   email = "cwrigh60@jhu.edu",
   role = c("ctb"))
   )
@@ -52,6 +52,6 @@ Remotes:
 ByteCompile: true
 Type: Package
 VignetteBuilder: knitr
-URL: https://github.com/muschellij2/didactr
-BugReports: https://github.com/muschellij2/didactr/issues
+URL: https://github.com/jhudsl/leanbuild
+BugReports: https://github.comjhudsl/leanbuild/issues
 RoxygenNote: 7.1.1
