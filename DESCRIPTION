@@ -1,57 +1,15 @@
 Package: leanbuild
-Version: 0.1.2
-Title: Tools for Creating Automated Courses
-Description: Leverages the 'bookdown' package and other tools to create courses
-  that can be hosted on Leanpub.
-Authors@R: c(person(given = "John",family = "Muschelli",
-  email = "muschellij2@gmail.com",
-  role = c("aut"),
-  comment = c(ORCID = "0000-0001-6469-1750")),
-  person(given = "Candace",family = "Savonen",
-  email = "cansav09@gmail.com",
-  role = c("aut", "cre"),
-  comment = c(ORCID = "0000-0001-6331-7070")), 
-  person(given = "Carrie", family = "Wright",
-  email = "cwrigh60@jhu.edu",
-  role = c("ctb"))
-  )
-Depends: R (>= 3.5.0)
-License: GPL-3
-Imports:
-    googledrive,
-    dplyr,
-    httr,
-    jsonlite,
-    utils,
-    ariExtra (>= 0.3.0),
-    tibble,
-    rmarkdown,
-    xml2,
-    rvest,
-    R.utils,
-    bookdown,
-    glue,
-    curl,
-    rprojroot,
-    magrittr,
-    yaml, 
-    stringr,
-    here
-Suggests:
-    didactr,
-    knitr,
-    testthat
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "First",
+           family = "Last",
+           role = c("aut", "cre"),
+           email = "first.last@example.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: What the package does (one paragraph).
+License: `use_mit_license()`, `use_gpl3_license()` or friends to
+    pick a license
 Encoding: UTF-8
-LazyData: true
-Remotes:
-    jhudsl/ari,
-    jhudsl/ariExtra,
-    jhudsl/text2speech,
-    jhudsl/didactr,
-    hairizuanbinnoorazman/rgoogleslides
-ByteCompile: true
-Type: Package
-VignetteBuilder: knitr
-URL: https://github.com/jhudsl/leanbuild
-BugReports: https://github.comjhudsl/leanbuild/issues
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
