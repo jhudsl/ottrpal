@@ -1,26 +1,4 @@
 
-#' Convert youtube link 
-#'
-#' @param utube_link a link to a youtube video that may or may not be "www.youtube.com/embed" or "www.youtube.com/watch?v="
-#' format. 
-#'
-#' @return Returns a youtube link in the "watch" format so it will render properly in Leanpub or Coursera-friendly files
-#' @export
-#' 
-convert_utube_link <- function(utube_link){
-  
-  # If it has a youtube embed link, switch to the watch format link
-  if (grepl("www.youtube.com/embed", utube_link)) {
-    
-    utube_link <- paste0("https://www.youtube.com/watch?v=",
-                      strsplit(utube_link,
-                               split = "www.youtube.com/embed/")[[1]][2]
-    )
-  }
-  return(utube_link)
-}
-
-
 get_html_element <- function(x, element = "img") {
   x <- paste(x, collapse = "\n")
   doc <- xml2::read_html(x)
@@ -393,7 +371,10 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
     
     # If it has a youtube embed link, switch to the watch format link
     if (grepl("www.youtube.com/embed", out$src)) {
-      out$src <- convert_utube_link(out$src)
+      out$src <- paste0("https://www.youtube.com/watch?v=",
+                        strsplit(out$src,
+                                 split = "www.youtube.com/embed/")[[1]][2]
+      )
       # If it's youtube put this image in the tag
       out$type <- "video"
       out$poster <- "http://img.youtube.com/vi/VOCYL-FNbr0/mqdefault.jpg"
