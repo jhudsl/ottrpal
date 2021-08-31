@@ -2,6 +2,7 @@ Meta
 doc
 .Rproj.user
 .Rhistory
+.DS_Store
 .RData
 .Ruserdata
 inst/doc
