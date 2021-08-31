@@ -48,7 +48,7 @@ jobs:
           signoff: false
           branch: auto_copy_rendered_files
           delete-branch: true
-          title: 'GHA: Automated transfer of leanbuild-needed files from Bookdown repository'
+          title: 'GHA: Automated transfer re-render with leanbuild update'
           body: |
             ### Description:
              This PR has changes to this repository's files using the latest leanbuild package changes!
