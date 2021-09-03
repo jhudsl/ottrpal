@@ -21,9 +21,9 @@ Imports:
     googledrive,
     dplyr,
     httr,
+    didactr,
     jsonlite,
     utils,
-    ariExtra (>= 0.3.0),
     tibble,
     rmarkdown,
     xml2,
@@ -35,19 +35,14 @@ Imports:
     rprojroot,
     magrittr,
     yaml, 
-    stringr,
-    here
+    stringr
 Suggests:
-    didactr,
     knitr,
     testthat
 Encoding: UTF-8
 LazyData: true
 Remotes:
-    jhudsl/ari,
-    jhudsl/ariExtra,
     jhudsl/text2speech,
-    jhudsl/didactr,
     hairizuanbinnoorazman/rgoogleslides
 ByteCompile: true
 Type: Package

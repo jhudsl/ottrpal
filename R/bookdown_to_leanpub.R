@@ -128,7 +128,7 @@ copy_directory_contents <- function(from, to) {
 }
 
 copy_resources <- function(path = ".",
-                           images_dir = "resources/images",
+                           images_dir = "resources",
                            output_dir = "manuscript") {
 
   # Get file path to bookdown.yml
@@ -137,16 +137,17 @@ copy_resources <- function(path = ".",
   # Assume image directory is `resources/images`
   res_image_dir <- file.path(path, images_dir )
 
-  # Creat the directory if it doesn't exist
+  # Create the directory if it doesn't exist
   dir.create(res_image_dir, showWarnings = FALSE, recursive = TRUE)
 
-  manuscript_image_dir <- file.path(output_dir, images_dir )
+  manuscript_image_dir <- file.path(output_dir, images_dir)
 
   dir.create(manuscript_image_dir, showWarnings = FALSE, recursive = TRUE)
 
   manuscript_image_dir <- normalizePath(manuscript_image_dir)
-  if (file.exists(res_image_dir)) {
-    copy_directory_contents(res_image_dir, manuscript_image_dir)
+
+  if (dir.exists(res_image_dir)) {
+    R.utils::copyDirectory(res_image_dir, manuscript_image_dir, recursive = TRUE, overwrite = TRUE)
   }
 }
 
@@ -221,7 +222,6 @@ bookdown_to_leanpub <- function(path = ".",
     message(paste("index_file is", index_file))
 
     output_format <- bookdown::gitbook(pandoc_args = "--citeproc")
-    # output_format$pandoc$to = output_format$pandoc$from
     output_format$pandoc$args <- c(output_format$pandoc$args, "--citeproc")
     bookdown::render_book(input = index_file,
                           output_format = output_format,
@@ -233,13 +233,16 @@ bookdown_to_leanpub <- function(path = ".",
     message("Copying Resources")
   }
   copy_resources(path, output_dir = output_dir)
+
   if (verbose) {
     message("Copying Docs folder")
   }
+
   copy_docs(path, output_dir = output_dir)
   if (verbose) {
     message("Copying bib files")
   }
+
   copy_bib(path, output_dir = output_dir)
   # FIXME Can also use bookdown_rmd_files
   # rmd_files = list.files(pattern = rmd_regex)
@@ -295,12 +298,12 @@ bookdown_to_leanpub <- function(path = ".",
   } else {
     file.copy("Book.txt", output_dir, overwrite = TRUE)
   }
-  L <- list(
+  output_list <- list(
     output_files = md_files,
     full_output_files = normalizePath(md_files, winslash = "/")
   )
-  L$book_txt_output <- out
-  return(L)
+  output_list$book_txt_output <- out
+  return(output_list)
 }
 
 
@@ -348,24 +351,25 @@ bookdown_to_book_txt <- function(
   )
   quiz_df <- dplyr::bind_rows(quiz_df, bad_quiz_df)
   rm(list = c("bad_quiz_files", "bad_quiz_df"))
+
   quiz_df <- quiz_df %>%
     dplyr::arrange(index)
+
   df <- dplyr::bind_rows(md_df, quiz_df)
+
   rm(list = c("quiz_df"))
 
   df <- df %>%
-    dplyr::arrange(index)
-  df <- df %>%
-    dplyr::mutate(full_file = file.path(output_dir, file))
-  df <- df %>%
+    dplyr::arrange(index) %>%
+    dplyr::mutate(full_file = file.path(output_dir, file)) %>%
     dplyr::filter(file.exists(full_file))
 
   book_txt <- file.path(output_dir, "Book.txt")
   # need to fix about quiz
   writeLines(df$file, book_txt)
-  L <- list(
+  output_list <- list(
     md_order = df,
     book_file = book_txt
   )
-  return(L)
+  return(output_list)
 }
