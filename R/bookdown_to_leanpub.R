@@ -105,22 +105,6 @@ bookdown_destination <- function(path = ".") {
   return(full_output_dir)
 }
 
-#' Copying directory contents
-#'
-#' @param from  Where the files to copy are located.
-#' @param to  Where the files to copy are to be copied should go to.
-#'
-#' @return The file paths to Rmds listed in the _bookdown.yml file.
-#' @export
-#'
-copy_directory_contents <- function(from, to) {
-  file_list <- list.files(
-    path = from, full.names = TRUE, all.files = TRUE,
-    recursive = TRUE
-  )
-  file.copy(file_list, to, recursive = TRUE, overwrite = TRUE)
-}
-
 copy_resources <- function(path = ".",
                            images_dir = "resources",
                            output_dir = "manuscript") {
@@ -238,11 +222,7 @@ bookdown_to_leanpub <- function(path = ".",
   if (verbose) {
     message("Copying bib files")
   }
-
   copy_bib(path, output_dir = output_dir)
-  # FIXME Can also use bookdown_rmd_files
-  # rmd_files = list.files(pattern = rmd_regex)
-
 
   bib_files <- list.files(pattern = "[.]bib$")
   if (length(bib_files) > 0) {
@@ -281,12 +261,31 @@ bookdown_to_leanpub <- function(path = ".",
     if (verbose > 1) {
       message("Running bookdown_to_book_txt")
     }
-    out <- bookdown_to_book_txt(
+    bookdown_to_book_txt(
       path = path,
       output_dir = output_dir,
+      quiz_dir = quiz_dir,
       verbose = verbose
     )
+    out <- book_txt_file <- file.path(output_dir, "Book.txt")
+
+  } else {
+    # If false, look for Book.txt file to copy to output folder.
+    book_txt_file <- file.path(path, "Book.txt")
+
+    if (file.exists(book_txt_file)) {
+      # Copy over an existing book.txt file if it exists
+      file.copy(from = book_txt_file, to = file.path(output_dir, "Book.txt"))
+
+      out <- book_txt_file <- file.path(output_dir, "Book.txt")
+    } else {
+      # If none exists and make_book_txt is false: stop.
+      stop(paste0("Book.txt file does not exist in the main directory: ", path, "and make_book_txt is set to FALSE.",
+           "There is no Book.txt file. Leanpub needs one. Either make one and place it in the directory path or ",
+           "use make_book_txt = TRUE and one will be generated for you."))
+    }
   }
+  # Return list of output files
   output_list <- list(
     output_files = md_files,
     full_output_files = normalizePath(md_files, winslash = "/")
@@ -296,69 +295,62 @@ bookdown_to_leanpub <- function(path = ".",
 }
 
 
-#' Convert Bookdown to Leanpub
+#' Create Book.txt file from files existing
 #'
 #' @param path path to the bookdown book, must have a `_bookdown.yml` file
 #' @param output_dir output directory to put files.  It should likely be
 #' relative to path
+#' @param quiz_dir Where are the quizzes stored? Default looks for folder called "quizzes".
 #' @param verbose print diagnostic messages
 #'
-#' @return A list of output files in order, the book text file name, and diagnostics
+#' @return A list of quiz and chapter files in order in a file called Book.txt -- How Leanpub wants it.
 #' @export
-bookdown_to_book_txt <- function(
-                                 path = ".",
+bookdown_to_book_txt <- function(path = ".",
                                  output_dir = "manuscript",
+                                 quiz_dir = "quizzes",
                                  verbose = TRUE) {
-  index <- full_file <- NULL
-  rm(list = c("full_file", "index"))
-
+  # Establish path
   path <- bookdown_path(path)
 
   rmd_regex <- "[.][R|r]md$"
+
+  # Extract the names of the Rmd files (the chapters)
   rmd_files <- bookdown_rmd_files(path = path)
-  md_files <- sub(rmd_regex, ".md", rmd_files, ignore.case = TRUE)
-  md_df <- tibble::tibble(
-    file = md_files,
-    index = seq_along(md_files)
-  )
-  quiz_files <- paste0("quiz-", md_files)
-  bad_quiz_files <- paste0("quiz_", md_files)
-  if (any(file.exists(file.path(output_dir, bad_quiz_files)))) {
-    warning(
-      "Naming convention for quizzes is quiz-, not quiz_",
-      ", please correct"
-    )
-  }
-  # add 0.5 so it's after the correct md file
-  quiz_df <- tibble::tibble(
-    file = quiz_files,
-    index = seq_along(quiz_files) + 0.5
-  )
-  bad_quiz_df <- tibble::tibble(
-    file = bad_quiz_files,
-    index = seq_along(bad_quiz_files) + 0.5
-  )
-  quiz_df <- dplyr::bind_rows(quiz_df, bad_quiz_df)
-  rm(list = c("bad_quiz_files", "bad_quiz_df"))
 
-  quiz_df <- quiz_df %>%
-    dplyr::arrange(index)
+  # Find the quiz files in the quiz directory
+  quiz_files <- list.files(pattern = "\\.md$", quiz_dir)
 
-  df <- dplyr::bind_rows(md_df, quiz_df)
+  # Put files in one vector
+  all_files <- c(rmd_files, quiz_files)
 
-  rm(list = c("quiz_df"))
+  # Make a vector specifying the file type: quiz or not
+  file_type <- c(rep("non-quiz", length(rmd_files)),
+                 rep("quiz", length(quiz_files)))
 
-  df <- df %>%
-    dplyr::arrange(index) %>%
-    dplyr::mutate(full_file = file.path(output_dir, file)) %>%
-    dplyr::filter(file.exists(full_file))
+  # Put all files in one data.frame
+  all_files <- data.frame(file_name = all_files,
+                          file_type) %>%
+    dplyr::mutate(
+      # Use this so we don't have to fiddle with case senstivity for the next step
+      lower_filename = tolower(file_name),
+      # Get the number from the file name and that will be the order
+      num = stringr::str_extract(file_name, "([0-9]+)"),
+                  num = dplyr::case_when(
+                    # Put index file first and about file last
+                    lower_filename == "index.rmd" ~ "0",
+                    lower_filename == "about.rmd" ~ as.character(length(all_files)),
+                    TRUE ~ num
+                  ),
+      num = as.numeric(num)) %>%
+    # Put quizzes in order!
+    dplyr::arrange(num, file_type) %>%
+    dplyr::pull(file_name)
 
+  # Declare output file name
   book_txt <- file.path(output_dir, "Book.txt")
+
   # need to fix about quiz
-  writeLines(df$file, book_txt)
-  output_list <- list(
-    md_order = df,
-    book_file = book_txt
-  )
-  return(output_list)
+  writeLines(all_files, con = book_txt)
+
+  return(list(quiz_files, book_txt))
 }
