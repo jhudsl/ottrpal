@@ -285,13 +285,6 @@ bookdown_to_leanpub <- function(path = ".",
            "use make_book_txt = TRUE and one will be generated for you."))
     }
   }
-  # Return list of output files
-  output_list <- list(
-    output_files = md_files,
-    full_output_files = normalizePath(md_files, winslash = "/")
-  )
-  output_list$book_txt_output <- out
-  return(output_list)
 }
 
 
@@ -351,6 +344,4 @@ bookdown_to_book_txt <- function(path = ".",
 
   # need to fix about quiz
   writeLines(all_files, con = book_txt)
-
-  return(list(quiz_files, book_txt))
 }
