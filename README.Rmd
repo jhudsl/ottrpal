@@ -16,7 +16,8 @@ knitr::opts_chunk$set(
 )
 ```
 
-# leanbuild Package: 
+# leanbuild Package:
+
 The goal of `leanbuild` is to provide tools to convert from Bookdown content to Leanpub content and do some checks.
 
 ## Installation
@@ -31,7 +32,13 @@ remotes::install_github("jhudsl/leanbuild")
 
 ## Example
 
+Within a bookdown repository, you can run the following command to convert your
+content to a Leanpub-ready format.
+
 ```{r, eval = FALSE}
-library(leanbuild)
+leanbuild::bookdown_to_leanpub()
 ```
 
+By default the output files will be sent to a `manuscript` folder which is what Leanpub looks for.
+
+For an example of what this looks like, see [this template repository](https://github.com/jhudsl/DaSL_Course_Template_Leanpub).
