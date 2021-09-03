@@ -168,6 +168,7 @@ bookdown_to_leanpub <- function(path = ".",
                                 render = TRUE,
                                 output_dir = "manuscript",
                                 make_book_txt = FALSE,
+                                quiz_dir = "quizzes",
                                 remove_resources_start = FALSE,
                                 verbose = TRUE,
                                 footer_text = NULL) {

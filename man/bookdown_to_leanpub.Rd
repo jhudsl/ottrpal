@@ -9,6 +9,7 @@ bookdown_to_leanpub(
   render = TRUE,
   output_dir = "manuscript",
   make_book_txt = FALSE,
+  quiz_dir = "quizzes",
   remove_resources_start = FALSE,
   verbose = TRUE,
   footer_text = NULL
@@ -25,6 +26,9 @@ relative to path}
 \item{make_book_txt}{Should [leanbuild::bookdown_to_book_txt()] be run
 to create a `Book.txt` in the output directory?}
 
+\item{quiz_dir}{directory that contains the quiz .md files that should be
+checked and incorporated into the Book.txt file}
+
 \item{remove_resources_start}{remove the word `resources/` at the front
 of any image path.}
 
@@ -32,9 +36,6 @@ of any image path.}
 
 \item{footer_text}{Optionally can add a bit of text that will be added to the
 end of each file before the references section.}
-
-\item{quiz_dir}{directory that contains the quiz .md files that should be
-checked and incorporated into the Book.txt file}
 }
 \value{
 A list of output files and diagnostics
