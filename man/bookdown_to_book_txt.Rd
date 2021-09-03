@@ -2,7 +2,7 @@
 % Please edit documentation in R/bookdown_to_leanpub.R
 \name{bookdown_to_book_txt}
 \alias{bookdown_to_book_txt}
-\title{Create Book.txt file from files existing}
+\title{Create Book.txt file from files existing in quiz directory}
 \usage{
 bookdown_to_book_txt(
   path = ".",
@@ -25,5 +25,5 @@ relative to path}
 A list of quiz and chapter files in order in a file called Book.txt -- How Leanpub wants it.
 }
 \description{
-Create Book.txt file from files existing
+Create Book.txt file from files existing in quiz directory
 }

@@ -32,6 +32,9 @@ of any image path.}
 
 \item{footer_text}{Optionally can add a bit of text that will be added to the
 end of each file before the references section.}
+
+\item{quiz_dir}{directory that contains the quiz .md files that should be
+checked and incorporated into the Book.txt file}
 }
 \value{
 A list of output files and diagnostics
