@@ -156,6 +156,8 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
 #' of any image path.
 #' @param make_book_txt Should [leanbuild::bookdown_to_book_txt()] be run
 #' to create a `Book.txt` in the output directory?
+#' @param quiz_dir directory that contains the quiz .md files that should be
+#' checked and incorporated into the Book.txt file
 #' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
 #'
@@ -288,7 +290,7 @@ bookdown_to_leanpub <- function(path = ".",
 }
 
 
-#' Create Book.txt file from files existing
+#' Create Book.txt file from files existing in quiz directory
 #'
 #' @param path path to the bookdown book, must have a `_bookdown.yml` file
 #' @param output_dir output directory to put files.  It should likely be
