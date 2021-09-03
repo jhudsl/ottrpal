@@ -17,8 +17,7 @@ Authors@R: c(person(given = "John",family = "Muschelli",
   )
 Depends: R (>= 3.5.0)
 License: GPL-3
-Imports:
-    googledrive,
+Imports: googledrive,
     dplyr,
     httr,
     jsonlite,
@@ -40,8 +39,7 @@ Suggests:
     testthat
 Encoding: UTF-8
 LazyData: true
-Remotes:
-    jhudsl/text2speech,
+Remotes: jhudsl/text2speech,
     jhudsl/didactr,
     hairizuanbinnoorazman/rgoogleslides
 ByteCompile: true
