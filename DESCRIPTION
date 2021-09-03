@@ -10,7 +10,7 @@ Authors@R: c(person(given = "John",family = "Muschelli",
   person(given = "Candace",family = "Savonen",
   email = "cansav09@gmail.com",
   role = c("aut", "cre"),
-  comment = c(ORCID = "0000-0001-6331-7070")), 
+  comment = c(ORCID = "0000-0001-6331-7070")),
   person(given = "Carrie", family = "Wright",
   email = "cwrigh60@jhu.edu",
   role = c("ctb"))
@@ -21,7 +21,6 @@ Imports:
     googledrive,
     dplyr,
     httr,
-    didactr,
     jsonlite,
     utils,
     tibble,
@@ -34,7 +33,7 @@ Imports:
     curl,
     rprojroot,
     magrittr,
-    yaml, 
+    yaml,
     stringr
 Suggests:
     knitr,
@@ -43,6 +42,7 @@ Encoding: UTF-8
 LazyData: true
 Remotes:
     jhudsl/text2speech,
+    jhudsl/didactr,
     hairizuanbinnoorazman/rgoogleslides
 ByteCompile: true
 Type: Package
