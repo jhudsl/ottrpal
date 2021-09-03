@@ -7,15 +7,15 @@
 #' @export
 
 get_bookdown_spec <- function(path = ".") {
-  
+
   # Get the file path to _bookdown.yaml
   file_path <- bookdown_file(path = path)
-  
+
   # Read in yaml
   suppressWarnings({
     yaml_contents <- yaml::yaml.load_file(file_path)
   })
-  
+
   return(yaml_contents)
 }
 
@@ -27,11 +27,8 @@ get_bookdown_spec <- function(path = ".") {
 #' @export
 
 bookdown_path <- function(path = ".") {
-  
-  rprojroot::find_root(rprojroot::has_file("_bookdown.yml"), path = path)
-  
-  path <- dirname(here::here("_bookdown.yml"))
-  
+  path <- rprojroot::find_root(rprojroot::has_file("_bookdown.yml"), path = path)
+
   return(path)
 }
 
@@ -41,12 +38,11 @@ bookdown_path <- function(path = ".") {
 #'
 #' @return The file path to _bookdown.yml
 #' @export
-#' 
+#'
 bookdown_file <- function(path = ".") {
-  
   root_dir <- bookdown_path(path = path)
   file_path <- file.path(root_dir, "_bookdown.yml")
-  
+
   return(file_path)
 }
 
@@ -54,13 +50,12 @@ bookdown_file <- function(path = ".") {
 #'
 #' @param path  Where to look for the _bookdown.yml file. Passes toget_bookdown_spec() function. By default looks in current directory
 #'
-#' @return The file paths to Rmds listed in the _bookdown.yml file. 
+#' @return The file paths to Rmds listed in the _bookdown.yml file.
 #' @export
-#' 
+#'
 bookdown_rmd_files <- function(path = ".") {
-  
   spec <- get_bookdown_spec(path)
-  
+
   files <- spec$rmd_files
   if (is.null(files) || all(is.na(files)) || length(files) == 0) {
     warning(
@@ -80,46 +75,45 @@ bookdown_rmd_files <- function(path = ".") {
 #'
 #' @param path  Where to look for the _bookdown.yml file. Passes toget_bookdown_spec() function. By default looks in current directory
 #'
-#' @return The file paths to Rmds listed in the _bookdown.yml file. 
+#' @return The file paths to Rmds listed in the _bookdown.yml file.
 #' @export
 #'
 bookdown_destination <- function(path = ".") {
-  
+
   # Find _bookdown.yml
   root_dir <- bookdown_path(path = path)
-  
+
   # Get specs from _bookdown.yml
   spec <- get_bookdown_spec(path = path)
-  
+
   # Find output directory declared in the bookdown.yml
   output_dir <- spec$output_dir
-  
+
   # If none specified, assume its called docs/
   if (is.null(output_dir)) {
     output_dir <- "docs"
   }
   # Get the full file path
   full_output_dir <- file.path(root_dir, output_dir)
-  
+
   # If the output dir doesn't exist, make it
   dir.create(full_output_dir, showWarnings = FALSE, recursive = TRUE)
-  
+
   # Declare full paths
   full_output_dir <- normalizePath(full_output_dir, winslash = "/")
-  
+
   return(full_output_dir)
 }
 
 #' Copying directory contents
 #'
-#' @param from  Where the files to copy are located. 
-#' @param to  Where the files to copy are to be copied should go to.  
+#' @param from  Where the files to copy are located.
+#' @param to  Where the files to copy are to be copied should go to.
 #'
-#' @return The file paths to Rmds listed in the _bookdown.yml file. 
+#' @return The file paths to Rmds listed in the _bookdown.yml file.
 #' @export
 #'
 copy_directory_contents <- function(from, to) {
-  
   file_list <- list.files(
     path = from, full.names = TRUE, all.files = TRUE,
     recursive = TRUE
@@ -128,25 +122,26 @@ copy_directory_contents <- function(from, to) {
 }
 
 copy_resources <- function(path = ".",
-                           images_dir = "resources/images",
+                           images_dir = "resources",
                            output_dir = "manuscript") {
-  
+
   # Get file path to bookdown.yml
   path <- bookdown_path(path)
-  
+
   # Assume image directory is `resources/images`
-  res_image_dir <- file.path(path, images_dir )
-  
-  # Creat the directory if it doesn't exist
+  res_image_dir <- file.path(path, images_dir)
+
+  # Create the directory if it doesn't exist
   dir.create(res_image_dir, showWarnings = FALSE, recursive = TRUE)
-  
-  manuscript_image_dir <- file.path(output_dir, images_dir )
-  
+
+  manuscript_image_dir <- file.path(output_dir, images_dir)
+
   dir.create(manuscript_image_dir, showWarnings = FALSE, recursive = TRUE)
-  
+
   manuscript_image_dir <- normalizePath(manuscript_image_dir)
-  if (file.exists(res_image_dir)) {
-    copy_directory_contents(res_image_dir, manuscript_image_dir)
+
+  if (dir.exists(res_image_dir)) {
+    R.utils::copyDirectory(res_image_dir, manuscript_image_dir, recursive = TRUE, overwrite = TRUE)
   }
 }
 
@@ -177,7 +172,7 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
 #' of any image path.
 #' @param make_book_txt Should [leanbuild::bookdown_to_book_txt()] be run
 #' to create a `Book.txt` in the output directory?
-#' @param footer_text Optionally can add a bit of text that will be added to the 
+#' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
 #'
 #' @return A list of output files and diagnostics
@@ -188,44 +183,45 @@ bookdown_to_leanpub <- function(path = ".",
                                 output_dir = "manuscript",
                                 make_book_txt = FALSE,
                                 remove_resources_start = FALSE,
-                                verbose = TRUE, 
+                                verbose = TRUE,
                                 footer_text = NULL) {
-  
+
   # Declare regex for finding rmd files
   rmd_regex <- "[.][R|r]md$"
 
   # Get the path to the _bookdown.yml
   path <- bookdown_path(path)
-  
+
   if (verbose) {
     message(paste0("Looking for bookdown file in ", path))
   }
   rmd_files <- bookdown_rmd_files(path = path)
-  
+
   if (verbose) {
     message(paste0(c("Processing these files: ", rmd_files), collapse = "\n"))
   }
-  
+
   if (render) {
     if (verbose) {
       message("Rendering the Book")
     }
     # Get the index file path
     index_file <- grep("index", rmd_files, ignore.case = TRUE, value = TRUE)
-    
+
     index_file <- normalizePath(index_file)
-    
+
     if (length(index_file) == 0 || is.na(index_file)) {
       index_file <- rmd_files[1]
     }
     message(paste("index_file is", index_file))
-    
+
     output_format <- bookdown::gitbook(pandoc_args = "--citeproc")
-    # output_format$pandoc$to = output_format$pandoc$from
     output_format$pandoc$args <- c(output_format$pandoc$args, "--citeproc")
-    bookdown::render_book(input = index_file, 
-                          output_format = output_format, 
-                          clean_envir = FALSE)
+    bookdown::render_book(
+      input = index_file,
+      output_format = output_format,
+      clean_envir = FALSE
+    )
   }
 
   # may be irrelevant since copy_docs does everything
@@ -233,13 +229,16 @@ bookdown_to_leanpub <- function(path = ".",
     message("Copying Resources")
   }
   copy_resources(path, output_dir = output_dir)
+
   if (verbose) {
     message("Copying Docs folder")
   }
+
   copy_docs(path, output_dir = output_dir)
   if (verbose) {
     message("Copying bib files")
   }
+
   copy_bib(path, output_dir = output_dir)
   # FIXME Can also use bookdown_rmd_files
   # rmd_files = list.files(pattern = rmd_regex)
@@ -257,7 +256,6 @@ bookdown_to_leanpub <- function(path = ".",
   md_files <- file.path(output_dir, basename(md_files))
 
   for (file in md_files) {
-
     if (verbose > 1) {
       message("Replacing HTML for ", file)
     }
@@ -289,12 +287,12 @@ bookdown_to_leanpub <- function(path = ".",
       verbose = verbose
     )
   }
-  L <- list(
+  output_list <- list(
     output_files = md_files,
     full_output_files = normalizePath(md_files, winslash = "/")
   )
-  L$book_txt_output <- out
-  return(L)
+  output_list$book_txt_output <- out
+  return(output_list)
 }
 
 
@@ -342,24 +340,25 @@ bookdown_to_book_txt <- function(
   )
   quiz_df <- dplyr::bind_rows(quiz_df, bad_quiz_df)
   rm(list = c("bad_quiz_files", "bad_quiz_df"))
+
   quiz_df <- quiz_df %>%
     dplyr::arrange(index)
+
   df <- dplyr::bind_rows(md_df, quiz_df)
+
   rm(list = c("quiz_df"))
 
   df <- df %>%
-    dplyr::arrange(index)
-  df <- df %>%
-    dplyr::mutate(full_file = file.path(output_dir, file))
-  df <- df %>%
+    dplyr::arrange(index) %>%
+    dplyr::mutate(full_file = file.path(output_dir, file)) %>%
     dplyr::filter(file.exists(full_file))
 
   book_txt <- file.path(output_dir, "Book.txt")
   # need to fix about quiz
   writeLines(df$file, book_txt)
-  L <- list(
+  output_list <- list(
     md_order = df,
     book_file = book_txt
   )
-  return(L)
+  return(output_list)
 }

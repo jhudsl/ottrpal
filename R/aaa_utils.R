@@ -218,12 +218,12 @@ download_png_urls <- function(urls) {
 
 
 add_footer <- function(rmd_path, footer_text = NULL) {
-  
   if (is.null(footer_text)) {
     stop("Need character string in footer_text argument to append to end of file.")
   }
-  
-  write(as.character(footer_text), 
-        file = rmd_path, 
-        append = TRUE)
+
+  write(as.character(footer_text),
+    file = rmd_path,
+    append = TRUE
+  )
 }
