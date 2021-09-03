@@ -27,7 +27,6 @@ get_bookdown_spec <- function(path = ".") {
 #' @export
 
 bookdown_path <- function(path = ".") {
-
   path <- rprojroot::find_root(rprojroot::has_file("_bookdown.yml"), path = path)
 
   return(path)
@@ -41,7 +40,6 @@ bookdown_path <- function(path = ".") {
 #' @export
 #'
 bookdown_file <- function(path = ".") {
-
   root_dir <- bookdown_path(path = path)
   file_path <- file.path(root_dir, "_bookdown.yml")
 
@@ -56,7 +54,6 @@ bookdown_file <- function(path = ".") {
 #' @export
 #'
 bookdown_rmd_files <- function(path = ".") {
-
   spec <- get_bookdown_spec(path)
 
   files <- spec$rmd_files
@@ -117,7 +114,6 @@ bookdown_destination <- function(path = ".") {
 #' @export
 #'
 copy_directory_contents <- function(from, to) {
-
   file_list <- list.files(
     path = from, full.names = TRUE, all.files = TRUE,
     recursive = TRUE
@@ -133,7 +129,7 @@ copy_resources <- function(path = ".",
   path <- bookdown_path(path)
 
   # Assume image directory is `resources/images`
-  res_image_dir <- file.path(path, images_dir )
+  res_image_dir <- file.path(path, images_dir)
 
   # Create the directory if it doesn't exist
   dir.create(res_image_dir, showWarnings = FALSE, recursive = TRUE)
@@ -221,9 +217,11 @@ bookdown_to_leanpub <- function(path = ".",
 
     output_format <- bookdown::gitbook(pandoc_args = "--citeproc")
     output_format$pandoc$args <- c(output_format$pandoc$args, "--citeproc")
-    bookdown::render_book(input = index_file,
-                          output_format = output_format,
-                          clean_envir = FALSE)
+    bookdown::render_book(
+      input = index_file,
+      output_format = output_format,
+      clean_envir = FALSE
+    )
   }
 
   # may be irrelevant since copy_docs does everything
@@ -258,7 +256,6 @@ bookdown_to_leanpub <- function(path = ".",
   md_files <- file.path(output_dir, basename(md_files))
 
   for (file in md_files) {
-
     if (verbose > 1) {
       message("Replacing HTML for ", file)
     }

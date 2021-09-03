@@ -1,20 +1,21 @@
 
-#' Convert youtube link 
+#' Convert youtube link
 #'
 #' @param utube_link a link to a youtube video that may or may not be "www.youtube.com/embed" or "www.youtube.com/watch?v="
-#' format. 
+#' format.
 #'
 #' @return Returns a youtube link in the "watch" format so it will render properly in Leanpub or Coursera-friendly files
 #' @export
-#' 
-convert_utube_link <- function(utube_link){
-  
+#'
+convert_utube_link <- function(utube_link) {
+
   # If it has a youtube embed link, switch to the watch format link
   if (grepl("www.youtube.com/embed", utube_link)) {
-    
-    utube_link <- paste0("https://www.youtube.com/watch?v=",
-                      strsplit(utube_link,
-                               split = "www.youtube.com/embed/")[[1]][2]
+    utube_link <- paste0(
+      "https://www.youtube.com/watch?v=",
+      strsplit(utube_link,
+        split = "www.youtube.com/embed/"
+      )[[1]][2]
     )
   }
   return(utube_link)
@@ -253,67 +254,71 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
     is.na(fullbleed)) {
     fullbleed <- FALSE
   }
-  
+
   ## Set defaults for items that haven't been specified
-  
+
   # Default for align is center
-  if(is.null(myenv$align)) {myenv$align <- "center"}
-  
+  if (is.null(myenv$align)) {
+    myenv$align <- "center"
+  }
+
   # Default for width is 100%
-  if(is.null(myenv$width)) {myenv$width <- "100%"}
-  
+  if (is.null(myenv$width)) {
+    myenv$width <- "100%"
+  }
+
   # Put everything together
   specs <- sapply(specs, glue::glue, .envir = myenv)
-  
+
   # Make sure it's coerced as a character
   specs <- unlist(sapply(specs, as.character))
-  
+
   # Set as fullbleed if TRUE
   specs <- c(specs, if (fullbleed) "fullbleed: true")
-  
+
   # Collapse it all together and add a new line
   specs <- paste(specs, collapse = " ")
   specs <- paste0("{", specs, "}\n")
-  
+
   # If caption was set, use that for link
-  # Default is to set this for a link 
+  # Default is to set this for a link
   words <- "Check out this link"
-  
+
   # If a caption is set use that
   if (!is.null(myenv$caption)) {
-    words <-  myenv$caption
-    
-  # Otherwise if video use this wording
+    words <- myenv$caption
+
+    # Otherwise if video use this wording
   } else if (!is.null(myenv$type)) {
     if (myenv$type == "video") words <- "Click on the lower right corner to expand the screen"
-  
-  # Otherwise if image use this wording
+
+    # Otherwise if image use this wording
   } else if (!is.null(element)) {
     if (element == "img") words <- ""
   }
 
   # Default is to not use a !
   link <- paste0("[", words, "](", myenv$src, ").")
-  
+
   # But if its an image or video, use use !
   if (!is.null(element)) {
     if (element == "img") {
       link <- paste0("![", words, "](", myenv$src, ").")
-      } 
+    }
   }
   if (!is.null(myenv$type)) {
     if (myenv$type == "video") {
       link <- paste0("![", words, "](", myenv$src, ").")
-      } 
     }
-  
+  }
+
   # Tack on the link
   specs <- paste0(specs, link)
-  
+
   return(specs)
 }
 
-replace_div_data <- function(x, fullbleed = FALSE, remove_resources_start = TRUE, 
+replace_div_data <- function(x, fullbleed = FALSE, remove_resources_start = TRUE,
                              element = NULL) {
   div_index <- find_figure_div(x)
   if (NROW(div_index) == 0) {
@@ -390,7 +395,7 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
       na_empty(get_html_attr(x = x, name = name, element = element))
     })
     names(out) <- attributes
-    
+
     # If it has a youtube embed link, switch to the watch format link
     if (grepl("www.youtube.com/embed", out$src)) {
       out$src <- convert_utube_link(out$src)
@@ -442,7 +447,7 @@ replace_image_data <- function(x, element = c("img", "iframe"), fullbleed = FALS
 #' @param fullbleed should the image have the attribute `fullbleed: true`?
 #' @param remove_resources_start remove the word `resources/` at the front
 #' of any image path.
-#' @param footer_text a bit of text that will be added to the 
+#' @param footer_text a bit of text that will be added to the
 #' end of each file before the references section.
 #' @param verbose print diagnostic messages
 #'
@@ -457,10 +462,10 @@ replace_html <- function(path = "manuscript",
     path = path, pattern = "[.]md$", ignore.case = TRUE,
     full.names = TRUE
   )
-  
+
   md_files <- lapply(md_files, replace_single_html,
     fullbleed = fullbleed,
-    verbose = verbose, 
+    verbose = verbose,
     footer_text = footer_text
   )
   return(md_files)
@@ -502,14 +507,16 @@ replace_single_html <- function(file,
     message("Converting footnotes")
   }
   x <- convert_footnotes(x)
-  
+
   # need to actually do changes
   writeLines(x, con = file)
-  
+
   # Add on footer if it was given
   if (!is.null(footer_text)) {
-    add_footer(rmd_path = file, 
-               footer_text)
+    add_footer(
+      rmd_path = file,
+      footer_text
+    )
   }
   return(file)
 }
