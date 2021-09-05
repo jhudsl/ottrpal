@@ -2,9 +2,14 @@
 % Please edit documentation in R/bookdown_to_leanpub.R
 \name{bookdown_to_book_txt}
 \alias{bookdown_to_book_txt}
-\title{Convert Bookdown to Leanpub}
+\title{Create Book.txt file from files existing in quiz directory}
 \usage{
-bookdown_to_book_txt(path = ".", output_dir = "manuscript", verbose = TRUE)
+bookdown_to_book_txt(
+  path = ".",
+  output_dir = "manuscript",
+  quiz_dir = "quizzes",
+  verbose = TRUE
+)
 }
 \arguments{
 \item{path}{path to the bookdown book, must have a `_bookdown.yml` file}
@@ -12,11 +17,13 @@ bookdown_to_book_txt(path = ".", output_dir = "manuscript", verbose = TRUE)
 \item{output_dir}{output directory to put files.  It should likely be
 relative to path}
 
+\item{quiz_dir}{Where are the quizzes stored? Default looks for folder called "quizzes".}
+
 \item{verbose}{print diagnostic messages}
 }
 \value{
-A list of output files in order, the book text file name, and diagnostics
+A list of quiz and chapter files in order in a file called Book.txt -- How Leanpub wants it.
 }
 \description{
-Convert Bookdown to Leanpub
+Create Book.txt file from files existing in quiz directory
 }
