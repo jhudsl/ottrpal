@@ -1,5 +1,5 @@
 
-# Intro to leanbuild
+# Intro to leanbuild vignette
 
 `leanbuild` converts a [Bookdown repository](https://github.com/jtr13/bookdown-template) into a [Leanpub-ready](https://leanpub.com/) set of files.
 The output rendered files from this package can be published using the [Github writing mode on Leanpub](https://leanpub.com/lfm/read#leanpub-auto-switching-writing-modes).

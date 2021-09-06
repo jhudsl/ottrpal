@@ -27,7 +27,7 @@ replace_single_html(
 \item{remove_resources_start}{remove the word `resources/` at the front
 of any image path.}
 
-\item{footer_text}{a bit of text that will be added to the 
+\item{footer_text}{a bit of text that will be added to the
 end of each file before the references section.}
 
 \item{fullbleed}{should the image have the attribute `fullbleed: true`?}
