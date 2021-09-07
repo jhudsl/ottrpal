@@ -104,9 +104,8 @@ parse_quiz <- function(quiz) {
   quiz <- extract_quiz(quiz)
 
   # Quiz should have at least two lines
-  if (length(quiz) >= 2) {
-    message(paste("Quiz file: ", quiz, " is empty, double check file contents."))
-    return(NULL)
+  if (length(quiz) < 2) {
+    stop(paste("Quiz file: ", quiz, " is empty, double check file contents."))
   }
 
   # Quiz meta data is in first line (after using extract_quiz)
