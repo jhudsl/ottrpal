@@ -8,35 +8,35 @@
 # Make sure all quizzes are listed in Book.txt (I think John made a check for this part already).
 
 
-find_question <- function(x) {
-  grepl("^\\?", x)
+find_question <- function(quiz) {
+  grepl("^\\?", quiz)
 }
 
-extract_number <- function(x) {
-  bad <- !find_question(x)
-  out <- gsub("^\\?(\\d*)\\s*.*", "\\1", x)
+extract_number <- function(quiz) {
+  bad <- !find_question(quiz)
+  out <- gsub("^\\?(\\d*)\\s*.*", "\\1", quiz)
   out[bad] <- NA
   out
 }
 
-find_answer <- function(x) {
-  grepl("^([[:alpha:]]\\)|!)", x)
+find_answer <- function(quiz) {
+  grepl("^([[:alpha:]]\\)|!)", quiz)
 }
 
 
-find_metadata <- function(x) {
-  grepl("^\\{", x)
+find_metadata <- function(quiz) {
+  grepl("^\\{", quiz)
 }
 
 # note this is not for general metadata
 # For example, {id: "this is , my id", number: 2}
 # will fail in this example
-extract_meta <- function(x) {
-  x <- trimws(x)
-  x <- sub("^\\{", "", x)
-  x <- sub("\\}$", "", x)
-  x <- strsplit(x, ",")
-  out <- lapply(x, function(xx) {
+extract_meta <- function(quiz) {
+  quiz <- trimws(quiz)
+  quiz <- sub("^\\{", "", quiz)
+  quiz <- sub("\\}$", "", quiz)
+  quiz <- strsplit(quiz, ",")
+  out <- lapply(quiz, function(xx) {
     xx <- trimws(xx)
     xx <- xx[!xx %in% ""]
     xxx <- strsplit(xx, ":")
@@ -66,7 +66,7 @@ extract_meta <- function(x) {
 
 #' Parse Quiz and Other Checking Functions
 #'
-#' @param x A single filename or a vector of the contents of the markdown
+#' @param quiz A single filename or a vector of the contents of the markdown
 #' file
 #'
 #' @return A list of elements, including a `data.frame` and metadata
@@ -75,7 +75,7 @@ extract_meta <- function(x) {
 #'
 #' @examples
 #'
-#' x <- c(
+#' quiz <- c(
 #'   "{quiz, id: quiz_00_filename}",
 #'   "### Lesson Name quiz",
 #'   "{choose-answers: 4}",
@@ -199,7 +199,7 @@ extract_quiz <- function(quiz) {
   quiz_index <- find_quiz_indices(quiz)
   ind <- seq(quiz_index[1], quiz_index[2])
 
-  retutn(quiz[ind])
+  return(quiz[ind])
 }
 #' Retrieve quiz index range
 #'
@@ -253,7 +253,7 @@ find_quiz_indices <- function(quiz_path) {
 #' check_quiz_attributes(out)
 #' check_quiz_question_attributes(out)
 #'
-#' x <- c(
+#' quiz <- c(
 #'   "{quiz, id: quiz_00_filename, choose-answers: 4}",
 #'   "### Lesson Name quiz",
 #'   "{choose-answers: 4, attempts: 25}",
@@ -378,16 +378,16 @@ quiz_md_files <- function(path = "manuscript") {
 
 #' @export
 #' @rdname parse_quiz
-check_attributes <- function(x, verbose = TRUE) {
-  if (is.character(x)) {
-    x <- parse_quiz(x)
+check_attributes <- function(quiz, verbose = TRUE) {
+  if (is.character(quiz)) {
+    quiz <- parse_quiz(quiz)
   }
-  if (is.list(x) && "data" %in% names(x)) {
-    x <- x$data
+  if (is.list(quiz) && "data" %in% names(quiz)) {
+    quiz <- quiz$data
   }
   index <- original <- lead_type <- type <- NULL
   rm(list = c("lead_type", "type", "original", "index"))
-  bad <- x %>%
+  bad <- quiz %>%
     dplyr::mutate(lead_type = dplyr::lead(type)) %>%
     dplyr::filter(type == "metadata" & !lead_type %in% "question")
   if (NROW(bad) > 0) {
@@ -420,7 +420,7 @@ check_attributes <- function(x, verbose = TRUE) {
 #'
 #' @examples
 #'
-#' x <- c(
+#' quiz <- c(
 #'   "{quiz, id: quiz_00_filename}",
 #'   "### Lesson Name quiz",
 #'   "{choose-answers: 4}",
@@ -450,15 +450,15 @@ check_quizzes <- function(path = "manuscript",
   if (length(files) == 0) {
     return(TRUE)
   }
-  result <- lapply(files, function(x) {
+  result <- lapply(files, function(quiz) {
     if (verbose) {
-      message("Checking ", x)
+      message("Checking ", quiz)
     }
-    check_quiz(x, verbose = verbose)
+    check_quiz(quiz, verbose = verbose)
   })
   names(result) <- files
-  result <- sapply(result, function(x) {
-    all(x$quiz_answer_output & x$quiz_spec_output)
+  result <- sapply(result, function(quiz) {
+    all(quiz$quiz_answer_output & quiz$quiz_spec_output)
   })
   return(result)
 }

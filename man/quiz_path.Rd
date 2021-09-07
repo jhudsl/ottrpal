@@ -11,7 +11,7 @@ An object of class \code{character} of length 1.
 quiz_path
 }
 \arguments{
-\item{x}{A single filename or a vector of the contents of the markdown
+\item{quiz}{A single filename or a vector of the contents of the markdown
 file}
 }
 \value{
@@ -23,7 +23,7 @@ Parse Quiz and Other Checking Functions
 }
 \examples{
 
-x <- c(
+quiz <- c(
   "{quiz, id: quiz_00_filename}",
   "### Lesson Name quiz",
   "{choose-answers: 4}",

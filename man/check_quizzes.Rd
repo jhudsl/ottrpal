@@ -23,7 +23,7 @@ Check Quizzes
 }
 \examples{
 
-x <- c(
+quiz <- c(
   "{quiz, id: quiz_00_filename}",
   "### Lesson Name quiz",
   "{choose-answers: 4}",

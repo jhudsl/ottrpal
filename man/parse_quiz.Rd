@@ -16,7 +16,7 @@ check_quiz_attributes(quiz, verbose = TRUE)
 
 check_quiz_question_attributes(quiz, verbose = TRUE)
 
-check_attributes(x, verbose = TRUE)
+check_attributes(quiz, verbose = TRUE)
 }
 \arguments{
 \item{quiz}{The output from [leanbuild::parse_quiz]}
@@ -58,7 +58,7 @@ out <- parse_quiz(x)
 check_quiz_attributes(out)
 check_quiz_question_attributes(out)
 
-x <- c(
+quiz <- c(
   "{quiz, id: quiz_00_filename, choose-answers: 4}",
   "### Lesson Name quiz",
   "{choose-answers: 4, attempts: 25}",
