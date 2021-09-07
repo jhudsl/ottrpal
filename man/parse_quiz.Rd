@@ -10,7 +10,7 @@
 \usage{
 extract_quiz(quiz)
 
-find_quiz_indices(quiz_path)
+find_quiz_indices(quiz)
 
 check_quiz_attributes(quiz, verbose = TRUE)
 
@@ -20,8 +20,6 @@ check_attributes(quiz, verbose = TRUE)
 }
 \arguments{
 \item{quiz}{The output from [leanbuild::parse_quiz]}
-
-\item{quiz_path}{a file path to a quiz file}
 
 \item{verbose}{print diagnostic messages}
 }

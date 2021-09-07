@@ -92,10 +92,10 @@ extract_meta <- function(quiz) {
 #' out <- parse_quiz(x)
 #' check_quiz_attributes(out)
 
-quiz_path <- "../DaSL_Course_Template_Leanpub/quizzes/quiz_ch1.md"
-parse_quiz <- function(quiz_path) {
-  if (length(quiz_path) == 1 && file.exists(quiz_path)) {
-    quiz <- readLines(quiz_path, warn = FALSE)
+quiz <- "../DaSL_Course_Template_Leanpub/quizzes/quiz_ch1.md"
+parse_quiz <- function(quiz) {
+  if (length(quiz) == 1 && file.exists(quiz)) {
+    quiz <- readLines(quiz, warn = FALSE)
   }
   answer <- meta <- repeated <- question <- number <- NULL
   rm(list = c("number", "question", "repeated", "answer", "meta"))
@@ -105,7 +105,7 @@ parse_quiz <- function(quiz_path) {
 
   # Quiz should have at least two lines
   if (length(quiz) >= 2) {
-    message(paste("Quiz file: ", quiz_path, " is empty, double check file contents."))
+    message(paste("Quiz file: ", quiz, " is empty, double check file contents."))
     return(NULL)
   }
 
@@ -144,7 +144,7 @@ parse_quiz <- function(quiz_path) {
   if (all(types > 1)) {
     # Find which line is a multiple type
     line <- which(types > 1)
-    stop(paste0("Quiz parsing error. Line #:", line, " of ", quiz_path, " is unclear what type of item it is."))
+    stop(paste0("Quiz parsing error. Line #:", line, " of ", quiz, " is unclear what type of item it is."))
   }
 
   quiz_df <- quiz_df %>%
@@ -190,7 +190,7 @@ parse_quiz <- function(quiz_path) {
 
 #' Extract lines of the quiz
 #'
-#' @param quiz the contents of a quiz
+#' @param quiz a file path to a quiz file or a quiz's contents read in with readLines()
 #'
 #' @return the lines of the quiz that actually contain of the content of the quiz.
 #' @export
@@ -203,16 +203,16 @@ extract_quiz <- function(quiz) {
 }
 #' Retrieve quiz index range
 #'
-#' @param quiz_path a file path to a quiz file
+#' @param quiz a file path to a quiz file or a quiz's contents read in with readLines()
 #'
 #' @return the indices that indicate the beginning and end of the quiz itself.
 #' Looks for the quiz tag.
 #' @export
 #' @rdname parse_quiz
 #'
-find_quiz_indices <- function(quiz_path) {
-  if (length(quiz_path) == 1 && file.exists(quiz_path)) {
-    quiz <- readLines(quiz_path, warn = FALSE)
+find_quiz_indices <- function(quiz) {
+  if (length(quiz) == 1 && file.exists(quiz)) {
+    quiz <- readLines(quiz, warn = FALSE)
   }
   start <- grep("^\\s*\\{\\s*quiz", quiz)
   end <- grep("^\\s*\\{\\s*/\\s*quiz", quiz)
