@@ -435,7 +435,7 @@ check_attributes <- function(quiz, verbose = TRUE) {
 #' tdir <- tempfile()
 #' dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
 #' tfile <- tempfile(pattern = "quiz_", fileext = ".md", tmpdir = tdir)
-#' writeLines(x, tfile)
+#' writeLines(quiz, tfile)
 #' check_quizzes(path = tdir)
 #'
 #' check_quiz(x)
