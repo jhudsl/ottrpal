@@ -1,3 +1,13 @@
+
+# Make sure choose answers is > than the number of answers you give. lol
+# Make sure that if you say "choose-answers" you use the C) m) o) notation
+# Make sure if you don't use choose answers but instead use : a, b,c,d you delete the "choose-answers" tag
+# Don't have exclamation points in answers.
+# Make sure there's at least one right answer!
+# Make sure the top of the quiz tag looks something like: {quiz, id: quiz_why_doc, attempts: 10}
+# Make sure all quizzes are listed in Book.txt (I think John made a check for this part already).
+
+
 find_question <- function(x) {
   grepl("^\\?", x)
 }
@@ -81,101 +91,132 @@ extract_meta <- function(x) {
 #' )
 #' out <- parse_quiz(x)
 #' check_quiz_attributes(out)
-parse_quiz <- function(x) {
-  if (length(x) == 1 && file.exists(x)) {
-    x <- readLines(x, warn = FALSE)
+
+quiz_path <- "../DaSL_Course_Template_Leanpub/quizzes/quiz_ch1.md"
+parse_quiz <- function(quiz_path) {
+  if (length(quiz_path) == 1 && file.exists(quiz_path)) {
+    quiz <- readLines(quiz_path, warn = FALSE)
   }
   answer <- meta <- repeated <- question <- number <- NULL
   rm(list = c("number", "question", "repeated", "answer", "meta"))
 
-  df <- extract_quiz(x)
+  # Extract only the lines of the actual quiz
+  quiz <- extract_quiz(quiz)
 
-
-  if (length(df) == 0) {
+  # Quiz should have at least two lines
+  if (length(quiz) >= 2) {
+    message(paste("Quiz file: ", quiz_path, " is empty, double check file contents."))
     return(NULL)
   }
-  stopifnot(length(df) >= 2)
-  quiz_meta <- df[1]
-  full_quiz_spec <- quiz_meta
+
+  # Quiz meta data is in first line (after using extract_quiz)
+  full_quiz_spec <- quiz_meta <- quiz[1]
+
+  # Remove the first part of the quiz tag
   quiz_meta <- sub("\\{\\s*quiz(,|)", "{", quiz_meta)
 
   # remove the "/quiz"
-  df <- df[2:(length(df) - 1)]
-  df <- tibble::tibble(
-    original = df,
-    x = trimws(df, which = "left"),
-    index = 1:length(df)
-  )
-  # df = df %>%
-  # dplyr::filter(!x %in% "")
-  df <- df %>%
+  quiz <- quiz[2:(length(quiz) - 1)]
+
+  # Put this in a data.frame so we can identify the content
+  quiz_df <- tibble::tibble(
+    original = quiz,
+    trimmed = trimws(quiz, which = "left"),
+    index = 1:length(quiz)
+  ) %>%
+    # Find which lines are which kinds of items
     dplyr::mutate(
-      question = find_question(x),
-      answer = find_answer(x),
-      number = extract_number(x),
-      meta = find_metadata(x),
+      question = find_question(trimmed),
+      answer = find_answer(trimmed),
+      number = extract_number(trimmed),
+      meta = find_metadata(trimmed),
       number = ifelse(number == "", NA, number),
       repeated = duplicated(number) & !is.na(number)
-    )
-  df <- df %>%
+    ) %>%
     dplyr::select(-number)
-  types <- df %>%
-    dplyr::select(answer, meta, question)
-  types <- rowSums(types, na.rm = TRUE)
-  stopifnot(all(types <= 1))
-  df <- df %>%
+
+  # Find out how many lines of each type
+  types <- quiz_df %>%
+    dplyr::select(answer, meta, question) %>%
+    rowSums(na.rm = TRUE)
+
+  # If one line contains more than one type of thing, then stop
+  if (all(types > 1)) {
+    # Find which line is a multiple type
+    line <- which(types > 1)
+    stop(paste0("Quiz parsing error. Line #:", line, " of ", quiz_path, " is unclear what type of item it is."))
+  }
+
+  quiz_df <- quiz_df %>%
     dplyr::mutate(
       type = dplyr::case_when(
         question ~ "question",
         answer ~ "answer",
         meta ~ "metadata",
-        trimws(x) == "" ~ "spacing",
+        trimws(trimmed) == "" ~ "spacing",
         TRUE ~ "markdown"
       )
-    )
-  # trying to caputure ?1 and ?1 for multiple questions
-  df <- df %>%
+    ) %>%
     dplyr::mutate(
       question = ifelse(repeated, FALSE, question)
-    )
-  df <- df %>%
-    dplyr::mutate(question = cumsum(question))
-  # assign the question number to the next line, as it should be the question
-  df <- df %>%
-    dplyr::mutate(question = ifelse(meta, dplyr::lead(question), question))
-  df <- df %>%
+    ) %>%
+    # Assign each line to a question number
+    dplyr::mutate(question = cumsum(question)) %>%
+    # assign the question number to the next line, as it should be the question
+    dplyr::mutate(question = ifelse(meta, dplyr::lead(question), question)) %>%
+    # Remove the answer and meta columns
     dplyr::select(-answer, -meta)
-  meta <- df$x[df$type == "metadata"]
+
+  #### Extract metadata
+  # Find those lines
+  meta <- quiz_df$trimmed[quiz_df$type == "metadata"]
+
+  # Extract the items in the meta
   meta <- extract_meta(meta)
+
+  # Extract the main quiz metadata
   quiz_meta <- extract_meta(quiz_meta)[[1]]
-  L <- list(
-    data = df,
+
+  # Put the info we need in a list
+  quiz_info <- list(
+    data = quiz_df,
     question_metadata = meta,
     original_quiz_specification = full_quiz_spec,
     quiz_metadata = quiz_meta
   )
-  L
+  return(quiz_info)
 }
 
 
 
-
+#' Extract lines of the quiz
+#'
+#' @param quiz the contents of a quiz
+#'
+#' @return the lines of the quiz that actually contain of the content of the quiz.
 #' @export
 #' @rdname parse_quiz
-extract_quiz <- function(x) {
-  xx <- find_quiz_indices(x)
-  ind <- seq(xx[1], xx[2])
-  x[ind]
+extract_quiz <- function(quiz) {
+  quiz_index <- find_quiz_indices(quiz)
+  ind <- seq(quiz_index[1], quiz_index[2])
+
+  retutn(quiz[ind])
 }
-
+#' Retrieve quiz index range
+#'
+#' @param quiz_path a file path to a quiz file
+#'
+#' @return the indices that indicate the beginning and end of the quiz itself.
+#' Looks for the quiz tag.
 #' @export
 #' @rdname parse_quiz
-find_quiz_indices <- function(x) {
-  if (length(x) == 1 && file.exists(x)) {
-    x <- readLines(x, warn = FALSE)
+#'
+find_quiz_indices <- function(quiz_path) {
+  if (length(quiz_path) == 1 && file.exists(quiz_path)) {
+    quiz <- readLines(quiz_path, warn = FALSE)
   }
-  start <- grep("^\\s*\\{\\s*quiz", x)
-  end <- grep("^\\s*\\{\\s*/\\s*quiz", x)
+  start <- grep("^\\s*\\{\\s*quiz", quiz)
+  end <- grep("^\\s*\\{\\s*/\\s*quiz", quiz)
   stopifnot(
     (length(start) == 1 & length(end) == 1) |
       (length(start) == 0 & length(end) == 0)
@@ -190,14 +231,14 @@ find_quiz_indices <- function(x) {
 
 #' Check Quiz Information
 #'
-#' @param x The output from [leanbuild::parse_quiz]
+#' @param quiz The output from [leanbuild::parse_quiz]
 #'
 #' @return A logical
 #' @export
 #'
 #' @examples
 #'
-#' x <- c(
+#' quiz <- c(
 #'   "{quiz, id: quiz_00_filename, choose-answers: 4}",
 #'   "### Lesson Name quiz",
 #'   "{choose-answers: 4, attempts: 25}",
@@ -442,7 +483,3 @@ check_quiz <- function(path, verbose = TRUE) {
   ))
 }
 
-
-## Anything that starts with a `{` the next line should be a question
-#
-# add SO MUHC verbosity to everything
