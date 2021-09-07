@@ -188,7 +188,6 @@ parse_quiz <- function(quiz_path) {
 }
 
 
-
 #' Extract lines of the quiz
 #'
 #' @param quiz the contents of a quiz
@@ -267,13 +266,12 @@ find_quiz_indices <- function(quiz_path) {
 #' check_quiz_attributes(out)
 #' check_quiz_question_attributes(out)
 #' @rdname parse_quiz
-check_quiz_attributes <- function(x, verbose = TRUE) {
-  if (is.character(x)) {
-    x <- parse_quiz(x)
+check_quiz_attributes <- function(quiz, verbose = TRUE) {
+  if (is.character(quiz)) {
+    quiz <- parse_quiz(quiz)
   }
-  quiz_metadata <- x$quiz_metadata
+  quiz_metadata <- quiz$quiz_metadata
   quiz_metadata <- tibble::as_tibble(quiz_metadata)
-
 
   quiz_attributes <- c(
     "version",
@@ -308,14 +306,14 @@ check_quiz_attributes <- function(x, verbose = TRUE) {
 #' @export
 #' @rdname parse_quiz
 #' @param verbose print diagnostic messages
-check_quiz_question_attributes <- function(x, verbose = TRUE) {
+check_quiz_question_attributes <- function(quiz, verbose = TRUE) {
   type <- answer <- meta <- repeated <- question <- number <- NULL
   rm(list = c(
     "number", "question", "repeated", "answer",
     "meta", "type"
   ))
 
-  out <- x$data
+  out <- quiz$data
   quiz_question_attributes <- c(
     "choose-answers",
     "points",
