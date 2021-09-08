@@ -91,8 +91,6 @@ extract_meta <- function(quiz) {
 #' )
 #' out <- parse_quiz(quiz)
 #' check_quiz_attributes(out)
-
-quiz <- "../DaSL_Course_Template_Leanpub/quizzes/quiz_ch1.md"
 parse_quiz <- function(quiz) {
   if (length(quiz) == 1 && file.exists(quiz)) {
     quiz <- readLines(quiz, warn = FALSE)
