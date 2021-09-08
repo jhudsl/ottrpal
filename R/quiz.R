@@ -437,7 +437,7 @@ check_attributes <- function(quiz, verbose = TRUE) {
 #' writeLines(quiz, tfile)
 #' check_quizzes(path = tdir)
 #'
-#' check_quiz(x)
+#' check_quiz(quiz)
 check_quizzes <- function(path = "manuscript",
                           verbose = TRUE) {
   owd <- getwd()
@@ -479,4 +479,3 @@ check_quiz <- function(path, verbose = TRUE) {
     quiz_spec_output = quiz_spec_output
   ))
 }
-
