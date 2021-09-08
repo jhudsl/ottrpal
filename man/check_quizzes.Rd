@@ -41,5 +41,5 @@ tfile <- tempfile(pattern = "quiz_", fileext = ".md", tmpdir = tdir)
 writeLines(quiz, tfile)
 check_quizzes(path = tdir)
 
-check_quiz(x)
+check_quiz(quiz)
 }
