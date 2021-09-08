@@ -52,7 +52,7 @@ quiz <- c(
   "m) Mandatory different answer",
   "{/quiz}"
 )
-out <- parse_quiz(x)
+out <- parse_quiz(quiz)
 check_quiz_attributes(out)
 check_quiz_question_attributes(out)
 
@@ -65,7 +65,7 @@ quiz <- c(
   "! The answer to this one",
   "{/quiz}"
 )
-out <- parse_quiz(x)
+out <- parse_quiz(quiz)
 check_quiz_attributes(out)
 check_quiz_question_attributes(out)
 }

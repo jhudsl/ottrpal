@@ -37,7 +37,7 @@ quiz <- c(
   "",
   "{/quiz}"
 )
-out <- parse_quiz(x)
+out <- parse_quiz(quiz)
 check_quiz_attributes(out)
 }
 \keyword{datasets}

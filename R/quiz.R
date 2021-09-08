@@ -89,7 +89,7 @@ extract_meta <- function(quiz) {
 #'   "",
 #'   "{/quiz}"
 #' )
-#' out <- parse_quiz(x)
+#' out <- parse_quiz(quiz)
 #' check_quiz_attributes(out)
 
 quiz <- "../DaSL_Course_Template_Leanpub/quizzes/quiz_ch1.md"
@@ -248,7 +248,7 @@ find_quiz_indices <- function(quiz) {
 #'   "m) Mandatory different answer",
 #'   "{/quiz}"
 #' )
-#' out <- parse_quiz(x)
+#' out <- parse_quiz(quiz)
 #' check_quiz_attributes(out)
 #' check_quiz_question_attributes(out)
 #'
@@ -261,7 +261,7 @@ find_quiz_indices <- function(quiz) {
 #'   "! The answer to this one",
 #'   "{/quiz}"
 #' )
-#' out <- parse_quiz(x)
+#' out <- parse_quiz(quiz)
 #' check_quiz_attributes(out)
 #' check_quiz_question_attributes(out)
 #' @rdname parse_quiz
