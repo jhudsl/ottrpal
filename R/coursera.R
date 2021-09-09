@@ -1,23 +1,19 @@
-# Need here and R.utils
-# For testing use quiz_lines  <- readLines(here::here("quizzes", "quiz_ch1.md"))
-
-# This is functionalized but running like script for now till we decide where to put this:
-# run by  pasting `Rscript scripts/coursera_quiz_conversion.R` in the terminal
+# C. Savonen 2021
 
 # Need magrittr
 `%>%` <- dplyr::`%>%`
 
+#' Find the end of the prompt
+#'
+#' @param start_prompt_index a single index to start the search at (the beginning of the prompt)
+#' @param type_vector A vector indicating the type of line -- will look for "answer" to indicate that the prompt has ended.
+#'
+#' @return The index of the end of the prompt
+#' @export
+#' @rdname coursera
+#'
+#'
 find_end_of_prompt <- function(start_prompt_index, type_vector) {
-  # Given an index of the start of a prompt, find the end of it. The end of the prompt is identified by finding the beginning of the answers
-  # Given a vector of what type of line something is, look for the end of the prompt for a given index
-  #
-  # Args:
-  #   start_prompt_index: a single index to start the search at (the beginning of the prompt)
-  #   type_vector: A vector indicating the type of line -- will look for "answer" to indicate that the prompt has ended.
-  #
-  # Returns:
-  #   The index of the end of the prompt
-
   # We want to see if the next line is where the answers start
   end_prompt_index <- start_prompt_index + 1
 
@@ -43,22 +39,22 @@ find_end_of_prompt <- function(start_prompt_index, type_vector) {
   return(end_prompt_index)
 }
 
-
-convert_quiz <- function(quiz_path, output_dir, verbose = TRUE) {
-  # Make a leanpub formatted md file quiz into a coursera yaml file quiz
-  #
-  # Args:
-  #   quiz_path: a path to a quiz .md file
-  #   output_dir: an existing folder where you would like the new version of the quiz to be saved
-  #   verbose: would you like the progress messages?
-  #
-  # Returns:
-  #   a coursera ready quiz saved to the output directory specified
-
+#' Convert Leanpub md quiz to Coursera yaml quiz
+#'
+#' @param quiz_path a path to a quiz .md file.
+#' @param output_quiz_dir an existing folder where you would like the new version of the quiz to be saved.
+#' @param verbose would you like the progress messages?
+#'
+#' @return a coursera ready quiz file saved to the output directory specified as a yaml.
+#' @export
+#' @rdname coursera
+#'
+#'
+convert_quiz <- function(quiz_path, output_quiz_dir, verbose = TRUE) {
   # Print out which quiz we're converting
   message(paste("Converting quiz:", quiz_path))
 
-  output_filename <- file.path(output_dir, paste0(basename(quiz_path), ".yml"))
+  output_filename <- file.path(output_quiz_dir, paste0(basename(quiz_path), ".yml"))
 
   ### First read lines for each quiz
   # Put it as a data.frame:
@@ -209,31 +205,30 @@ convert_quiz <- function(quiz_path, output_dir, verbose = TRUE) {
   message(paste("Converted quiz saved to:", output_filename))
 }
 
-convert_coursera_quizzes <- function(quiz_dir = "quizzes",
-                                     output_dir = "coursera_quizzes",
+#' Convert Leanpub md quiz to Coursera yaml quiz
+#'
+#' @param input_quiz_dir a path to a directory of leanpub formatted quiz md files. By default assumes "quizzes" and looks in current directory.
+#' @param output_quiz_dir a folder (existing or not) that the new coursera converted quizzes should be saved to. By default saves to "coursera_quizzes".
+#' @param verbose would you like the progress messages?
+#'
+#' @return a folder of coursera ready quiz files saved to the output directory specified as a yamls.
+#' @export
+#' @rdname coursera
+#'
+convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
+                                     output_quiz_dir = "coursera_quizzes",
                                      verbose = TRUE) {
 
-  # Given a directory of Leanpub quiz md files, convert all quizzes to Coursera compatible quizzes
-  # by passing them to `convert_quiz`.
-  #
-  # Args:
-  #   quiz_dir: a path to a directory of leanpub formatted quiz md files
-  #   output_dir: a folder (existing or not) that the new coursera converted quizzes should be saved to.
-  #   verbose: would you like the progress messages?
-  #
-  # Returns:
-  #   a coursera ready quiz saved to the output directory specified
-
   # Create directory if it is not yet created
-  if (!dir.exists(output_dir)) {
-    dir.create(output_dir, recursive = TRUE)
+  if (!dir.exists(output_quiz_dir)) {
+    dir.create(output_quiz_dir, recursive = TRUE)
   }
 
   # List quiz paths
   leanpub_quizzes <- list.files(
     pattern = (".md"),
     ignore.case = TRUE,
-    path = quiz_dir,
+    path = input_quiz_dir,
     full.names = TRUE
   )
 
@@ -245,32 +240,46 @@ convert_coursera_quizzes <- function(quiz_dir = "quizzes",
   lapply(leanpub_quizzes,
     convert_quiz,
     verbose = verbose,
-    output_dir = output_dir
+    output_quiz_dir = output_quiz_dir
   )
 }
 
-
-
-render_coursera <- function() {
-  # A script that calls the render-rmd-coursera for all rmd files listed in the
-  # _bookdown.yml for this repository
-
-  # C. Savonen 2021
-
-  # Usage (from Terminal):
-  # Rscript -e "render_all_coursera.R"
+#' Create TOC-less Bookdown for use in Coursera
+#'
+#' @param output_dir a folder (existing or not) that the TOC-less Bookdown for Coursera files should be saved. By default is file.path("docs", "coursera")
+#' @param convert_quizzes TRUE/FALSE whether or not to convert quizzes. Default is TRUE
+#' @param input_quiz_dir a path to a directory of leanpub formatted quiz md files. By default assumes "quizzes" and looks in current directory.
+#' @param output_quiz_dir a folder (existing or not) where the coursera quizzes should be saved. By default is "coursera_quizzes".
+#' @param verbose would you like the progress messages?
+#'
+#' @return a folder of coursera ready quiz files saved to the output directory specified as a yamls.
+#' @export
+#' @rdname coursera
+#'
+render_coursera <- function(
+  output_dir = file.path("docs", "coursera"),
+  convert_quizzes = TRUE,
+  input_quiz_dir = "quizzes",
+  output_quiz_dir = "coursera_quizzes") {
 
   # Clean out environment before we start
   rm(list = ls())
 
-  # Assumes script is located in the scripts folder
-  root_dir <- rprojroot::find_root("_bookdown.yml")
+  # Find root directory by finding `_bookdown.yml` file
+  root_dir <- bookdown_path()
 
-  # Create output folder
-  output_dir <- file.path("docs", "coursera")
-
+  # Create output folder if it does not exist
   if (!dir.exists(output_dir)) {
+    message(paste0("Creating output folder: ", output_dir))
     dir.create(output_dir, showWarnings = FALSE)
+  }
+
+  if (convert_quizzes) {
+    if (!dir.exists(input_quiz_dir)){
+      stop("convert_quizzes = TRUE but the specified input_quiz_dir: ",
+           input_quiz_dir,
+           " cannot be found.")
+    }
   }
 
   # Clean out old files if they exist
@@ -282,7 +291,15 @@ render_coursera <- function() {
   # Copy these directories over if they don't exist in the output folder
   needed_directories <- c("assets", "code_output", "resources")
 
+  if (verbose) {
+    message(paste0(c("Needed directories being copied:"), collapse = "\n"))
+  }
+
+  # Copy over needed directories
   lapply(needed_directories, function(needed_dir) {
+    if (verbose) {
+      message(needed_dir)
+    }
     if (!dir.exists(file.path(output_dir, needed_dir))) {
       fs::dir_copy(needed_dir, file.path(output_dir, needed_dir), overwrite = TRUE)
     }
@@ -291,6 +308,9 @@ render_coursera <- function() {
   # Slightly different path for the libs folder
   libs_path <- file.path("docs", "libs")
   if (!dir.exists(file.path(output_dir, "libs"))) {
+    if (verbose) {
+      message(file.path("docs", "libs"))
+    }
     fs::dir_copy(libs_path, file.path(output_dir, "libs"), overwrite = TRUE)
   }
 
@@ -303,7 +323,6 @@ render_coursera <- function() {
 
   # Write this new coursera yml
   yaml::write_yaml(output_yaml, file.path(output_dir, "_output_coursera.yml"))
-
 
   message("Render bookdown without TOC for Coursera")
 
