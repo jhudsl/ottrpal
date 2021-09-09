@@ -23,7 +23,7 @@ Check Quizzes
 }
 \examples{
 
-x <- c(
+quiz <- c(
   "{quiz, id: quiz_00_filename}",
   "### Lesson Name quiz",
   "{choose-answers: 4}",
@@ -38,8 +38,8 @@ x <- c(
 tdir <- tempfile()
 dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
 tfile <- tempfile(pattern = "quiz_", fileext = ".md", tmpdir = tdir)
-writeLines(x, tfile)
+writeLines(quiz, tfile)
 check_quizzes(path = tdir)
 
-check_quiz(x)
+check_quiz(quiz)
 }
