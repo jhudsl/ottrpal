@@ -19,9 +19,10 @@ convert_coursera_quizzes(
 
 render_coursera(
   output_dir = file.path("docs", "coursera"),
-  convert_quizzes = TRUE,
+  convert_quizzes = FALSE,
   input_quiz_dir = "quizzes",
-  output_quiz_dir = "coursera_quizzes"
+  output_quiz_dir = "coursera_quizzes",
+  verbose = TRUE
 )
 }
 \arguments{
@@ -51,11 +52,5 @@ a folder of coursera ready quiz files saved to the output directory specified as
 a folder of coursera ready quiz files saved to the output directory specified as a yamls.
 }
 \description{
-Find the end of the prompt
-
-Convert Leanpub md quiz to Coursera yaml quiz
-
-Convert Leanpub md quiz to Coursera yaml quiz
-
-Create TOC-less Bookdown for use in Coursera
+Create a version of Leanpub that does not have a TOC and has quizzes in the Coursera yaml format. Requires Bookdown output files including "assets", "resources", and "libs".
 }
