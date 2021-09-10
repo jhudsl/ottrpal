@@ -3,17 +3,14 @@
 \name{parse_quiz}
 \alias{parse_quiz}
 \alias{extract_quiz}
-\alias{find_quiz_indices}
 \alias{check_quiz_attributes}
 \alias{check_quiz_question_attributes}
 \alias{check_attributes}
 \title{Parse Quiz and Other Checking Functions}
 \usage{
-parse_quiz(quiz)
+parse_quiz(quiz_lines, verbose = FALSE)
 
-extract_quiz(quiz)
-
-find_quiz_indices(quiz)
+extract_quiz(quiz_lines)
 
 check_quiz_attributes(quiz, verbose = TRUE)
 
@@ -22,18 +19,17 @@ check_quiz_question_attributes(quiz, verbose = TRUE)
 check_attributes(quiz, verbose = TRUE)
 }
 \arguments{
-\item{quiz}{The output from [leanbuild::parse_quiz]}
+\item{quiz_lines}{A quiz's contents read in with readLines()}
 
 \item{verbose}{print diagnostic messages}
+
+\item{quiz}{The output from [leanbuild::parse_quiz]}
 }
 \value{
 A list of elements, including a `data.frame` and metadata
 for questions
 
 the lines of the quiz that actually contain of the content of the quiz.
-
-the indices that indicate the beginning and end of the quiz itself.
-Looks for the quiz tag.
 
 A logical
 }
@@ -42,13 +38,11 @@ Parse Quiz and Other Checking Functions
 
 Extract lines of the quiz
 
-Retrieve quiz index range
-
 Check Quiz Information
 }
 \examples{
 
-quiz <- c(
+quiz_lines <- c(
   "{quiz, id: quiz_00_filename}",
   "### Lesson Name quiz",
   "{choose-answers: 4}",
@@ -62,8 +56,10 @@ quiz <- c(
   "",
   "{/quiz}"
 )
-out <- parse_quiz(quiz)
+out <- parse_quiz(quiz_lines)
 check_quiz_attributes(out)
+
+
 
 quiz <- c(
   "{quiz, id: quiz_00_filename, choose-answers: 4}",

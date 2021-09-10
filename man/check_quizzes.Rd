@@ -2,12 +2,9 @@
 % Please edit documentation in R/quiz.R
 \name{check_quizzes}
 \alias{check_quizzes}
-\alias{check_quiz}
 \title{Check Quizzes}
 \usage{
-check_quizzes(path = "manuscript", verbose = TRUE)
-
-check_quiz(path, verbose = TRUE)
+check_quizzes(path = "quizzes", verbose = TRUE)
 }
 \arguments{
 \item{path}{either a path to the directory of quizzes or a full path to a
