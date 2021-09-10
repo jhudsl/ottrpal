@@ -253,8 +253,8 @@ extract_quiz <- function(quiz_lines) {
 check_quiz_attributes <- function(quiz, verbose = TRUE) {
 
   # If quiz has not been parsed, parse it
-  if (is.vector(quiz)) {
-    quiz_df <- parse_quiz(quiz)
+  if (!is.list(quiz)) {
+    quiz <- parse_quiz(quiz)
   }
   quiz_metadata <- quiz$quiz_metadata
   quiz_metadata <- tibble::as_tibble(quiz_metadata)
@@ -460,14 +460,15 @@ check_quiz <- function(quiz_path, verbose = TRUE) {
   quiz_lines <- readLines(quiz_path)
 
   # Parse the quiz
-  out <- parse_quiz(quiz_lines)
+  quiz_specs <- parse_quiz(quiz_lines)
 
-  quiz_spec_output <- check_quiz_attributes(out)
+  quiz_spec_output <- check_quiz_attributes(quiz_specs)
+
   quiz_answer_output <- check_quiz_question_attributes(
-    out,
+    quiz_specs,
     verbose = verbose
   )
-  quiz_attribute_output <- check_attributes(out)
+  quiz_attribute_output <- check_attributes(quiz_specs)
 
   # Make sure choose answers is > than the number of answers you give. lol
   # Make sure that if you say "choose-answers" you use the C) m) o) notation
