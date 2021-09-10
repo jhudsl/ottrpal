@@ -246,6 +246,8 @@ convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
 
 #' Create TOC-less Bookdown for use in Coursera
 #'
+#' Create a version of Leanpub that does not have a TOC and has quizzes in the Coursera yaml format. Requires Bookdown output files including "assets", "resources", and "libs".
+#'
 #' @param output_dir a folder (existing or not) that the TOC-less Bookdown for Coursera files should be saved. By default is file.path("docs", "coursera")
 #' @param convert_quizzes TRUE/FALSE whether or not to convert quizzes. Default is TRUE
 #' @param input_quiz_dir a path to a directory of leanpub formatted quiz md files. By default assumes "quizzes" and looks in current directory.
@@ -258,12 +260,10 @@ convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
 #'
 render_coursera <- function(
   output_dir = file.path("docs", "coursera"),
-  convert_quizzes = TRUE,
+  convert_quizzes = FALSE,
   input_quiz_dir = "quizzes",
-  output_quiz_dir = "coursera_quizzes") {
-
-  # Clean out environment before we start
-  rm(list = ls())
+  output_quiz_dir = "coursera_quizzes",
+  verbose = TRUE) {
 
   # Find root directory by finding `_bookdown.yml` file
   root_dir <- bookdown_path()
@@ -271,7 +271,7 @@ render_coursera <- function(
   # Create output folder if it does not exist
   if (!dir.exists(output_dir)) {
     message(paste0("Creating output folder: ", output_dir))
-    dir.create(output_dir, showWarnings = FALSE)
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
 
   if (convert_quizzes) {
@@ -280,6 +280,9 @@ render_coursera <- function(
            input_quiz_dir,
            " cannot be found.")
     }
+    convert_coursera_quizzes(input_quiz_dir = input_quiz_dir,
+                             output_quiz_dir = output_quiz_dir,
+                             verbose = verbose)
   }
 
   # Clean out old files if they exist
@@ -289,7 +292,7 @@ render_coursera <- function(
   }
 
   # Copy these directories over if they don't exist in the output folder
-  needed_directories <- c("assets", "code_output", "resources")
+  needed_directories <- c("assets", "resources")
 
   if (verbose) {
     message(paste0(c("Needed directories being copied:"), collapse = "\n"))
@@ -299,6 +302,9 @@ render_coursera <- function(
   lapply(needed_directories, function(needed_dir) {
     if (verbose) {
       message(needed_dir)
+    }
+    if (!dir.exists(needed_dir)) {
+      stop(paste0("Needed directory:", needed_dir, "does not exist in the current path."))
     }
     if (!dir.exists(file.path(output_dir, needed_dir))) {
       fs::dir_copy(needed_dir, file.path(output_dir, needed_dir), overwrite = TRUE)
@@ -339,7 +345,9 @@ render_coursera <- function(
 
   # Read in TOC closing CSS lines
   toc_close_css <- readLines(style_css)
-  full_css <- readLines(file.path(output_dir, "assets", "style.css"))
+
+  # Using suppressWarnings() because "incomplete final line"
+  full_css <- suppressWarnings(readLines(file.path(output_dir, "assets", "style.css")))
 
   # Write to "style.css"
   writeLines(append(full_css, toc_close_css), file.path(output_dir, "assets", "style.css"))

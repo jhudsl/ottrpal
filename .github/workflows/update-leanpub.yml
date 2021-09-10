@@ -36,6 +36,7 @@ jobs:
       - name: Run leanbuild::bookdown_to_leanpub
         run: |
           Rscript -e "devtools::load_all('leanbuild'); leanbuild::bookdown_to_leanpub(footer_text = '*Please provide any feedback with [this form!](https://forms.gle/hc8Xt3Y2Znjb6M4Y7) We appreciate your thoughts.*')"
+          Rscript -e "devtools::load_all('leanbuild'); leanbuild::render_coursera(convert_quizzes = TRUE)"
           rm -r leanbuild
 
 
