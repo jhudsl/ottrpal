@@ -248,10 +248,11 @@ convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
 #'
 #' Create a version of Leanpub that does not have a TOC and has quizzes in the Coursera yaml format. Requires Bookdown output files including "assets", "resources", and "libs".
 #'
-#' @param output_dir a folder (existing or not) that the TOC-less Bookdown for Coursera files should be saved. By default is file.path("docs", "coursera")
+#' @param output_dir A folder (existing or not) that the TOC-less Bookdown for Coursera files should be saved. By default is file.path("docs", "coursera")
+#' @param output_yaml A output.yml file to be provided to bookdown. By default is "_output.yml"
 #' @param convert_quizzes TRUE/FALSE whether or not to convert quizzes. Default is TRUE
-#' @param input_quiz_dir a path to a directory of leanpub formatted quiz md files. By default assumes "quizzes" and looks in current directory.
-#' @param output_quiz_dir a folder (existing or not) where the coursera quizzes should be saved. By default is "coursera_quizzes".
+#' @param input_quiz_dir A path to a directory of Leanpub-formatted quiz md files. By default assumes "quizzes" and looks in current directory.
+#' @param output_quiz_dir A folder (existing or not) where the coursera quizzes should be saved. By default is "coursera_quizzes".
 #' @param verbose would you like the progress messages?
 #'
 #' @return a folder of coursera ready quiz files saved to the output directory specified as a yamls.
@@ -261,6 +262,7 @@ convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
 #'
 render_coursera <- function(
   output_dir = file.path("docs", "coursera"),
+  output_yaml = "_output.yml",
   convert_quizzes = FALSE,
   input_quiz_dir = "quizzes",
   output_quiz_dir = "coursera_quizzes",
@@ -269,21 +271,28 @@ render_coursera <- function(
   # Find root directory by finding `_bookdown.yml` file
   root_dir <- bookdown_path()
 
+  ###### Declare all the file paths relative to root directory ######
+  # Input files:
+  toc_close_css <- file.path(root_dir, "assets", "toc_close.css")
+  output_yaml_file <- file.path(root_dir, output_yaml)
+
+  # Output files:
+  output_dir <- file.path(root_dir, output_dir)
+
+  ###### Check we have the files we need ######
   # Create output folder if it does not exist
   if (!dir.exists(output_dir)) {
     message(paste0("Creating output folder: ", output_dir))
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
 
-  if (convert_quizzes) {
-    if (!dir.exists(input_quiz_dir)){
-      stop("convert_quizzes = TRUE but the specified input_quiz_dir: ",
-           input_quiz_dir,
-           " cannot be found.")
-    }
-    convert_coursera_quizzes(input_quiz_dir = input_quiz_dir,
-                             output_quiz_dir = output_quiz_dir,
-                             verbose = verbose)
+  # Make sure we have that file
+  if (!file.exists(toc_close_css)) {
+    stop(paste0("Could not find: ", toc_close_css))
+  }
+  # Make sure we know where the output yaml is
+  if (!file.exists(output_yaml_file)) {
+    stop(paste0("Could not find: ", output_yaml_file))
   }
 
   # Clean out old files if they exist
@@ -292,6 +301,7 @@ render_coursera <- function(
     file.remove(old_files)
   }
 
+  ###### Copy over needed directories ######
   # Copy these directories over if they don't exist in the output folder
   needed_directories <- c("assets", "resources")
 
@@ -299,7 +309,7 @@ render_coursera <- function(
     message(paste0(c("Needed directories being copied:"), collapse = "\n"))
   }
 
-  # Copy over needed directories
+  # Do the copying
   lapply(needed_directories, function(needed_dir) {
     if (verbose) {
       message(needed_dir)
@@ -321,35 +331,51 @@ render_coursera <- function(
     fs::dir_copy(libs_path, file.path(output_dir, "libs"), overwrite = TRUE)
   }
 
-  # Retrieve list of Rmd files from the _bookdown.yml
-  output_yaml <- yaml::yaml.load_file(file.path(root_dir, "_output.yml"))
+  ###### Copy over CSS file ######
+  # Retrieve yaml file specs
+  output_yaml_lines <- yaml::yaml.load_file(output_yaml_file)
 
-  # Change CSS file to coursera special one
-  coursera_css <- gsub("\\.css", "_coursera.css", output_yaml$`bookdown::gitbook`$css)
-  output_yaml$`bookdown::gitbook`$css <- coursera_css
+  # Copy over css file that's specified
+  org_css_file <- output_yaml_lines$`bookdown::gitbook`$css
+  css_file <- file.path(output_dir, org_css_file)
 
-  # Write this new coursera yml
-  yaml::write_yaml(output_yaml, file.path(output_dir, "_output_coursera.yml"))
+  # Write it as "style.css"
+  fs::file_copy(org_css_file,
+                css_file,
+                overwrite = TRUE)
 
+  ###### Now do the rendering! ######
   message("Render bookdown without TOC for Coursera")
 
   # Do the render
   bookdown::render_book(
     input = "index.Rmd",
-    output_yaml = file.path(output_dir, "_output_coursera.yaml"),
+    output_yaml = output_yaml_file,
     output_dir = output_dir,
     clean_envir = FALSE
   )
 
-  # Get specified style name
-  style_css <- file.path(coursera_css)
-
   # Read in TOC closing CSS lines
-  toc_close_css <- readLines(style_css)
+  toc_close_css_lines <- readLines(toc_close_css)
 
   # Using suppressWarnings() because "incomplete final line"
-  full_css <- suppressWarnings(readLines(file.path(output_dir, "assets", "style.css")))
+  full_css <- suppressWarnings(
+    readLines(css_file)
+    )
 
   # Write to "style.css"
-  writeLines(append(full_css, toc_close_css), file.path(output_dir, "assets", "style.css"))
+  writeLines(append(full_css, toc_close_css_lines), css_file)
+
+  # Only convert the quizzes if set to TRUE
+  if (convert_quizzes) {
+    if (!dir.exists(input_quiz_dir)){
+      stop("convert_quizzes = TRUE but the specified input_quiz_dir: ",
+           input_quiz_dir,
+           " cannot be found.")
+    }
+    convert_coursera_quizzes(input_quiz_dir = input_quiz_dir,
+                             output_quiz_dir = output_quiz_dir,
+                             verbose = verbose)
+  }
+
 }
