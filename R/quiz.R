@@ -31,7 +31,7 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
       TRUE ~ "other"
     ),
     # Assign each a question number
-    question = cumsum(type == "prompt")
+    question = cumsum(type == "prompt"))
 
   ###### Find extended prompts
   # Get the starts of prompts
@@ -175,6 +175,18 @@ parse_quiz <- function(quiz_lines, verbose = FALSE) {
 
   # Extract the main quiz metadata
   quiz_meta <- extract_meta(quiz_meta)[[1]]
+
+  ## Count number of answers per question
+
+  answers_per_question <- quiz_df %>%
+    dplyr::mutate(type = dplyr::case_when(
+      grepl("answer", type) ~ "answer",
+      TRUE ~ type
+    )) %>%
+    dplyr::group_by(question, type) %>%
+    dplyr::count() %>%
+    dplyr::filter(type == "question")
+
 
   # Put the info we need in a list
   quiz_info <- list(
