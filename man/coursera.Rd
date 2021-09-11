@@ -35,7 +35,7 @@ render_coursera(
 
 \item{output_quiz_dir}{A folder (existing or not) where the coursera quizzes should be saved. By default is "coursera_quizzes".}
 
-\item{verbose}{would you like the progress messages?}
+\item{verbose}{Would you like the progress messages? TRUE/FALSE}
 
 \item{input_quiz_dir}{A path to a directory of Leanpub-formatted quiz md files. By default assumes "quizzes" and looks in current directory.}
 
@@ -52,7 +52,7 @@ a coursera ready quiz file saved to the output directory specified as a yaml.
 
 a folder of coursera ready quiz files saved to the output directory specified as a yamls.
 
-a folder of coursera ready quiz files saved to the output directory specified as a yamls.
+A folder of coursera ready quiz files and html chapter files saved to output directories specified.
 }
 \description{
 Create a version of Leanpub that does not have a TOC and has quizzes in the Coursera yaml format. Requires Bookdown output files including "assets", "resources", and "libs".

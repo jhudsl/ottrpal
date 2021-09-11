@@ -253,9 +253,9 @@ convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
 #' @param convert_quizzes TRUE/FALSE whether or not to convert quizzes. Default is TRUE
 #' @param input_quiz_dir A path to a directory of Leanpub-formatted quiz md files. By default assumes "quizzes" and looks in current directory.
 #' @param output_quiz_dir A folder (existing or not) where the coursera quizzes should be saved. By default is "coursera_quizzes".
-#' @param verbose would you like the progress messages?
+#' @param verbose Would you like the progress messages? TRUE/FALSE
 #'
-#' @return a folder of coursera ready quiz files saved to the output directory specified as a yamls.
+#' @return A folder of coursera ready quiz files and html chapter files saved to output directories specified.
 #' @export
 #' @rdname coursera
 #'
