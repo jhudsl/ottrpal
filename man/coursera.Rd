@@ -19,6 +19,7 @@ convert_coursera_quizzes(
 
 render_coursera(
   output_dir = file.path("docs", "coursera"),
+  output_yaml = "_output.yml",
   convert_quizzes = FALSE,
   input_quiz_dir = "quizzes",
   output_quiz_dir = "coursera_quizzes",
@@ -32,13 +33,15 @@ render_coursera(
 
 \item{quiz_path}{a path to a quiz .md file.}
 
-\item{output_quiz_dir}{a folder (existing or not) where the coursera quizzes should be saved. By default is "coursera_quizzes".}
+\item{output_quiz_dir}{A folder (existing or not) where the coursera quizzes should be saved. By default is "coursera_quizzes".}
 
-\item{verbose}{would you like the progress messages?}
+\item{verbose}{Would you like the progress messages? TRUE/FALSE}
 
-\item{input_quiz_dir}{a path to a directory of leanpub formatted quiz md files. By default assumes "quizzes" and looks in current directory.}
+\item{input_quiz_dir}{A path to a directory of Leanpub-formatted quiz md files. By default assumes "quizzes" and looks in current directory.}
 
-\item{output_dir}{a folder (existing or not) that the TOC-less Bookdown for Coursera files should be saved. By default is file.path("docs", "coursera")}
+\item{output_dir}{A folder (existing or not) that the TOC-less Bookdown for Coursera files should be saved. By default is file.path("docs", "coursera")}
+
+\item{output_yaml}{A output.yml file to be provided to bookdown. By default is "_output.yml"}
 
 \item{convert_quizzes}{TRUE/FALSE whether or not to convert quizzes. Default is TRUE}
 }
@@ -49,7 +52,7 @@ a coursera ready quiz file saved to the output directory specified as a yaml.
 
 a folder of coursera ready quiz files saved to the output directory specified as a yamls.
 
-a folder of coursera ready quiz files saved to the output directory specified as a yamls.
+A folder of coursera ready quiz files and html chapter files saved to output directories specified.
 }
 \description{
 Create a version of Leanpub that does not have a TOC and has quizzes in the Coursera yaml format. Requires Bookdown output files including "assets", "resources", and "libs".
