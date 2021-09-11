@@ -74,41 +74,54 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
   return(quiz_df)
 }
 
-# note this is not for general metadata
-# For example, {id: "this is , my id", number: 2}
-# will fail in this example
-extract_meta <- function(quiz) {
-  quiz <- trimws(quiz)
-  quiz <- sub("^\\{", "", quiz)
-  quiz <- sub("\\}$", "", quiz)
-  quiz <- strsplit(quiz, ",")
-  out <- lapply(quiz, function(xx) {
-    xx <- trimws(xx)
-    xx <- xx[!xx %in% ""]
-    xxx <- strsplit(xx, ":")
-    xxx <- sapply(xxx, function(r) {
-      if (length(r) <= 1) {
-        return(r)
-      }
-      r[2] <- paste(r[2:length(r)], collapse = ":")
-      r <- r[1:2]
-      r <- trimws(r)
-      nr <- r[1]
-      r <- r[2]
-      names(r) <- nr
-      nr <- as.list(r)
-      r
-    })
-    xxx <- as.list(xxx)
-    if (length(xxx) == 0) {
-      xxx <- NULL
-    }
-    xxx
-    # xxx = unlist(c(xxx))
-  })
-  out
+extract_meta <- function(tags) {
+
+  # trim whitespace
+  tags <- trimws(tags)
+
+  # Remove brackets
+  tags <- stringr::str_remove_all(tags, "^\\{|\\}$")
+
+  # Split by commas
+  tags <- strsplit(tags, ",")
+
+  # Parse each tag
+  meta <- lapply(tags, parse_q_tag)
+
+  return(meta)
 }
 
+# For example, {id: "this is , my id", number: 2}
+parse_q_tag <- function(tag) {
+
+  # Trim whitespace
+  tag <- trimws(tag)
+
+  # Get rid of empty lines
+  tag <- tag[tag != ""]
+
+  # Split by colons
+  tag <- strsplit(tag, ":")
+
+  individual_tags <- sapply(tag, function(r) {
+    if (length(r) <= 1) {
+      return(r)
+    }
+    r[2] <- paste(r[2:length(r)], collapse = ":")
+    r <- r[1:2]
+    r <- trimws(r)
+    nr <- r[1]
+    r <- r[2]
+    names(r) <- nr
+    nr <- as.list(r)
+    r
+  })
+  individual_tags <- as.list(individual_tags)
+  if (length(individual_tags) == 0) {
+    individual_tags <- NULL
+  }
+  individual_tags
+}
 
 #' Parse Quiz and Other Checking Functions
 #'
@@ -167,17 +180,16 @@ parse_quiz <- function(quiz_lines, verbose = FALSE) {
   quiz_df <- parse_quiz_df(quiz_lines)
 
   #### Extract metadata
-  # Find those lines
-  meta <- quiz_df$trimmed[quiz_df$type == "tag"]
+  # Extract metadata tags
+  tags <- quiz_df$trimmed[quiz_df$type == "tag"]
 
-  # Extract the items in the meta
-  meta <- extract_meta(meta)
+  # Extract the tag items
+  meta <- extract_meta(tags)
 
   # Extract the main quiz metadata
   quiz_meta <- extract_meta(quiz_meta)[[1]]
 
   ## Count number of answers per question
-
   answers_per_question <- quiz_df %>%
     dplyr::mutate(type = dplyr::case_when(
       grepl("answer", type) ~ "answer",
@@ -185,8 +197,7 @@ parse_quiz <- function(quiz_lines, verbose = FALSE) {
     )) %>%
     dplyr::group_by(question, type) %>%
     dplyr::count() %>%
-    dplyr::filter(type == "question")
-
+    dplyr::filter(type == "answer")
 
   # Put the info we need in a list
   quiz_info <- list(
