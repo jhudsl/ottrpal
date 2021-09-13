@@ -1,3 +1,14 @@
+
+# These will be existing paths to grab from
+#' @export
+good_quiz_path <- list.files(pattern = "quiz_good.md",
+                        system.file('extdata', package = 'leanbuild'),
+                        full.names = TRUE)
+#' @export
+bad_quiz_path <- list.files(pattern = "quiz_bad.md",
+                        system.file('extdata', package = 'leanbuild'),
+                        full.names = TRUE)
+
 #' Parse quiz into a data.frame
 #'
 #' @param quiz_lines A character vector of the contents of the markdown
@@ -69,6 +80,9 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
   return(quiz_df)
 }
 
+#' @param question_df Which is an individual question's data frame after being parse from
+#' @param verbose Whether progress messages should be given
+#'
 extract_meta <- function(tags) {
 
   # trim whitespace
@@ -82,6 +96,9 @@ extract_meta <- function(tags) {
 
   # Parse each tag
   meta <- lapply(tags, parse_q_tag)
+
+  # Make it a named list
+  meta <- unlist(meta)
 
   return(meta)
 }
@@ -172,15 +189,11 @@ parse_quiz <- function(quiz_lines, quiz_name = NULL, verbose = FALSE) {
   # Put this in a data.frame so we can identify the content
   quiz_df <- parse_quiz_df(quiz_lines)
 
-  # Get per question split up
-  per_question <- quiz_df %>%
-    dplyr::group_split(question)
-
   #### Extract metadata
-  # Extract metadata tags
-  tags <- quiz_df$trimmed[quiz_df$type == "tag"]
+  # Extract the tags
+  tags <- quiz_df$original[quiz_df$type == "tag"]
 
-  # Extract the tag items
+  # Extract metadata tags
   meta <- extract_meta(tags)
 
   # Extract the main quiz metadata
@@ -304,10 +317,7 @@ check_quiz_question_attributes <- function(question_df, quiz_name = NULL, verbos
   attr_msg <- "good"
 
   # Extract the tags
-  question_meta <- question_df$original[question_df$type == "tag"]
-
-  # Make it a named list
-  question_meta <- unlist(extract_meta(question_meta))
+  question_meta <- question_df$original[question_df$type == "tags"]
 
   # These are the accepted question attributes
   quiz_question_attributes <- c(
@@ -337,7 +347,10 @@ check_quiz_question_attributes <- function(question_df, quiz_name = NULL, verbos
 
 #' Check All Quiz Questions
 #'
-#' @param quiz_specs quiz_specs which is output from [leanbuild::parse_quiz]
+#' Takes output from [leanbuild::parse_quiz] and runs checks on each question in a quiz by calling [leanbuild::check_question] for each question.
+#' First splits questions into their own data frame. Returns a list of messages/warnings about each question's set up.
+#'
+#' @param quiz_specs quiz_specs which is output from [leanbuild::parse_quiz].
 #' @param quiz_name The name of the quiz being checked.
 #' @param verbose Whether progress messages should be given.
 #'
@@ -380,7 +393,8 @@ check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
 #' Check Quiz Question Set Up
 #'
 #' Check quiz question set up to see if it is compliant with Leanpub and Coursera needs.
-#' Based off of [Markua guide](https://leanpub.com/markua/read#leanpub-auto-quizzes-and-exercises)
+#' Based off of [Markua guide](https://leanpub.com/markua/read#leanpub-auto-quizzes-and-exercises).
+#' Is called by [leanbuild::check_all_questions] and run for each question.
 #'
 #' @param question_df Which is an individual question's data frame after being parse from
 #' @param quiz_name The name of the quiz the question is from
@@ -395,11 +409,13 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
   # Things are considered innocent until proven guilty
   colon_msg <- tot_ans_msg <- cor_ans_msg <- inc_ans_msg <- exclam_msg <- "good"
 
+  # Get prompt
+  prompt <- question_df$original[question_df$type == "prompt"]
+
   # Piece together a quiz identity
   quiz_identity <- paste0(substr(prompt, 0, 20), " of quiz: ", quiz_name)
 
   # Only run this if there is an actual prompt and start to the question
-  prompt <- question_df$original[question_df$type == "prompt"]
   if (verbose) {
     message(paste0("Checking question: ", quiz_identity))
   }
@@ -454,9 +470,16 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 
   #### If choose answer, make sure that there are more answers than specified in tag
   if ("tag" %in% question_df$type) {
+
+    # Retrieve lines with tags
+    tags <- question_df$original[question_df$type == "tag"]
+
+    # Extract metadata
+    question_meta <- extract_meta(tags)
+
     # Check the attributes
-    attr_msg <- check_quiz_question_attributes(question_meta,
-      quiz_name = quiz_name
+    attr_msg <- check_quiz_question_attributes(question_df,
+                                               quiz_name = quiz_name
     )
 
     if ("choose-answers" %in% names(question_meta)) {
@@ -566,6 +589,10 @@ check_quizzes <- function(path = "quizzes",
 #' @return A list of logical indicators
 #' @export
 #'
+#' @examples
+#'
+#' check_list <- check_quiz(leanbuild::good_quiz_path)
+#'
 check_quiz <- function(quiz_path, verbose = TRUE) {
   if (verbose) {
     message(paste0("Checking quiz: ", quiz_path))
@@ -582,20 +609,21 @@ check_quiz <- function(quiz_path, verbose = TRUE) {
   )
 
   # Check main quiz attributes
-  main_attributes_checks <- check_quiz_attributes(quiz_specs,
+  meta_checks <- check_quiz_attributes(quiz_specs,
     quiz_name = quiz_name
   )
 
   # Check each question
-  check_all_questions(quiz_specs,
+  question_checks <- check_all_questions(
+    quiz_specs,
     quiz_name = quiz_name,
     verbose = verbose
   )
 
   return(list(
-    quiz_df = out,
-    quiz_answer_output = quiz_answer_output,
-    quiz_question_follow_attribute = quiz_attribute_output,
-    quiz_spec_output = quiz_spec_output
+    quiz_name = quiz_name,
+    parsed_quiz = quiz_specs,
+    meta_checks = meta_checks,
+    question_checks = question_checks
   ))
 }
