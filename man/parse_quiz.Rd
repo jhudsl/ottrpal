@@ -8,13 +8,13 @@
 \alias{check_attributes}
 \title{Parse Quiz and Other Checking Functions}
 \usage{
-parse_quiz(quiz_lines, verbose = FALSE)
+parse_quiz(quiz_lines, quiz_name = NULL, verbose = FALSE)
 
 extract_quiz(quiz_lines)
 
-check_quiz_attributes(quiz, verbose = TRUE)
+check_quiz_attributes(quiz_specs, quiz_name = NULL, verbose = TRUE)
 
-check_quiz_question_attributes(quiz, verbose = TRUE)
+check_quiz_question_attributes(question_meta, quiz_name = NULL, verbose = TRUE)
 
 check_attributes(quiz, verbose = TRUE)
 }
@@ -60,6 +60,7 @@ out <- parse_quiz(quiz_lines)
 check_quiz_attributes(out)
 
 
+# quiz_lines <- readLines("quizzes/quiz_ch1.md")
 
 quiz <- c(
   "{quiz, id: quiz_00_filename, choose-answers: 4}",

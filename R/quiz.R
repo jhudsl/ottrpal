@@ -325,6 +325,33 @@ check_quiz_question_attributes <- function(question_meta, quiz_name = NULL, verb
   return(TRUE)
 }
 
+#' Check All Quiz Questions
+#'
+#' @param quiz_specs quiz_specs which is output from [leanbuild::parse_quiz]
+#' @param quiz_name The name of the quiz being checked.
+#' @param verbose Whether progress messages should be given.
+#'
+#' @return A list of the output from [leanbuild::check_question] with messages/warnings regarding each question and each check.
+#'
+#' @export check_questions
+#'
+#' @example
+#'
+#' quiz <- c(
+#'   "{quiz, id: quiz_00_filename, choose-answers: 4}",
+#'   "### Lesson Name quiz",
+#'   "{choose-answers: 4, attempts: 25}",
+#'   "? What do you think?",
+#'   "C) The answer to this one",
+#'   "o) Not the answer",
+#'   "o) Not the answer either",
+#'   "C) Another correct answer",
+#'   "m) Mandatory different answer",
+#'   "{/quiz}"
+#' )
+#' quiz_specs <- parse_quiz(quiz)
+#' quiz_checks <- check_all_questions(quiz_specs)
+#'
 check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
 
   # Remove header part and split into per question data frames
@@ -341,7 +368,23 @@ check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
   return(result)
 }
 
+#' Check Quiz Question Set Up
+#'
+#' Check quiz question set up to see if it is compliant with Leanpub and Coursera needs.
+#' Based off of [Markua guide](https://leanpub.com/markua/read#leanpub-auto-quizzes-and-exercises)
+#'
+#' @param question_df Which is an individual question's data.frame after being parse from
+#' @param quiz_name The name of the quiz the question is from
+#' @param verbose Whether progress messages should be given
+#'
+#' @return A list of messages/warnings regarding each check for the given question.
+#'
+#' @export check_questions
+#'
 check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
+
+  # Things are considered innocent until proven guilty
+  colon_msg <- tot_ans_msg <- cor_ans_msg <- inc_ans_msg <- exclam_msg <- "good"
 
   # Piece together a quiz identity
   quiz_identity <- paste0(substr(prompt, 0, 20), " of quiz: ", quiz_name)
@@ -349,7 +392,7 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
   # Only run this if there is an actual prompt and start to the question
   prompt <- question_df$original[question_df$type == "prompt"]
   if (verbose) {
-    message(paste0("Checking question: ", prompt))
+    message(paste0("Checking question: ", quiz_identity))
   }
 
   ###### Check for no-no symbols in prompt:
@@ -360,10 +403,11 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
   colon <- stringr::str_detect(full_prompt$original, "\\:")
 
   if (any(colon)) {
-    warning(paste0(
+    colon_msg <- paste0(
       "Colon detected in question prompt for: ", quiz_identity,
       "\n Get rid of colon -- will mess up formatting in Coursera."
-    ))
+    )
+    warning(colon_msg)
   }
 
   ###### Parse out and check answer choices
@@ -385,15 +429,18 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 
   # Now stop if anything is fishy:
   if (total_answers == 0) {
-    warning(paste0("No detected answer options provided for ", quiz_identity))
+    tot_ans_msg <- paste0("No detected answer options provided for ", quiz_identity)
+    warning(tot_ans_msg)
   }
 
   if (correct_answers == 0) {
-    warning(paste0("No correct answers provided for ", quiz_identity))
+    cor_ans_msg <- paste0("No correct answers provided for ", quiz_identity)
+    warning(cor_ans_msg)
   }
 
   if (wrong_answers == 0) {
-    warning(paste0("No incorrect answer options provided for ", quiz_identity))
+    inc_ans_msg <- paste0("No incorrect answer options provided for ", quiz_identity)
+    warning(inc_ans_msg)
   }
 
   #### If choose answer, make sure that there are more answers than specified in tag
@@ -411,22 +458,36 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
       choose_answers_num <- as.numeric(question_meta[names(question_meta) == "choose-answers"])
 
       if (choose_answers_num > total_answers) {
-        warning(paste0(
+        choos_ans_msg <- paste0(
           "choose-answers number is greater than the number of answers provided in: ",
           quiz_identity
-        ))
+        )
+        warning(choos_ans_msg)
       }
     }
+  } else {
+    choos_ans_msg <- NA
   }
   #### Check answer formats:
   exclam <- stringr::str_detect(question_df$original, "\\!")
 
   if (any(exclam)) {
-    warning(paste0(
+    exclam_msg <- paste0(
       "Exclamation point detected in answer for: ", quiz_identity,
       "\n Get rid of exclamation -- will mess up formatting in Leanpub."
-    ))
+    )
+    warning(exclam_msg)
   }
+
+
+  # Store all warning messages as a list; they will say "good" if nothing is detected as wrong
+  result <- list(colon_msg,
+                 tot_ans_msg,
+                 cor_ans_msg,
+                 inc_ans_msg,
+                 exclam_msg)
+
+  return(list)
 }
 
 #' @export
@@ -553,19 +614,7 @@ check_quiz <- function(quiz_path, verbose = TRUE) {
     quiz_name = quiz_name
   )
 
-
-
-
   quiz_attribute_output <- check_attributes(quiz_specs)
-
-  # Make sure choose answers is > than the number of answers you give. lol
-  # Make sure that if you say "choose-answers" you use the C) m) o) notation
-  # Make sure if you don't use choose answers but instead use : a, b,c,d you delete the "choose-answers" tag
-  # Don't have exclamation points in answers.
-  # Make sure there's at least one right answer!
-  # Make sure the top of the quiz tag looks something like: {quiz, id: quiz_why_doc, attempts: 10}
-  # Make sure all quizzes are listed in Book.txt (I think John made a check for this part already).
-
 
   return(list(
     quiz_df = out,
