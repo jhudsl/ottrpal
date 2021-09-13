@@ -19,3 +19,20 @@ A list of the output from [leanbuild::check_question] with messages/warnings reg
 \description{
 Check All Quiz Questions
 }
+\examples{
+quiz <- c(
+  "{quiz, id: quiz_00_filename, choose-answers: 4}",
+  "### Lesson Name quiz",
+  "{choose-answers: 4, attempts: 25}",
+  "? What do you think?",
+  "C) The answer to this one",
+  "o) Not the answer",
+  "o) Not the answer either",
+  "C) Another correct answer",
+  "m) Mandatory different answer",
+  "{/quiz}"
+)
+quiz_specs <- parse_quiz(quiz)
+quiz_checks <- check_all_questions(quiz_specs)
+
+}

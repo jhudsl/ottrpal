@@ -7,7 +7,7 @@
 check_question(question_df, quiz_name = NULL, verbose = TRUE)
 }
 \arguments{
-\item{question_df}{Which is an individual question's data.frame after being parse from}
+\item{question_df}{Which is an individual question's data frame after being parse from}
 
 \item{quiz_name}{The name of the quiz the question is from}
 

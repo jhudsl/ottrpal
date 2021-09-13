@@ -143,8 +143,8 @@ parse_q_tag <- function(tag) {
 #'   "",
 #'   "{/quiz}"
 #' )
-#' out <- parse_quiz(quiz_lines)
-#' check_quiz_attributes(out)
+#' quiz_specs <- parse_quiz(quiz_lines)
+#' check_quiz_attributes(quiz_specs)
 #'
 #'
 #' # quiz_lines <- readLines("quizzes/quiz_ch1.md")
@@ -241,9 +241,9 @@ extract_quiz <- function(quiz_lines) {
 #'   "m) Mandatory different answer",
 #'   "{/quiz}"
 #' )
-#' out <- parse_quiz(quiz)
-#' check_quiz_attributes(out)
-#' check_quiz_question_attributes(out)
+#' quiz_specs <- parse_quiz(quiz)
+#' check_quiz_attributes(quiz_specs)
+#' check_quiz_question_attributes(quiz_specs)
 #'
 #' quiz <- c(
 #'   "{quiz, id: quiz_00_filename, choose-answers: 4}",
@@ -254,9 +254,9 @@ extract_quiz <- function(quiz_lines) {
 #'   "! The answer to this one",
 #'   "{/quiz}"
 #' )
-#' out <- parse_quiz(quiz)
-#' check_quiz_attributes(out)
-#' check_quiz_question_attributes(out)
+#' quiz_specs <- parse_quiz(quiz)
+#' check_quiz_attributes(quiz_specs)
+#' check_quiz_question_attributes(quiz_specs)
 #' @rdname parse_quiz
 
 check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
@@ -298,7 +298,16 @@ check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) 
 #' @export
 #' @rdname parse_quiz
 #' @param verbose print diagnostic messages
-check_quiz_question_attributes <- function(question_meta, quiz_name = NULL, verbose = TRUE) {
+check_quiz_question_attributes <- function(question_df, quiz_name = NULL, verbose = TRUE) {
+
+  # Assume good until shown otherwise
+  attr_msg <- "good"
+
+  # Extract the tags
+  question_meta <- question_df$original[question_df$type == "tag"]
+
+  # Make it a named list
+  question_meta <- unlist(extract_meta(question_meta))
 
   # These are the accepted question attributes
   quiz_question_attributes <- c(
@@ -315,14 +324,15 @@ check_quiz_question_attributes <- function(question_meta, quiz_name = NULL, verb
     # Get the attribute
     unsupported_attributes <- names(question_meta)[unsupported_attributes]
 
-    # Now print it out
-    warning(paste0(
+    attr_msg <- paste0(
       quiz_name, " has attributes that aren't relevant for questions: ",
       paste(unsupported_attributes, collapse = ", ")
-    ))
+    )
+    # Now print it out
+    warning(attr_msg)
   }
 
-  return(TRUE)
+  return(attr_msg)
 }
 
 #' Check All Quiz Questions
@@ -333,10 +343,9 @@ check_quiz_question_attributes <- function(question_meta, quiz_name = NULL, verb
 #'
 #' @return A list of the output from [leanbuild::check_question] with messages/warnings regarding each question and each check.
 #'
-#' @export check_questions
+#' @export check_all_questions
 #'
-#' @example
-#'
+#' @examples
 #' quiz <- c(
 #'   "{quiz, id: quiz_00_filename, choose-answers: 4}",
 #'   "### Lesson Name quiz",
@@ -363,7 +372,7 @@ check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
     question_dfs,
     check_question,
     quiz_name = quiz_name
-    )
+  )
 
   return(result)
 }
@@ -373,13 +382,13 @@ check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
 #' Check quiz question set up to see if it is compliant with Leanpub and Coursera needs.
 #' Based off of [Markua guide](https://leanpub.com/markua/read#leanpub-auto-quizzes-and-exercises)
 #'
-#' @param question_df Which is an individual question's data.frame after being parse from
+#' @param question_df Which is an individual question's data frame after being parse from
 #' @param quiz_name The name of the quiz the question is from
 #' @param verbose Whether progress messages should be given
 #'
 #' @return A list of messages/warnings regarding each check for the given question.
 #'
-#' @export check_questions
+#' @export check_question
 #'
 check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 
@@ -445,14 +454,10 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 
   #### If choose answer, make sure that there are more answers than specified in tag
   if ("tag" %in% question_df$type) {
-    # Extract the tags
-    question_meta <- question_df$original[question_df$type == "tag"]
-
-    # Make it a named list
-    question_meta <- unlist(extract_meta(question_meta))
-
     # Check the attributes
-    check_quiz_question_attributes(question_meta, quiz_name = quiz_name)
+    attr_msg <- check_quiz_question_attributes(question_meta,
+      quiz_name = quiz_name
+    )
 
     if ("choose-answers" %in% names(question_meta)) {
       choose_answers_num <- as.numeric(question_meta[names(question_meta) == "choose-answers"])
@@ -464,9 +469,13 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
         )
         warning(choos_ans_msg)
       }
+    } else {
+      # If choose answers isn't used then put NA for this check
+      choos_ans_msg <- NA
     }
   } else {
-    choos_ans_msg <- NA
+    # If attributes weren't declared then put NA for this check
+    attr_msg <- NA
   }
   #### Check answer formats:
   exclam <- stringr::str_detect(question_df$original, "\\!")
@@ -479,48 +488,17 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
     warning(exclam_msg)
   }
 
-
-  # Store all warning messages as a list; they will say "good" if nothing is detected as wrong
-  result <- list(colon_msg,
-                 tot_ans_msg,
-                 cor_ans_msg,
-                 inc_ans_msg,
-                 exclam_msg)
+    # Store all warning messages as a list; they will say "good" if nothing is detected as wrong
+  result <- list(
+    attr_msg,
+    colon_msg,
+    tot_ans_msg,
+    cor_ans_msg,
+    inc_ans_msg,
+    exclam_msg
+  )
 
   return(list)
-}
-
-#' @export
-#' @rdname parse_quiz
-check_attributes <- function(quiz, verbose = TRUE) {
-  if (is.character(quiz)) {
-    quiz <- parse_quiz(quiz)
-  }
-  if (is.list(quiz) && "data" %in% names(quiz)) {
-    quiz <- quiz$data
-  }
-  index <- original <- lead_type <- type <- NULL
-  rm(list = c("lead_type", "type", "original", "index"))
-  bad <- quiz %>%
-    dplyr::mutate(lead_type = dplyr::lead(type)) %>%
-    dplyr::filter(type == "metadata" & !lead_type %in% "question")
-  if (NROW(bad) > 0) {
-    bad <- bad %>%
-      dplyr::select(original, index) %>%
-      as.data.frame()
-    msg <- paste0(
-      "Attributes with the next line ",
-      "not being a question!  Some may be ",
-      "false positives if images are in quizzes"
-    )
-    if (verbose) {
-      message(msg)
-    }
-    warning(msg)
-    print(bad)
-    return(FALSE)
-  }
-  return(TRUE)
 }
 
 #' Check Quizzes
@@ -604,17 +582,15 @@ check_quiz <- function(quiz_path, verbose = TRUE) {
   )
 
   # Check main quiz attributes
-  quiz_spec_output <- check_quiz_attributes(quiz_specs,
+  main_attributes_checks <- check_quiz_attributes(quiz_specs,
     quiz_name = quiz_name
   )
 
   # Check each question
-  lapply(quiz_specs,
-    check_questions,
-    quiz_name = quiz_name
+  check_all_questions(quiz_specs,
+    quiz_name = quiz_name,
+    verbose = verbose
   )
-
-  quiz_attribute_output <- check_attributes(quiz_specs)
 
   return(list(
     quiz_df = out,

@@ -5,7 +5,6 @@
 \alias{extract_quiz}
 \alias{check_quiz_attributes}
 \alias{check_quiz_question_attributes}
-\alias{check_attributes}
 \title{Parse Quiz and Other Checking Functions}
 \usage{
 parse_quiz(quiz_lines, quiz_name = NULL, verbose = FALSE)
@@ -14,9 +13,7 @@ extract_quiz(quiz_lines)
 
 check_quiz_attributes(quiz_specs, quiz_name = NULL, verbose = TRUE)
 
-check_quiz_question_attributes(question_meta, quiz_name = NULL, verbose = TRUE)
-
-check_attributes(quiz, verbose = TRUE)
+check_quiz_question_attributes(question_df, quiz_name = NULL, verbose = TRUE)
 }
 \arguments{
 \item{quiz_lines}{A quiz's contents read in with readLines()}
@@ -56,8 +53,8 @@ quiz_lines <- c(
   "",
   "{/quiz}"
 )
-out <- parse_quiz(quiz_lines)
-check_quiz_attributes(out)
+quiz_specs <- parse_quiz(quiz_lines)
+check_quiz_attributes(quiz_specs)
 
 
 # quiz_lines <- readLines("quizzes/quiz_ch1.md")
@@ -74,9 +71,9 @@ quiz <- c(
   "m) Mandatory different answer",
   "{/quiz}"
 )
-out <- parse_quiz(quiz)
-check_quiz_attributes(out)
-check_quiz_question_attributes(out)
+quiz_specs <- parse_quiz(quiz)
+check_quiz_attributes(quiz_specs)
+check_quiz_question_attributes(quiz_specs)
 
 quiz <- c(
   "{quiz, id: quiz_00_filename, choose-answers: 4}",
@@ -87,7 +84,7 @@ quiz <- c(
   "! The answer to this one",
   "{/quiz}"
 )
-out <- parse_quiz(quiz)
-check_quiz_attributes(out)
-check_quiz_question_attributes(out)
+quiz_specs <- parse_quiz(quiz)
+check_quiz_attributes(quiz_specs)
+check_quiz_question_attributes(quiz_specs)
 }
