@@ -18,5 +18,12 @@ A list of messages/warnings regarding each check for the given question.
 }
 \description{
 Check quiz question set up to see if it is compliant with Leanpub and Coursera needs.
-Based off of [Markua guide](https://leanpub.com/markua/read#leanpub-auto-quizzes-and-exercises)
+Based off of [Markua guide](https://leanpub.com/markua/read#leanpub-auto-quizzes-and-exercises).
+Is called by [leanbuild::check_all_questions] and run for each question.
+}
+\examples{
+
+good_quiz <- readLines(leanbuild::good_quiz_path)
+good_quiz_specs <- parse_quiz(good_quiz)
+good_quiz_checks <- check_all_questions(good_quiz_specs)
 }

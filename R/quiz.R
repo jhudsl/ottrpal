@@ -1,5 +1,5 @@
 
-# These will be existing paths to grab from
+# These will be existing paths to grab from for examples
 #' @export
 good_quiz_path <- list.files(pattern = "quiz_good.md",
                         system.file('extdata', package = 'leanbuild'),
@@ -16,9 +16,20 @@ bad_quiz_path <- list.files(pattern = "quiz_bad.md",
 #' @param remove_tags TRUE/FALSE remove tags and empty lines?
 #' @param verbose Would you like progress messages? TRUE/FALSE
 #' @return A data frame containing a type column which indicates what type of line each is.
+#'
 #' @export
+#'
+#' @examples
+#'
+#' # Use readLines to read in a quiz
+#' quiz_lines <- readLines(leanbuild::good_quiz_path)
+#'
+#' # Can use this to parse the quiz into a data.frame
+#' quiz_df <- parse_quiz_df(quiz_lines)
+#'
 
 parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
+
   quiz_df <- tibble::tibble(
     original = quiz_lines,
     trimmed = trimws(quiz_lines, which = "left"),
@@ -80,8 +91,27 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
   return(quiz_df)
 }
 
-#' @param question_df Which is an individual question's data frame after being parse from
-#' @param verbose Whether progress messages should be given
+#' Extract meta fields from a tag
+#'
+#' @param tags A single tag or vector of tags to extract the fields from.
+#' @return A named vector indicating the field and entry associated with it.
+#'
+#' @export meta_extract
+#'
+#' @examples
+#'
+#' quiz_lines <- readLines(leanbuild::good_quiz_path)
+#'
+#' # Put this in a data.frame so we can identify the content
+#' quiz_df <- parse_quiz_df(quiz_lines)
+#'
+#' # Extract the tags
+#' tags <- quiz_df %>%
+#'   dplyr::filter(type == "tag") %>%
+#'   dplyr::pull("original")
+#'
+#' Extract metadata tags
+#' meta <- extract_meta(tags)
 #'
 extract_meta <- function(tags) {
 
@@ -275,6 +305,9 @@ extract_quiz <- function(quiz_lines) {
 
 check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
 
+  # Assume good until otherwise
+  metadata_msg <- "good"
+
   # Set up as tibble
   quiz_metadata <- tibble::as_tibble(quiz_specs$quiz_metadata)
 
@@ -299,19 +332,22 @@ check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) 
     # Get the attribute
     unsupported_attributes <- names(quiz_metadata)[unsupported_attributes]
 
-    # Now print it out
-    warning(paste0(
+    # Build message
+    metadata_msg <- paste0(
       quiz_name, " has attributes that aren't relevant for quizzes: ",
       paste(unsupported_attributes, collapse = ", ")
-    ))
+    )
+    # Now print it out
+    warning(metadata_check)
   }
 
-  return(TRUE)
+  return(metadata_msg)
 }
 
 #' @export
 #' @rdname parse_quiz
 #' @param verbose print diagnostic messages
+#'
 check_quiz_question_attributes <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 
   # Assume good until shown otherwise
@@ -377,18 +413,17 @@ check_quiz_question_attributes <- function(question_df, quiz_name = NULL, verbos
 #' quiz_specs <- parse_quiz(quiz)
 #' quiz_checks <- check_all_questions(quiz_specs)
 #'
-#'
-#' ## A more complicated example using good quiz md example
+#' # Using good quiz md example
 #'
 #' good_quiz <- readLines(leanbuild::good_quiz_path)
 #' good_quiz_specs <- parse_quiz(good_quiz)
-#' check_all_questions(good_quiz_specs)
+#' good_quiz_checks <- check_all_questions(good_quiz_specs)
 #'
-#' ## A more complicated example using good quiz md example
+#' # Using bad quiz md example
 #'
 #' bad_quiz <- readLines(leanbuild::bad_quiz_path)
 #' bad_quiz_specs <- parse_quiz(bad_quiz)
-#' check_all_questions(bad_quiz_specs)
+#' bad_quiz_checks <- check_all_questions(bad_quiz_specs)
 #'
 check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
 
@@ -432,6 +467,11 @@ check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
 #'
 #' @export check_question
 #'
+#' @examples
+#'
+#' good_quiz <- readLines(leanbuild::good_quiz_path)
+#' good_quiz_specs <- parse_quiz(good_quiz)
+#' good_quiz_checks <- check_all_questions(good_quiz_specs)
 check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 
   # Things are considered innocent until proven guilty
@@ -443,7 +483,7 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
   prompt <- stringr::str_remove(prompt, "^\\? ")
 
   # Piece together a quiz identity
-  quiz_identity <- paste0(substr(prompt, 0, 20), " of quiz: ", quiz_name)
+  quiz_identity <- paste0(substr(prompt, 0, 20), " ... in quiz: ", quiz_name)
 
   # Only run this if there is an actual prompt and start to the question
   if (verbose) {
@@ -459,7 +499,7 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 
   if (any(colon)) {
     colon_msg <- paste0(
-      "Colon detected in question prompt for: ", quiz_identity,
+      "Colon detected in question prompt starting with: ", quiz_identity,
       "\n Get rid of colon -- will mess up formatting in Coursera."
     )
     warning(colon_msg)
@@ -482,18 +522,18 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 
   total_answers <- sum(num_answers$n)
 
-  # Now stop if anything is fishy:
-  if (total_answers == 0) {
+  # Now warn us if anything is fishy:
+  if (length(total_answers) == 0) {
     tot_ans_msg <- paste0("No detected answer options provided for ", quiz_identity)
     warning(tot_ans_msg)
   }
 
-  if (correct_answers == 0) {
+  if (length(correct_answers) == 0) {
     cor_ans_msg <- paste0("No correct answers provided for ", quiz_identity)
     warning(cor_ans_msg)
   }
 
-  if (wrong_answers == 0) {
+  if (length(wrong_answers) == 0) {
     inc_ans_msg <- paste0("No incorrect answer options provided for ", quiz_identity)
     warning(inc_ans_msg)
   }
@@ -554,14 +594,16 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
   return(question_result)
 }
 
-#' Check Quizzes
+#' Check all quizzes in a directory
 #'
-#' @param path either a path to the directory of quizzes or a full path to a
-#' quiz markdown file
+#' Check the formatting of all quizzes in a given directory.
+#'
+#' @param path A path to a directory full of quizzes that should all be checked with [leanbuild::check_all_quizzes].
 #' @param verbose print diagnostic messages
 #'
-#' @return A list of logical indicators
-#' @export
+#' @return A list checks performed on each quiz
+#'
+#' @export check_quizzes
 #'
 #' @examples
 #'
@@ -585,7 +627,7 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 #' writeLines(quiz, tfile)
 #'
 #' ## Now check the quizzes in that directory
-#' check_quizzes(path = tdir)
+#' all_quiz_results <- check_quizzes(path = tdir)
 #'
 check_quizzes <- function(path = "quizzes",
                           verbose = TRUE) {
@@ -600,31 +642,34 @@ check_quizzes <- function(path = "quizzes",
     stop(paste0("No quizzes found at given path:", path))
   }
 
-  result <- lapply(files, function(quiz_path) {
-    if (verbose) {
-      message("Checking ", quiz_path)
-    }
+  all_quiz_results <- lapply(files, function(quiz_path) {
     check_quiz(quiz_path, verbose = verbose)
   })
 
-  names(result) <- files
-  result <- sapply(result, function(quiz) {
-    all(quiz$quiz_answer_output & quiz$quiz_spec_output)
-  })
-  return(result)
+  # Name the results with the file names
+  names(all_quiz_results) <- basename(files)
+
+  return(all_quiz_results)
 }
 
-#' Check Quizzes
+#' Check Quiz
 #'
-#' @param quiz_path a full path to a quiz markdown file
-#' @param verbose print diagnostic messages
+#' For a file path to a quiz, check whether it is properly formatted for Leanpub.
 #'
-#' @return A list of logical indicators
-#' @export
+#' @param quiz_path A file path to a quiz markdown file
+#' @param verbose print diagnostic messages? TRUE/FALSE
+#'
+#' @return A list of checks. "good" means the check passed. Failed checks will report where it failed.
+#'
+#' @export check_quiz
 #'
 #' @examples
 #'
-#' check_list <- check_quiz(leanbuild::good_quiz_path)
+#' # Take a look at a failed quiz's checks:
+#' good_checks <- check_quiz(leanbuild::good_quiz_path)
+#'
+#' # Take a look at a failed quiz's checks:
+#' failed_checks <- check_quiz(leanbuild::bad_quiz_path)
 #'
 check_quiz <- function(quiz_path, verbose = TRUE) {
   if (verbose) {

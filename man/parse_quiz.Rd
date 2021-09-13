@@ -87,4 +87,5 @@ quiz <- c(
 quiz_specs <- parse_quiz(quiz)
 check_quiz_attributes(quiz_specs)
 check_quiz_question_attributes(quiz_specs)
+
 }

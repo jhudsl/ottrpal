@@ -2,21 +2,20 @@
 % Please edit documentation in R/quiz.R
 \name{check_quizzes}
 \alias{check_quizzes}
-\title{Check Quizzes}
+\title{Check all quizzes in a directory}
 \usage{
 check_quizzes(path = "quizzes", verbose = TRUE)
 }
 \arguments{
-\item{path}{either a path to the directory of quizzes or a full path to a
-quiz markdown file}
+\item{path}{A path to a directory full of quizzes that should all be checked with [leanbuild::check_all_quizzes].}
 
 \item{verbose}{print diagnostic messages}
 }
 \value{
-A list of logical indicators
+A list checks performed on each quiz
 }
 \description{
-Check Quizzes
+Check the formatting of all quizzes in a given directory.
 }
 \examples{
 
@@ -32,11 +31,14 @@ quiz <- c(
   "m) Mandatory different answer",
   "{/quiz}"
 )
+
+## Make a temporary quiz directory
 tdir <- tempfile()
 dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
 tfile <- tempfile(pattern = "quiz_", fileext = ".md", tmpdir = tdir)
 writeLines(quiz, tfile)
-check_quizzes(path = tdir)
 
-check_quiz(quiz)
+## Now check the quizzes in that directory
+all_quiz_results <- check_quizzes(path = tdir)
+
 }

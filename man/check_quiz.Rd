@@ -2,18 +2,27 @@
 % Please edit documentation in R/quiz.R
 \name{check_quiz}
 \alias{check_quiz}
-\title{Check Quizzes}
+\title{Check Quiz}
 \usage{
 check_quiz(quiz_path, verbose = TRUE)
 }
 \arguments{
-\item{quiz_path}{a full path to a quiz markdown file}
+\item{quiz_path}{A file path to a quiz markdown file}
 
-\item{verbose}{print diagnostic messages}
+\item{verbose}{print diagnostic messages? TRUE/FALSE}
 }
 \value{
-A list of logical indicators
+A list of checks. "good" means the check passed. Failed checks will report where it failed.
 }
 \description{
-Check Quizzes
+For a file path to a quiz, check whether it is properly formatted for Leanpub.
+}
+\examples{
+
+# Take a look at a failed quiz's checks:
+good_checks <- check_quiz(leanbuild::good_quiz_path)
+
+# Take a look at a failed quiz's checks:
+failed_checks <- check_quiz(leanbuild::bad_quiz_path)
+
 }
