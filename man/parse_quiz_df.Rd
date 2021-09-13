@@ -11,8 +11,6 @@ parse_quiz_df(quiz_lines, remove_tags = FALSE)
 file obtained from readLines()}
 
 \item{remove_tags}{TRUE/FALSE remove tags and empty lines?}
-
-\item{verbose}{Would you like progress messages? TRUE/FALSE}
 }
 \value{
 A data frame containing a type column which indicates what type of line each is.

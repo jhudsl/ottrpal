@@ -31,7 +31,7 @@ tags <- quiz_df \%>\%
   dplyr::filter(type == "tag") \%>\%
   dplyr::pull("original")
 
-Extract metadata tags
+# Extract metadata tags
 meta <- extract_meta(tags)
 
 }
