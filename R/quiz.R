@@ -1,4 +1,6 @@
 
+utils::globalVariables(c("question", "original", "n", "metadata_check", "index"))
+
 # These will be saved as RData files to grab for examples as well as in extData
 #
 # good_quiz_path <- list.files(pattern = "quiz_good.md",
@@ -20,7 +22,6 @@
 #' @param quiz_lines A character vector of the contents of the markdown
 #' file obtained from readLines()
 #' @param remove_tags TRUE/FALSE remove tags and empty lines?
-#' @param verbose Would you like progress messages? TRUE/FALSE
 #' @return A data frame containing a type column which indicates what type of line each is.
 #'
 #' @export
@@ -124,7 +125,7 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
 #'   dplyr::filter(type == "tag") %>%
 #'   dplyr::pull("original")
 #'
-#' Extract metadata tags
+#' # Extract metadata tags
 #' meta <- extract_meta(tags)
 #'
 extract_meta <- function(tags) {
