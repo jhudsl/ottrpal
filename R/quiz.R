@@ -466,7 +466,7 @@ check_quiz_question_attributes <- function(question_df, quiz_name = NULL, verbos
 #' bad_quiz_specs <- parse_quiz(bad_quiz)
 #' bad_quiz_checks <- check_all_questions(bad_quiz_specs)
 #'
-check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
+check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 
   # Remove header part and split into per question data frames
   question_dfs <- quiz_specs$data %>%
@@ -490,6 +490,8 @@ check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
 
   # Add names to question check list
   names(question_checks) <- question_names
+
+  question_checks <- dplyr::bind_rows(question_checks, .id = "question_names")
 
   return(question_checks)
 }
@@ -535,7 +537,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
   }
   prompt <- question_df$original[question_df$type == "prompt"]
 
-  prompt <- stringr::str_remove(prompt, "^\\?")
+  prompt <- stringr::str_remove(prompt, "^\\? ")
 
   # Piece together a quiz identity
   quiz_identity <- paste0(substr(prompt, 0, 20), " ... \n In quiz: ", quiz_name)
@@ -550,9 +552,10 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
     dplyr::filter(grepl("\\:", original)) %>%
     dplyr::pull(index)
 
-  colon_index <- paste0(colon_index, collapse = ", ")
-
   if (length(colon_index) > 0 ) {
+    # Collapse in case there are multiple infractions
+    colon_index <- paste0(colon_index, collapse = ", ")
+
     colon_msg <- paste0(
       "Colon detected in question on lines: ",
       paste0(colon_index, collapse = ", "),
@@ -639,9 +642,10 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
     dplyr::filter(grepl("\\:", original)) %>%
     dplyr::pull(index)
 
-  exclam_index <- paste0(exclam_index, collapse = ", ")
-
   if (length(exclam_index) > 0) {
+    # Collapse in case there are multiple infractions
+    exclam_index <- paste0(exclam_index, collapse = ", ")
+
     exclam_msg <- paste0(
       "Exclamation point detected in answer for: ", quiz_identity,
       "\n Get rid of exclamation -- will mess up formatting in Leanpub."
@@ -667,10 +671,11 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
     exclam_index
   )
 
-    # Store all warning messages as a list; they will say "good" if nothing is detected as wrong
+  # Store all warning messages as a list; they will say "good" if nothing is detected as wrong
   question_result <- data.frame(quiz = rep(quiz_name, length(related_index)),
                                 warning_msg,
                                 related_index) %>%
+    # Now filter out the good ones
     dplyr::filter(warning_msg != "good")
 
   return(question_result)
