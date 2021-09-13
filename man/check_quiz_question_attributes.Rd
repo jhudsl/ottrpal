@@ -19,12 +19,8 @@ It checks that the attributes specified are accepted ones by Leanpub.
 }
 \examples{
 
-good_quiz_path <- file.path(
-  system.file('extdata', package = 'leanbuild'),
-  "quiz_good.md")
-
 # Use readLines to read in a quiz
-quiz_lines <- readLines(good_quiz_path)
+quiz_lines <- readLines(good_quiz_path())
 
 # Use
 question_df <- parse_quiz_df(quiz_lines) \%>\%

@@ -20,12 +20,8 @@ Parse quiz into a data.frame
 }
 \examples{
 
-good_quiz_path <- file.path(
-  system.file('extdata', package = 'leanbuild'),
-  "quiz_good.md")
-
-# Use readLines to read in a quiz
-quiz_lines <- readLines(good_quiz_path)
+# Use readLines() to read in a quiz
+quiz_lines <- readLines(good_quiz_path())
 
 # Can use this to parse the quiz into a data.frame
 quiz_df <- parse_quiz_df(quiz_lines)

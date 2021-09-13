@@ -40,21 +40,13 @@ quiz_checks <- check_all_questions(quiz_specs)
 
 # Using good quiz md example
 
-good_quiz_path <- file.path(
-  system.file('extdata', package = 'leanbuild'),
-  "quiz_good.md")
-
-good_quiz <- readLines(good_quiz_path)
+good_quiz <- readLines(good_quiz_path())
 good_quiz_specs <- parse_quiz(good_quiz)
 good_quiz_checks <- check_all_questions(good_quiz_specs)
 
 # Using bad quiz md example
 
-bad_quiz_path <- file.path(
-  system.file('extdata', package = 'leanbuild'),
-  "quiz_bad.md")
-
-bad_quiz <- readLines(bad_quiz_path)
+bad_quiz <- readLines(bad_quiz_path())
 bad_quiz_specs <- parse_quiz(bad_quiz)
 bad_quiz_checks <- check_all_questions(bad_quiz_specs)
 

@@ -17,11 +17,7 @@ Extract meta fields from a tag
 }
 \examples{
 
-good_quiz_path <- file.path(
-  system.file('extdata', package = 'leanbuild'),
-  "quiz_good.md")
-
-quiz_lines <- readLines(good_quiz_path)
+quiz_lines <- readLines(good_quiz_path())
 
 # Put this in a data.frame so we can identify the content
 quiz_df <- parse_quiz_df(quiz_lines)

@@ -163,12 +163,8 @@ convert_quiz <- function(quiz_path,
 #' tdir <- tempfile()
 #' dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
 #'
-#' good_quiz_path <- file.path(
-#'   system.file('extdata', package = 'leanbuild'),
-#'   "quiz_good.md")
-#'
-#' file.copy(from = good_quiz_path,
-#'           to = file.path(tdir, basename(good_quiz_path)))
+#' file.copy(from = good_quiz_path(),
+#'           to = file.path(tdir, basename(good_quiz_path())))
 #'
 #' # Provide path to directory of quizzes
 #' convert_coursera_quizzes(tdir)
