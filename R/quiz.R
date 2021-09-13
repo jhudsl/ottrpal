@@ -57,18 +57,12 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
     }
   }
 
-  quiz_df <- quiz_df %>%
-    # Now for updating based on type!
-    dplyr::mutate(updated_line = dplyr::case_when(
-      type %in% c("prompt", "single_line_prompt") ~ stringr::str_replace(quiz_lines, "^\\?", "  prompt:"),
-      type %in% c("extended_prompt", "end_prompt") ~ paste0("    ", quiz_lines),
-      grepl("answer", type) ~ stringr::str_replace(quiz_lines, "^[[:alpha:]]\\)", "    - answer:"),
-      TRUE ~ quiz_lines
-    ))
-
   if (remove_tags) {
     quiz_df <- quiz_df %>%
       dplyr::filter(!(type %in% c("tag", "empty")))
+  } else {
+    # Adjust that tags are actually the start of the next question
+    quiz_df$question[which(quiz_df$type == "tag")] <- quiz_df$question[which(quiz_df$type == "tag")] + 1
   }
 
   return(quiz_df)
@@ -179,6 +173,10 @@ parse_quiz <- function(quiz_lines, verbose = FALSE) {
   # Put this in a data.frame so we can identify the content
   quiz_df <- parse_quiz_df(quiz_lines)
 
+  # Get per question split up
+  per_question <- quiz_df %>%
+    dplyr::group_split(question)
+
   #### Extract metadata
   # Extract metadata tags
   tags <- quiz_df$trimmed[quiz_df$type == "tag"]
@@ -189,15 +187,8 @@ parse_quiz <- function(quiz_lines, verbose = FALSE) {
   # Extract the main quiz metadata
   quiz_meta <- extract_meta(quiz_meta)[[1]]
 
-  ## Count number of answers per question
-  answers_per_question <- quiz_df %>%
-    dplyr::mutate(type = dplyr::case_when(
-      grepl("answer", type) ~ "answer",
-      TRUE ~ type
-    )) %>%
-    dplyr::group_by(question, type) %>%
-    dplyr::count() %>%
-    dplyr::filter(type == "answer")
+  #### Check each question
+  lapply(per_question, check_question)
 
   # Put the info we need in a list
   quiz_info <- list(
@@ -315,64 +306,62 @@ check_quiz_attributes <- function(quiz, verbose = TRUE) {
 #' @export
 #' @rdname parse_quiz
 #' @param verbose print diagnostic messages
-check_quiz_question_attributes <- function(quiz, verbose = TRUE) {
-  type <- answer <- meta <- repeated <- question <- number <- NULL
-  rm(list = c(
-    "number", "question", "repeated", "answer",
-    "meta", "type"
-  ))
+check_quiz_question_attributes <- function(question_meta, verbose = TRUE) {
 
-  out <- quiz$data
   quiz_question_attributes <- c(
     "choose-answers",
     "points",
     "random-choice-order"
   )
 
-  if (is.null(out)) {
-    return(TRUE)
+  # Find if there are any attributes in names(question_meta) that are unsupported
+  unsupported_attributes <- names(question_meta) %in% quiz_question_attributes)
+
+  # If any are unsupported give a warning
+  if (!all(unsupported_attributes)) {
+    # Get the attribute
+    unsupported_attributes <- names(question_meta)[unsupported_attributes]
+
+    # Now print it out
+    warning(paste0(question_name, " has attributes that aren't relevant for questions: ",
+                   paste(unsupported_attributes, collapse = ", "))
   }
-  result <- TRUE
-  out <- out %>%
-    dplyr::filter(question >= 1)
-  out <- split(out, out$question)
-  out <- lapply(out, function(r) {
-    question_name <- unique(paste0("question_", r$question))
-    if (verbose > 1) {
-      message(question_name)
+
+  return("good")
+}
+
+#' @export
+#' @rdname question
+check_question <- function(question_df, verbose = TRUE){
+
+  # Only run this if there is an actual prompt and start to the question
+  if ("prompt" %in% question_df$type) {
+    prompt <- question_df$original[question_df$type == "prompt"]
+    if (verbose) {
+      message(paste0("Checking question: ", prompt))
     }
-    meta <- r %>%
-      dplyr::filter(type == "metadata")
-    meta <- extract_meta(meta$original)
-    meta <- dplyr::bind_rows(lapply(meta, tibble::as_tibble))
-    if (NROW(meta) > 0) {
-      sd <- setdiff(colnames(meta), quiz_question_attributes)
-      if (length(sd) > 0) {
-        msg <- paste0(
-          question_name,
-          " has attributes that aren't relevant for questions: ",
-          paste(sd, collapse = ", ")
-        )
-        if (verbose) {
-          message(msg)
-        }
-        warning(msg)
-        result <<- FALSE
-      }
+
+    if ("tag" %in% question_df$type) {
+      # Extract the tags
+      question_meta <- question_df$original[question_df$type == "tag"]
+
+      # Make it a named list
+      question_meta <- unlist(extract_meta(question_meta))
+
+
+      check_quiz_question_attributes(meta)
+
+      if ("choose-answers" %in% names(meta))
+
+
     }
-    r <- r %>%
+
+    ## Count number of answers per question
+    num_answers <- question_df %>%
+      dplyr::group_by(question, type) %>%
+      dplyr::count() %>%
       dplyr::filter(type == "answer")
-    if (NROW(r) == 0) {
-      result <<- FALSE
-      msg <- paste0(question_name, " has no listed answers")
-      if (verbose) {
-        message(msg)
-      }
-      warning(msg)
-    }
-    return(NULL)
-  })
-  return(result)
+  }
 }
 
 #' @export

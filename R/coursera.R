@@ -50,6 +50,15 @@ convert_quiz <- function(quiz_path, output_quiz_dir, verbose = TRUE) {
   # Put it as a data.frame:
   quiz_lines_df <- parse_quiz_df(readLines(quiz_path), remove_tags = TRUE)
 
+  quiz_lines_df <- quiz_lines_df %>%
+    # Now for updating based on type!
+    dplyr::mutate(updated_line = dplyr::case_when(
+      type %in% c("prompt", "single_line_prompt") ~ stringr::str_replace(quiz_lines, "^\\?", "  prompt:"),
+      type %in% c("extended_prompt", "end_prompt") ~ paste0("    ", quiz_lines),
+      grepl("answer", type) ~ stringr::str_replace(quiz_lines, "^[[:alpha:]]\\)", "    - answer:"),
+      TRUE ~ quiz_lines
+    ))
+
   #### Create a question number column so we can track answers by question
   # Create an empty one
   quiz_lines_df$question <- rep(NA, nrow(quiz_lines_df))
