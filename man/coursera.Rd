@@ -14,27 +14,19 @@ render_coursera(
 )
 }
 \arguments{
-\item{output_dir}{a folder (existing or not) that the TOC-less Bookdown for Coursera files should be saved. By default is file.path("docs", "coursera")}
-
-\item{convert_quizzes}{TRUE/FALSE whether or not to convert quizzes. Default is TRUE}
-
-\item{input_quiz_dir}{a path to a directory of leanpub formatted quiz md files. By default assumes "quizzes" and looks in current directory.}
-
-\item{output_quiz_dir}{A folder (existing or not) where the coursera quizzes should be saved. By default is "coursera_quizzes".}
-
-\item{verbose}{Would you like the progress messages? TRUE/FALSE}
-
-\item{input_quiz_dir}{A path to a directory of Leanpub-formatted quiz md files. By default assumes "quizzes" and looks in current directory.}
-
 \item{output_dir}{A folder (existing or not) that the TOC-less Bookdown for Coursera files should be saved. By default is file.path("docs", "coursera")}
 
 \item{output_yaml}{A output.yml file to be provided to bookdown. By default is "_output.yml"}
 
 \item{convert_quizzes}{TRUE/FALSE whether or not to convert quizzes. Default is TRUE}
+
+\item{input_quiz_dir}{A path to a directory of Leanpub-formatted quiz md files. By default assumes "quizzes" and looks in current directory.}
+
+\item{output_quiz_dir}{A folder (existing or not) where the coursera quizzes should be saved. By default is "coursera_quizzes".}
+
+\item{verbose}{Would you like the progress messages? TRUE/FALSE}
 }
 \value{
-A folder of coursera ready quiz files saved to the output directory specified as a yamls.
-
 A folder of coursera ready quiz files and html chapter files saved to output directories specified.
 }
 \description{

@@ -23,7 +23,12 @@ Is called by [leanbuild::check_all_questions] and run for each question.
 }
 \examples{
 
-good_quiz <- readLines(leanbuild::good_quiz_path)
+good_quiz_path <- file.path(
+  system.file('extdata', package = 'leanbuild'),
+  "good_quiz.md")
+
+good_quiz <- readLines(good_quiz_path)
 good_quiz_specs <- parse_quiz(good_quiz)
 good_quiz_checks <- check_all_questions(good_quiz_specs)
+
 }

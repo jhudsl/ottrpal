@@ -43,8 +43,12 @@ find_end_of_prompt <- function(start_prompt_index, type_vector) {
 #'
 #' @examples
 #'
+#' good_quiz_path <- file.path(
+#'   system.file('extdata', package = 'leanbuild'),
+#'   "good_quiz.md")
+#'
 #' # Provide path to quiz to convert
-#' convert_quiz(leanbuild::good_quiz_path)
+#' convert_quiz(good_quiz_path)
 #'
 #'
 convert_quiz <- function(quiz_path,

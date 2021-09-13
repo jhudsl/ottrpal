@@ -20,9 +20,17 @@ For a file path to a quiz, check whether it is properly formatted for Leanpub.
 \examples{
 
 # Take a look at a failed quiz's checks:
-good_checks <- check_quiz(leanbuild::good_quiz_path)
+good_quiz_path <- file.path(
+  system.file('extdata', package = 'leanbuild'),
+  "good_quiz.md")
+
+good_checks <- check_quiz(good_quiz_path)
 
 # Take a look at a failed quiz's checks:
-failed_checks <- check_quiz(leanbuild::bad_quiz_path)
+bad_quiz_path <- file.path(
+  system.file('extdata', package = 'leanbuild'),
+  "bad_quiz.md")
+
+failed_checks <- check_quiz(bad_quiz_path)
 
 }
