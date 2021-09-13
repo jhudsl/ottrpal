@@ -1,13 +1,19 @@
 
-# These will be existing paths to grab from for examples
-#' @export
-good_quiz_path <- list.files(pattern = "quiz_good.md",
-                        system.file('extdata', package = 'leanbuild'),
-                        full.names = TRUE)
-#' @export
-bad_quiz_path <- list.files(pattern = "quiz_bad.md",
-                        system.file('extdata', package = 'leanbuild'),
-                        full.names = TRUE)
+# These will be saved as RData files to grab for examples as well as in extData
+#
+# good_quiz_path <- list.files(pattern = "quiz_good.md",
+#                        system.file('extdata', package = 'leanbuild'),
+#                        full.names = TRUE)
+#
+# bad_quiz_path <- list.files(pattern = "quiz_bad.md",
+#                        system.file('extdata', package = 'leanbuild'),
+#                        full.names = TRUE)
+#
+# bad_quiz <- readLines(bad_quiz_path)
+# good_quiz <- readLines(good_quiz_path)
+#
+# save(bad_quiz, bad_quiz, file = "bad_quiz.RData")
+# save(good_quiz, good_quiz, file = "good_quiz.RData")
 
 #' Parse quiz into a data.frame
 #'
@@ -21,8 +27,12 @@ bad_quiz_path <- list.files(pattern = "quiz_bad.md",
 #'
 #' @examples
 #'
+#' good_quiz_path <- file.path(
+#'   system.file('extdata', package = 'leanbuild'),
+#'   "good_quiz.md")
+#'
 #' # Use readLines to read in a quiz
-#' quiz_lines <- readLines(leanbuild::good_quiz_path)
+#' quiz_lines <- readLines(good_quiz_path)
 #'
 #' # Can use this to parse the quiz into a data.frame
 #' quiz_df <- parse_quiz_df(quiz_lines)
@@ -100,7 +110,11 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
 #'
 #' @examples
 #'
-#' quiz_lines <- readLines(leanbuild::good_quiz_path)
+#' good_quiz_path <- file.path(
+#'   system.file('extdata', package = 'leanbuild'),
+#'   "good_quiz.md")
+#'
+#' quiz_lines <- readLines(good_quiz_path)
 #'
 #' # Put this in a data.frame so we can identify the content
 #' quiz_df <- parse_quiz_df(quiz_lines)
@@ -415,13 +429,21 @@ check_quiz_question_attributes <- function(question_df, quiz_name = NULL, verbos
 #'
 #' # Using good quiz md example
 #'
-#' good_quiz <- readLines(leanbuild::good_quiz_path)
+#' good_quiz_path <- file.path(
+#'   system.file('extdata', package = 'leanbuild'),
+#'   "good_quiz.md")
+#'
+#' good_quiz <- readLines(good_quiz_path)
 #' good_quiz_specs <- parse_quiz(good_quiz)
 #' good_quiz_checks <- check_all_questions(good_quiz_specs)
 #'
 #' # Using bad quiz md example
 #'
-#' bad_quiz <- readLines(leanbuild::bad_quiz_path)
+#' bad_quiz_path <- file.path(
+#'   system.file('extdata', package = 'leanbuild'),
+#'   "bad_quiz.md")
+#'
+#' bad_quiz <- readLines(bad_quiz_path)
 #' bad_quiz_specs <- parse_quiz(bad_quiz)
 #' bad_quiz_checks <- check_all_questions(bad_quiz_specs)
 #'
@@ -469,9 +491,14 @@ check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
 #'
 #' @examples
 #'
-#' good_quiz <- readLines(leanbuild::good_quiz_path)
+#' good_quiz_path <- file.path(
+#'   system.file('extdata', package = 'leanbuild'),
+#'   "good_quiz.md")
+#'
+#' good_quiz <- readLines(good_quiz_path)
 #' good_quiz_specs <- parse_quiz(good_quiz)
 #' good_quiz_checks <- check_all_questions(good_quiz_specs)
+#'
 check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 
   # Things are considered innocent until proven guilty
@@ -666,10 +693,18 @@ check_quizzes <- function(path = "quizzes",
 #' @examples
 #'
 #' # Take a look at a failed quiz's checks:
-#' good_checks <- check_quiz(leanbuild::good_quiz_path)
+#' good_quiz_path <- file.path(
+#'   system.file('extdata', package = 'leanbuild'),
+#'   "good_quiz.md")
+#'
+#' good_checks <- check_quiz(good_quiz_path)
 #'
 #' # Take a look at a failed quiz's checks:
-#' failed_checks <- check_quiz(leanbuild::bad_quiz_path)
+#' bad_quiz_path <- file.path(
+#'   system.file('extdata', package = 'leanbuild'),
+#'   "bad_quiz.md")
+#'
+#' failed_checks <- check_quiz(bad_quiz_path)
 #'
 check_quiz <- function(quiz_path, verbose = TRUE) {
   if (verbose) {
