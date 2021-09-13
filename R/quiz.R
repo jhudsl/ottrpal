@@ -744,8 +744,8 @@ check_quizzes <- function(quiz_dir = "quizzes",
   if (write_report) {
     if (nrow(question_report) > 0) {
       message("Question error report saved to 'question_error_report.csv'")
-      readr::write_csv(question_report,
-                       'question_error_report.csv')
+      write.csv(question_report, file = 'question_error_report.csv',
+                quote = FALSE, row.names = FALSE)
     } else{
       message("No question errors to report!")
     }
