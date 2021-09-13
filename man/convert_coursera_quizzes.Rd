@@ -28,8 +28,13 @@ Convert Leanpub md quiz to Coursera yaml quiz
 # Set up a directory with a quiz in it for this example
 tdir <- tempfile()
 dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
-file.copy(from = leanbuild::good_quiz_path,
-          to = file.path(tdir, basename(leanbuild::good_quiz_path)))
+
+good_quiz_path <- file.path(
+  system.file('extdata', package = 'leanbuild'),
+  "good_quiz.md")
+
+file.copy(from = good_quiz_path,
+          to = file.path(tdir, basename(good_quiz_path)))
 
 # Provide path to directory of quizzes
 convert_coursera_quizzes(tdir)
