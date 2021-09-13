@@ -148,7 +148,7 @@ parse_q_tag <- function(tag) {
 #'
 # quiz_lines <- readLines("quizzes/quiz_ch1.md")
 
-parse_quiz <- function(quiz_lines, verbose = FALSE) {
+parse_quiz <- function(quiz_lines, quiz_name = NULL, verbose = FALSE) {
 
   answer <- meta <- repeated <- question <- number <- NULL
   rm(list = c("number", "question", "repeated", "answer", "meta"))
@@ -186,9 +186,6 @@ parse_quiz <- function(quiz_lines, verbose = FALSE) {
 
   # Extract the main quiz metadata
   quiz_meta <- extract_meta(quiz_meta)[[1]]
-
-  #### Check each question
-  lapply(per_question, check_question)
 
   # Put the info we need in a list
   quiz_info <- list(
@@ -264,15 +261,12 @@ extract_quiz <- function(quiz_lines) {
 #' check_quiz_question_attributes(out)
 #' @rdname parse_quiz
 
-check_quiz_attributes <- function(quiz, verbose = TRUE) {
+check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
 
-  # If quiz has not been parsed, parse it
-  if (!is.list(quiz)) {
-    quiz <- parse_quiz(quiz)
-  }
-  quiz_metadata <- quiz$quiz_metadata
-  quiz_metadata <- tibble::as_tibble(quiz_metadata)
+  # Set up as tibble
+  quiz_metadata <- tibble::as_tibble(quiz_specs$quiz_metadata)
 
+  # These are the accepted quiz attributes
   quiz_attributes <- c(
     "version",
     "attempts",
@@ -285,22 +279,20 @@ check_quiz_attributes <- function(quiz, verbose = TRUE) {
     "version"
   )
 
-  result <- TRUE
-  if (NROW(quiz_metadata) > 0) {
-    sd <- setdiff(colnames(quiz_metadata), quiz_attributes)
-    if (length(sd) > 0) {
-      msg <- paste0(
-        "quiz has attributes not specified as appropriate for quizzes:",
-        paste(sd, collapse = ", ")
-      )
-      if (verbose) {
-        message(msg)
-      }
-      warning(msg)
-      result <- FALSE
-    }
+  # Find if there are any attributes in names(question_meta) that are unsupported
+  unsupported_attributes <- !(names(quiz_metadata) %in% quiz_attributes)
+
+  # If any are unsupported give a warning
+  if (any(unsupported_attributes)) {
+    # Get the attribute
+    unsupported_attributes <- names(quiz_metadata)[unsupported_attributes]
+
+    # Now print it out
+    warning(paste0(quiz_name, " has attributes that aren't relevant for quizzes: ",
+                   paste(unsupported_attributes, collapse = ", ")))
   }
-  return(result)
+
+  return(TRUE)
 }
 
 #' @export
@@ -315,7 +307,7 @@ check_quiz_question_attributes <- function(question_meta, verbose = TRUE) {
   )
 
   # Find if there are any attributes in names(question_meta) that are unsupported
-  unsupported_attributes <- names(question_meta) %in% quiz_question_attributes)
+  unsupported_attributes <- !(names(question_meta) %in% quiz_question_attributes)
 
   # If any are unsupported give a warning
   if (!all(unsupported_attributes)) {
@@ -324,15 +316,15 @@ check_quiz_question_attributes <- function(question_meta, verbose = TRUE) {
 
     # Now print it out
     warning(paste0(question_name, " has attributes that aren't relevant for questions: ",
-                   paste(unsupported_attributes, collapse = ", "))
+                   paste(unsupported_attributes, collapse = ", ")))
   }
 
-  return("good")
+  return(TRUE)
 }
 
 #' @export
 #' @rdname question
-check_question <- function(question_df, verbose = TRUE){
+check_question <- function(question_df, quiz_name, verbose = TRUE){
 
   # Only run this if there is an actual prompt and start to the question
   if ("prompt" %in% question_df$type) {
@@ -341,6 +333,31 @@ check_question <- function(question_df, verbose = TRUE){
       message(paste0("Checking question: ", prompt))
     }
 
+
+    # Parse out answer choices
+    num_answers <- question_df %>%
+      dplyr::group_by(question, type) %>%
+      dplyr::count() %>%
+      dplyr::filter(grepl("answer", type))
+
+    # Get the counts for each kind of answer:
+    correct_answers <- num_answers %>%
+      dplyr::filter(type == "correct_answer") %>%
+      dplyr::pull(n)
+
+    wrong_answers <- num_answers %>%
+      dplyr::filter(type == "wrong_answer") %>%
+      dplyr::pull(n)
+
+    total_answers <- sum(num_answers$n)
+
+
+    # Now stop if anything is fishy:
+    if (correct_answers == 0) {
+      stop("No correct answers provided for ", prompt, )
+    }
+
+
     if ("tag" %in% question_df$type) {
       # Extract the tags
       question_meta <- question_df$original[question_df$type == "tag"]
@@ -348,19 +365,15 @@ check_question <- function(question_df, verbose = TRUE){
       # Make it a named list
       question_meta <- unlist(extract_meta(question_meta))
 
+      check_quiz_question_attributes(question_meta)
 
-      check_quiz_question_attributes(meta)
+      if ("choose-answers" %in% names(question_meta)) {
+        choose_answers_num <- as.numeric(question_meta[names(question_meta) == "choose-answers"])
 
-      if ("choose-answers" %in% names(meta))
+      }
 
 
     }
-
-    ## Count number of answers per question
-    num_answers <- question_df %>%
-      dplyr::group_by(question, type) %>%
-      dplyr::count() %>%
-      dplyr::filter(type == "answer")
   }
 }
 
@@ -472,14 +485,16 @@ check_quiz <- function(quiz_path, verbose = TRUE) {
   quiz_lines <- readLines(quiz_path)
 
   # Parse the quiz
-  quiz_specs <- parse_quiz(quiz_lines)
+  quiz_specs <- parse_quiz(quiz_lines, quiz_name = basename(quiz_path))
 
+  # Check main quiz attributes
   quiz_spec_output <- check_quiz_attributes(quiz_specs)
 
-  quiz_answer_output <- check_quiz_question_attributes(
-    quiz_specs,
-    verbose = verbose
-  )
+  #### Check each question
+  lapply(per_question,
+         check_question,
+         quiz_name = )
+
   quiz_attribute_output <- check_attributes(quiz_specs)
 
   # Make sure choose answers is > than the number of answers you give. lol
