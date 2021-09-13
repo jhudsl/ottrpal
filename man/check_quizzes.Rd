@@ -4,10 +4,10 @@
 \alias{check_quizzes}
 \title{Check all quizzes in a directory}
 \usage{
-check_quizzes(path = "quizzes", verbose = TRUE)
+check_quizzes(quiz_dir = "quizzes", verbose = TRUE)
 }
 \arguments{
-\item{path}{A path to a directory full of quizzes that should all be checked with [leanbuild::check_all_quizzes].}
+\item{quiz_dir}{A path to a directory full of quizzes that should all be checked with [leanbuild::check_all_quizzes].}
 
 \item{verbose}{print diagnostic messages}
 }

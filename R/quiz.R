@@ -510,41 +510,58 @@ check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
 #'
 #' @examples
 #'
-#' good_quiz <- readLines(good_quiz_path())
-#' good_quiz_specs <- parse_quiz(good_quiz)
-#' good_quiz_checks <- check_all_questions(good_quiz_specs)
+#' # Use readLines to read in a quiz
+#' quiz_lines <- readLines(good_quiz_path())
 #'
-check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
+#' # Use group_split to get the questions
+#' questions_df <- parse_quiz_df(quiz_lines) %>%
+#'   dplyr::group_split(question)
+#'
+#' question_df <- questions_df[[2]]
+#' good_quiz_checks <- check_question(question_df[[2]])
+#'
+check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 
   # Things are considered innocent until proven guilty
   colon_msg <- tot_ans_msg <- cor_ans_msg <- inc_ans_msg <- exclam_msg <- "good"
+  colon_index <- tot_ans_index <- cor_ans_index <- inc_ans_index <- exclam_index <- NA
 
-  # Get prompt
+  # Get index for reporting purposes
+  question_start_index <- min(question_df$index)
+
+  # Get prompt if its there
+  if (!any(grepl("^\\? ", question_df$original))) {
+    stop("Could not find prompt for question. Question prompts start line with '?'")
+  }
   prompt <- question_df$original[question_df$type == "prompt"]
 
-  prompt <- stringr::str_remove(prompt, "^\\? ")
+  prompt <- stringr::str_remove(prompt, "^\\?")
 
   # Piece together a quiz identity
-  quiz_identity <- paste0(substr(prompt, 0, 20), " ... in quiz: ", quiz_name)
+  quiz_identity <- paste0(substr(prompt, 0, 20), " ... \n In quiz: ", quiz_name)
 
   # Only run this if there is an actual prompt and start to the question
   if (verbose) {
     message(paste0("Checking question: ", quiz_identity))
   }
 
-  ###### Check for no-no symbols in prompt:
-  full_prompt <- question_df %>%
-    dplyr::filter(grepl("prompt", type))
+  ###### Check for no-no symbols:
+  colon_index <- question_df %>%
+    dplyr::filter(grepl("\\:", original)) %>%
+    dplyr::pull(index)
 
-  # Look for colons
-  colon <- stringr::str_detect(full_prompt$original, "\\:")
+  colon_index <- paste0(colon_index, collapse = ", ")
 
-  if (any(colon)) {
+  if (length(colon_index) > 0 ) {
     colon_msg <- paste0(
-      "Colon detected in question prompt starting with: ", quiz_identity,
+      "Colon detected in question on lines: ",
+      paste0(colon_index, collapse = ", "),
+      "\n in question starting with:",  quiz_identity,
       "\n Get rid of colon -- will mess up formatting in Coursera."
     )
     warning(colon_msg)
+  } else {
+    colon_index <- NA
   }
 
   ###### Parse out and check answer choices
@@ -568,16 +585,19 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
   if (length(total_answers) == 0) {
     tot_ans_msg <- paste0("No detected answer options provided for ", quiz_identity)
     warning(tot_ans_msg)
+    tot_ans_index <- question_start_index
   }
 
   if (length(correct_answers) == 0) {
     cor_ans_msg <- paste0("No correct answers provided for ", quiz_identity)
     warning(cor_ans_msg)
+    cor_ans_index <- question_start_index
   }
 
   if (length(wrong_answers) == 0) {
     inc_ans_msg <- paste0("No incorrect answer options provided for ", quiz_identity)
     warning(inc_ans_msg)
+    inc_ans_index <- question_start_index
   }
 
   #### If choose answer, make sure that there are more answers than specified in tag
@@ -602,6 +622,7 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
           "choose-answers number is greater than the number of answers provided in: ",
           quiz_identity
         )
+        choos_ans_index <- question_start_index
         warning(choos_ans_msg)
       }
     } else {
@@ -613,25 +634,44 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
     attr_msg <- NA
   }
   #### Check answer formats:
-  exclam <- stringr::str_detect(question_df$original, "\\!")
+  exclam_index <- question_df %>%
+    dplyr::filter(grepl("answer", type)) %>%
+    dplyr::filter(grepl("\\:", original)) %>%
+    dplyr::pull(index)
 
-  if (any(exclam)) {
+  exclam_index <- paste0(exclam_index, collapse = ", ")
+
+  if (length(exclam_index) > 0) {
     exclam_msg <- paste0(
       "Exclamation point detected in answer for: ", quiz_identity,
       "\n Get rid of exclamation -- will mess up formatting in Leanpub."
     )
     warning(exclam_msg)
+  } else {
+    exclam_index <- NA
   }
 
-    # Store all warning messages as a list; they will say "good" if nothing is detected as wrong
-  question_result <- list(
-    attributes = attr_msg,
-    no_colons = colon_msg,
-    total_answers = tot_ans_msg,
-    correct_answers = cor_ans_msg,
-    incorrect_answers = inc_ans_msg,
-    no_exclamations = exclam_msg
+  # Put these together in a helpful way
+  warning_msg <- c(
+    colon_msg,
+    tot_ans_msg,
+    cor_ans_msg,
+    inc_ans_msg,
+    exclam_msg
+    )
+  related_index <- c(
+    colon_index,
+    tot_ans_index,
+    cor_ans_index,
+    inc_ans_index,
+    exclam_index
   )
+
+    # Store all warning messages as a list; they will say "good" if nothing is detected as wrong
+  question_result <- data.frame(quiz = rep(quiz_name, length(related_index)),
+                                warning_msg,
+                                related_index) %>%
+    dplyr::filter(warning_msg != "good")
 
   return(question_result)
 }
@@ -640,7 +680,7 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 #'
 #' Check the formatting of all quizzes in a given directory.
 #'
-#' @param path A path to a directory full of quizzes that should all be checked with [leanbuild::check_all_quizzes].
+#' @param quiz_dir A path to a directory full of quizzes that should all be checked with [leanbuild::check_all_quizzes].
 #' @param verbose print diagnostic messages
 #'
 #' @return A list checks performed on each quiz
@@ -671,22 +711,24 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 #' ## Now check the quizzes in that directory
 #' all_quiz_results <- check_quizzes(path = tdir)
 #'
-check_quizzes <- function(path = "quizzes",
+check_quizzes <- function(quiz_dir = "quizzes",
                           verbose = TRUE) {
   files <- list.files(
     pattern = "\\.md",
     ignore.case = TRUE,
-    path = path,
+    path = quiz_dir,
     full.names = TRUE
   )
 
   if (length(files) == 0) {
-    stop(paste0("No quizzes found at given path:", path))
+    stop(paste0("No quizzes found at given path:", quiz_dir))
   }
 
   all_quiz_results <- lapply(files, function(quiz_path) {
     check_quiz(quiz_path, verbose = verbose)
   })
+
+  dplyr::bind_rows(all_quiz_results$question_checks)
 
   # Name the results with the file names
   names(all_quiz_results) <- basename(files)

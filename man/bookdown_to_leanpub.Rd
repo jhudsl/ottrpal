@@ -10,6 +10,7 @@ bookdown_to_leanpub(
   output_dir = "manuscript",
   make_book_txt = FALSE,
   quiz_dir = "quizzes",
+  run_quiz_checks = TRUE,
   remove_resources_start = FALSE,
   verbose = TRUE,
   footer_text = NULL

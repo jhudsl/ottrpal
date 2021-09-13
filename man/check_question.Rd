@@ -4,7 +4,7 @@
 \alias{check_question}
 \title{Check Quiz Question Set Up}
 \usage{
-check_question(question_df, quiz_name = NULL, verbose = TRUE)
+check_question(question_df, quiz_name = NA, verbose = TRUE)
 }
 \arguments{
 \item{question_df}{Which is an individual question's data frame after being parse from}
@@ -23,8 +23,14 @@ Is called by [leanbuild::check_all_questions] and run for each question.
 }
 \examples{
 
-good_quiz <- readLines(good_quiz_path())
-good_quiz_specs <- parse_quiz(good_quiz)
-good_quiz_checks <- check_all_questions(good_quiz_specs)
+# Use readLines to read in a quiz
+quiz_lines <- readLines(good_quiz_path())
+
+# Use group_split to get the questions
+questions_df <- parse_quiz_df(quiz_lines) \%>\%
+  dplyr::group_split(question)
+
+question_df <- questions_df[[2]]
+good_quiz_checks <- check_question(question_df[[2]])
 
 }
