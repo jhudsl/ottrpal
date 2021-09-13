@@ -169,6 +169,7 @@ bookdown_to_leanpub <- function(path = ".",
                                 output_dir = "manuscript",
                                 make_book_txt = FALSE,
                                 quiz_dir = "quizzes",
+                                run_quiz_checks = TRUE,
                                 remove_resources_start = FALSE,
                                 verbose = TRUE,
                                 footer_text = NULL) {
@@ -258,6 +259,13 @@ bookdown_to_leanpub <- function(path = ".",
         con = infile, sep = "\n"
       )
     }
+  }
+
+  #### Run quiz checks
+  if (run_quiz_checks) {
+    quiz_checks <- check_quizzes(quiz_dir)
+
+    readr::write_csv()
   }
   out <- NULL
   if (make_book_txt) {
