@@ -8,30 +8,31 @@
 #' @export
 
 parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
-
   quiz_df <- tibble::tibble(
     original = quiz_lines,
     trimmed = trimws(quiz_lines, which = "left"),
     index = 1:length(quiz_lines)
   ) %>%
-    dplyr::mutate(type = dplyr::case_when(
-      # Find starts to questions:
-      grepl("^\\?", quiz_lines) ~ "prompt",
-      # Find which lines are the wrong answer options
-      grepl("^[[:lower:]]{1}\\)", quiz_lines) ~ "wrong_answer",
-      # Find which lines are the correct answer options
-      grepl("^[[:upper:]]{1}\\)", quiz_lines) ~ "correct_answer",
-      # Find the tags
-      grepl("^\\{", quiz_lines) ~ "tag",
-      # Mark empty lines
-      nchar(quiz_lines) == 0 ~ "empty",
-      # Mark which lines have links
-      grepl("\\!\\[|http", quiz_lines) ~ "link",
-      # Mark everything else as "other
-      TRUE ~ "other"
-    ),
-    # Assign each a question number
-    question = cumsum(type == "prompt"))
+    dplyr::mutate(
+      type = dplyr::case_when(
+        # Find starts to questions:
+        grepl("^\\?", quiz_lines) ~ "prompt",
+        # Find which lines are the wrong answer options
+        grepl("^[[:lower:]]{1}\\)", quiz_lines) ~ "wrong_answer",
+        # Find which lines are the correct answer options
+        grepl("^[[:upper:]]{1}\\)", quiz_lines) ~ "correct_answer",
+        # Find the tags
+        grepl("^\\{", quiz_lines) ~ "tag",
+        # Mark empty lines
+        nchar(quiz_lines) == 0 ~ "empty",
+        # Mark which lines have links
+        grepl("\\!\\[|http", quiz_lines) ~ "link",
+        # Mark everything else as "other
+        TRUE ~ "other"
+      ),
+      # Assign each a question number
+      question = cumsum(type == "prompt")
+    )
 
   ###### Find extended prompts
   # Get the starts of prompts
@@ -39,8 +40,8 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
 
   # Find the line which the footnote ends at
   end_prompt_indices <- sapply(start_prompt_indices,
-                               find_end_of_prompt,
-                               type_vector = quiz_df$type
+    find_end_of_prompt,
+    type_vector = quiz_df$type
   )
 
   # Rename "other" as also part of prompts
@@ -146,10 +147,8 @@ parse_q_tag <- function(tag) {
 #' check_quiz_attributes(out)
 #'
 #'
-# quiz_lines <- readLines("quizzes/quiz_ch1.md")
-
+#' # quiz_lines <- readLines("quizzes/quiz_ch1.md")
 parse_quiz <- function(quiz_lines, quiz_name = NULL, verbose = FALSE) {
-
   answer <- meta <- repeated <- question <- number <- NULL
   rm(list = c("number", "question", "repeated", "answer", "meta"))
 
@@ -206,7 +205,6 @@ parse_quiz <- function(quiz_lines, quiz_name = NULL, verbose = FALSE) {
 #' @export
 #' @rdname parse_quiz
 extract_quiz <- function(quiz_lines) {
-
   start <- grep("^\\s*\\{\\s*quiz", quiz_lines)
   end <- grep("^\\s*\\{\\s*/\\s*quiz", quiz_lines)
 
@@ -288,8 +286,10 @@ check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) 
     unsupported_attributes <- names(quiz_metadata)[unsupported_attributes]
 
     # Now print it out
-    warning(paste0(quiz_name, " has attributes that aren't relevant for quizzes: ",
-                   paste(unsupported_attributes, collapse = ", ")))
+    warning(paste0(
+      quiz_name, " has attributes that aren't relevant for quizzes: ",
+      paste(unsupported_attributes, collapse = ", ")
+    ))
   }
 
   return(TRUE)
@@ -298,8 +298,9 @@ check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) 
 #' @export
 #' @rdname parse_quiz
 #' @param verbose print diagnostic messages
-check_quiz_question_attributes <- function(question_meta, verbose = TRUE) {
+check_quiz_question_attributes <- function(question_meta, quiz_name = NULL, verbose = TRUE) {
 
+  # These are the accepted question attributes
   quiz_question_attributes <- c(
     "choose-answers",
     "points",
@@ -310,70 +311,121 @@ check_quiz_question_attributes <- function(question_meta, verbose = TRUE) {
   unsupported_attributes <- !(names(question_meta) %in% quiz_question_attributes)
 
   # If any are unsupported give a warning
-  if (!all(unsupported_attributes)) {
+  if (any(unsupported_attributes)) {
     # Get the attribute
     unsupported_attributes <- names(question_meta)[unsupported_attributes]
 
     # Now print it out
-    warning(paste0(question_name, " has attributes that aren't relevant for questions: ",
-                   paste(unsupported_attributes, collapse = ", ")))
+    warning(paste0(
+      quiz_name, " has attributes that aren't relevant for questions: ",
+      paste(unsupported_attributes, collapse = ", ")
+    ))
   }
 
   return(TRUE)
 }
 
-#' @export
-#' @rdname question
-check_question <- function(question_df, quiz_name, verbose = TRUE){
+check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
+
+  # Remove header part and split into per question data frames
+  question_dfs <- quiz_specs$data %>%
+    dplyr::filter(question > 0) %>%
+    dplyr::group_split(question)
+
+  result <- lapply(
+    question_dfs,
+    check_question,
+    quiz_name = quiz_name
+    )
+
+  return(result)
+}
+
+check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
+
+  # Piece together a quiz identity
+  quiz_identity <- paste0(substr(prompt, 0, 20), " of quiz: ", quiz_name)
 
   # Only run this if there is an actual prompt and start to the question
-  if ("prompt" %in% question_df$type) {
-    prompt <- question_df$original[question_df$type == "prompt"]
-    if (verbose) {
-      message(paste0("Checking question: ", prompt))
-    }
+  prompt <- question_df$original[question_df$type == "prompt"]
+  if (verbose) {
+    message(paste0("Checking question: ", prompt))
+  }
 
+  ###### Check for no-no symbols in prompt:
+  full_prompt <- question_df %>%
+    dplyr::filter(grepl("prompt", type))
 
-    # Parse out answer choices
-    num_answers <- question_df %>%
-      dplyr::group_by(question, type) %>%
-      dplyr::count() %>%
-      dplyr::filter(grepl("answer", type))
+  # Look for colons
+  colon <- stringr::str_detect(full_prompt$original, "\\:")
 
-    # Get the counts for each kind of answer:
-    correct_answers <- num_answers %>%
-      dplyr::filter(type == "correct_answer") %>%
-      dplyr::pull(n)
+  if (any(colon)) {
+    warning(paste0(
+      "Colon detected in question prompt for: ", quiz_identity,
+      "\n Get rid of colon -- will mess up formatting in Coursera."
+    ))
+  }
 
-    wrong_answers <- num_answers %>%
-      dplyr::filter(type == "wrong_answer") %>%
-      dplyr::pull(n)
+  ###### Parse out and check answer choices
+  num_answers <- question_df %>%
+    dplyr::group_by(question, type) %>%
+    dplyr::count() %>%
+    dplyr::filter(grepl("answer", type))
 
-    total_answers <- sum(num_answers$n)
+  # Get the counts for each kind of answer:
+  correct_answers <- num_answers %>%
+    dplyr::filter(type == "correct_answer") %>%
+    dplyr::pull(n)
 
+  wrong_answers <- num_answers %>%
+    dplyr::filter(type == "wrong_answer") %>%
+    dplyr::pull(n)
 
-    # Now stop if anything is fishy:
-    if (correct_answers == 0) {
-      stop("No correct answers provided for ", prompt, )
-    }
+  total_answers <- sum(num_answers$n)
 
+  # Now stop if anything is fishy:
+  if (total_answers == 0) {
+    warning(paste0("No detected answer options provided for ", quiz_identity))
+  }
 
-    if ("tag" %in% question_df$type) {
-      # Extract the tags
-      question_meta <- question_df$original[question_df$type == "tag"]
+  if (correct_answers == 0) {
+    warning(paste0("No correct answers provided for ", quiz_identity))
+  }
 
-      # Make it a named list
-      question_meta <- unlist(extract_meta(question_meta))
+  if (wrong_answers == 0) {
+    warning(paste0("No incorrect answer options provided for ", quiz_identity))
+  }
 
-      check_quiz_question_attributes(question_meta)
+  #### If choose answer, make sure that there are more answers than specified in tag
+  if ("tag" %in% question_df$type) {
+    # Extract the tags
+    question_meta <- question_df$original[question_df$type == "tag"]
 
-      if ("choose-answers" %in% names(question_meta)) {
-        choose_answers_num <- as.numeric(question_meta[names(question_meta) == "choose-answers"])
+    # Make it a named list
+    question_meta <- unlist(extract_meta(question_meta))
 
+    # Check the attributes
+    check_quiz_question_attributes(question_meta, quiz_name = quiz_name)
+
+    if ("choose-answers" %in% names(question_meta)) {
+      choose_answers_num <- as.numeric(question_meta[names(question_meta) == "choose-answers"])
+
+      if (choose_answers_num > total_answers) {
+        warning(paste0(
+          "choose-answers number is greater than the number of answers provided in: ",
+          quiz_identity
+        ))
       }
-
-
     }
+  }
+  #### Check answer formats:
+  exclam <- stringr::str_detect(question_df$original, "\\!")
+
+  if (any(exclam)) {
+    warning(paste0(
+      "Exclamation point detected in answer for: ", quiz_identity,
+      "\n Get rid of exclamation -- will mess up formatting in Leanpub."
+    ))
   }
 }
 
@@ -442,7 +494,6 @@ check_attributes <- function(quiz, verbose = TRUE) {
 #' check_quiz(quiz)
 check_quizzes <- function(path = "quizzes",
                           verbose = TRUE) {
-
   files <- list.files(
     pattern = "\\.md",
     ignore.case = TRUE,
@@ -477,23 +528,33 @@ check_quizzes <- function(path = "quizzes",
 #' @export
 #'
 check_quiz <- function(quiz_path, verbose = TRUE) {
-
   if (verbose) {
     message(paste0("Checking quiz: ", quiz_path))
   }
   # Read in quiz
   quiz_lines <- readLines(quiz_path)
 
+  # Have a name for this quiz
+  quiz_name <- basename(quiz_path)
+
   # Parse the quiz
-  quiz_specs <- parse_quiz(quiz_lines, quiz_name = basename(quiz_path))
+  quiz_specs <- parse_quiz(quiz_lines,
+    quiz_name = quiz_name
+  )
 
   # Check main quiz attributes
-  quiz_spec_output <- check_quiz_attributes(quiz_specs)
+  quiz_spec_output <- check_quiz_attributes(quiz_specs,
+    quiz_name = quiz_name
+  )
 
-  #### Check each question
-  lapply(per_question,
-         check_question,
-         quiz_name = )
+  # Check each question
+  lapply(quiz_specs,
+    check_questions,
+    quiz_name = quiz_name
+  )
+
+
+
 
   quiz_attribute_output <- check_attributes(quiz_specs)
 
