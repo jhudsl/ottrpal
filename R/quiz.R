@@ -670,8 +670,8 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
     # Store all warning messages as a list; they will say "good" if nothing is detected as wrong
   question_result <- data.frame(quiz = rep(quiz_name, length(related_index)),
                                 warning_msg,
-                                related_index)
-
+                                related_index) %>%
+    dplyr::filter(warning_msg != "good")
 
   return(question_result)
 }
@@ -794,5 +794,3 @@ check_quiz <- function(quiz_path, verbose = TRUE) {
     question_checks = question_checks
   ))
 }
-
-quiz_checks <- check_quizzes(quiz_dir = "../DaSL_Course_Template_Leanpub/quizzes")
