@@ -4,7 +4,7 @@
 \alias{check_all_questions}
 \title{Check all quiz questions}
 \usage{
-check_all_questions(quiz_specs, quiz_name = NULL, verbose = TRUE)
+check_all_questions(quiz_specs, quiz_name = NA, verbose = TRUE)
 }
 \arguments{
 \item{quiz_specs}{quiz_specs which is output from [leanbuild::parse_quiz].}

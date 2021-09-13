@@ -10,7 +10,7 @@ bookdown_to_leanpub(
   output_dir = "manuscript",
   make_book_txt = FALSE,
   quiz_dir = "quizzes",
-  run_quiz_checks = TRUE,
+  run_quiz_checks = FALSE,
   remove_resources_start = FALSE,
   verbose = TRUE,
   footer_text = NULL
@@ -29,6 +29,8 @@ to create a `Book.txt` in the output directory?}
 
 \item{quiz_dir}{directory that contains the quiz .md files that should be
 checked and incorporated into the Book.txt file}
+
+\item{run_quiz_checks}{TRUE/FALSE run quiz checks}
 
 \item{remove_resources_start}{remove the word `resources/` at the front
 of any image path.}
