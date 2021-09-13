@@ -96,7 +96,7 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
 #' @param tags A single tag or vector of tags to extract the fields from.
 #' @return A named vector indicating the field and entry associated with it.
 #'
-#' @export meta_extract
+#' @export extract_meta
 #'
 #' @examples
 #'

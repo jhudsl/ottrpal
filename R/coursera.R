@@ -31,16 +31,25 @@ find_end_of_prompt <- function(start_prompt_index, type_vector) {
 
 #' Convert Leanpub md quiz to Coursera yaml quiz
 #'
-#' @param quiz_path A path to a quiz .md file.
+#' Convert a Leanpub-formatted md quiz file to a Coursera-formatted yaml quiz file in preparation for uploading to Coursera.
+#'
+#' @param quiz_path A path to a quiz .md file to be converted.
 #' @param output_quiz_dir An existing folder where you would like the new version of the quiz to be saved.
+#' Default is the directory of the quiz_path provided
 #' @param verbose Would you like the progress messages?
 #'
 #' @return A Coursera-ready quiz file saved to the output directory specified as a yaml.
-#' @export
-#' @rdname coursera_quiz
+#' @export convert_quiz
+#'
+#' @examples
+#'
+#' # Provide path to quiz to convert
+#' convert_quiz(leanbuild::good_quiz_path)
 #'
 #'
-convert_quiz <- function(quiz_path, output_quiz_dir, verbose = TRUE) {
+convert_quiz <- function(quiz_path,
+                         output_quiz_dir = dirname(quiz_path),
+                         verbose = TRUE) {
   # Print out which quiz we're converting
   message(paste("Converting quiz:", quiz_path))
 
@@ -50,18 +59,15 @@ convert_quiz <- function(quiz_path, output_quiz_dir, verbose = TRUE) {
   # Put it as a data.frame:
   quiz_lines_df <- parse_quiz_df(readLines(quiz_path), remove_tags = TRUE)
 
+  # Add in proper Coursera yaml mappings based on the parsing
   quiz_lines_df <- quiz_lines_df %>%
     # Now for updating based on type!
     dplyr::mutate(updated_line = dplyr::case_when(
-      type %in% c("prompt", "single_line_prompt") ~ stringr::str_replace(quiz_lines, "^\\?", "  prompt:"),
-      type %in% c("extended_prompt", "end_prompt") ~ paste0("    ", quiz_lines),
-      grepl("answer", type) ~ stringr::str_replace(quiz_lines, "^[[:alpha:]]\\)", "    - answer:"),
-      TRUE ~ quiz_lines
+      type %in% c("prompt", "single_line_prompt") ~ stringr::str_replace(original, "^\\?", "  prompt:"),
+      type %in% c("extended_prompt", "end_prompt") ~ paste0("    ", original),
+      grepl("answer", type) ~ stringr::str_replace(original, "^[[:alpha:]]\\)", "    - answer:"),
+      TRUE ~ original
     ))
-
-  #### Create a question number column so we can track answers by question
-  # Create an empty one
-  quiz_lines_df$question <- rep(NA, nrow(quiz_lines_df))
 
   # Declare the correct answers by which ones are the first ones listed
   correct_answers <- quiz_lines_df %>%
@@ -146,7 +152,17 @@ convert_quiz <- function(quiz_path, output_quiz_dir, verbose = TRUE) {
 #'
 #' @return A folder of coursera ready quiz files saved to the output directory specified as a yamls.
 #' @export
-#' @rdname coursera
+#'
+#' @examples
+#'
+#' # Set up a directory with a quiz in it for this example
+#' tdir <- tempfile()
+#' dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
+#' file.copy(from = leanbuild::good_quiz_path,
+#'           to = file.path(tdir, basename(leanbuild::good_quiz_path)))
+#'
+#' # Provide path to directory of quizzes
+#' convert_coursera_quizzes(tdir)
 #'
 convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
                                      output_quiz_dir = "coursera_quizzes",
