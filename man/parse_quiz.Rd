@@ -3,39 +3,29 @@
 \name{parse_quiz}
 \alias{parse_quiz}
 \alias{extract_quiz}
-\alias{check_quiz_attributes}
-\alias{check_quiz_question_attributes}
 \title{Parse Quiz and Other Checking Functions}
 \usage{
 parse_quiz(quiz_lines, quiz_name = NULL, verbose = FALSE)
 
 extract_quiz(quiz_lines)
-
-check_quiz_attributes(quiz_specs, quiz_name = NULL, verbose = TRUE)
-
-check_quiz_question_attributes(question_df, quiz_name = NULL, verbose = TRUE)
 }
 \arguments{
 \item{quiz_lines}{A quiz's contents read in with readLines()}
 
-\item{verbose}{print diagnostic messages}
+\item{quiz_name}{A character vector indicating the name of the quiz.}
 
-\item{quiz}{The output from [leanbuild::parse_quiz]}
+\item{verbose}{Would you like progress messages? TRUE/FALSE}
 }
 \value{
 A list of elements, including a `data.frame` and metadata
 for questions
 
 the lines of the quiz that actually contain of the content of the quiz.
-
-A logical
 }
 \description{
 Parse Quiz and Other Checking Functions
 
 Extract lines of the quiz
-
-Check Quiz Information
 }
 \examples{
 
@@ -56,36 +46,5 @@ quiz_lines <- c(
 quiz_specs <- parse_quiz(quiz_lines)
 check_quiz_attributes(quiz_specs)
 
-
-# quiz_lines <- readLines("quizzes/quiz_ch1.md")
-
-quiz <- c(
-  "{quiz, id: quiz_00_filename, choose-answers: 4}",
-  "### Lesson Name quiz",
-  "{choose-answers: 4, attempts: 25}",
-  "? What do you think?",
-  "C) The answer to this one",
-  "o) Not the answer",
-  "o) Not the answer either",
-  "C) Another correct answer",
-  "m) Mandatory different answer",
-  "{/quiz}"
-)
-quiz_specs <- parse_quiz(quiz)
-check_quiz_attributes(quiz_specs)
-check_quiz_question_attributes(quiz_specs)
-
-quiz <- c(
-  "{quiz, id: quiz_00_filename, choose-answers: 4}",
-  "### Lesson Name quiz",
-  "{choose-answers: 4, attempts: 25}",
-  "",
-  "? What do you think?",
-  "! The answer to this one",
-  "{/quiz}"
-)
-quiz_specs <- parse_quiz(quiz)
-check_quiz_attributes(quiz_specs)
-check_quiz_question_attributes(quiz_specs)
 
 }

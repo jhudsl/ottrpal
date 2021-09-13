@@ -19,7 +19,7 @@ Extract meta fields from a tag
 
 good_quiz_path <- file.path(
   system.file('extdata', package = 'leanbuild'),
-  "good_quiz.md")
+  "quiz_good.md")
 
 quiz_lines <- readLines(good_quiz_path)
 

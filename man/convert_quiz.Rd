@@ -24,7 +24,7 @@ Convert a Leanpub-formatted md quiz file to a Coursera-formatted yaml quiz file 
 
 good_quiz_path <- file.path(
   system.file('extdata', package = 'leanbuild'),
-  "good_quiz.md")
+  "quiz_good.md")
 
 # Provide path to quiz to convert
 convert_quiz(good_quiz_path)

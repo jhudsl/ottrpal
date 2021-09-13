@@ -25,7 +25,7 @@ Is called by [leanbuild::check_all_questions] and run for each question.
 
 good_quiz_path <- file.path(
   system.file('extdata', package = 'leanbuild'),
-  "good_quiz.md")
+  "quiz_good.md")
 
 good_quiz <- readLines(good_quiz_path)
 good_quiz_specs <- parse_quiz(good_quiz)

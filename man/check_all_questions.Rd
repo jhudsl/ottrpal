@@ -2,7 +2,7 @@
 % Please edit documentation in R/quiz.R
 \name{check_all_questions}
 \alias{check_all_questions}
-\title{Check All Quiz Questions}
+\title{Check all quiz questions}
 \usage{
 check_all_questions(quiz_specs, quiz_name = NULL, verbose = TRUE)
 }
@@ -42,7 +42,7 @@ quiz_checks <- check_all_questions(quiz_specs)
 
 good_quiz_path <- file.path(
   system.file('extdata', package = 'leanbuild'),
-  "good_quiz.md")
+  "quiz_good.md")
 
 good_quiz <- readLines(good_quiz_path)
 good_quiz_specs <- parse_quiz(good_quiz)
@@ -52,7 +52,7 @@ good_quiz_checks <- check_all_questions(good_quiz_specs)
 
 bad_quiz_path <- file.path(
   system.file('extdata', package = 'leanbuild'),
-  "bad_quiz.md")
+  "quiz_bad.md")
 
 bad_quiz <- readLines(bad_quiz_path)
 bad_quiz_specs <- parse_quiz(bad_quiz)

@@ -29,7 +29,7 @@
 #'
 #' good_quiz_path <- file.path(
 #'   system.file('extdata', package = 'leanbuild'),
-#'   "good_quiz.md")
+#'   "quiz_good.md")
 #'
 #' # Use readLines to read in a quiz
 #' quiz_lines <- readLines(good_quiz_path)
@@ -112,7 +112,7 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
 #'
 #' good_quiz_path <- file.path(
 #'   system.file('extdata', package = 'leanbuild'),
-#'   "good_quiz.md")
+#'   "quiz_good.md")
 #'
 #' quiz_lines <- readLines(good_quiz_path)
 #'
@@ -181,8 +181,9 @@ parse_q_tag <- function(tag) {
 
 #' Parse Quiz and Other Checking Functions
 #'
-#' @param quiz A character vector of the contents of the markdown
+#' @param quiz_lines A character vector of the contents of the markdown
 #' file obtained from readLines()
+#' @param quiz_name A character vector indicating the name of the quiz.
 #' @param verbose Would you like progress messages? TRUE/FALSE
 #' @return A list of elements, including a `data.frame` and metadata
 #' for questions
@@ -208,8 +209,9 @@ parse_q_tag <- function(tag) {
 #' check_quiz_attributes(quiz_specs)
 #'
 #'
-#' # quiz_lines <- readLines("quizzes/quiz_ch1.md")
-parse_quiz <- function(quiz_lines, quiz_name = NULL, verbose = FALSE) {
+parse_quiz <- function(quiz_lines,
+                       quiz_name = NULL,
+                       verbose = FALSE) {
   answer <- meta <- repeated <- question <- number <- NULL
   rm(list = c("number", "question", "repeated", "answer", "meta"))
 
@@ -277,9 +279,11 @@ extract_quiz <- function(quiz_lines) {
   return(quiz_lines)
 }
 
-#' Check Quiz Information
+#' Check Quiz Attributes
 #'
-#' @param quiz The output from [leanbuild::parse_quiz]
+#' @param quiz_specs The output from [leanbuild::parse_quiz].
+#' @param quiz_name A character string indicating the name of the quiz being checked.
+#' @param verbose Would you like progress messages? TRUE/FALSE
 #'
 #' @return A logical
 #' @export
@@ -315,8 +319,7 @@ extract_quiz <- function(quiz_lines) {
 #' check_quiz_attributes(quiz_specs)
 #' check_quiz_question_attributes(quiz_specs)
 #'
-#' @rdname parse_quiz
-
+#'
 check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
 
   # Assume good until otherwise
@@ -357,10 +360,30 @@ check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) 
 
   return(metadata_msg)
 }
-
-#' @export
-#' @rdname parse_quiz
+#' Check a question's attributes
+#'
+#' This is ran automatically by [leanbuild::check_all_questions] for all questions.
+#' It checks that the attributes specified are accepted ones by Leanpub.
+#'
+#' @param question_df a data.frame obtained from [leanbuild::parse_quiz_df] and dplyr::group_split(question).
+#' @param quiz_name inherited from parse
 #' @param verbose print diagnostic messages
+#'
+#' @export
+#'
+#' @examples
+#'
+#' good_quiz_path <- file.path(
+#'   system.file('extdata', package = 'leanbuild'),
+#'   "quiz_good.md")
+#'
+#' # Use readLines to read in a quiz
+#' quiz_lines <- readLines(good_quiz_path)
+#'
+#' # Use
+#' question_df <- parse_quiz_df(quiz_lines) %>%
+#'   dplyr::group_split(question)
+#'
 #'
 check_quiz_question_attributes <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 
@@ -396,7 +419,7 @@ check_quiz_question_attributes <- function(question_df, quiz_name = NULL, verbos
   return(attr_msg)
 }
 
-#' Check All Quiz Questions
+#' Check all quiz questions
 #'
 #' Takes output from [leanbuild::parse_quiz] and runs checks on each question in a quiz by calling [leanbuild::check_question] for each question.
 #' First splits questions into their own data frame. Returns a list of messages/warnings about each question's set up.
@@ -431,7 +454,7 @@ check_quiz_question_attributes <- function(question_df, quiz_name = NULL, verbos
 #'
 #' good_quiz_path <- file.path(
 #'   system.file('extdata', package = 'leanbuild'),
-#'   "good_quiz.md")
+#'   "quiz_good.md")
 #'
 #' good_quiz <- readLines(good_quiz_path)
 #' good_quiz_specs <- parse_quiz(good_quiz)
@@ -441,7 +464,7 @@ check_quiz_question_attributes <- function(question_df, quiz_name = NULL, verbos
 #'
 #' bad_quiz_path <- file.path(
 #'   system.file('extdata', package = 'leanbuild'),
-#'   "bad_quiz.md")
+#'   "quiz_bad.md")
 #'
 #' bad_quiz <- readLines(bad_quiz_path)
 #' bad_quiz_specs <- parse_quiz(bad_quiz)
@@ -493,7 +516,7 @@ check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
 #'
 #' good_quiz_path <- file.path(
 #'   system.file('extdata', package = 'leanbuild'),
-#'   "good_quiz.md")
+#'   "quiz_good.md")
 #'
 #' good_quiz <- readLines(good_quiz_path)
 #' good_quiz_specs <- parse_quiz(good_quiz)
@@ -695,14 +718,14 @@ check_quizzes <- function(path = "quizzes",
 #' # Take a look at a failed quiz's checks:
 #' good_quiz_path <- file.path(
 #'   system.file('extdata', package = 'leanbuild'),
-#'   "good_quiz.md")
+#'   "quiz_good.md")
 #'
 #' good_checks <- check_quiz(good_quiz_path)
 #'
 #' # Take a look at a failed quiz's checks:
 #' bad_quiz_path <- file.path(
 #'   system.file('extdata', package = 'leanbuild'),
-#'   "bad_quiz.md")
+#'   "quiz_bad.md")
 #'
 #' failed_checks <- check_quiz(bad_quiz_path)
 #'

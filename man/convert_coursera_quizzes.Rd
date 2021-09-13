@@ -31,7 +31,7 @@ dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
 
 good_quiz_path <- file.path(
   system.file('extdata', package = 'leanbuild'),
-  "good_quiz.md")
+  "quiz_good.md")
 
 file.copy(from = good_quiz_path,
           to = file.path(tdir, basename(good_quiz_path)))
