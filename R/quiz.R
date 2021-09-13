@@ -203,7 +203,7 @@ parse_quiz <- function(quiz_lines, quiz_name = NULL, verbose = FALSE) {
   quiz_info <- list(
     data = quiz_df,
     question_metadata = meta,
-    original_quiz_specification = full_quiz_spec,
+    quiz_tag = full_quiz_spec,
     quiz_metadata = quiz_meta
   )
   return(quiz_info)
@@ -270,6 +270,7 @@ extract_quiz <- function(quiz_lines) {
 #' quiz_specs <- parse_quiz(quiz)
 #' check_quiz_attributes(quiz_specs)
 #' check_quiz_question_attributes(quiz_specs)
+#'
 #' @rdname parse_quiz
 
 check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
@@ -359,6 +360,8 @@ check_quiz_question_attributes <- function(question_df, quiz_name = NULL, verbos
 #' @export check_all_questions
 #'
 #' @examples
+#'
+#' ## Simple one question example:
 #' quiz <- c(
 #'   "{quiz, id: quiz_00_filename, choose-answers: 4}",
 #'   "### Lesson Name quiz",
@@ -374,6 +377,19 @@ check_quiz_question_attributes <- function(question_df, quiz_name = NULL, verbos
 #' quiz_specs <- parse_quiz(quiz)
 #' quiz_checks <- check_all_questions(quiz_specs)
 #'
+#'
+#' ## A more complicated example using good quiz md example
+#'
+#' good_quiz <- readLines(leanbuild::good_quiz_path)
+#' good_quiz_specs <- parse_quiz(good_quiz)
+#' check_all_questions(good_quiz_specs)
+#'
+#' ## A more complicated example using good quiz md example
+#'
+#' bad_quiz <- readLines(leanbuild::bad_quiz_path)
+#' bad_quiz_specs <- parse_quiz(bad_quiz)
+#' check_all_questions(bad_quiz_specs)
+#'
 check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
 
   # Remove header part and split into per question data frames
@@ -381,13 +397,25 @@ check_all_questions <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
     dplyr::filter(question > 0) %>%
     dplyr::group_split(question)
 
-  result <- lapply(
+  # Get prompt names
+  question_names <- quiz_specs$data %>%
+    dplyr::filter(type == "prompt") %>%
+    dplyr::pull(original)
+
+  # Remove beginning format
+  question_names <- stringr::str_remove(question_names, "^\\? ")
+
+  # Run checks on each question
+  question_checks <- lapply(
     question_dfs,
     check_question,
     quiz_name = quiz_name
   )
 
-  return(result)
+  # Add names to question check list
+  names(question_checks) <- question_names
+
+  return(question_checks)
 }
 
 #' Check Quiz Question Set Up
@@ -411,6 +439,8 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 
   # Get prompt
   prompt <- question_df$original[question_df$type == "prompt"]
+
+  prompt <- stringr::str_remove(prompt, "^\\? ")
 
   # Piece together a quiz identity
   quiz_identity <- paste0(substr(prompt, 0, 20), " of quiz: ", quiz_name)
@@ -512,16 +542,16 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
   }
 
     # Store all warning messages as a list; they will say "good" if nothing is detected as wrong
-  result <- list(
-    attr_msg,
-    colon_msg,
-    tot_ans_msg,
-    cor_ans_msg,
-    inc_ans_msg,
-    exclam_msg
+  question_result <- list(
+    attributes = attr_msg,
+    no_colons = colon_msg,
+    total_answers = tot_ans_msg,
+    correct_answers = cor_ans_msg,
+    incorrect_answers = inc_ans_msg,
+    no_exclamations = exclam_msg
   )
 
-  return(list)
+  return(question_result)
 }
 
 #' Check Quizzes
@@ -547,13 +577,16 @@ check_question <- function(question_df, quiz_name = NULL, verbose = TRUE) {
 #'   "m) Mandatory different answer",
 #'   "{/quiz}"
 #' )
+#'
+#' ## Make a temporary quiz directory
 #' tdir <- tempfile()
 #' dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
 #' tfile <- tempfile(pattern = "quiz_", fileext = ".md", tmpdir = tdir)
 #' writeLines(quiz, tfile)
+#'
+#' ## Now check the quizzes in that directory
 #' check_quizzes(path = tdir)
 #'
-#' check_quiz(quiz)
 check_quizzes <- function(path = "quizzes",
                           verbose = TRUE) {
   files <- list.files(

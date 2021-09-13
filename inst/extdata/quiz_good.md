@@ -3,7 +3,7 @@
 
 ## Template quiz
 
-Put any other instructions your quiz takers need to know here like: Choose the best answer.
+Put any other instructions your quiz takers need to know here like, Choose the best answer.
 
 {choose-answers: 4}
 ? First question to ask goes here. (Note- you need a question mark at end like this. Just one is required if using a question mark in your question field)?
@@ -15,10 +15,10 @@ m) A second mandatory incorrect answer
 o) An optional incorrect answer here marked with an "o"
 o) A second optional incorrect answer here
 
-? Example without choose answers?
+? Example without choose answers
 
 a) A first wrong answer
-B) The correct answer which is capitalized!
+B) The correct answer which is capitalized
 c) Some wrong answer
 d) Some other wrong answer
 
@@ -33,7 +33,7 @@ o) An optional incorrect answer here marked with an "o"
 o) A second optional incorrect answer here
 
 {choose-answers: 4}
-? A more complicated example. Note the question mark at the end of the options! Which of the following are correct:
+? A more complicated example. Note the question mark at the end of the options. Which of the following are correct...
 1. An option described
 2. A second option
 3. A third option
