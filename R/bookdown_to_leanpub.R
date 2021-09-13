@@ -264,9 +264,8 @@ bookdown_to_leanpub <- function(path = ".",
 
   #### Run quiz checks
   if (run_quiz_checks) {
-    quiz_checks <- check_quizzes(quiz_dir)
-
-    readr::write_csv()
+    quiz_checks <- check_quizzes(quiz_dir,
+                                 verbose = verbose)
   }
   out <- NULL
   if (make_book_txt) {

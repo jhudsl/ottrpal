@@ -687,6 +687,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 #'
 #' @param quiz_dir A path to a directory full of quizzes that should all be checked with [leanbuild::check_all_quizzes].
 #' @param verbose print diagnostic messages
+#' @param write_report TRUE/FALSE save warning report to a CSV file?
 #'
 #' @return A list checks performed on each quiz
 #'
@@ -717,6 +718,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 #' all_quiz_results <- check_quizzes(path = tdir)
 #'
 check_quizzes <- function(quiz_dir = "quizzes",
+                          write_report = TRUE,
                           verbose = TRUE) {
   files <- list.files(
     pattern = "\\.md",
@@ -733,12 +735,22 @@ check_quizzes <- function(quiz_dir = "quizzes",
     check_quiz(quiz_path, verbose = verbose)
   })
 
-  dplyr::bind_rows(all_quiz_results$question_checks)
-
   # Name the results with the file names
   names(all_quiz_results) <- basename(files)
 
-  return(all_quiz_results)
+  # Make into one data.frame
+  question_report <- dplyr::bind_rows(all_quiz_results$question_checks)
+
+  if (write_report) {
+    if (nrow(question_report) > 0) {
+      message("Question error report saved to 'question_error_report.csv'")
+      readr::write_csv(question_report,
+                       'question_error_report.csv')
+    } else{
+      message("No question errors to report!")
+    }
+  }
+  return(question_report)
 }
 
 #' Check Quiz
@@ -754,16 +766,11 @@ check_quizzes <- function(quiz_dir = "quizzes",
 #'
 #' @examples
 #'
-#' # Take a look at a failed quiz's checks:
-#'
+#' # Take a look at a good quiz's checks:
 #' good_checks <- check_quiz(good_quiz_path())
 #'
 #' # Take a look at a failed quiz's checks:
-#' bad_quiz_path <- file.path(
-#'   system.file('extdata', package = 'leanbuild'),
-#'   "quiz_bad.md")
-#'
-#' failed_checks <- check_quiz(bad_quiz_path)
+#' failed_checks <- check_quiz(bad_quiz_path())
 #'
 check_quiz <- function(quiz_path, verbose = TRUE) {
   if (verbose) {
