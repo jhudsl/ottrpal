@@ -377,19 +377,9 @@ check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) 
 #' @param quiz_name inherited from parse
 #' @param verbose print diagnostic messages
 #'
-#' @export
-#'
-#' @examples
-#'
-#' # Use readLines to read in a quiz
-#' quiz_lines <- readLines(good_quiz_path())
-#'
-#' # Use
-#' question_df <- parse_quiz_df(quiz_lines) %>%
-#'   dplyr::group_split(question)
-#'
-#'
-check_quiz_question_attributes <- function(question_df, quiz_name = NULL, verbose = TRUE) {
+check_quiz_question_attributes <- function(question_df,
+                                           quiz_name = NULL,
+                                           verbose = TRUE) {
 
   # Assume good until shown otherwise
   attr_msg <- "good"
@@ -520,7 +510,7 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 #'   dplyr::group_split(question)
 #'
 #' question_df <- questions_df[[2]]
-#' good_quiz_checks <- check_question(question_df[[2]])
+#' good_quiz_checks <- check_question(question_df)
 #'
 check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 
