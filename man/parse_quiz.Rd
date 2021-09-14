@@ -3,52 +3,33 @@
 \name{parse_quiz}
 \alias{parse_quiz}
 \alias{extract_quiz}
-\alias{find_quiz_indices}
-\alias{check_quiz_attributes}
-\alias{check_quiz_question_attributes}
-\alias{check_attributes}
 \title{Parse Quiz and Other Checking Functions}
 \usage{
-parse_quiz(quiz)
+parse_quiz(quiz_lines, quiz_name = NULL, verbose = FALSE)
 
-extract_quiz(quiz)
-
-find_quiz_indices(quiz)
-
-check_quiz_attributes(quiz, verbose = TRUE)
-
-check_quiz_question_attributes(quiz, verbose = TRUE)
-
-check_attributes(quiz, verbose = TRUE)
+extract_quiz(quiz_lines)
 }
 \arguments{
-\item{quiz}{The output from [leanbuild::parse_quiz]}
+\item{quiz_lines}{A quiz's contents read in with readLines()}
 
-\item{verbose}{print diagnostic messages}
+\item{quiz_name}{A character vector indicating the name of the quiz.}
+
+\item{verbose}{Would you like progress messages? TRUE/FALSE}
 }
 \value{
 A list of elements, including a `data.frame` and metadata
 for questions
 
 the lines of the quiz that actually contain of the content of the quiz.
-
-the indices that indicate the beginning and end of the quiz itself.
-Looks for the quiz tag.
-
-A logical
 }
 \description{
 Parse Quiz and Other Checking Functions
 
 Extract lines of the quiz
-
-Retrieve quiz index range
-
-Check Quiz Information
 }
 \examples{
 
-quiz <- c(
+quiz_lines <- c(
   "{quiz, id: quiz_00_filename}",
   "### Lesson Name quiz",
   "{choose-answers: 4}",
@@ -62,35 +43,8 @@ quiz <- c(
   "",
   "{/quiz}"
 )
-out <- parse_quiz(quiz)
-check_quiz_attributes(out)
+quiz_specs <- parse_quiz(quiz_lines)
+check_quiz_attributes(quiz_specs)
 
-quiz <- c(
-  "{quiz, id: quiz_00_filename, choose-answers: 4}",
-  "### Lesson Name quiz",
-  "{choose-answers: 4, attempts: 25}",
-  "? What do you think?",
-  "C) The answer to this one",
-  "o) Not the answer",
-  "o) Not the answer either",
-  "C) Another correct answer",
-  "m) Mandatory different answer",
-  "{/quiz}"
-)
-out <- parse_quiz(quiz)
-check_quiz_attributes(out)
-check_quiz_question_attributes(out)
 
-quiz <- c(
-  "{quiz, id: quiz_00_filename, choose-answers: 4}",
-  "### Lesson Name quiz",
-  "{choose-answers: 4, attempts: 25}",
-  "",
-  "? What do you think?",
-  "! The answer to this one",
-  "{/quiz}"
-)
-out <- parse_quiz(quiz)
-check_quiz_attributes(out)
-check_quiz_question_attributes(out)
 }

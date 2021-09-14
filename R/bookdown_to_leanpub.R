@@ -154,6 +154,7 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
 #' @param verbose print diagnostic messages
 #' @param remove_resources_start remove the word `resources/` at the front
 #' of any image path.
+#' @param run_quiz_checks TRUE/FALSE run quiz checks
 #' @param make_book_txt Should [leanbuild::bookdown_to_book_txt()] be run
 #' to create a `Book.txt` in the output directory?
 #' @param quiz_dir directory that contains the quiz .md files that should be
@@ -169,6 +170,7 @@ bookdown_to_leanpub <- function(path = ".",
                                 output_dir = "manuscript",
                                 make_book_txt = FALSE,
                                 quiz_dir = "quizzes",
+                                run_quiz_checks = FALSE,
                                 remove_resources_start = FALSE,
                                 verbose = TRUE,
                                 footer_text = NULL) {
@@ -258,6 +260,12 @@ bookdown_to_leanpub <- function(path = ".",
         con = infile, sep = "\n"
       )
     }
+  }
+
+  #### Run quiz checks
+  if (run_quiz_checks) {
+    quiz_checks <- check_quizzes(quiz_dir,
+                                 verbose = verbose)
   }
   out <- NULL
   if (make_book_txt) {

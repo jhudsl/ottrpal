@@ -41,8 +41,7 @@ Suggests:
     testthat
 Encoding: UTF-8
 LazyData: true
-Remotes:
-    jhudsl/text2speech,
+Remotes: jhudsl/text2speech,
     jhudsl/didactr,
     hairizuanbinnoorazman/rgoogleslides
 ByteCompile: true
