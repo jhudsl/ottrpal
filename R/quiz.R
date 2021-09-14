@@ -506,11 +506,10 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 #' quiz_lines <- readLines(good_quiz_path())
 #'
 #' # Use group_split to get the questions
-#' questions_df <- parse_quiz_df(quiz_lines) %>%
+#' questions_df <- parse_quiz(quiz_lines)$data %>%
 #'   dplyr::group_split(question)
 #'
-#' question_df <- questions_df[[2]]
-#' good_quiz_checks <- check_question(question_df)
+#' good_quiz_checks <- check_question(questions_df[[2]])
 #'
 check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 
