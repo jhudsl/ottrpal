@@ -23,7 +23,7 @@ Check the formatting of all quizzes in a given directory.
 
 
 ## Make a temporary quiz directory
-quiz_dir <- dirname(good_quiz_path)
+quiz_dir <- dirname(good_quiz_path())
 
 ## Now check the quizzes in that directory
 all_quiz_results <- check_quizzes(quiz_dir = quiz_dir)
