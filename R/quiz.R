@@ -458,7 +458,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
   prompt <- stringr::str_remove(prompt, "^\\? ")
 
   # Piece together a quiz identity
-  quiz_identity <- paste0(substr(prompt, 0, 20), " ... \n In quiz: ", quiz_name)
+  quiz_identity <- paste0(substr(prompt, 0, 20), " ... in quiz: ", quiz_name)
 
   # Only run this if there is an actual prompt and start to the question
   if (verbose) {
@@ -477,8 +477,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
     colon_msg <- paste0(
       "Colon detected in question on lines: ",
       paste0(colon_index, collapse = ", "),
-      "\n in question starting with:",  quiz_identity,
-      "\n Get rid of colon -- will mess up formatting in Coursera."
+      " in question starting with:",  quiz_identity
     )
     warning(colon_msg)
   } else {
@@ -565,8 +564,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
     exclam_index <- paste0(exclam_index, collapse = ", ")
 
     exclam_msg <- paste0(
-      "Exclamation point detected in answer for: ", quiz_identity,
-      "\n Get rid of exclamation -- will mess up formatting in Leanpub."
+      "Exclamation point detected in answer for: ", quiz_identity
     )
     warning(exclam_msg)
   } else {
@@ -647,17 +645,17 @@ check_quizzes <- function(quiz_dir = "quizzes",
   question_checks <- lapply(all_quiz_results, function(quiz_report) {quiz_report$question_checks})
 
   # Make into one data.frame
-  question_report <- dplyr::bind_rows(question_checks, .id = "quiz_name")
+  question_report <- dplyr::bind_rows(question_checks) %>%
+    dplyr::arrange("quiz")
 
   if (write_report) {
     if (nrow(question_report) > 0) {
-      message("Question error report saved to 'question_error_report.csv'")
-      write.csv(question_report,
-        file = "question_error_report.csv",
-        quote = FALSE, row.names = FALSE
+      message("\n Question error report saved to 'question_error_report.tsv'")
+      readr::write_tsv(question_report,
+        file = "question_error_report.tsv"
       )
     } else {
-      message("No question errors to report!")
+      message("\n No question errors to report!")
     }
   }
   return(question_report)
@@ -685,7 +683,7 @@ check_quizzes <- function(quiz_dir = "quizzes",
 #' failed_checks <- check_quiz(quiz_path)
 check_quiz <- function(quiz_path, verbose = TRUE) {
   if (verbose) {
-    message(paste0("Checking quiz: ", quiz_path))
+    message(paste0("\n Checking quiz: ", quiz_path))
   }
   # Read in quiz
   quiz_lines <- readLines(quiz_path)

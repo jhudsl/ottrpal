@@ -152,7 +152,7 @@ Leanpub can be very particular about the formatting of the quizzes, so there are
 In the main argument, you can set `run_quiz_checks` to `TRUE` (the default is `FALSE`).
 
 ```
-leanbuild::bookdown_to_leanpub(make_book_txt = TRUE)
+leanbuild::bookdown_to_leanpub(run_quiz_checks = TRUE)
 ```
 
 But the quiz checks can also be run separately using the `check_quizzes()` function. 
@@ -165,21 +165,24 @@ We can take a look at how `check_quizzes()` runs using a quiz examples: one that
 good_quiz_path <- good_quiz_path()
 
 dest_quiz_path <- file.path("quizzes", basename(good_quiz_path))
-                       
-file.copy(from = good_quiz_path, 
-          to = dest_quiz_path)
+              
+if (!file.exists(dest_quiz_path)){         
+  file.copy(from = good_quiz_path, 
+            to = dest_quiz_path)
+}
 ```
 
 Run `check_quizzes()` to check all quizzes in the directory.
 
 ```{r}
-check_quizzes(quiz_dir = "quizzes")
+quiz_checklist <- check_quizzes(quiz_dir = "quizzes")
 ```
+
 We can take a look at what a typical quiz format looks like: 
 
 ```{r}
 quiz_lines <- readLines(dest_quiz_path)
-quiz_lines
+head(quiz_lines)
 ```
 
 Now let's add in a bad quiz and see how the report changes.
@@ -189,16 +192,30 @@ Now let's add in a bad quiz and see how the report changes.
 bad_quiz_path <- bad_quiz_path()
 
 dest_quiz_path <- file.path("quizzes", basename(bad_quiz_path))
-                       
-file.copy(from = bad_quiz_path, 
-          to = dest_quiz_path)
+
+if (!file.exists(dest_quiz_path)){                
+  file.copy(from = bad_quiz_path, 
+            to = dest_quiz_path)
+}
 ```
 
 Let's re-run `check_quizzes()`. 
 
 ```{r}
-check_quizzes(quiz_dir = "quizzes")
+quiz_checklist <- check_quizzes(quiz_dir = "quizzes")
 ```
+
+We have some warning messages about various items and the errors have been saved to `'question_error_report.tsv'` which we can read in and check out. 
+Each line shows an error detected, what quiz file it was detected in, the line it's roughly associated with and the warning message which explains what the problem is. 
+
+```{r}
+error_df <- readr::read_tsv("question_error_report.tsv")
+
+error_df
+```
+
+Now you would just need to go into each of those files and fix the stated problem. 
+Then you can re-run `check_quizzes()` and see if the warning is resolved. 
 
 ## Adding footer text:
 
