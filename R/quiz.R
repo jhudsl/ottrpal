@@ -277,7 +277,7 @@ check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) 
   metadata_msg <- "good"
 
   # Set up as tibble
-  quiz_metadata <- tibble::as_tibble(quiz_specs$quiz_metadata)
+  quiz_metadata <- quiz_specs$quiz_metadata
 
   # These are the accepted quiz attributes
   quiz_attributes <- c(
