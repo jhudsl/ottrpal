@@ -309,6 +309,7 @@ bookdown_to_leanpub <- function(path = ".",
 #'
 #' @return A list of quiz and chapter files in order in a file called Book.txt -- How Leanpub wants it.
 #' @export
+#'
 bookdown_to_book_txt <- function(path = ".",
                                  output_dir = "manuscript",
                                  quiz_dir = "quizzes",

@@ -1,36 +1,6 @@
+# C. Savonen 2021
 
 utils::globalVariables(c("question", "original", "n", "metadata_check", "index"))
-
-#' Path to good example quiz
-#'
-#' @export
-#'
-#' @examples
-#'
-#' quiz_path <- good_quiz_path()
-#'
-good_quiz_path <- function() {
-  list.files(pattern = "quiz_good.md$",
-             system.file('extdata', package = 'leanbuild'),
-             full.names = TRUE)
-}
-
-#' Path to bad example quiz
-#'
-#' @export
-#'
-#' @examples
-#'
-#' quiz_path <- bad_quiz_path()
-#'
-bad_quiz_path <- function() {
-  list.files(pattern = "quiz_bad.md$",
-             system.file('extdata', package = 'leanbuild'),
-             full.names = TRUE)
-}
-
-# save(bad_quiz, bad_quiz, file = "bad_quiz.RData")
-# save(good_quiz, good_quiz, file = "good_quiz.RData")
 
 #' Parse quiz into a data.frame
 #'
@@ -49,10 +19,7 @@ bad_quiz_path <- function() {
 #'
 #' # Can use this to parse the quiz into a data.frame
 #' quiz_df <- parse_quiz_df(quiz_lines)
-#'
-
 parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
-
   quiz_df <- tibble::tibble(
     original = quiz_lines,
     trimmed = trimws(quiz_lines, which = "left"),
@@ -136,7 +103,6 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
 #'
 #' # Extract metadata tags
 #' meta <- extract_meta(tags)
-#'
 extract_meta <- function(tags) {
 
   # trim whitespace
@@ -217,8 +183,6 @@ parse_q_tag <- function(tag) {
 #' )
 #' quiz_specs <- parse_quiz(quiz_lines)
 #' check_quiz_attributes(quiz_specs)
-#'
-#'
 parse_quiz <- function(quiz_lines,
                        quiz_name = NULL,
                        verbose = FALSE) {
@@ -413,7 +377,6 @@ check_quiz_question_attributes <- function(question_df,
 #' bad_quiz <- readLines(bad_quiz_path())
 #' bad_quiz_specs <- parse_quiz(bad_quiz)
 #' bad_quiz_checks <- check_all_questions(bad_quiz_specs)
-#'
 check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 
   # Remove header part and split into per question data frames
@@ -469,7 +432,6 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 #'   dplyr::group_split(question)
 #'
 #' good_quiz_checks <- check_question(questions_df[[2]])
-#'
 check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 
   # Things are considered innocent until proven guilty
@@ -500,7 +462,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
     dplyr::filter(grepl("\\:", original)) %>%
     dplyr::pull(index)
 
-  if (length(colon_index) > 0 ) {
+  if (length(colon_index) > 0) {
     # Collapse in case there are multiple infractions
     colon_index <- paste0(colon_index, collapse = ", ")
 
@@ -562,7 +524,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 
     # Check the attributes
     attr_msg <- check_quiz_question_attributes(question_df,
-                                               quiz_name = quiz_name
+      quiz_name = quiz_name
     )
 
     if ("choose-answers" %in% names(question_meta)) {
@@ -610,7 +572,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
     cor_ans_msg,
     inc_ans_msg,
     exclam_msg
-    )
+  )
   related_index <- c(
     as.numeric(colon_index),
     as.numeric(tot_ans_index),
@@ -620,9 +582,11 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
   )
 
   # Store all warning messages as a list; they will say "good" if nothing is detected as wrong
-  question_result <- data.frame(quiz = rep(quiz_name, length(related_index)),
-                                warning_msg,
-                                related_index) %>%
+  question_result <- data.frame(
+    quiz = rep(quiz_name, length(related_index)),
+    warning_msg,
+    related_index
+  ) %>%
     # Now filter out the good ones
     dplyr::filter(warning_msg != "good")
 
@@ -650,7 +614,6 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 #'
 #' ## Now check the quizzes in that directory
 #' all_quiz_results <- check_quizzes(quiz_dir = quiz_dir)
-#'
 check_quizzes <- function(quiz_dir = "quizzes",
                           write_report = TRUE,
                           verbose = TRUE) {
@@ -678,9 +641,11 @@ check_quizzes <- function(quiz_dir = "quizzes",
   if (write_report) {
     if (nrow(question_report) > 0) {
       message("Question error report saved to 'question_error_report.csv'")
-      write.csv(question_report, file = 'question_error_report.csv',
-                quote = FALSE, row.names = FALSE)
-    } else{
+      write.csv(question_report,
+        file = "question_error_report.csv",
+        quote = FALSE, row.names = FALSE
+      )
+    } else {
       message("No question errors to report!")
     }
   }
@@ -707,7 +672,6 @@ check_quizzes <- function(quiz_dir = "quizzes",
 #' # Take a look at a failed quiz's checks:
 #' quiz_path <- good_quiz_path()
 #' failed_checks <- check_quiz(quiz_path)
-#'
 check_quiz <- function(quiz_path, verbose = TRUE) {
   if (verbose) {
     message(paste0("Checking quiz: ", quiz_path))
