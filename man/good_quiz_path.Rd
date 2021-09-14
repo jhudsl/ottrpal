@@ -11,6 +11,6 @@ Path to good example quiz
 }
 \examples{
 
-good_quiz <- readLines(good_quiz_path())
+quiz_path <- good_quiz_path()
 
 }

@@ -11,6 +11,6 @@ Path to bad example quiz
 }
 \examples{
 
-bad_quiz <- readLines(bad_quiz_path())
+quiz_path <- bad_quiz_path()
 
 }

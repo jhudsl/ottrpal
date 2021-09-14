@@ -34,7 +34,9 @@ Imports: googledrive,
     rprojroot,
     magrittr,
     yaml,
-    stringr
+    stringr,
+    rgoogleslides,
+    methods
 Suggests:
     knitr,
     testthat

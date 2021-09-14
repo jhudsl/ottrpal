@@ -21,7 +21,8 @@ Parse quiz into a data.frame
 \examples{
 
 # Use readLines() to read in a quiz
-quiz_lines <- readLines(good_quiz_path())
+quiz_path <- good_quiz_path()
+quiz_lines <- readLines(quiz_path)
 
 # Can use this to parse the quiz into a data.frame
 quiz_df <- parse_quiz_df(quiz_lines)
