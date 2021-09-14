@@ -40,7 +40,7 @@ gs_convert = function(
   use_gs_pngs = TRUE,
   ...) {
 
-  check_didactr_auth()
+  check_auth()
   if (is.character(id)) {
     id = get_slide_id(id)
   }

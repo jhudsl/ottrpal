@@ -20,7 +20,6 @@ License: GPL-3
 Imports: googledrive,
     dplyr,
     httr,
-    didactr,
     fs,
     jsonlite,
     utils,
@@ -42,7 +41,6 @@ Suggests:
 Encoding: UTF-8
 LazyData: true
 Remotes: jhudsl/text2speech,
-    jhudsl/didactr,
     hairizuanbinnoorazman/rgoogleslides
 ByteCompile: true
 Type: Package
