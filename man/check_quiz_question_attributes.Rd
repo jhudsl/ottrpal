@@ -17,14 +17,3 @@ check_quiz_question_attributes(question_df, quiz_name = NULL, verbose = TRUE)
 This is ran automatically by [leanbuild::check_all_questions] for all questions.
 It checks that the attributes specified are accepted ones by Leanpub.
 }
-\examples{
-
-# Use readLines to read in a quiz
-quiz_lines <- readLines(good_quiz_path())
-
-# Use
-question_df <- parse_quiz_df(quiz_lines) \%>\%
-  dplyr::group_split(question)
-
-
-}
