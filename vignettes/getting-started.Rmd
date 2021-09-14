@@ -182,10 +182,22 @@ quiz_lines <- readLines(dest_quiz_path)
 quiz_lines
 ```
 
-Good quiz example: 
+Now let's add in a bad quiz and see how the report changes.
 
 ```{r}
-good_quiz_path()
+# Set up an good example quiz
+bad_quiz_path <- bad_quiz_path()
+
+dest_quiz_path <- file.path("quizzes", basename(bad_quiz_path))
+                       
+file.copy(from = bad_quiz_path, 
+          to = dest_quiz_path)
+```
+
+Let's re-run `check_quizzes()`. 
+
+```{r}
+check_quizzes(quiz_dir = "quizzes")
 ```
 
 ## Adding footer text:

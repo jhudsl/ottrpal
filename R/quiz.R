@@ -643,8 +643,11 @@ check_quizzes <- function(quiz_dir = "quizzes",
   # Name the results with the file names
   names(all_quiz_results) <- basename(files)
 
+  # Only extract the question checks
+  question_checks <- lapply(all_quiz_results, function(quiz_report) {quiz_report$question_checks})
+
   # Make into one data.frame
-  question_report <- dplyr::bind_rows(all_quiz_results$question_checks)
+  question_report <- dplyr::bind_rows(question_checks, .id = "quiz_name")
 
   if (write_report) {
     if (nrow(question_report) > 0) {
