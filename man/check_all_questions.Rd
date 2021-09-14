@@ -34,5 +34,4 @@ good_quiz_checks <- check_all_questions(good_quiz_specs)
 bad_quiz <- readLines(bad_quiz_path())
 bad_quiz_specs <- parse_quiz(bad_quiz)
 bad_quiz_checks <- check_all_questions(bad_quiz_specs)
-
 }

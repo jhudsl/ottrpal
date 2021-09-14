@@ -17,6 +17,13 @@ Extract meta fields from a tag
 }
 \examples{
 
+### Simple example
+tag <- "{quiz, id: quiz_name_here, attempts: 10}"
+
+# Extract metadata tags
+meta <- extract_meta(tag)
+
+### Example using a file
 quiz_path <- good_quiz_path()
 quiz_lines <- readLines(quiz_path)
 
@@ -30,5 +37,4 @@ tags <- quiz_df \%>\%
 
 # Extract metadata tags
 meta <- extract_meta(tags)
-
 }

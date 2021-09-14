@@ -26,5 +26,4 @@ good_checks <- check_quiz(quiz_path)
 # Take a look at a failed quiz's checks:
 quiz_path <- good_quiz_path()
 failed_checks <- check_quiz(quiz_path)
-
 }

@@ -608,7 +608,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 #' @param write_report TRUE/FALSE save warning report to a CSV file?
 #'
 #' @return A list checks performed on each quiz
-#' @importFrom utils write.csv
+#' @importFrom readr write_tsv
 #'
 #' @export check_quizzes
 #'

@@ -26,5 +26,4 @@ quiz_lines <- readLines(quiz_path)
 
 # Can use this to parse the quiz into a data.frame
 quiz_df <- parse_quiz_df(quiz_lines)
-
 }
