@@ -90,6 +90,13 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
 #'
 #' @examples
 #'
+#' ### Simple example
+#' tag <- "{quiz, id: quiz_name_here, attempts: 10}"
+#'
+#' # Extract metadata tags
+#' meta <- extract_meta(tag)
+#'
+#' ### Example using a file
 #' quiz_path <- good_quiz_path()
 #' quiz_lines <- readLines(quiz_path)
 #'
@@ -109,7 +116,7 @@ extract_meta <- function(tags) {
   tags <- trimws(tags)
 
   # Remove brackets
-  tags <- stringr::str_remove_all(tags, "^\\{|\\}$")
+  tags <- stringr::str_remove_all(tags, "^\\{quiz, |\\}$")
 
   # Split by commas
   tags <- strsplit(tags, ",")
@@ -123,7 +130,15 @@ extract_meta <- function(tags) {
   return(meta)
 }
 
-# For example, {id: "this is , my id", number: 2}
+#' Parse apart a tag
+#'
+#' @param tag A single tag to extract from
+#' @return A named vector indicating the field and entry associated with it.
+#' @examples
+#'
+#' tag <- "{quiz, id: quiz_name_here, attempts: 10}"
+#' parse_q_tag(one_field)
+#'
 parse_q_tag <- function(tag) {
 
   # Trim whitespace
@@ -132,27 +147,24 @@ parse_q_tag <- function(tag) {
   # Get rid of empty lines
   tag <- tag[tag != ""]
 
-  # Split by colons
+  # Split by commas
   tag <- strsplit(tag, ":")
 
-  individual_tags <- sapply(tag, function(r) {
-    if (length(r) <= 1) {
-      return(r)
+  parsed_tag <- lapply(tag, function(field) {
+
+    field <- trimws(field)
+    if (length(field) > 1) {
+      field_name <- field[1]
+      field_spec <- field[2]
+
+    parsed_field <- field_spec
+    names(parsed_field) <- field_name
+    } else {
+      parsed_field <- field
     }
-    r[2] <- paste(r[2:length(r)], collapse = ":")
-    r <- r[1:2]
-    r <- trimws(r)
-    nr <- r[1]
-    r <- r[2]
-    names(r) <- nr
-    nr <- as.list(r)
-    r
+    return(parsed_field)
   })
-  individual_tags <- as.list(individual_tags)
-  if (length(individual_tags) == 0) {
-    individual_tags <- NULL
-  }
-  individual_tags
+  return(parsed_tag)
 }
 
 #' Parse Quiz and Other Checking Functions
@@ -183,6 +195,7 @@ parse_q_tag <- function(tag) {
 #' )
 #' quiz_specs <- parse_quiz(quiz_lines)
 #' check_quiz_attributes(quiz_specs)
+#'
 parse_quiz <- function(quiz_lines,
                        quiz_name = NULL,
                        verbose = FALSE) {
@@ -190,40 +203,31 @@ parse_quiz <- function(quiz_lines,
   rm(list = c("number", "question", "repeated", "answer", "meta"))
 
   # Extract only the lines of the actual quiz
-  quiz_lines <- extract_quiz(quiz_lines)
+  extracted_quiz <- extract_quiz(quiz_lines)
 
   # Quiz should have at least two lines
-  if (length(quiz_lines) < 2) {
+  if (length(extracted_quiz$quiz_lines) < 2) {
     stop("Quiz file is empty, double check file contents.")
   }
 
-  # Quiz meta data is in first line (after using extract_quiz)
-  full_quiz_spec <- quiz_meta <- quiz_lines[1]
-
-  # Remove the first part of the quiz tag
-  quiz_meta <- sub("\\{\\s*quiz(,|)", "{", quiz_meta)
-
-  # remove the "/quiz"
-  quiz_lines <- quiz_lines[2:(length(quiz_lines) - 1)]
+  # Extract the main quiz metadata
+  quiz_meta <- extract_meta(extracted_quiz$quiz_tag)
 
   # Put this in a data.frame so we can identify the content
-  quiz_df <- parse_quiz_df(quiz_lines)
+  quiz_df <- parse_quiz_df(extracted_quiz$quiz_lines)
 
   #### Extract metadata
   # Extract the tags
   tags <- quiz_df$original[quiz_df$type == "tag"]
 
   # Extract metadata tags
-  meta <- extract_meta(tags)
-
-  # Extract the main quiz metadata
-  quiz_meta <- extract_meta(quiz_meta)[[1]]
+  question_meta <- extract_meta(tags)
 
   # Put the info we need in a list
   quiz_info <- list(
     data = quiz_df,
-    question_metadata = meta,
-    quiz_tag = full_quiz_spec,
+    question_metadata = question_meta,
+    quiz_tag = extracted_quiz$quiz_tag,
     quiz_metadata = quiz_meta
   )
   return(quiz_info)
@@ -247,10 +251,14 @@ extract_quiz <- function(quiz_lines) {
   if (length(end) == 0) {
     stop("Could not find end tag of quiz; should end with: {\\quiz}.")
   }
-  # Keep only those lines:
-  quiz_lines <- quiz_lines[start:end]
+  # Extract main quiz tag
+  quiz_tag <- quiz_lines[start]
 
-  return(quiz_lines)
+  # Keep only those lines:
+  quiz_lines <- quiz_lines[(start + 1):(end - 1)]
+
+  return(list(quiz_lines = quiz_lines,
+              quiz_tag = quiz_tag))
 }
 
 #' Check Quiz Attributes
@@ -459,7 +467,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 
   ###### Check for no-no symbols:
   colon_index <- question_df %>%
-    dplyr::filter(grepl("\\:", original)) %>%
+    dplyr::filter(type != "tag", grepl("\\:", original)) %>%
     dplyr::pull(index)
 
   if (length(colon_index) > 0) {

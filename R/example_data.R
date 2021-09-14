@@ -40,8 +40,10 @@ bad_quiz_path <- function() {
 #' example_repo_setup()
 example_repo_setup <- function(dest_dir = ".") {
 
+  zip_file <- file.path(dest_dir, "example-repo.zip")
+
   download.file(url = "https://github.com/jhudsl/DaSL_Course_Template_Leanpub/raw/main/example-repo.zip",
-                destfile = file.path(dest_dir, "example-repo.zip"))
+                destfile = zip_file)
 
   # Unzip the folder
   unzip(zip_file, exdir = dest_dir)
