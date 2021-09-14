@@ -65,7 +65,7 @@ But for the purposes of this example we will download a zip file of the files we
 
 ```{r}
 # Run this to get the files we need
-example_repo_setup()
+leanbuild::example_repo_setup()
 ```
 
 Each of your Rmds needs to have a chunk of code with this at the beginning of the file:
