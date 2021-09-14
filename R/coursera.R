@@ -43,12 +43,10 @@ find_end_of_prompt <- function(start_prompt_index, type_vector) {
 #'
 #' @examples
 #'
-#' good_quiz_path <- file.path(
-#'   system.file('extdata', package = 'leanbuild'),
-#'   "quiz_good.md")
+#' quiz_path <- good_quiz_path()
 #'
 #' # Provide path to quiz to convert
-#' convert_quiz(good_quiz_path)
+#' convert_quiz(quiz_path)
 #'
 #'
 convert_quiz <- function(quiz_path,
@@ -168,6 +166,8 @@ convert_quiz <- function(quiz_path,
 #'
 #' # Provide path to directory of quizzes
 #' convert_coursera_quizzes(tdir)
+#'
+#' system("rm -r coursera_quizzes")
 #'
 convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
                                      output_quiz_dir = "coursera_quizzes",

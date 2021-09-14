@@ -35,4 +35,6 @@ file.copy(from = good_quiz_path(),
 # Provide path to directory of quizzes
 convert_coursera_quizzes(tdir)
 
+system("rm -r coursera_quizzes")
+
 }

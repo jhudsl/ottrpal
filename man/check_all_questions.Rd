@@ -24,7 +24,8 @@ First splits questions into their own data frame. Returns a list of messages/war
 
 # Using good quiz md example
 
-good_quiz <- readLines(good_quiz_path())
+quiz_path <- good_quiz_path()
+good_quiz <- readLines(quiz_path)
 good_quiz_specs <- parse_quiz(good_quiz)
 good_quiz_checks <- check_all_questions(good_quiz_specs)
 

@@ -7,10 +7,10 @@ utils::globalVariables(c("question", "original", "n", "metadata_check", "index")
 #'
 #' @examples
 #'
-#' good_quiz <- readLines(good_quiz_path())
+#' quiz_path <- good_quiz_path()
 #'
 good_quiz_path <- function() {
-  list.files(pattern = "quiz_good.md",
+  list.files(pattern = "quiz_good.md$",
              system.file('extdata', package = 'leanbuild'),
              full.names = TRUE)
 }
@@ -21,10 +21,10 @@ good_quiz_path <- function() {
 #'
 #' @examples
 #'
-#' bad_quiz <- readLines(bad_quiz_path())
+#' quiz_path <- bad_quiz_path()
 #'
 bad_quiz_path <- function() {
-  list.files(pattern = "quiz_bad.md",
+  list.files(pattern = "quiz_bad.md$",
              system.file('extdata', package = 'leanbuild'),
              full.names = TRUE)
 }
@@ -44,7 +44,8 @@ bad_quiz_path <- function() {
 #' @examples
 #'
 #' # Use readLines() to read in a quiz
-#' quiz_lines <- readLines(good_quiz_path())
+#' quiz_path <- good_quiz_path()
+#' quiz_lines <- readLines(quiz_path)
 #'
 #' # Can use this to parse the quiz into a data.frame
 #' quiz_df <- parse_quiz_df(quiz_lines)
@@ -122,7 +123,8 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
 #'
 #' @examples
 #'
-#' quiz_lines <- readLines(good_quiz_path())
+#' quiz_path <- good_quiz_path()
+#' quiz_lines <- readLines(quiz_path)
 #'
 #' # Put this in a data.frame so we can identify the content
 #' quiz_df <- parse_quiz_df(quiz_lines)
@@ -401,7 +403,8 @@ check_quiz_question_attributes <- function(question_df,
 #'
 #' # Using good quiz md example
 #'
-#' good_quiz <- readLines(good_quiz_path())
+#' quiz_path <- good_quiz_path()
+#' good_quiz <- readLines(quiz_path)
 #' good_quiz_specs <- parse_quiz(good_quiz)
 #' good_quiz_checks <- check_all_questions(good_quiz_specs)
 #'
@@ -458,7 +461,8 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 #' @examples
 #'
 #' # Use readLines to read in a quiz
-#' quiz_lines <- readLines(good_quiz_path())
+#' quiz_path <- good_quiz_path()
+#' quiz_lines <- readLines(quiz_path)
 #'
 #' # Use group_split to get the questions
 #' questions_df <- parse_quiz(quiz_lines)$data %>%
@@ -697,10 +701,12 @@ check_quizzes <- function(quiz_dir = "quizzes",
 #' @examples
 #'
 #' # Take a look at a good quiz's checks:
-#' good_checks <- check_quiz(good_quiz_path())
+#' quiz_path <- good_quiz_path()
+#' good_checks <- check_quiz(quiz_path)
 #'
 #' # Take a look at a failed quiz's checks:
-#' failed_checks <- check_quiz(bad_quiz_path())
+#' quiz_path <- good_quiz_path()
+#' failed_checks <- check_quiz(quiz_path)
 #'
 check_quiz <- function(quiz_path, verbose = TRUE) {
   if (verbose) {

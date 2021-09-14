@@ -24,7 +24,8 @@ Is called by [leanbuild::check_all_questions] and run for each question.
 \examples{
 
 # Use readLines to read in a quiz
-quiz_lines <- readLines(good_quiz_path())
+quiz_path <- good_quiz_path()
+quiz_lines <- readLines(quiz_path)
 
 # Use group_split to get the questions
 questions_df <- parse_quiz(quiz_lines)$data \%>\%
