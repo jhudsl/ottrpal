@@ -40,12 +40,8 @@ bad_quiz_path <- function() {
 #' example_repo_setup()
 example_repo_setup <- function(dest_dir = ".") {
 
-  # Find example folder file
-  zip_file <- list.files(
-    pattern = "example-repo.zip",
-    system.file("extdata", package = "leanbuild"),
-    full.names = TRUE
-  )
+  download.file(url = "https://github.com/jhudsl/DaSL_Course_Template_Leanpub/raw/main/example-repo.zip",
+                destfile = file.path(dest_dir, "example-repo.zip"))
 
   # Unzip the folder
   unzip(zip_file, exdir = dest_dir)
@@ -62,17 +58,7 @@ example_repo_setup <- function(dest_dir = ".") {
 example_repo_cleanup <- function() {
 
   # Find example folder file
-  zip_file <- list.files(
-    pattern = "example-repo.zip",
-    system.file("extdata", package = "leanbuild"),
-    full.names = TRUE
-  )
-
-  # Retrieve list of files from original zip
-  files_to_remove <- unzip(zip_file, list = TRUE)
-
-  # Remove MACOSX bit if its there
-  files_to_remove <- stringr::str_remove_all(files_to_remove$Name, "^_MACOSX/")
+  files_to_remove <- readLines(file.path(root_dir, "resources", "needed_leanbuild_files.txt"))
 
   message("Cleaning up and removing example repo files")
 
