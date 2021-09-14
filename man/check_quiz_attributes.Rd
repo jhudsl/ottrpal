@@ -19,36 +19,3 @@ A logical
 \description{
 Check Quiz Attributes
 }
-\examples{
-
-quiz <- c(
-  "{quiz, id: quiz_00_filename, choose-answers: 4}",
-  "### Lesson Name quiz",
-  "{choose-answers: 4, attempts: 25}",
-  "? What do you think?",
-  "C) The answer to this one",
-  "o) Not the answer",
-  "o) Not the answer either",
-  "C) Another correct answer",
-  "m) Mandatory different answer",
-  "{/quiz}"
-)
-quiz_specs <- parse_quiz(quiz)
-check_quiz_attributes(quiz_specs)
-check_quiz_question_attributes(quiz_specs)
-
-quiz <- c(
-  "{quiz, id: quiz_00_filename, choose-answers: 4}",
-  "### Lesson Name quiz",
-  "{choose-answers: 4, attempts: 25}",
-  "",
-  "? What do you think?",
-  "! The answer to this one",
-  "{/quiz}"
-)
-quiz_specs <- parse_quiz(quiz)
-check_quiz_attributes(quiz_specs)
-check_quiz_question_attributes(quiz_specs)
-
-
-}

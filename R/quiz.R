@@ -296,37 +296,6 @@ extract_quiz <- function(quiz_lines) {
 #' @return A logical
 #' @export
 #'
-#' @examples
-#'
-#' quiz <- c(
-#'   "{quiz, id: quiz_00_filename, choose-answers: 4}",
-#'   "### Lesson Name quiz",
-#'   "{choose-answers: 4, attempts: 25}",
-#'   "? What do you think?",
-#'   "C) The answer to this one",
-#'   "o) Not the answer",
-#'   "o) Not the answer either",
-#'   "C) Another correct answer",
-#'   "m) Mandatory different answer",
-#'   "{/quiz}"
-#' )
-#' quiz_specs <- parse_quiz(quiz)
-#' check_quiz_attributes(quiz_specs)
-#' check_quiz_question_attributes(quiz_specs)
-#'
-#' quiz <- c(
-#'   "{quiz, id: quiz_00_filename, choose-answers: 4}",
-#'   "### Lesson Name quiz",
-#'   "{choose-answers: 4, attempts: 25}",
-#'   "",
-#'   "? What do you think?",
-#'   "! The answer to this one",
-#'   "{/quiz}"
-#' )
-#' quiz_specs <- parse_quiz(quiz)
-#' check_quiz_attributes(quiz_specs)
-#' check_quiz_question_attributes(quiz_specs)
-#'
 #'
 check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
 
@@ -429,22 +398,6 @@ check_quiz_question_attributes <- function(question_df,
 #' @export check_all_questions
 #'
 #' @examples
-#'
-#' ## Simple one question example:
-#' quiz <- c(
-#'   "{quiz, id: quiz_00_filename, choose-answers: 4}",
-#'   "### Lesson Name quiz",
-#'   "{choose-answers: 4, attempts: 25}",
-#'   "? What do you think?",
-#'   "C) The answer to this one",
-#'   "o) Not the answer",
-#'   "o) Not the answer either",
-#'   "C) Another correct answer",
-#'   "m) Mandatory different answer",
-#'   "{/quiz}"
-#' )
-#' quiz_specs <- parse_quiz(quiz)
-#' quiz_checks <- check_all_questions(quiz_specs)
 #'
 #' # Using good quiz md example
 #'
@@ -687,27 +640,12 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 #'
 #' @examples
 #'
-#' quiz <- c(
-#'   "{quiz, id: quiz_00_filename}",
-#'   "### Lesson Name quiz",
-#'   "{choose-answers: 4}",
-#'   "? What do you think?",
-#'   "C) The answer to this one",
-#'   "o) Not the answer",
-#'   "o) Not the answer either",
-#'   "C) Another correct answer",
-#'   "m) Mandatory different answer",
-#'   "{/quiz}"
-#' )
 #'
 #' ## Make a temporary quiz directory
-#' tdir <- tempfile()
-#' dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
-#' tfile <- tempfile(pattern = "quiz_", fileext = ".md", tmpdir = tdir)
-#' writeLines(quiz, tfile)
+#' quiz_dir <- dirname(good_quiz_path)
 #'
 #' ## Now check the quizzes in that directory
-#' all_quiz_results <- check_quizzes(path = tdir)
+#' all_quiz_results <- check_quizzes(quiz_dir = quiz_dir)
 #'
 check_quizzes <- function(quiz_dir = "quizzes",
                           write_report = TRUE,

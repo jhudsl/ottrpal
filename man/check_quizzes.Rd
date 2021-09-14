@@ -21,26 +21,11 @@ Check the formatting of all quizzes in a given directory.
 }
 \examples{
 
-quiz <- c(
-  "{quiz, id: quiz_00_filename}",
-  "### Lesson Name quiz",
-  "{choose-answers: 4}",
-  "? What do you think?",
-  "C) The answer to this one",
-  "o) Not the answer",
-  "o) Not the answer either",
-  "C) Another correct answer",
-  "m) Mandatory different answer",
-  "{/quiz}"
-)
 
 ## Make a temporary quiz directory
-tdir <- tempfile()
-dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
-tfile <- tempfile(pattern = "quiz_", fileext = ".md", tmpdir = tdir)
-writeLines(quiz, tfile)
+quiz_dir <- dirname(good_quiz_path)
 
 ## Now check the quizzes in that directory
-all_quiz_results <- check_quizzes(path = tdir)
+all_quiz_results <- check_quizzes(quiz_dir = quiz_dir)
 
 }
