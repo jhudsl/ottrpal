@@ -664,11 +664,11 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
     exclam_msg
     )
   related_index <- c(
-    colon_index,
-    tot_ans_index,
-    cor_ans_index,
-    inc_ans_index,
-    exclam_index
+    as.numeric(colon_index),
+    as.numeric(tot_ans_index),
+    as.numeric(cor_ans_index),
+    as.numeric(inc_ans_index),
+    as.numeric(exclam_index)
   )
 
   # Store all warning messages as a list; they will say "good" if nothing is detected as wrong
