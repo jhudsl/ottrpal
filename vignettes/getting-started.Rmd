@@ -123,7 +123,7 @@ So to run the main function and also have it make a `Book.txt` file for us, we c
 leanbuild::bookdown_to_leanpub(make_book_txt = TRUE)
 ```
 
-Alternatively we could run `bookdown_to_book_txt()` function on its own:
+Alternatively, we could run `bookdown_to_book_txt()` function on its own:
 
 ```{r}
 leanbuild::bookdown_to_book_txt()

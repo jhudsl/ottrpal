@@ -4,7 +4,7 @@
 \alias{example_repo_cleanup}
 \title{Clean up example repo files}
 \usage{
-example_repo_cleanup()
+example_repo_cleanup(dir = ".")
 }
 \description{
 Clean up example repo files

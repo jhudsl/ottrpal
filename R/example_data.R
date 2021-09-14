@@ -42,6 +42,9 @@ example_repo_setup <- function(dest_dir = ".") {
 
   zip_file <- file.path(dest_dir, "example-repo.zip")
 
+  if (!dir.exists(dest_dir)) {
+    dir.create(dest_dir)
+  }
   download.file(url = "https://github.com/jhudsl/DaSL_Course_Template_Leanpub/raw/main/example-repo.zip",
                 destfile = zip_file)
 
@@ -57,17 +60,25 @@ example_repo_setup <- function(dest_dir = ".") {
 #'
 #' example_repo_cleanup()
 #'
-example_repo_cleanup <- function() {
+example_repo_cleanup <- function(dir = ".") {
 
   # Find example folder file
-  files_to_remove <- readLines(file.path(root_dir, "resources", "needed_leanbuild_files.txt"))
+  files_to_remove <- c(
+    readLines(file.path(dir, "resources", "needed_leanbuild_files.txt")),
+    "Course_Name.rds",
+    "manuscript",
+    "question_error_report.tsv",
+    "example-repo.zip",
+    "packages.bib")
+
 
   message("Cleaning up and removing example repo files")
 
   # Now remove it all
   lapply(files_to_remove, function(file) {
-
-    system(paste0("rm -r ", file))
+    if (file.exists(file) | dir.exists(file)) {
+      system(paste0("rm -r ", file))
+    }
   })
 }
 
