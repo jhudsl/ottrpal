@@ -377,6 +377,8 @@ check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) 
 #' @param quiz_name inherited from parse
 #' @param verbose print diagnostic messages
 #'
+#' @export
+#'
 check_quiz_question_attributes <- function(question_df,
                                            quiz_name = NULL,
                                            verbose = TRUE) {
