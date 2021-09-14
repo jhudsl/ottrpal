@@ -42,7 +42,7 @@ gs_convert = function(
 
   check_didactr_auth()
   if (is.character(id)) {
-    id = ariExtra::get_slide_id(id)
+    id = get_slide_id(id)
   }
   id = googledrive::as_id(id)
   tdir = tempfile()
@@ -119,7 +119,7 @@ gs_convert = function(
     if (verbose) {
       message("Getting Notes from PPTX")
     }
-    script = ariExtra::pptx_notes(pptx_file)
+    script = pptx_notes(pptx_file)
   } else {
     slide_df = gs_slide_df(id)
     script = notes_from_slide_output(slide_df)

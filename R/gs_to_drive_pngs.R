@@ -78,14 +78,7 @@ gs_to_drive_pngs <- function(
                              verbose = TRUE,
                              overwrite = TRUE) {
   id <- get_slide_id(id)
-  # pdf_file = download_gs_file(id = path, out_type = "pdf")
-  if (!requireNamespace("didactr", quietly = TRUE)) {
-    stop(
-      "please install didactr for gs_to_drive_pngs: \n",
-      "remotes::install_github('jhudsl/didactr')"
-    )
-  }
-  result <- didactr::gs_convert(
+  result <- gs_convert(
     id,
     PPTX = FALSE,
     use_gs_pngs = FALSE,
