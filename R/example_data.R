@@ -96,6 +96,7 @@ example_repo_cleanup <- function(dir = ".") {
   # Now remove it all
   lapply(files_to_remove, function(file) {
     if (file.exists(file) | dir.exists(file)) {
+      system(paste0("chmod +w -R", file))
       system(paste0("sudo rm -r ", file))
     }
   })
