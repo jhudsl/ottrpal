@@ -207,6 +207,8 @@ bookdown_to_leanpub <- function(path = ".",
     if (rmarkdown::pandoc_version() > 2.11) {
       output_format <- bookdown::gitbook(pandoc_args = "--citeproc")
       output_format$pandoc$args <- c(output_format$pandoc$args, "--citeproc")
+    } else {
+      output_format = NULL
     }
     bookdown::render_book(
       input = index_file,
