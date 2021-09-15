@@ -36,7 +36,7 @@ bad_quiz_path <- function() {
 #' @export
 #'
 #' @importFrom utils download.file
-#' @importFrom zip unzip
+#' @importFrom utils unzip
 #' @examples
 #'
 #' example_repo_setup()
@@ -47,12 +47,12 @@ example_repo_setup <- function(dest_dir = ".") {
   if (!dir.exists(dest_dir)) {
     dir.create(dest_dir)
   }
-  download.file(url = "https://github.com/jhudsl/DaSL_Course_Template_Leanpub/raw/main/example-repo.zip",
-                destfile = zip_file,
-                mode = "wb")
+  downloader::download(url = "https://github.com/jhudsl/DaSL_Course_Template_Leanpub/raw/main/example-repo.zip",
+                       destfile = zip_file,
+                       mode = "wb")
 
   # Unzip the folder
-  zip::unzip(zip_file, exdir = dest_dir)
+  utils::unzip(zip_file, exdir = dest_dir)
 }
 
 #' Clean up example repo files
