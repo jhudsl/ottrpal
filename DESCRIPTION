@@ -36,7 +36,7 @@ Imports: googledrive,
     yaml,
     stringr,
     rgoogleslides,
-    methods
+    methods,
     knitr,
     qpdf
 Suggests:
