@@ -32,5 +32,4 @@ questions_df <- parse_quiz(quiz_lines)$data \%>\%
   dplyr::group_split(question)
 
 good_quiz_checks <- check_question(questions_df[[2]])
-
 }

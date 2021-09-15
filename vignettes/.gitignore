@@ -1,3 +1,9 @@
 *.html
 *.R
 .httr-oauth
+quizzes/*
+resources/
+docs/
+assets/
+manuscript/
+question_error_report.tsv

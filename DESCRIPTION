@@ -20,13 +20,13 @@ License: GPL-3
 Imports: googledrive,
     dplyr,
     httr,
-    fs,
     jsonlite,
     utils,
     tibble,
-    rmarkdown,
+    rmarkdown (>= 2.10),
     xml2,
     rvest,
+    readr,
     R.utils,
     bookdown,
     glue,
@@ -37,9 +37,12 @@ Imports: googledrive,
     stringr,
     rgoogleslides,
     methods
+    knitr (>= 1.33),
+    qpdf
 Suggests:
-    knitr,
-    testthat
+    remotes,
+    testthat,
+    fs
 Encoding: UTF-8
 LazyData: true
 Remotes: jhudsl/text2speech,
