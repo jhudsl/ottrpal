@@ -50,8 +50,16 @@ example_repo_setup <- function(dest_dir = ".") {
   download.file(url = "https://github.com/jhudsl/DaSL_Course_Template_Leanpub/raw/main/example-repo.zip",
                 destfile = zip_file)
 
-  # Unzip the folder
-  system(paste("sudo unzip", zip_file, "-d", dest_dir))
+  # See what unzip is being used
+  operating_system <- Sys.info()[1]
+
+  if (operating_system == "Windows" ){
+    # Unzip function doesn't always work for windows
+    system(paste("7z a -tzip", zip_file, dest_dir))
+  } else {
+    # Unzip the folder
+    utils::unzip(zip_file, exdir = dest_dir)
+  }
 }
 
 #' Clean up example repo files
