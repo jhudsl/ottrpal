@@ -14,6 +14,21 @@ The output rendered files from this package can be published using the [Github w
 
 If you aren't familiar with `Bookdown` you may want with [their tutorials](https://bookdown.org/yihui/bookdown/). 
 
+## Installing leanbuild:
+
+You can install `leanbuild` from GitHub with:
+
+You will need to use the remotes package (and will need to install it if you don't have it).
+
+```{r}
+if (!("remotes" %in% installed.packages())) {
+  install.packages("remotes")
+}
+if (!("leanbuild" %in% installed.packages())) {
+  remotes::install_github("jhudsl/leanbuild")
+}
+```
+
 ## Required files:
 
 Before you are ready to run `leanbuild`, you will need the following files (which are standard in a `Bookdown` repository):  
@@ -60,21 +75,6 @@ Each of your Rmds needs to have a chunk of code with this at the beginning of th
 `leanbuild::set_knitr_image_path()`
 
 This will ensure that the images are stored in the correct place and will be rendered correctly both in `Bookdown` and in Leanpub.
-
-## Installing leanbuild:
-
-You can install `leanbuild` from GitHub with:
-
-You will need to use the remotes package (and will need to install it if you don't have it).
-
-```{r}
-if (!("remotes" %in% installed.packages())) {
-  install.packages("remotes")
-}
-if (!("leanbuild" %in% installed.packages())) {
-  remotes::install_github("jhudsl/leanbuild")
-}
-```
 
 ## Running leanbuild
 
