@@ -1,36 +1,6 @@
+# C. Savonen 2021
 
 utils::globalVariables(c("question", "original", "n", "metadata_check", "index"))
-
-#' Path to good example quiz
-#'
-#' @export
-#'
-#' @examples
-#'
-#' quiz_path <- good_quiz_path()
-#'
-good_quiz_path <- function() {
-  list.files(pattern = "quiz_good.md$",
-             system.file('extdata', package = 'leanbuild'),
-             full.names = TRUE)
-}
-
-#' Path to bad example quiz
-#'
-#' @export
-#'
-#' @examples
-#'
-#' quiz_path <- bad_quiz_path()
-#'
-bad_quiz_path <- function() {
-  list.files(pattern = "quiz_bad.md$",
-             system.file('extdata', package = 'leanbuild'),
-             full.names = TRUE)
-}
-
-# save(bad_quiz, bad_quiz, file = "bad_quiz.RData")
-# save(good_quiz, good_quiz, file = "good_quiz.RData")
 
 #' Parse quiz into a data.frame
 #'
@@ -49,10 +19,7 @@ bad_quiz_path <- function() {
 #'
 #' # Can use this to parse the quiz into a data.frame
 #' quiz_df <- parse_quiz_df(quiz_lines)
-#'
-
 parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
-
   quiz_df <- tibble::tibble(
     original = quiz_lines,
     trimmed = trimws(quiz_lines, which = "left"),
@@ -123,6 +90,13 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
 #'
 #' @examples
 #'
+#' ### Simple example
+#' tag <- "{quiz, id: quiz_name_here, attempts: 10}"
+#'
+#' # Extract metadata tags
+#' meta <- extract_meta(tag)
+#'
+#' ### Example using a file
 #' quiz_path <- good_quiz_path()
 #' quiz_lines <- readLines(quiz_path)
 #'
@@ -136,14 +110,13 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
 #'
 #' # Extract metadata tags
 #' meta <- extract_meta(tags)
-#'
 extract_meta <- function(tags) {
 
   # trim whitespace
   tags <- trimws(tags)
 
   # Remove brackets
-  tags <- stringr::str_remove_all(tags, "^\\{|\\}$")
+  tags <- stringr::str_remove_all(tags, "^\\{quiz, |\\}$")
 
   # Split by commas
   tags <- strsplit(tags, ",")
@@ -157,7 +130,17 @@ extract_meta <- function(tags) {
   return(meta)
 }
 
-# For example, {id: "this is , my id", number: 2}
+#' Parse apart a tag
+#'
+#' @param tag A single tag to extract from
+#' @return A named vector indicating the field and entry associated with it.
+#'
+#' @export
+#' @examples
+#'
+#' tag <- "{quiz, id: quiz_name_here, attempts: 10}"
+#' parse_q_tag(tag)
+#'
 parse_q_tag <- function(tag) {
 
   # Trim whitespace
@@ -166,27 +149,24 @@ parse_q_tag <- function(tag) {
   # Get rid of empty lines
   tag <- tag[tag != ""]
 
-  # Split by colons
+  # Split by commas
   tag <- strsplit(tag, ":")
 
-  individual_tags <- sapply(tag, function(r) {
-    if (length(r) <= 1) {
-      return(r)
+  parsed_tag <- lapply(tag, function(field) {
+
+    field <- trimws(field)
+    if (length(field) > 1) {
+      field_name <- field[1]
+      field_spec <- field[2]
+
+    parsed_field <- field_spec
+    names(parsed_field) <- field_name
+    } else {
+      parsed_field <- field
     }
-    r[2] <- paste(r[2:length(r)], collapse = ":")
-    r <- r[1:2]
-    r <- trimws(r)
-    nr <- r[1]
-    r <- r[2]
-    names(r) <- nr
-    nr <- as.list(r)
-    r
+    return(parsed_field)
   })
-  individual_tags <- as.list(individual_tags)
-  if (length(individual_tags) == 0) {
-    individual_tags <- NULL
-  }
-  individual_tags
+  return(parsed_tag)
 }
 
 #' Parse Quiz and Other Checking Functions
@@ -218,7 +198,6 @@ parse_q_tag <- function(tag) {
 #' quiz_specs <- parse_quiz(quiz_lines)
 #' check_quiz_attributes(quiz_specs)
 #'
-#'
 parse_quiz <- function(quiz_lines,
                        quiz_name = NULL,
                        verbose = FALSE) {
@@ -226,40 +205,31 @@ parse_quiz <- function(quiz_lines,
   rm(list = c("number", "question", "repeated", "answer", "meta"))
 
   # Extract only the lines of the actual quiz
-  quiz_lines <- extract_quiz(quiz_lines)
+  extracted_quiz <- extract_quiz(quiz_lines)
 
   # Quiz should have at least two lines
-  if (length(quiz_lines) < 2) {
+  if (length(extracted_quiz$quiz_lines) < 2) {
     stop("Quiz file is empty, double check file contents.")
   }
 
-  # Quiz meta data is in first line (after using extract_quiz)
-  full_quiz_spec <- quiz_meta <- quiz_lines[1]
-
-  # Remove the first part of the quiz tag
-  quiz_meta <- sub("\\{\\s*quiz(,|)", "{", quiz_meta)
-
-  # remove the "/quiz"
-  quiz_lines <- quiz_lines[2:(length(quiz_lines) - 1)]
+  # Extract the main quiz metadata
+  quiz_meta <- extract_meta(extracted_quiz$quiz_tag)
 
   # Put this in a data.frame so we can identify the content
-  quiz_df <- parse_quiz_df(quiz_lines)
+  quiz_df <- parse_quiz_df(extracted_quiz$quiz_lines)
 
   #### Extract metadata
   # Extract the tags
   tags <- quiz_df$original[quiz_df$type == "tag"]
 
   # Extract metadata tags
-  meta <- extract_meta(tags)
-
-  # Extract the main quiz metadata
-  quiz_meta <- extract_meta(quiz_meta)[[1]]
+  question_meta <- extract_meta(tags)
 
   # Put the info we need in a list
   quiz_info <- list(
     data = quiz_df,
-    question_metadata = meta,
-    quiz_tag = full_quiz_spec,
+    question_metadata = question_meta,
+    quiz_tag = extracted_quiz$quiz_tag,
     quiz_metadata = quiz_meta
   )
   return(quiz_info)
@@ -283,10 +253,14 @@ extract_quiz <- function(quiz_lines) {
   if (length(end) == 0) {
     stop("Could not find end tag of quiz; should end with: {\\quiz}.")
   }
-  # Keep only those lines:
-  quiz_lines <- quiz_lines[start:end]
+  # Extract main quiz tag
+  quiz_tag <- quiz_lines[start]
 
-  return(quiz_lines)
+  # Keep only those lines:
+  quiz_lines <- quiz_lines[(start + 1):(end - 1)]
+
+  return(list(quiz_lines = quiz_lines,
+              quiz_tag = quiz_tag))
 }
 
 #' Check Quiz Attributes
@@ -305,7 +279,7 @@ check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) 
   metadata_msg <- "good"
 
   # Set up as tibble
-  quiz_metadata <- tibble::as_tibble(quiz_specs$quiz_metadata)
+  quiz_metadata <- quiz_specs$quiz_metadata
 
   # These are the accepted quiz attributes
   quiz_attributes <- c(
@@ -413,7 +387,6 @@ check_quiz_question_attributes <- function(question_df,
 #' bad_quiz <- readLines(bad_quiz_path())
 #' bad_quiz_specs <- parse_quiz(bad_quiz)
 #' bad_quiz_checks <- check_all_questions(bad_quiz_specs)
-#'
 check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 
   # Remove header part and split into per question data frames
@@ -469,7 +442,6 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 #'   dplyr::group_split(question)
 #'
 #' good_quiz_checks <- check_question(questions_df[[2]])
-#'
 check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 
   # Things are considered innocent until proven guilty
@@ -488,7 +460,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
   prompt <- stringr::str_remove(prompt, "^\\? ")
 
   # Piece together a quiz identity
-  quiz_identity <- paste0(substr(prompt, 0, 20), " ... \n In quiz: ", quiz_name)
+  quiz_identity <- paste0(substr(prompt, 0, 20), " ... in quiz: ", quiz_name)
 
   # Only run this if there is an actual prompt and start to the question
   if (verbose) {
@@ -497,18 +469,17 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 
   ###### Check for no-no symbols:
   colon_index <- question_df %>%
-    dplyr::filter(grepl("\\:", original)) %>%
+    dplyr::filter(type != "tag", grepl("\\:", original)) %>%
     dplyr::pull(index)
 
-  if (length(colon_index) > 0 ) {
+  if (length(colon_index) > 0) {
     # Collapse in case there are multiple infractions
     colon_index <- paste0(colon_index, collapse = ", ")
 
     colon_msg <- paste0(
       "Colon detected in question on lines: ",
       paste0(colon_index, collapse = ", "),
-      "\n in question starting with:",  quiz_identity,
-      "\n Get rid of colon -- will mess up formatting in Coursera."
+      " in question starting with:",  quiz_identity
     )
     warning(colon_msg)
   } else {
@@ -562,7 +533,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 
     # Check the attributes
     attr_msg <- check_quiz_question_attributes(question_df,
-                                               quiz_name = quiz_name
+      quiz_name = quiz_name
     )
 
     if ("choose-answers" %in% names(question_meta)) {
@@ -595,8 +566,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
     exclam_index <- paste0(exclam_index, collapse = ", ")
 
     exclam_msg <- paste0(
-      "Exclamation point detected in answer for: ", quiz_identity,
-      "\n Get rid of exclamation -- will mess up formatting in Leanpub."
+      "Exclamation point detected in answer for: ", quiz_identity
     )
     warning(exclam_msg)
   } else {
@@ -610,7 +580,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
     cor_ans_msg,
     inc_ans_msg,
     exclam_msg
-    )
+  )
   related_index <- c(
     as.numeric(colon_index),
     as.numeric(tot_ans_index),
@@ -620,9 +590,11 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
   )
 
   # Store all warning messages as a list; they will say "good" if nothing is detected as wrong
-  question_result <- data.frame(quiz = rep(quiz_name, length(related_index)),
-                                warning_msg,
-                                related_index) %>%
+  question_result <- data.frame(
+    quiz = rep(quiz_name, length(related_index)),
+    warning_msg,
+    related_index
+  ) %>%
     # Now filter out the good ones
     dplyr::filter(warning_msg != "good")
 
@@ -638,7 +610,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 #' @param write_report TRUE/FALSE save warning report to a CSV file?
 #'
 #' @return A list checks performed on each quiz
-#' @importFrom utils write.csv
+#' @importFrom readr write_tsv
 #'
 #' @export check_quizzes
 #'
@@ -650,7 +622,6 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 #'
 #' ## Now check the quizzes in that directory
 #' all_quiz_results <- check_quizzes(quiz_dir = quiz_dir)
-#'
 check_quizzes <- function(quiz_dir = "quizzes",
                           write_report = TRUE,
                           verbose = TRUE) {
@@ -672,16 +643,21 @@ check_quizzes <- function(quiz_dir = "quizzes",
   # Name the results with the file names
   names(all_quiz_results) <- basename(files)
 
+  # Only extract the question checks
+  question_checks <- lapply(all_quiz_results, function(quiz_report) {quiz_report$question_checks})
+
   # Make into one data.frame
-  question_report <- dplyr::bind_rows(all_quiz_results$question_checks)
+  question_report <- dplyr::bind_rows(question_checks) %>%
+    dplyr::arrange("quiz")
 
   if (write_report) {
     if (nrow(question_report) > 0) {
-      message("Question error report saved to 'question_error_report.csv'")
-      write.csv(question_report, file = 'question_error_report.csv',
-                quote = FALSE, row.names = FALSE)
-    } else{
-      message("No question errors to report!")
+      message("\n Question error report saved to 'question_error_report.tsv'")
+      readr::write_tsv(question_report,
+        file = "question_error_report.tsv"
+      )
+    } else {
+      message("\n No question errors to report!")
     }
   }
   return(question_report)
@@ -707,10 +683,9 @@ check_quizzes <- function(quiz_dir = "quizzes",
 #' # Take a look at a failed quiz's checks:
 #' quiz_path <- good_quiz_path()
 #' failed_checks <- check_quiz(quiz_path)
-#'
 check_quiz <- function(quiz_path, verbose = TRUE) {
   if (verbose) {
-    message(paste0("Checking quiz: ", quiz_path))
+    message(paste0("\n Checking quiz: ", quiz_path))
   }
   # Read in quiz
   quiz_lines <- readLines(quiz_path)

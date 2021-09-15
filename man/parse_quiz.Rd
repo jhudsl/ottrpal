@@ -46,5 +46,4 @@ quiz_lines <- c(
 quiz_specs <- parse_quiz(quiz_lines)
 check_quiz_attributes(quiz_specs)
 
-
 }

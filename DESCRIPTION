@@ -25,9 +25,10 @@ Imports: googledrive,
     jsonlite,
     utils,
     tibble,
-    rmarkdown,
+    rmarkdown (>= 2.10),
     xml2,
     rvest,
+    readr,
     R.utils,
     bookdown,
     glue,
@@ -35,9 +36,11 @@ Imports: googledrive,
     rprojroot,
     magrittr,
     yaml,
-    stringr
+    stringr,
+    knitr (>= 1.33),
+    qpdf
 Suggests:
-    knitr,
+    remotes,
     testthat
 Encoding: UTF-8
 LazyData: true
