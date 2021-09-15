@@ -51,7 +51,7 @@ example_repo_setup <- function(dest_dir = ".") {
                 destfile = zip_file)
 
   # Unzip the folder
-  unzip(zip_file, exdir = dest_dir)
+  system(paste("sudo unzip", zip_file, "-d", dest_dir))
 }
 
 #' Clean up example repo files
