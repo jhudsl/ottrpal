@@ -68,7 +68,6 @@ example_repo_cleanup <- function(dir = ".") {
     "Course_Name.rds",
     "manuscript",
     "question_error_report.tsv",
-    "example-repo.zip",
     "packages.bib")
 
 
