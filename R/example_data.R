@@ -36,7 +36,7 @@ bad_quiz_path <- function() {
 #' @export
 #'
 #' @importFrom utils download.file
-#' @importFrom utils unzip
+#' @importFrom zip unzip
 #' @examples
 #'
 #' example_repo_setup()
@@ -52,7 +52,7 @@ example_repo_setup <- function(dest_dir = ".") {
                 mode = "wb")
 
   # Unzip the folder
-  utils::unzip(zip_file, exdir = dest_dir)
+  zip::unzip(zip_file, exdir = dest_dir)
 }
 
 #' Clean up example repo files
