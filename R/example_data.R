@@ -65,9 +65,26 @@ example_repo_setup <- function(dest_dir = ".") {
 #'
 example_repo_cleanup <- function(dir = ".") {
 
+  file_list <- file.path(dir, "resources", "needed_leanbuild_files.txt")
+  if (file.exists(file_list)) {
+    file_list <- readLines(file.path(dir, "resources", "needed_leanbuild_files.txt"))
+  } else {
+    file_list <- NULL
+  }
   # Find example folder file
   files_to_remove <- c(
-    readLines(file.path(dir, "resources", "needed_leanbuild_files.txt")),
+    file_list,
+    "_bookdown.yml",
+    "_output.yml",
+    "01-intro.Rmd",
+    "02-chapter_of_course.Rmd",
+    "About.Rmd",
+    "assets",
+    "docs",
+    "example-repo.zip",
+    "index.Rmd",
+    "quizzes",
+    "resources",
     "Course_Name.rds",
     "manuscript",
     "question_error_report.tsv",
@@ -79,7 +96,7 @@ example_repo_cleanup <- function(dir = ".") {
   # Now remove it all
   lapply(files_to_remove, function(file) {
     if (file.exists(file) | dir.exists(file)) {
-      system(paste0("rm -r ", file))
+      system(paste0("sudo rm -r ", file))
     }
   })
 }

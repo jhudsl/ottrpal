@@ -18,6 +18,6 @@ Parse apart a tag
 \examples{
 
 tag <- "{quiz, id: quiz_name_here, attempts: 10}"
-parse_q_tag(one_field)
+parse_q_tag(tag)
 
 }

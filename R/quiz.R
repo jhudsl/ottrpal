@@ -134,10 +134,12 @@ extract_meta <- function(tags) {
 #'
 #' @param tag A single tag to extract from
 #' @return A named vector indicating the field and entry associated with it.
+#'
+#' @export
 #' @examples
 #'
 #' tag <- "{quiz, id: quiz_name_here, attempts: 10}"
-#' parse_q_tag(one_field)
+#' parse_q_tag(tag)
 #'
 parse_q_tag <- function(tag) {
 

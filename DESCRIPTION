@@ -37,7 +37,8 @@ Imports: googledrive,
     magrittr,
     yaml,
     stringr,
-    knitr (>= 1.33)
+    knitr (>= 1.33),
+    qpdf
 Suggests:
     remotes,
     testthat
