@@ -14,11 +14,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(leanbuild)
-```
-
-
 # Intro to leanbuild
 
 `leanbuild` converts a [Bookdown repository](https://github.com/jtr13/bookdown-template) into a [Leanpub-ready](https://leanpub.com/) set of files.
@@ -229,10 +224,9 @@ survey_link <- "Please provide any feedback you have in [this survey](www.some_l
 leanbuild::bookdown_to_leanpub(footer_text = survey_link)
 ```
 
-
 ### Wrapping up 
 
-If you don't want those example files hanging around, we can run this function to cleanup and remove them:
+If you don't want those example files hanging around, we can run this function to cleanup the example files.
 
 ```{r, echo = FALSE}
 leanbuild::example_repo_cleanup()
