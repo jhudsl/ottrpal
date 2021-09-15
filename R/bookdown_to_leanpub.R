@@ -27,7 +27,11 @@ get_bookdown_spec <- function(path = ".") {
 #' @export
 
 bookdown_path <- function(path = ".") {
-  path <- rprojroot::find_root(rprojroot::has_file("_bookdown.yml"), path = path)
+
+  # See what unzip is being used
+  operating_system <- Sys.info()[1]
+
+  path <- rprojroot::find_root(rprojroot::has_file("_bookdown.yml"), path = file.path(path))
 
   return(path)
 }
@@ -40,7 +44,7 @@ bookdown_path <- function(path = ".") {
 #' @export
 #'
 bookdown_file <- function(path = ".") {
-  root_dir <- bookdown_path(path = path)
+  root_dir <- bookdown_path(path = file.path(path))
   file_path <- file.path(root_dir, "_bookdown.yml")
 
   return(file_path)
@@ -54,7 +58,7 @@ bookdown_file <- function(path = ".") {
 #' @export
 #'
 bookdown_rmd_files <- function(path = ".") {
-  spec <- get_bookdown_spec(path)
+  spec <- get_bookdown_spec(file.path(path))
 
   files <- spec$rmd_files
   if (is.null(files) || all(is.na(files)) || length(files) == 0) {
@@ -62,7 +66,7 @@ bookdown_rmd_files <- function(path = ".") {
       "No bookdown specification of the files, using ",
       "list.files(pattern ='.Rmd')"
     )
-    root_dir <- bookdown_path(path = path)
+    root_dir <- bookdown_path(path = file.path(path))
     files <- list.files(
       pattern = "[.]Rmd", ignore.case = TRUE,
       path = root_dir, full.names = FALSE
@@ -81,10 +85,10 @@ bookdown_rmd_files <- function(path = ".") {
 bookdown_destination <- function(path = ".") {
 
   # Find _bookdown.yml
-  root_dir <- bookdown_path(path = path)
+  root_dir <- bookdown_path(path = file.path(path))
 
   # Get specs from _bookdown.yml
-  spec <- get_bookdown_spec(path = path)
+  spec <- get_bookdown_spec(path = file.path(path))
 
   # Find output directory declared in the bookdown.yml
   output_dir <- spec$output_dir
@@ -131,14 +135,14 @@ copy_resources <- function(path = ".",
 
 copy_docs <- function(path = ".", output_dir = "manuscript") {
   path <- bookdown_destination(path)
-  R.utils::copyDirectory(path, output_dir, recursive = TRUE, overwrite = TRUE)
+  R.utils::copyDirectory(path, file.path(output_dir), recursive = TRUE, overwrite = TRUE)
 }
 
 copy_bib <- function(path = ".", output_dir = "manuscript") {
   path <- bookdown_path(path)
   files <- list.files(path = path, full.names = TRUE, pattern = ".bib$")
   if (length(files) > 0) {
-    file.copy(files, output_dir, overwrite = TRUE)
+    file.copy(files, file.path(output_dir), overwrite = TRUE)
   }
 }
 
