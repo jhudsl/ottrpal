@@ -235,5 +235,5 @@ leanbuild::example_repo_cleanup()
 Lastly, we will print out the session info.
 
 ```{r}
-devtools::session_info()
+sessionInfo()
 ```
