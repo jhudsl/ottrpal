@@ -37,7 +37,7 @@ Imports: googledrive,
     stringr,
     rgoogleslides,
     methods
-    knitr (>= 1.33),
+    knitr,
     qpdf
 Suggests:
     remotes,
