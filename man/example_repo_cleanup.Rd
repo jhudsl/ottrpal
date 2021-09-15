@@ -6,6 +6,9 @@
 \usage{
 example_repo_cleanup(dir = ".")
 }
+\arguments{
+\item{dir}{What directory to delete the example files from}
+}
 \description{
 Clean up example repo files
 }

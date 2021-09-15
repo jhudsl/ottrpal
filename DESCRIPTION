@@ -36,9 +36,10 @@ Imports: googledrive,
     rprojroot,
     magrittr,
     yaml,
-    stringr
+    stringr,
+    knitr (>= 1.33)
 Suggests:
-    knitr,
+    remotes,
     testthat
 Encoding: UTF-8
 LazyData: true

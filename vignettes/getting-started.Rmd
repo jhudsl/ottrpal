@@ -7,13 +7,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
-
 # Intro to leanbuild
 
 `leanbuild` converts a [Bookdown repository](https://github.com/jtr13/bookdown-template) into a [Leanpub-ready](https://leanpub.com/) set of files.
@@ -157,7 +150,7 @@ We can take a look at how `check_quizzes()` runs using a quiz examples: one that
 
 ```{r}
 # Set up an good example quiz
-good_quiz_path <- good_quiz_path()
+good_quiz_path <- leanbuild::good_quiz_path()
 
 dest_quiz_path <- file.path("quizzes", basename(good_quiz_path))
               
@@ -170,7 +163,7 @@ if (!file.exists(dest_quiz_path)){
 Run `check_quizzes()` to check all quizzes in the directory.
 
 ```{r}
-quiz_checklist <- check_quizzes(quiz_dir = "quizzes")
+quiz_checklist <- leanbuild::check_quizzes(quiz_dir = "quizzes")
 ```
 
 We can take a look at what a typical quiz format looks like: 
@@ -184,7 +177,7 @@ Now let's add in a bad quiz and see how the report changes.
 
 ```{r}
 # Set up an good example quiz
-bad_quiz_path <- bad_quiz_path()
+bad_quiz_path <- leanbuild::bad_quiz_path()
 
 dest_quiz_path <- file.path("quizzes", basename(bad_quiz_path))
 
@@ -197,7 +190,7 @@ if (!file.exists(dest_quiz_path)){
 Let's re-run `check_quizzes()`. 
 
 ```{r}
-quiz_checklist <- check_quizzes(quiz_dir = "quizzes")
+quiz_checklist <- leanbuild::check_quizzes(quiz_dir = "quizzes")
 ```
 
 We have some warning messages about various items and the errors have been saved to `'question_error_report.tsv'` which we can read in and check out. 
@@ -221,7 +214,8 @@ If there is text you would like added to the end of each chapter (like a link to
 survey_link <- "Please provide any feedback you have in [this survey](www.some_link.org)"
 
 # Supply the footer text in the main function
-leanbuild::bookdown_to_leanpub(footer_text = survey_link)
+leanbuild::bookdown_to_leanpub(make_book_txt = TRUE, 
+                               footer_text = survey_link)
 ```
 
 ### Wrapping up 

@@ -35,6 +35,8 @@ bad_quiz_path <- function() {
 #' @param dest_dir The destination directory you would like the example repo files to be placed. By default is current directory.
 #' @export
 #'
+#' @importFrom utils download.file
+#' @importFrom utils unzip
 #' @examples
 #'
 #' example_repo_setup()
@@ -54,6 +56,7 @@ example_repo_setup <- function(dest_dir = ".") {
 
 #' Clean up example repo files
 #'
+#' @param dir What directory to delete the example files from
 #' @export
 #'
 #' @examples
