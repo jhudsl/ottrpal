@@ -28,10 +28,7 @@ get_bookdown_spec <- function(path = ".") {
 
 bookdown_path <- function(path = ".") {
 
-  # See what unzip is being used
-  operating_system <- Sys.info()[1]
-
-  path <- rprojroot::find_root(rprojroot::has_file("_bookdown.yml"), path = file.path(path))
+  path <- fs::path_home("_bookdown.yml")
 
   return(path)
 }
