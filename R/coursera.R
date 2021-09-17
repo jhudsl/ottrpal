@@ -228,6 +228,11 @@ render_coursera <- function(
   ###### Declare all the file paths relative to root directory ######
   # Input files:
   toc_close_css <- file.path(root_dir, "assets", "toc_close.css")
+
+  if (!file.exists(toc_close_css)) {
+    download.file("https://raw.githubusercontent.com/jhudsl/leanbuild/master/inst/extdata/toc_close.css",
+                  destfile = toc_close_css)
+  }
   output_yaml_file <- file.path(root_dir, output_yaml)
 
   # Output files:
