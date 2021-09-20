@@ -208,10 +208,11 @@ bookdown_to_leanpub <- function(path = ".",
     }
     message(paste("index_file is", index_file))
 
-    if (rmarkdown::pandoc_version() > 2.11) {
+    if (rmarkdown::pandoc_version() >= "2.11") {
       output_format <- bookdown::gitbook(pandoc_args = "--citeproc")
       output_format$pandoc$args <- c(output_format$pandoc$args, "--citeproc")
     } else {
+      warning("Pandoc version is not greater than 2.11 so citations will not be able to be rendered properly")
       output_format = NULL
     }
     bookdown::render_book(
