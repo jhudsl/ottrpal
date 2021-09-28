@@ -9,8 +9,8 @@
 #' quiz_path <- good_quiz_path()
 good_quiz_path <- function() {
   list.files(
-    pattern = "quiz_good.md$",
-    system.file("extdata/quizzes", package = "leanbuild"),
+    pattern = "quizzes/quiz_good.md$",
+    system.file("extdata", package = "leanbuild"),
     full.names = TRUE
   )
 }
@@ -24,8 +24,8 @@ good_quiz_path <- function() {
 #' quiz_path <- bad_quiz_path()
 bad_quiz_path <- function() {
   list.files(
-    pattern = "quiz_bad.md$",
-    system.file("extdata/quizzes", package = "leanbuild"),
+    pattern = "quizzes/quiz_bad.md$",
+    system.file("extdata", package = "leanbuild"),
     full.names = TRUE
   )
 }
