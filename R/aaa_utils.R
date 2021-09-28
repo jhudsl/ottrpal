@@ -224,7 +224,7 @@ add_footer <- function(rmd_path, footer_text = NULL) {
   if (is.null(footer_text)) {
     stop("Need character string in footer_text argument to append to end of file.")
   }
-  footer_text <- paste0("\n \n", footer_text)
+  footer_text <- paste0("\n", footer_text, collapse = "\n")
   write(as.character(footer_text),
     file = rmd_path,
     append = TRUE
