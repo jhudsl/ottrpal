@@ -11,6 +11,8 @@
 `leanbuild` converts a [Bookdown repository](https://github.com/jtr13/bookdown-template) into a [Leanpub-ready](https://leanpub.com/) set of files.
 The output rendered files from this package can be published using the [Github writing mode on Leanpub](https://leanpub.com/lfm/read#leanpub-auto-switching-writing-modes).
 
+[Read the full documentation here](https://jhudatascience.org/leanbuild/docs/index.html).
+
 ## Required files:
 
 Before you are ready to run `leanbuild`, you will need the following files (which are standard in a `Bookdown` repository):  

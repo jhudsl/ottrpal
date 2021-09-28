@@ -9,4 +9,3 @@ inst/doc
 .httr-oauth
 tests/testthat/googlesheets_token.rds
 run_test.R
-docs
