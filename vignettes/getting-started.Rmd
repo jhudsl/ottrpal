@@ -128,6 +128,15 @@ readLines(file.path("manuscript", "Book.txt"))
 
 ## Setting up quizzes:
 
+First, we will set up a directory to put our quizzes in. 
+
+```{r}
+quiz_dir <- "quizzes"
+if(!dir.exists(quiz_dir)) {
+  dir.create(quiz_dir)
+}
+```
+
 By default, leanbuild will look for a folder called `quizzes/` to find your quiz `.md` files.
 If your quizzes are located somewhere else, you will need to use the `quiz_dir` argument to specify that:
 
