@@ -2,7 +2,6 @@
 title: "Course Title"
 ---
 
-
 ```{r, include = FALSE}
 leanbuild::set_knitr_image_path()
 ```

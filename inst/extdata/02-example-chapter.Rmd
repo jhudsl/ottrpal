@@ -2,6 +2,8 @@
 title: "Example Chapter"
 ---
 
+# Example Chapter 
+
 Every chapter needs to start out with this chunk of code:
 
 ```{r, include = FALSE}
