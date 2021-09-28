@@ -41,7 +41,7 @@ bad_quiz_path <- function() {
 #' @examples
 #' # Run this to get the files we need
 #' example_files <- leanbuild::example_repo_setup()
-#' example_repo_setup(files_to_remove = basename(example_files))
+#'
 example_repo_setup <- function(dest_dir = ".") {
 
   bookdown_path <- list.files(
@@ -66,7 +66,11 @@ example_repo_setup <- function(dest_dir = ".") {
 #'
 #' @examples
 #'
-#' example_repo_cleanup()
+#' # Run this to get the files we need
+#' example_files <- leanbuild::example_repo_setup()
+#'
+#' # Run this to delete them
+#' example_repo_cleanup(files_to_remove = basename(example_files))
 #'
 example_repo_cleanup <- function(files_to_remove, verbose = FALSE) {
 

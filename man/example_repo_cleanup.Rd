@@ -16,6 +16,10 @@ Clean up example repo files
 }
 \examples{
 
-example_repo_cleanup()
+# Run this to get the files we need
+example_files <- leanbuild::example_repo_setup()
+
+# Run this to delete them
+example_repo_cleanup(files_to_remove = basename(example_files))
 
 }
