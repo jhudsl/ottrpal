@@ -246,7 +246,7 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
     'align: "{align}",',
     'type: "{type}",',
     'poster: "{poster}",',
-    'embed: "{embed}"'
+    'embed: "{embed}",'
   )
   if (is.null(fullbleed) ||
     length(fullbleed) == 0 ||
@@ -272,6 +272,8 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
 
   # Make sure it's coerced as a character
   specs <- unlist(sapply(specs, as.character))
+
+  specs <- gsub(",\\}$", "\\}", specs)
 
   # Set as fullbleed if TRUE
   specs <- c(specs, if (fullbleed) "fullbleed: true")
