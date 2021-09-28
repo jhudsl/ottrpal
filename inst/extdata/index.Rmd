@@ -1,0 +1,6 @@
+---
+date: "`r format(Sys.time(), '%B, %Y')`"
+link-citations: yes
+---
+
+# About this Course

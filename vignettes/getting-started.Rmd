@@ -68,7 +68,7 @@ But for the purposes of this example we will download a zip file of the files we
 
 ```{r}
 # Run this to get the files we need
-leanbuild::example_repo_setup()
+example_files <- leanbuild::example_repo_setup()
 ```
 
 Each of your Rmds needs to have a chunk of code with this at the beginning of the file:
@@ -127,6 +127,15 @@ readLines(file.path("manuscript", "Book.txt"))
 ```
 
 ## Setting up quizzes:
+
+First, we will set up a directory to put our quizzes in. 
+
+```{r}
+quiz_dir <- "quizzes"
+if(!dir.exists(quiz_dir)) {
+  dir.create(quiz_dir)
+}
+```
 
 By default, leanbuild will look for a folder called `quizzes/` to find your quiz `.md` files.
 If your quizzes are located somewhere else, you will need to use the `quiz_dir` argument to specify that:
@@ -223,7 +232,7 @@ leanbuild::bookdown_to_leanpub(make_book_txt = TRUE,
 If you don't want those example files hanging around, we can run this function to cleanup the example files.
 
 ```{r, echo = FALSE}
-leanbuild::example_repo_cleanup()
+leanbuild::example_repo_cleanup(files_to_remove = basename(example_files), verbose = FALSE)
 ```
 
 Lastly, we will print out the session info.

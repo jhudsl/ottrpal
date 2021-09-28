@@ -10,6 +10,7 @@
 good_quiz_path <- function() {
   list.files(
     pattern = "quiz_good.md$",
+    recursive = TRUE,
     system.file("extdata", package = "leanbuild"),
     full.names = TRUE
   )
@@ -25,6 +26,7 @@ good_quiz_path <- function() {
 bad_quiz_path <- function() {
   list.files(
     pattern = "quiz_bad.md$",
+    recursive = TRUE,
     system.file("extdata", package = "leanbuild"),
     full.names = TRUE
   )
@@ -35,80 +37,59 @@ bad_quiz_path <- function() {
 #' @param dest_dir The destination directory you would like the example repo files to be placed. By default is current directory.
 #' @export
 #'
-#' @importFrom utils download.file
-#' @importFrom utils unzip
+#' @importFrom fs dir_copy
 #' @examples
+#' # Run this to get the files we need
+#' example_files <- leanbuild::example_repo_setup()
 #'
-#' example_repo_setup()
 example_repo_setup <- function(dest_dir = ".") {
 
-  zip_file <- file.path(dest_dir, "example-repo.zip")
+  bookdown_path <- list.files(
+    pattern = "_bookdown.yml$",
+    system.file("extdata/", package = "leanbuild"),
+    full.names = TRUE
+  )
 
-  if (!dir.exists(dest_dir)) {
-    dir.create(dest_dir)
-  }
-  download.file(url = "https://github.com/jhudsl/DaSL_Course_Template_Leanpub/raw/main/example-repo.zip",
-                destfile = zip_file)
+  # Copy over whole directory
+  fs::dir_copy(dirname(bookdown_path), dest_dir, overwrite = TRUE)
 
-  # See what unzip is being used
-  operating_system <- Sys.info()[1]
-  message(operating_system)
-  if (operating_system == "Windows" ){
-    # Unzip function doesn't always work for windows
-    system(paste("7z a -tzip", zip_file, dest_dir))
-  } else {
-    # Unzip the folder
-    utils::unzip(zip_file, exdir = dest_dir)
-  }
+  copied_files <- list.files(dirname(bookdown_path), full.names = TRUE)
+
+  return(copied_files)
 }
 
 #' Clean up example repo files
 #'
-#' @param dir What directory to delete the example files from
+#' @param files_to_remove List of example files to delete.
+#' @param verbose TRUE/FALSE would you like progress messages?
 #' @export
 #'
 #' @examples
 #'
-#' example_repo_cleanup()
+#' # Run this to get the files we need
+#' example_files <- leanbuild::example_repo_setup()
 #'
-example_repo_cleanup <- function(dir = ".") {
-
-  file_list <- file.path(dir, "resources", "needed_leanbuild_files.txt")
-  if (file.exists(file_list)) {
-    file_list <- readLines(file.path(dir, "resources", "needed_leanbuild_files.txt"))
-  } else {
-    file_list <- NULL
-  }
-  # Find example folder file
-  files_to_remove <- c(
-    file_list,
-    "_bookdown.yml",
-    "_output.yml",
-    "01-intro.Rmd",
-    "02-chapter_of_course.Rmd",
-    "About.Rmd",
-    "assets",
-    "docs",
-    "example-repo.zip",
-    "index.Rmd",
-    "quizzes",
-    "resources",
-    "Course_Name.rds",
-    "manuscript",
-    "question_error_report.tsv",
-    "packages.bib")
-
+#' # Run this to delete them
+#' example_repo_cleanup(files_to_remove = basename(example_files))
+#'
+example_repo_cleanup <- function(files_to_remove, verbose = FALSE) {
 
   message("Cleaning up and removing example repo files")
 
-  # Now remove it all
-  lapply(files_to_remove, function(file) {
-    if (file.exists(file) | dir.exists(file)) {
-      system(paste0("chmod +w -R", file))
-      system(paste0("sudo rm -r ", file))
+  files_to_remove <- c(list.files("quizzes", recursive = TRUE, full.names = TRUE),
+                       list.files("docs", recursive = TRUE, full.names = TRUE),
+                       list.files("manuscript",  recursive = TRUE, full.names = TRUE),
+                       list.files("resources", recursive = TRUE, full.names = TRUE),
+                       files_to_remove,
+                       "question_error_report.tsv",
+                       "Course_Name.rds"
+  )
+
+  lapply(files_to_remove, function(file2remove, verbose = verbose) {
+    if (file.exists(file2remove)) {
+      message(paste0("Removing: ", file2remove))
+      file.remove(file2remove)
     }
   })
-}
 
-# save(bad_quiz, bad_quiz, file = "bad_quiz.RData")
-# save(good_quiz, good_quiz, file = "good_quiz.RData")
+}

@@ -4,16 +4,22 @@
 \alias{example_repo_cleanup}
 \title{Clean up example repo files}
 \usage{
-example_repo_cleanup(dir = ".")
+example_repo_cleanup(files_to_remove, verbose = FALSE)
 }
 \arguments{
-\item{dir}{What directory to delete the example files from}
+\item{files_to_remove}{List of example files to delete.}
+
+\item{verbose}{TRUE/FALSE would you like progress messages?}
 }
 \description{
 Clean up example repo files
 }
 \examples{
 
-example_repo_cleanup()
+# Run this to get the files we need
+example_files <- leanbuild::example_repo_setup()
+
+# Run this to delete them
+example_repo_cleanup(files_to_remove = basename(example_files))
 
 }
