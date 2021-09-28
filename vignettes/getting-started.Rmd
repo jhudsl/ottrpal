@@ -232,7 +232,7 @@ leanbuild::bookdown_to_leanpub(make_book_txt = TRUE,
 If you don't want those example files hanging around, we can run this function to cleanup the example files.
 
 ```{r, echo = FALSE}
-leanbuild::example_repo_cleanup(basename(example_files))
+leanbuild::example_repo_cleanup(basename(example_files), verbose = FALSE)
 ```
 
 Lastly, we will print out the session info.

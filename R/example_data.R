@@ -25,7 +25,7 @@ good_quiz_path <- function() {
 #' quiz_path <- bad_quiz_path()
 bad_quiz_path <- function() {
   list.files(
-    pattern = "quizzes/quiz_bad.md$",
+    pattern = "quiz_bad.md$",
     recursive = TRUE,
     system.file("extdata", package = "leanbuild"),
     full.names = TRUE
@@ -70,13 +70,11 @@ example_repo_cleanup <- function(files_to_remove, verbose = FALSE) {
 
   message("Cleaning up and removing example repo files")
 
-  files_to_remove <- grep(c("^docs$|^manuscript$|^resources$|^extdata$"),
-                          basename(files_to_remove), value = TRUE, invert = TRUE)
-
-  files_to_remove <- c(files_to_remove,
+  files_to_remove <- c(list.files("quizzes", recursive = TRUE, full.names = TRUE),
                        list.files("docs", recursive = TRUE, full.names = TRUE),
                        list.files("manuscript",  recursive = TRUE, full.names = TRUE),
-                       list.files("resources", recursive = TRUE, full.names = TRUE)
+                       list.files("resources", recursive = TRUE, full.names = TRUE),
+                       files_to_remove
   )
 
   lapply(files_to_remove, function(file2remove, verbose = verbose) {
