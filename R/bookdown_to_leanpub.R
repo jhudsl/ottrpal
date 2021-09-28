@@ -307,7 +307,7 @@ bookdown_to_leanpub <- function(path = ".",
   }
   message(paste("Leanpub ready files are saved to",
                 output_dir,
-                "Go to https://leanpub.com/ to publish them using the GitHub writing mode.")
+                "Go to https://leanpub.com/ to publish them using the GitHub writing mode."))
 }
 
 
