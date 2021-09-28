@@ -1,42 +1,12 @@
 ---
-title: "Chapter of course"
+title: "Example Chapter"
 ---
-
-
-*If you haven't yet read the getting started Wiki pages; [start there](https://github.com/jhudsl/DaSL_Course_Template_Bookdown/wiki/Getting-started)
 
 Every chapter needs to start out with this chunk of code:
 
 ```{r, include = FALSE}
 leanbuild::set_knitr_image_path()
 ```
-
-## Learning Objectives
-
-*Every chapter also needs Learning objectives that will look like this:  
-
-This chapter will cover:  
-
-- {You can use https://www.bu.edu/cme/forms/RSS_forms/tips_for_writing_objectives.pdf to define some learning objectives here}
-- {Another learning objective}
-
-## Libraries
-
-For this chapter, we'll need the following packages attached:
-
-*Remember to add [any additional packages you need to your course's own docker image](https://github.com/jhudsl/DaSL_Course_Template_Bookdown/wiki/Using-Docker#starting-a-new-docker-image).
-
-```{r}
-library(magrittr)
-```
-
-# Topic of Section
-
-You can write all your text in sections like this!
-
-## Subtopic
-
-Here's a subheading and some text in this subsection!
 
 ### Code examples
 
@@ -66,7 +36,7 @@ dev.off()
 ### Image example
 
 
-How to include a Google slide. It's simplest to use the `leanbuild` package:
+How to include a Google slide. 
 
 ```{r, fig.align='center', echo = FALSE, fig.alt= "Major point!! example image"}
 leanbuild::include_slide("https://docs.google.com/presentation/d/1YmwKdIy9BeQ3EShgZhvtb3MgR8P6iDX4DfFD65W_gdQ/edit#slide=id.gcc4fbee202_0_141")
