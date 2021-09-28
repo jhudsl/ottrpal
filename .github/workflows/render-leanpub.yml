@@ -1,12 +1,12 @@
 
 # Adapted for this jhudsl repository by Candace Savonen Aug 2021
 
-name: Render and publish Leanpub
+name: Update docs
 
 # Triggers the workflow on pull requests for the master branch OR can be manually triggered
 on:
   workflow_dispatch:
-  pull_request:
+  push:
     branches: [ master ]
 
 jobs:
@@ -24,16 +24,7 @@ jobs:
           repository: jhudsl/DaSL_Course_Template_Leanpub
           token: ${{ secrets.GH_PAT }}
 
-      # Copy over the latest leanbuild and use that for the run
-      - name: Get latest leanbuild
-        run: |
-          sudo apt-get install  -y --no-install-recommends subversion
-
-          # Copy over the latest leanbuild build
-          svn export https://github.com/${GITHUB_REPOSITORY}.git/branches/${GITHUB_HEAD_REF} leanbuild/
-
       # Run leanpub rendering
-      - name: Run leanbuild::bookdown_to_leanpub
+      - name: Run build site
         run: |
-          Rscript -e "devtools::load_all('leanbuild'); leanbuild::bookdown_to_leanpub(footer_text = 'check if footer works')"
-          Rscript -e "devtools::load_all('leanbuild'); leanbuild::render_coursera(convert_quizzes = TRUE)"
+          Rscript -e "pkgdown::build_site()"
