@@ -10,7 +10,7 @@
 good_quiz_path <- function() {
   list.files(
     pattern = "quiz_good.md$",
-    system.file("extdata", package = "leanbuild"),
+    system.file("extdata/quizzes", package = "leanbuild"),
     full.names = TRUE
   )
 }
@@ -25,7 +25,7 @@ good_quiz_path <- function() {
 bad_quiz_path <- function() {
   list.files(
     pattern = "quiz_bad.md$",
-    system.file("extdata", package = "leanbuild"),
+    system.file("extdata/quizzes", package = "leanbuild"),
     full.names = TRUE
   )
 }
@@ -42,24 +42,6 @@ bad_quiz_path <- function() {
 #' example_repo_setup()
 example_repo_setup <- function(dest_dir = ".") {
 
-  zip_file <- file.path(dest_dir, "example-repo.zip")
-
-  if (!dir.exists(dest_dir)) {
-    dir.create(dest_dir)
-  }
-  download.file(url = "https://github.com/jhudsl/DaSL_Course_Template_Leanpub/raw/main/example-repo.zip",
-                destfile = zip_file)
-
-  # See what unzip is being used
-  operating_system <- Sys.info()[1]
-  message(operating_system)
-  if (operating_system == "Windows" ){
-    # Unzip function doesn't always work for windows
-    system(paste("7z a -tzip", zip_file, dest_dir))
-  } else {
-    # Unzip the folder
-    utils::unzip(zip_file, exdir = dest_dir)
-  }
 }
 
 #' Clean up example repo files
