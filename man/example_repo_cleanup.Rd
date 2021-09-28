@@ -4,10 +4,10 @@
 \alias{example_repo_cleanup}
 \title{Clean up example repo files}
 \usage{
-example_repo_cleanup(dir = ".")
+example_repo_cleanup(files_to_remove, verbose = FALSE)
 }
 \arguments{
-\item{dir}{What directory to delete the example files from}
+\item{files_to_remove}{List of example files to delete.}
 }
 \description{
 Clean up example repo files

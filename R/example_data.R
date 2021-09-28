@@ -74,7 +74,9 @@ example_repo_cleanup <- function(files_to_remove, verbose = FALSE) {
                        list.files("docs", recursive = TRUE, full.names = TRUE),
                        list.files("manuscript",  recursive = TRUE, full.names = TRUE),
                        list.files("resources", recursive = TRUE, full.names = TRUE),
-                       files_to_remove
+                       files_to_remove,
+                       "question_error_report.tsv",
+                       "Course_Name.rds"
   )
 
   lapply(files_to_remove, function(file2remove, verbose = verbose) {
