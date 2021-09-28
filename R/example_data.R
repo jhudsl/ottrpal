@@ -69,7 +69,8 @@ example_repo_cleanup <- function(files_to_remove, verbose = FALSE) {
   message("Cleaning up and removing example repo files")
 
   files_to_remove <- grep(c("^docs$|^manuscript$|^resources$|^extdata$"),
-                          basename(files), value = TRUE, invert = TRUE)
+                          basename(files_to_remove), value = TRUE, invert = TRUE)
+
   files_to_remove <- c(files_to_remove,
                        list.files("docs", recursive = TRUE, full.names = TRUE),
                        list.files("manuscript",  recursive = TRUE, full.names = TRUE),
