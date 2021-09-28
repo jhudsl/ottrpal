@@ -273,7 +273,7 @@ build_image <- function(src, ..., caption = NULL, embed = NULL,
   # Make sure it's coerced as a character
   specs <- unlist(sapply(specs, as.character))
 
-  specs <- gsub(",\\}$", "\\}", specs)
+  specs <- gsub(",\\}$", "}", specs)
 
   # Set as fullbleed if TRUE
   specs <- c(specs, if (fullbleed) "fullbleed: true")
