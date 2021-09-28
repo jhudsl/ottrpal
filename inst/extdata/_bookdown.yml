@@ -5,7 +5,7 @@ rmd_files: ["index.Rmd",
             "01-intro.Rmd",
             "02-example-chapter.Rmd"]
 new_session: yes
-bibliography: [book.bib]
+bibliography: references.bib
 delete_merged_file: true
 language:
   ui:
