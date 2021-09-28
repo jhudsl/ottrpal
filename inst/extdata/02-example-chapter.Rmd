@@ -2,7 +2,7 @@
 title: "Example Chapter"
 ---
 
-# Example Chapter 
+# Example Chapter
 
 Every chapter needs to start out with this chunk of code:
 
@@ -38,7 +38,7 @@ dev.off()
 ### Image example
 
 
-How to include a Google slide. 
+How to include a Google slide.
 
 ```{r, fig.align='center', echo = FALSE, fig.alt= "Major point!! example image"}
 leanbuild::include_slide("https://docs.google.com/presentation/d/1YmwKdIy9BeQ3EShgZhvtb3MgR8P6iDX4DfFD65W_gdQ/edit#slide=id.gcc4fbee202_0_141")
@@ -46,7 +46,7 @@ leanbuild::include_slide("https://docs.google.com/presentation/d/1YmwKdIy9BeQ3ES
 
 But if you have the slide or some other image locally downloaded you can also use html like this:
 
-<img src="resources/images/02-chapter_of_course_files/figure-html//1YmwKdIy9BeQ3EShgZhvtb3MgR8P6iDX4DfFD65W_gdQ_gcc4fbee202_0_141.png" title="Major point!! example image" alt="Major point!! example image" style="display: block; margin: auto;" />
+<img src="resources/images/02-example-chapter_files/figure-html//1YmwKdIy9BeQ3EShgZhvtb3MgR8P6iDX4DfFD65W_gdQ_gcc4fbee202_0_141.png" title="Major point!! example image" alt="Major point!! example image" style="display: block; margin: auto;" />
 
 
 ### Video examples
