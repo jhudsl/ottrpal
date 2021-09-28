@@ -19,3 +19,4 @@ vignettes/.httr-oauth$
 ^R/youtube$
 ^run_test\.R$
 ^\.github$
+^pkgdown$
