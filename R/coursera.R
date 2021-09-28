@@ -213,6 +213,7 @@ convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
 #' @export
 #' @rdname coursera
 #'
+#' @importFrom utils download.file
 #'
 render_coursera <- function(
   output_dir = file.path("docs", "coursera"),

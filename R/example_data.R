@@ -39,8 +39,9 @@ bad_quiz_path <- function() {
 #'
 #' @importFrom fs dir_copy
 #' @examples
-#'
-#' example_repo_setup()
+#' # Run this to get the files we need
+#' example_files <- leanbuild::example_repo_setup()
+#' example_repo_setup(files_to_remove = basename(example_files))
 example_repo_setup <- function(dest_dir = ".") {
 
   bookdown_path <- list.files(
@@ -60,6 +61,7 @@ example_repo_setup <- function(dest_dir = ".") {
 #' Clean up example repo files
 #'
 #' @param files_to_remove List of example files to delete.
+#' @param verbose TRUE/FALSE would you like progress messages?
 #' @export
 #'
 #' @examples

@@ -13,6 +13,7 @@ example_repo_setup(dest_dir = ".")
 Set up example repo files
 }
 \examples{
-
-example_repo_setup()
+# Run this to get the files we need
+example_files <- leanbuild::example_repo_setup()
+example_repo_setup(files_to_remove = basename(example_files))
 }

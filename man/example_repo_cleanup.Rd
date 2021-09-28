@@ -8,6 +8,8 @@ example_repo_cleanup(files_to_remove, verbose = FALSE)
 }
 \arguments{
 \item{files_to_remove}{List of example files to delete.}
+
+\item{verbose}{TRUE/FALSE would you like progress messages?}
 }
 \description{
 Clean up example repo files
