@@ -1,6 +1,8 @@
 
-utils::globalVariables(c("num", "quiz_dir", "type_url", "file_name", "trimmed", "quiz",
-                         "quiz_path", "type", "q_num", "verbose"))
+utils::globalVariables(c(
+  "num", "quiz_dir", "type_url", "file_name", "trimmed", "quiz",
+  "quiz_path", "type", "q_num", "verbose"
+))
 
 # get script path and number of paragraphs
 paragraph_from_script <- function(x) {

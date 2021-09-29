@@ -47,8 +47,6 @@ find_end_of_prompt <- function(start_prompt_index, type_vector) {
 #'
 #' # Provide path to quiz to convert
 #' convert_quiz(quiz_path)
-#'
-#'
 convert_quiz <- function(quiz_path,
                          output_quiz_dir = dirname(quiz_path),
                          verbose = TRUE) {
@@ -161,14 +159,15 @@ convert_quiz <- function(quiz_path,
 #' tdir <- tempfile()
 #' dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
 #'
-#' file.copy(from = good_quiz_path(),
-#'           to = file.path(tdir, basename(good_quiz_path())))
+#' file.copy(
+#'   from = good_quiz_path(),
+#'   to = file.path(tdir, basename(good_quiz_path()))
+#' )
 #'
 #' # Provide path to directory of quizzes
 #' convert_coursera_quizzes(tdir)
 #'
 #' system("rm -r coursera_quizzes")
-#'
 convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
                                      output_quiz_dir = "coursera_quizzes",
                                      verbose = TRUE) {
@@ -215,13 +214,12 @@ convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
 #'
 #' @importFrom utils download.file
 #'
-render_coursera <- function(
-  output_dir = file.path("docs", "coursera"),
-  output_yaml = "_output.yml",
-  convert_quizzes = FALSE,
-  input_quiz_dir = "quizzes",
-  output_quiz_dir = "coursera_quizzes",
-  verbose = TRUE) {
+render_coursera <- function(output_dir = file.path("docs", "coursera"),
+                            output_yaml = "_output.yml",
+                            convert_quizzes = FALSE,
+                            input_quiz_dir = "quizzes",
+                            output_quiz_dir = "coursera_quizzes",
+                            verbose = TRUE) {
 
   # Find root directory by finding `_bookdown.yml` file
   root_dir <- bookdown_path()
@@ -232,7 +230,8 @@ render_coursera <- function(
 
   if (!file.exists(toc_close_css)) {
     download.file("https://raw.githubusercontent.com/jhudsl/leanbuild/master/inst/extdata/toc_close.css",
-                  destfile = toc_close_css)
+      destfile = toc_close_css
+    )
   }
   output_yaml_file <- file.path(root_dir, output_yaml)
 
@@ -301,8 +300,9 @@ render_coursera <- function(
 
   # Write it as "style.css"
   fs::file_copy(org_css_file,
-                css_file,
-                overwrite = TRUE)
+    css_file,
+    overwrite = TRUE
+  )
 
   ###### Now do the rendering! ######
   message("Render bookdown without TOC for Coursera")
@@ -321,21 +321,24 @@ render_coursera <- function(
   # Using suppressWarnings() because "incomplete final line"
   full_css <- suppressWarnings(
     readLines(css_file)
-    )
+  )
 
   # Write to "style.css"
   writeLines(append(full_css, toc_close_css_lines), css_file)
 
   # Only convert the quizzes if set to TRUE
   if (convert_quizzes) {
-    if (!dir.exists(input_quiz_dir)){
-      stop("convert_quizzes = TRUE but the specified input_quiz_dir: ",
-           input_quiz_dir,
-           " cannot be found.")
+    if (!dir.exists(input_quiz_dir)) {
+      stop(
+        "convert_quizzes = TRUE but the specified input_quiz_dir: ",
+        input_quiz_dir,
+        " cannot be found."
+      )
     }
-    convert_coursera_quizzes(input_quiz_dir = input_quiz_dir,
-                             output_quiz_dir = output_quiz_dir,
-                             verbose = verbose)
+    convert_coursera_quizzes(
+      input_quiz_dir = input_quiz_dir,
+      output_quiz_dir = output_quiz_dir,
+      verbose = verbose
+    )
   }
-
 }

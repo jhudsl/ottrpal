@@ -26,6 +26,4 @@ quiz_path <- good_quiz_path()
 
 # Provide path to quiz to convert
 convert_quiz(quiz_path)
-
-
 }

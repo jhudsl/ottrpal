@@ -147,13 +147,19 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
 }
 
 copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
+  quiz_dir <- file.path(quiz_dir)
+
   if (!dir.exists(quiz_dir)) {
-    stop(paste("The quiz directory specified by quiz_dir:", quiz_dir, "does not exist."))
+    stop(paste(
+      "The quiz directory specified by quiz_dir:", quiz_dir, "does not exist.",
+      "If you don't have quizzes, set quiz_dir = NULL"
+    ))
   }
-  quizzes <- list.files(path = quiz_dir, full.names = TRUE, pattern = "\\.md$")
-  if (length(files) > 0) {
+  quizzes <- list.files(path = file.path(quiz_dir), full.names = TRUE, pattern = "\\.md$")
+  if (length(quizzes) > 0) {
     fs::file_copy(quizzes, file.path(output_dir, basename(quizzes)),
-                 overwrite = TRUE)
+      overwrite = TRUE
+    )
   }
 }
 
@@ -172,7 +178,8 @@ copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
 #' @param make_book_txt Should [leanbuild::bookdown_to_book_txt()] be run
 #' to create a `Book.txt` in the output directory?
 #' @param quiz_dir directory that contains the quiz .md files that should be
-#' checked and incorporated into the Book.txt file
+#' checked and incorporated into the Book.txt file. If you don't have quizzes,
+#' set this to NULL
 #' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
 #'
@@ -223,7 +230,7 @@ bookdown_to_leanpub <- function(path = ".",
       output_format$pandoc$args <- c(output_format$pandoc$args, "--citeproc")
     } else {
       warning("Pandoc version is not greater than 2.11 so citations will not be able to be rendered properly")
-      output_format = NULL
+      output_format <- NULL
     }
     bookdown::render_book(
       input = index_file,
@@ -246,14 +253,10 @@ bookdown_to_leanpub <- function(path = ".",
   if (verbose) {
     message("Copying docs files")
   }
+
   copy_bib(path, output_dir = output_dir)
   if (verbose) {
     message("Copying bib files")
-  }
-
-  copy_quizzes(quiz_dir = quiz_dir, output_dir = output_dir)
-  if (verbose) {
-    message("Copying quiz files")
   }
 
   bib_files <- list.files(pattern = "[.]bib$")
@@ -288,12 +291,23 @@ bookdown_to_leanpub <- function(path = ".",
       )
     }
   }
-
-  #### Run quiz checks
-  if (run_quiz_checks) {
-    quiz_checks <- check_quizzes(quiz_dir,
-                                 verbose = verbose)
+  if (!is.null(quiz_dir)) {
+    #### Run quiz checks
+    if (run_quiz_checks) {
+      message("Checking quizzes")
+      quiz_checks <- check_quizzes(quiz_dir,
+        verbose = verbose
+      )
+    }
+    copy_quizzes(
+      quiz_dir = quiz_dir,
+      output_dir = output_dir
+    )
+    if (verbose) {
+      message("Copying quiz files")
+    }
   }
+
   out <- NULL
   if (make_book_txt) {
     if (verbose > 1) {
@@ -306,7 +320,6 @@ bookdown_to_leanpub <- function(path = ".",
       verbose = verbose
     )
     out <- book_txt_file <- file.path(output_dir, "Book.txt")
-
   } else {
     # If false, look for Book.txt file to copy to output folder.
     book_txt_file <- file.path(path, "Book.txt")
@@ -318,14 +331,18 @@ bookdown_to_leanpub <- function(path = ".",
       out <- book_txt_file <- file.path(output_dir, "Book.txt")
     } else {
       # If none exists and make_book_txt is false: stop.
-      stop(paste0("Book.txt file does not exist in the main directory: ", path, "and make_book_txt is set to FALSE.",
-           "There is no Book.txt file. Leanpub needs one. Either make one and place it in the directory path or ",
-           "use make_book_txt = TRUE and one will be generated for you."))
+      stop(paste0(
+        "Book.txt file does not exist in the main directory: ", path, "and make_book_txt is set to FALSE.",
+        "There is no Book.txt file. Leanpub needs one. Either make one and place it in the directory path or ",
+        "use make_book_txt = TRUE and one will be generated for you."
+      ))
     }
   }
-  message(paste("Leanpub ready files are saved to",
-                output_dir,
-                "Go to https://leanpub.com/ to publish them using the GitHub writing mode."))
+  message(paste(
+    "Leanpub ready files are saved to",
+    output_dir,
+    "Go to https://leanpub.com/ to publish them using the GitHub writing mode."
+  ))
 }
 
 
@@ -352,6 +369,7 @@ bookdown_to_book_txt <- function(path = ".",
   # Extract the names of the Rmd files (the chapters)
   rmd_files <- bookdown_rmd_files(path = path)
 
+  if (!is.null(quiz_dir)) {
   # Find the quiz files in the quiz directory
   quiz_files <- list.files(pattern = "\\.md$", quiz_dir)
 
@@ -359,24 +377,32 @@ bookdown_to_book_txt <- function(path = ".",
   all_files <- c(rmd_files, quiz_files)
 
   # Make a vector specifying the file type: quiz or not
-  file_type <- c(rep("non-quiz", length(rmd_files)),
-                 rep("quiz", length(quiz_files)))
-
+  file_type <- c(
+    rep("non-quiz", length(rmd_files)),
+    rep("quiz", length(quiz_files))
+  )
+  } else {
+    all_files <- rmd_files
+    file_type <- rep("non-quiz", length(rmd_files))
+  }
   # Put all files in one data.frame
-  all_files <- data.frame(file_name = all_files,
-                          file_type) %>%
+  all_files <- data.frame(
+    file_name = all_files,
+    file_type
+  ) %>%
     dplyr::mutate(
       # Use this so we don't have to fiddle with case senstivity for the next step
       lower_filename = tolower(file_name),
       # Get the number from the file name and that will be the order
       num = stringr::str_extract(file_name, "([0-9]+)"),
-                  num = dplyr::case_when(
-                    # Put index file first and about file last
-                    lower_filename == "index.rmd" ~ "0",
-                    lower_filename == "about.rmd" ~ as.character(length(all_files)),
-                    TRUE ~ num
-                  ),
-      num = as.numeric(num)) %>%
+      num = dplyr::case_when(
+        # Put index file first and about file last
+        lower_filename == "index.rmd" ~ "0",
+        lower_filename == "about.rmd" ~ as.character(length(all_files)),
+        TRUE ~ num
+      ),
+      num = as.numeric(num)
+    ) %>%
     # Put quizzes in order!
     dplyr::arrange(num, file_type) %>%
     dplyr::pull(file_name)

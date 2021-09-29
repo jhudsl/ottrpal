@@ -19,5 +19,4 @@ Parse apart a tag
 
 tag <- "{quiz, id: quiz_name_here, attempts: 10}"
 parse_q_tag(tag)
-
 }

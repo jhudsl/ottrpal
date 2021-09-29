@@ -41,9 +41,7 @@ bad_quiz_path <- function() {
 #' @examples
 #' # Run this to get the files we need
 #' example_files <- leanbuild::example_repo_setup()
-#'
 example_repo_setup <- function(dest_dir = ".") {
-
   bookdown_path <- list.files(
     pattern = "_bookdown.yml$",
     system.file("extdata/", package = "leanbuild"),
@@ -71,18 +69,17 @@ example_repo_setup <- function(dest_dir = ".") {
 #'
 #' # Run this to delete them
 #' example_repo_cleanup(files_to_remove = basename(example_files))
-#'
 example_repo_cleanup <- function(files_to_remove, verbose = FALSE) {
-
   message("Cleaning up and removing example repo files")
 
-  files_to_remove <- c(list.files("quizzes", recursive = TRUE, full.names = TRUE),
-                       list.files("docs", recursive = TRUE, full.names = TRUE),
-                       list.files("manuscript",  recursive = TRUE, full.names = TRUE),
-                       list.files("resources", recursive = TRUE, full.names = TRUE),
-                       files_to_remove,
-                       "question_error_report.tsv",
-                       "Course_Name.rds"
+  files_to_remove <- c(
+    list.files("quizzes", recursive = TRUE, full.names = TRUE),
+    list.files("docs", recursive = TRUE, full.names = TRUE),
+    list.files("manuscript", recursive = TRUE, full.names = TRUE),
+    list.files("resources", recursive = TRUE, full.names = TRUE),
+    files_to_remove,
+    "question_error_report.tsv",
+    "Course_Name.rds"
   )
 
   lapply(files_to_remove, function(file2remove, verbose = verbose) {
@@ -91,5 +88,4 @@ example_repo_cleanup <- function(files_to_remove, verbose = FALSE) {
       file.remove(file2remove)
     }
   })
-
 }
