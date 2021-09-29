@@ -146,11 +146,14 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
   }
 }
 
-copy_quizzes <- function(path = "./quizzes", output_dir = "manuscript") {
-  path <- bookdown_path(path)
-  files <- list.files(path = path, full.names = TRUE, pattern = "^quiz")
+copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
+  if (!dir.exists(quiz_dir)) {
+    stop(paste("The quiz directory specified by quiz_dir:", quiz_dir, "does not exist."))
+  }
+  quizzes <- list.files(path = quiz_dir, full.names = TRUE, pattern = "\\.md$")
   if (length(files) > 0) {
-    file.copy(files, file.path(output_dir), overwrite = TRUE)
+    fs::file_copy(quizzes, file.path(output_dir, basename(quizzes)),
+                 overwrite = TRUE)
   }
 }
 
@@ -248,7 +251,7 @@ bookdown_to_leanpub <- function(path = ".",
     message("Copying bib files")
   }
 
-  copy_quizzes(path, output_dir = output_dir)
+  copy_quizzes(quiz_dir = quiz_dir, output_dir = output_dir)
   if (verbose) {
     message("Copying quiz files")
   }
