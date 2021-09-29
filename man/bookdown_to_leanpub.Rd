@@ -28,7 +28,8 @@ relative to path}
 to create a `Book.txt` in the output directory?}
 
 \item{quiz_dir}{directory that contains the quiz .md files that should be
-checked and incorporated into the Book.txt file}
+checked and incorporated into the Book.txt file. If you don't have quizzes,
+set this to NULL}
 
 \item{run_quiz_checks}{TRUE/FALSE run quiz checks}
 

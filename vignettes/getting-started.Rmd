@@ -105,10 +105,10 @@ You can create a `Book.txt` file manually, or if your quizzes and chapters are n
 To have `leanbuild` attempt to autogenerate this file with the main function you can set `make_book_txt` to `TRUE`. 
 If no `Book.txt` file is found and `make_book_txt` is set to `FALSE` (this is the default setting), `leanbuild` will fail.
 
-So to run the main function and also have it make a `Book.txt` file for us, we can run the following: 
+So to run the main function and also have it make a `Book.txt` file for us, we can run the following: For now we don't have quizzes, so we will set `quiz_dir = NULL`.
 
 ```{r}
-leanbuild::bookdown_to_leanpub(make_book_txt = TRUE)
+leanbuild::bookdown_to_leanpub(make_book_txt = TRUE, quiz_dir = NULL)
 ```
 
 Alternatively, we could run `bookdown_to_book_txt()` function on its own:

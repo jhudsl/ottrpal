@@ -146,14 +146,16 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
   }
 }
 
-copy_quizzes <- function(quiz_dir = quiz_dir, output_dir = "manuscript") {
+copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
+
   if (!dir.exists(quiz_dir)) {
-    stop(paste("The quiz directory specified by quiz_dir:", quiz_dir, "does not exist."))
+    stop(paste("The quiz directory specified by quiz_dir:", quiz_dir, "does not exist.",
+               "If you don't have quizzes, set quiz_dir = NULL"))
   }
   quizzes <- list.files(path = quiz_dir, full.names = TRUE, pattern = "\\.md$")
   if (length(files) > 0) {
     fs::file_copy(quizzes, file.path(output_dir, basename(quizzes)),
-                 overwrite = TRUE)
+                  overwrite = TRUE)
   }
 }
 
@@ -172,7 +174,8 @@ copy_quizzes <- function(quiz_dir = quiz_dir, output_dir = "manuscript") {
 #' @param make_book_txt Should [leanbuild::bookdown_to_book_txt()] be run
 #' to create a `Book.txt` in the output directory?
 #' @param quiz_dir directory that contains the quiz .md files that should be
-#' checked and incorporated into the Book.txt file
+#' checked and incorporated into the Book.txt file. If you don't have quizzes,
+#' set this to NULL
 #' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
 #'
@@ -246,14 +249,10 @@ bookdown_to_leanpub <- function(path = ".",
   if (verbose) {
     message("Copying docs files")
   }
+
   copy_bib(path, output_dir = output_dir)
   if (verbose) {
     message("Copying bib files")
-  }
-
-  copy_quizzes(quiz_dir = quiz_dir, output_dir = output_dir)
-  if (verbose) {
-    message("Copying quiz files")
   }
 
   bib_files <- list.files(pattern = "[.]bib$")
@@ -274,9 +273,9 @@ bookdown_to_leanpub <- function(path = ".",
     infile <- normalizePath(file)
 
     infile <- replace_single_html(infile,
-      verbose = verbose > 1,
-      remove_resources_start = remove_resources_start,
-      footer_text = footer_text
+                                  verbose = verbose > 1,
+                                  remove_resources_start = remove_resources_start,
+                                  footer_text = footer_text
     )
 
     if (length(bib_files) > 0) {
@@ -284,16 +283,26 @@ bookdown_to_leanpub <- function(path = ".",
         message("Making references for ", file)
       }
       writeLines(simple_references(infile, bib_files, add_reference_header = TRUE),
-        con = infile, sep = "\n"
+                 con = infile, sep = "\n"
       )
     }
   }
 
   #### Run quiz checks
   if (run_quiz_checks) {
+    message("Checking quizzes")
     quiz_checks <- check_quizzes(quiz_dir,
                                  verbose = verbose)
   }
+  if (!is.null(quiz_dir)) {
+    copy_quizzes(quiz_dir = quiz_dir,
+                output_dir = output_dir)
+
+    if (verbose) {
+      message("Copying quiz files")
+    }
+  }
+
   out <- NULL
   if (make_book_txt) {
     if (verbose > 1) {
@@ -319,8 +328,8 @@ bookdown_to_leanpub <- function(path = ".",
     } else {
       # If none exists and make_book_txt is false: stop.
       stop(paste0("Book.txt file does not exist in the main directory: ", path, "and make_book_txt is set to FALSE.",
-           "There is no Book.txt file. Leanpub needs one. Either make one and place it in the directory path or ",
-           "use make_book_txt = TRUE and one will be generated for you."))
+                  "There is no Book.txt file. Leanpub needs one. Either make one and place it in the directory path or ",
+                  "use make_book_txt = TRUE and one will be generated for you."))
     }
   }
   message(paste("Leanpub ready files are saved to",
@@ -370,12 +379,12 @@ bookdown_to_book_txt <- function(path = ".",
       lower_filename = tolower(file_name),
       # Get the number from the file name and that will be the order
       num = stringr::str_extract(file_name, "([0-9]+)"),
-                  num = dplyr::case_when(
-                    # Put index file first and about file last
-                    lower_filename == "index.rmd" ~ "0",
-                    lower_filename == "about.rmd" ~ as.character(length(all_files)),
-                    TRUE ~ num
-                  ),
+      num = dplyr::case_when(
+        # Put index file first and about file last
+        lower_filename == "index.rmd" ~ "0",
+        lower_filename == "about.rmd" ~ as.character(length(all_files)),
+        TRUE ~ num
+      ),
       num = as.numeric(num)) %>%
     # Put quizzes in order!
     dplyr::arrange(num, file_type) %>%
