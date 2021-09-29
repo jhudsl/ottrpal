@@ -147,13 +147,15 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
 }
 
 copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
+  quiz_dir <- file.path(quiz_dir)
+
   if (!dir.exists(quiz_dir)) {
     stop(paste(
       "The quiz directory specified by quiz_dir:", quiz_dir, "does not exist.",
       "If you don't have quizzes, set quiz_dir = NULL"
     ))
   }
-  quizzes <- list.files(path = quiz_dir, full.names = TRUE, pattern = "\\.md$")
+  quizzes <- list.files(path = file.path(quiz_dir), full.names = TRUE, pattern = "\\.md$")
   if (length(files) > 0) {
     fs::file_copy(quizzes, file.path(output_dir, basename(quizzes)),
       overwrite = TRUE
@@ -289,20 +291,18 @@ bookdown_to_leanpub <- function(path = ".",
       )
     }
   }
-
-  #### Run quiz checks
-  if (run_quiz_checks) {
-    message("Checking quizzes")
-    quiz_checks <- check_quizzes(quiz_dir,
-      verbose = verbose
-    )
-  }
   if (!is.null(quiz_dir)) {
+    #### Run quiz checks
+    if (run_quiz_checks) {
+      message("Checking quizzes")
+      quiz_checks <- check_quizzes(quiz_dir,
+        verbose = verbose
+      )
+    }
     copy_quizzes(
       quiz_dir = quiz_dir,
       output_dir = output_dir
     )
-
     if (verbose) {
       message("Copying quiz files")
     }
