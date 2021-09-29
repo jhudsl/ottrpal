@@ -369,6 +369,7 @@ bookdown_to_book_txt <- function(path = ".",
   # Extract the names of the Rmd files (the chapters)
   rmd_files <- bookdown_rmd_files(path = path)
 
+  if (!is.null(quiz_dir)) {
   # Find the quiz files in the quiz directory
   quiz_files <- list.files(pattern = "\\.md$", quiz_dir)
 
@@ -380,7 +381,10 @@ bookdown_to_book_txt <- function(path = ".",
     rep("non-quiz", length(rmd_files)),
     rep("quiz", length(quiz_files))
   )
-
+  } else {
+    all_files <- rmd_files
+    file_type <- rep("non-quiz", length(rmd_files))
+  }
   # Put all files in one data.frame
   all_files <- data.frame(
     file_name = all_files,

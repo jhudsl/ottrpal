@@ -21,5 +21,4 @@ example_files <- leanbuild::example_repo_setup()
 
 # Run this to delete them
 example_repo_cleanup(files_to_remove = basename(example_files))
-
 }
