@@ -241,9 +241,13 @@ bookdown_to_leanpub <- function(path = ".",
 
   copy_docs(path, output_dir = output_dir)
   if (verbose) {
-    message("Copying bib files")
+    message("Copying docs files")
   }
   copy_bib(path, output_dir = output_dir)
+  if (verbose) {
+    message("Copying bib files")
+  }
+
   copy_quizzes(path, output_dir = output_dir)
   if (verbose) {
     message("Copying quiz files")
