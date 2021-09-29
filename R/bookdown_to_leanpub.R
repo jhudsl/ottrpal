@@ -146,7 +146,7 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
   }
 }
 
-copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
+copy_quizzes <- function(quiz_dir = quiz_dir, output_dir = "manuscript") {
   if (!dir.exists(quiz_dir)) {
     stop(paste("The quiz directory specified by quiz_dir:", quiz_dir, "does not exist."))
   }
