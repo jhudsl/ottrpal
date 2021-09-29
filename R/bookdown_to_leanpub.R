@@ -146,6 +146,13 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
   }
 }
 
+copy_quizzes <- function(path = "./quizzes", output_dir = "manuscript") {
+  path <- bookdown_path(path)
+  files <- list.files(path = path, full.names = TRUE, pattern = "^quiz")
+  if (length(files) > 0) {
+    file.copy(files, file.path(output_dir), overwrite = TRUE)
+  }
+}
 
 
 
@@ -234,9 +241,17 @@ bookdown_to_leanpub <- function(path = ".",
 
   copy_docs(path, output_dir = output_dir)
   if (verbose) {
-    message("Copying bib files")
+    message("Copying docs files")
   }
   copy_bib(path, output_dir = output_dir)
+  if (verbose) {
+    message("Copying bib files")
+  }
+
+  copy_quizzes(path, output_dir = output_dir)
+  if (verbose) {
+    message("Copying quiz files")
+  }
 
   bib_files <- list.files(pattern = "[.]bib$")
   if (length(bib_files) > 0) {
