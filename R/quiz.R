@@ -140,7 +140,6 @@ extract_meta <- function(tags) {
 #'
 #' tag <- "{quiz, id: quiz_name_here, attempts: 10}"
 #' parse_q_tag(tag)
-#'
 parse_q_tag <- function(tag) {
 
   # Trim whitespace
@@ -153,14 +152,13 @@ parse_q_tag <- function(tag) {
   tag <- strsplit(tag, ":")
 
   parsed_tag <- lapply(tag, function(field) {
-
     field <- trimws(field)
     if (length(field) > 1) {
       field_name <- field[1]
       field_spec <- field[2]
 
-    parsed_field <- field_spec
-    names(parsed_field) <- field_name
+      parsed_field <- field_spec
+      names(parsed_field) <- field_name
     } else {
       parsed_field <- field
     }
@@ -197,7 +195,6 @@ parse_q_tag <- function(tag) {
 #' )
 #' quiz_specs <- parse_quiz(quiz_lines)
 #' check_quiz_attributes(quiz_specs)
-#'
 parse_quiz <- function(quiz_lines,
                        quiz_name = NULL,
                        verbose = FALSE) {
@@ -259,8 +256,10 @@ extract_quiz <- function(quiz_lines) {
   # Keep only those lines:
   quiz_lines <- quiz_lines[(start + 1):(end - 1)]
 
-  return(list(quiz_lines = quiz_lines,
-              quiz_tag = quiz_tag))
+  return(list(
+    quiz_lines = quiz_lines,
+    quiz_tag = quiz_tag
+  ))
 }
 
 #' Check Quiz Attributes
@@ -644,7 +643,9 @@ check_quizzes <- function(quiz_dir = "quizzes",
   names(all_quiz_results) <- basename(files)
 
   # Only extract the question checks
-  question_checks <- lapply(all_quiz_results, function(quiz_report) {quiz_report$question_checks})
+  question_checks <- lapply(all_quiz_results, function(quiz_report) {
+    quiz_report$question_checks
+  })
 
   # Make into one data.frame
   question_report <- dplyr::bind_rows(question_checks) %>%

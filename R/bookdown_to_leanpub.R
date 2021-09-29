@@ -147,15 +147,17 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
 }
 
 copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
-
   if (!dir.exists(quiz_dir)) {
-    stop(paste("The quiz directory specified by quiz_dir:", quiz_dir, "does not exist.",
-               "If you don't have quizzes, set quiz_dir = NULL"))
+    stop(paste(
+      "The quiz directory specified by quiz_dir:", quiz_dir, "does not exist.",
+      "If you don't have quizzes, set quiz_dir = NULL"
+    ))
   }
   quizzes <- list.files(path = quiz_dir, full.names = TRUE, pattern = "\\.md$")
   if (length(files) > 0) {
     fs::file_copy(quizzes, file.path(output_dir, basename(quizzes)),
-                  overwrite = TRUE)
+      overwrite = TRUE
+    )
   }
 }
 
@@ -226,7 +228,7 @@ bookdown_to_leanpub <- function(path = ".",
       output_format$pandoc$args <- c(output_format$pandoc$args, "--citeproc")
     } else {
       warning("Pandoc version is not greater than 2.11 so citations will not be able to be rendered properly")
-      output_format = NULL
+      output_format <- NULL
     }
     bookdown::render_book(
       input = index_file,
@@ -273,9 +275,9 @@ bookdown_to_leanpub <- function(path = ".",
     infile <- normalizePath(file)
 
     infile <- replace_single_html(infile,
-                                  verbose = verbose > 1,
-                                  remove_resources_start = remove_resources_start,
-                                  footer_text = footer_text
+      verbose = verbose > 1,
+      remove_resources_start = remove_resources_start,
+      footer_text = footer_text
     )
 
     if (length(bib_files) > 0) {
@@ -283,7 +285,7 @@ bookdown_to_leanpub <- function(path = ".",
         message("Making references for ", file)
       }
       writeLines(simple_references(infile, bib_files, add_reference_header = TRUE),
-                 con = infile, sep = "\n"
+        con = infile, sep = "\n"
       )
     }
   }
@@ -292,11 +294,14 @@ bookdown_to_leanpub <- function(path = ".",
   if (run_quiz_checks) {
     message("Checking quizzes")
     quiz_checks <- check_quizzes(quiz_dir,
-                                 verbose = verbose)
+      verbose = verbose
+    )
   }
   if (!is.null(quiz_dir)) {
-    copy_quizzes(quiz_dir = quiz_dir,
-                output_dir = output_dir)
+    copy_quizzes(
+      quiz_dir = quiz_dir,
+      output_dir = output_dir
+    )
 
     if (verbose) {
       message("Copying quiz files")
@@ -315,7 +320,6 @@ bookdown_to_leanpub <- function(path = ".",
       verbose = verbose
     )
     out <- book_txt_file <- file.path(output_dir, "Book.txt")
-
   } else {
     # If false, look for Book.txt file to copy to output folder.
     book_txt_file <- file.path(path, "Book.txt")
@@ -327,14 +331,18 @@ bookdown_to_leanpub <- function(path = ".",
       out <- book_txt_file <- file.path(output_dir, "Book.txt")
     } else {
       # If none exists and make_book_txt is false: stop.
-      stop(paste0("Book.txt file does not exist in the main directory: ", path, "and make_book_txt is set to FALSE.",
-                  "There is no Book.txt file. Leanpub needs one. Either make one and place it in the directory path or ",
-                  "use make_book_txt = TRUE and one will be generated for you."))
+      stop(paste0(
+        "Book.txt file does not exist in the main directory: ", path, "and make_book_txt is set to FALSE.",
+        "There is no Book.txt file. Leanpub needs one. Either make one and place it in the directory path or ",
+        "use make_book_txt = TRUE and one will be generated for you."
+      ))
     }
   }
-  message(paste("Leanpub ready files are saved to",
-                output_dir,
-                "Go to https://leanpub.com/ to publish them using the GitHub writing mode."))
+  message(paste(
+    "Leanpub ready files are saved to",
+    output_dir,
+    "Go to https://leanpub.com/ to publish them using the GitHub writing mode."
+  ))
 }
 
 
@@ -368,12 +376,16 @@ bookdown_to_book_txt <- function(path = ".",
   all_files <- c(rmd_files, quiz_files)
 
   # Make a vector specifying the file type: quiz or not
-  file_type <- c(rep("non-quiz", length(rmd_files)),
-                 rep("quiz", length(quiz_files)))
+  file_type <- c(
+    rep("non-quiz", length(rmd_files)),
+    rep("quiz", length(quiz_files))
+  )
 
   # Put all files in one data.frame
-  all_files <- data.frame(file_name = all_files,
-                          file_type) %>%
+  all_files <- data.frame(
+    file_name = all_files,
+    file_type
+  ) %>%
     dplyr::mutate(
       # Use this so we don't have to fiddle with case senstivity for the next step
       lower_filename = tolower(file_name),
@@ -385,7 +397,8 @@ bookdown_to_book_txt <- function(path = ".",
         lower_filename == "about.rmd" ~ as.character(length(all_files)),
         TRUE ~ num
       ),
-      num = as.numeric(num)) %>%
+      num = as.numeric(num)
+    ) %>%
     # Put quizzes in order!
     dplyr::arrange(num, file_type) %>%
     dplyr::pull(file_name)

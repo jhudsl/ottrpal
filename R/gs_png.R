@@ -132,7 +132,7 @@ download_gs_file <- function(id, out_type = "pptx") {
   # don't write something if not really a pptx
   ctype <- result$headers$`content-type`
   if (httr::status_code(result) >= 400 &&
-      !is.null(ctype) && grepl("html", ctype)) {
+    !is.null(ctype) && grepl("html", ctype)) {
     file.remove(tfile)
   }
   if (grepl("ServiceLogin", result$url)) {
