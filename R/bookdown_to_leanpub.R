@@ -156,7 +156,7 @@ copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
     ))
   }
   quizzes <- list.files(path = file.path(quiz_dir), full.names = TRUE, pattern = "\\.md$")
-  if (length(files) > 0) {
+  if (length(quizzes) > 0) {
     fs::file_copy(quizzes, file.path(output_dir, basename(quizzes)),
       overwrite = TRUE
     )
