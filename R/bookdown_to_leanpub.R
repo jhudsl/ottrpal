@@ -401,7 +401,8 @@ bookdown_to_book_txt <- function(path = ".",
         lower_filename == "about.rmd" ~ as.character(length(all_files)),
         TRUE ~ num
       ),
-      num = as.numeric(num)
+      num = as.numeric(num),
+      file_name = gsub(".Rmd$", ".md", file_name)
     ) %>%
     # Put quizzes in order!
     dplyr::arrange(num, file_type) %>%
