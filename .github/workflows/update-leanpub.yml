@@ -12,7 +12,7 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    # I have it check out the image that is built from: https://github.com/jhudsl/DaSL_Course_Template_Bookdown/blob/main/docker/Dockerfile
+    # I have it check out the image that is built from: https://github.com/jhudsl/OTTR_Template/blob/main/docker/Dockerfile
     container:
       image: jhudsl/course_template
 
@@ -21,7 +21,7 @@ jobs:
       - name: Checkout code from Leanpub test repo
         uses: actions/checkout@v2
         with:
-          repository: jhudsl/DaSL_Course_Template_Leanpub
+          repository: jhudsl/OTTR_Quizzes
           token: ${{ secrets.GH_PAT }}
 
       # Copy over the latest leanbuild and use that for the run
