@@ -8,7 +8,7 @@
 
 # Intro to leanbuild
 
-`leanbuild` converts a [Bookdown repository](https://github.com/jtr13/bookdown-template) into a [Leanpub-ready](https://leanpub.com/) set of files.
+`leanbuild` converts an [OTTR-made course](https://github.com/jhudsl/OTTR_Template/wiki) into a [Leanpub-ready](https://leanpub.com/) set of files.
 The output rendered files from this package can be published using the [Github writing mode on Leanpub](https://leanpub.com/lfm/read#leanpub-auto-switching-writing-modes).
 
 [Read the full documentation here](https://jhudatascience.org/leanbuild/docs/index.html).
