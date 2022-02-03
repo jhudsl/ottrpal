@@ -1,4 +1,4 @@
-Package: leanbuild
+Package: ottr
 Version: 0.1.2
 Title: Tools for Creating Automated Courses
 Description: Leverages the 'bookdown' package and other tools to create courses
@@ -48,6 +48,6 @@ Remotes: jhudsl/text2speech,
 ByteCompile: true
 Type: Package
 VignetteBuilder: knitr
-URL: https://github.com/jhudsl/leanbuild
-BugReports: https://github.comjhudsl/leanbuild/issues
+URL: https://github.com/jhudsl/ottr
+BugReports: https://github.comjhudsl/ottr/issues
 RoxygenNote: 7.1.1

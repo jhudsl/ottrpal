@@ -7,17 +7,17 @@
 check_all_questions(quiz_specs, quiz_name = NA, verbose = TRUE)
 }
 \arguments{
-\item{quiz_specs}{quiz_specs which is output from [leanbuild::parse_quiz].}
+\item{quiz_specs}{quiz_specs which is output from [ottr::parse_quiz].}
 
 \item{quiz_name}{The name of the quiz being checked.}
 
 \item{verbose}{Whether progress messages should be given.}
 }
 \value{
-A list of the output from [leanbuild::check_question] with messages/warnings regarding each question and each check.
+A list of the output from [ottr::check_question] with messages/warnings regarding each question and each check.
 }
 \description{
-Takes output from [leanbuild::parse_quiz] and runs checks on each question in a quiz by calling [leanbuild::check_question] for each question.
+Takes output from [ottr::parse_quiz] and runs checks on each question in a quiz by calling [ottr::check_question] for each question.
 First splits questions into their own data frame. Returns a list of messages/warnings about each question's set up.
 }
 \examples{
