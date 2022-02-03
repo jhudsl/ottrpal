@@ -6,10 +6,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Intro to ottr
+# Intro to ottr (Online 
 
-`ottr` converts an [OTTR-made course](https://github.com/jhudsl/OTTR_Template/wiki) into a [Leanpub-ready](https://leanpub.com/) set of files.
-The output rendered files from this package can be published using the [Github writing mode on Leanpub](https://leanpub.com/lfm/read#leanpub-auto-switching-writing-modes).
+`ottr` converts an [OTTR course](https://github.com/jhudsl/OTTR_Template/wiki) (Open-source Tools for Training Resources) into a files ready for upload to Massive Open Online Courses (MOOCs): [Coursera](https://www.coursera.org/) and [Leanpub](https://leanpub.com/).
+
+Go to the [main OTTR guide](https://github.com/jhudsl/OTTR_Template/wiki) for how to start creating courses with OTTR.
 
 [Read the full documentation here](https://jhudatascience.org/ottr/docs/index.html).
 
