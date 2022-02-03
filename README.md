@@ -6,7 +6,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Intro to ottr (Online 
+# Intro to ottr package
 
 `ottr` converts an [OTTR course](https://github.com/jhudsl/OTTR_Template/wiki) (Open-source Tools for Training Resources) into a files ready for upload to Massive Open Online Courses (MOOCs): [Coursera](https://www.coursera.org/) and [Leanpub](https://leanpub.com/).
 
