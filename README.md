@@ -10,9 +10,8 @@
 
 `ottr` converts an [OTTR course](https://github.com/jhudsl/OTTR_Template/wiki) (Open-source Tools for Training Resources) into a files ready for upload to Massive Open Online Courses (MOOCs): [Coursera](https://www.coursera.org/) and [Leanpub](https://leanpub.com/).
 
-Go to the [main OTTR guide](https://github.com/jhudsl/OTTR_Template/wiki) for how to start creating courses with OTTR.
-
-[Read the full documentation here](https://jhudatascience.org/ottr/docs/index.html).
+- Go to the [main OTTR guide](https://github.com/jhudsl/OTTR_Template/wiki) for how to start creating courses with OTTR.
+- [Read the ottr package documentation here](https://jhudatascience.org/ottr/docs/index.html).
 
 ## Required files:
 
