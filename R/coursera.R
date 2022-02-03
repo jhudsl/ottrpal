@@ -229,7 +229,7 @@ render_coursera <- function(output_dir = file.path("docs", "coursera"),
   toc_close_css <- file.path(root_dir, "assets", "toc_close.css")
 
   if (!file.exists(toc_close_css)) {
-    download.file("https://raw.githubusercontent.com/jhudsl/leanbuild/master/inst/extdata/toc_close.css",
+    download.file("https://raw.githubusercontent.com/jhudsl/ottr/master/inst/extdata/toc_close.css",
       destfile = toc_close_css
     )
   }

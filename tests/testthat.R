@@ -1,4 +1,4 @@
 library(testthat)
-library(leanbuild)
+library(ottr)
 
-test_check("leanbuild")
+test_check("ottr")

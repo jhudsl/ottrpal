@@ -7,7 +7,7 @@
 check_quizzes(quiz_dir = "quizzes", write_report = TRUE, verbose = TRUE)
 }
 \arguments{
-\item{quiz_dir}{A path to a directory full of quizzes that should all be checked with [leanbuild::check_all_quizzes].}
+\item{quiz_dir}{A path to a directory full of quizzes that should all be checked with [ottr::check_all_quizzes].}
 
 \item{write_report}{TRUE/FALSE save warning report to a CSV file?}
 

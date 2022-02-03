@@ -14,5 +14,5 @@ Set up example repo files
 }
 \examples{
 # Run this to get the files we need
-example_files <- leanbuild::example_repo_setup()
+example_files <- ottr::example_repo_setup()
 }
