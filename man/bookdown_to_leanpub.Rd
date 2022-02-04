@@ -13,8 +13,7 @@ bookdown_to_leanpub(
   run_quiz_checks = FALSE,
   remove_resources_start = FALSE,
   verbose = TRUE,
-  footer_text = NULL,
-  ...
+  footer_text = NULL
 )
 }
 \arguments{
