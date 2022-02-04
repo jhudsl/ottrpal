@@ -36,12 +36,12 @@ Imports: googledrive,
     stringr,
     knitr (>= 1.33),
     qpdf,
-    purrr
-Suggests:
-    remotes,
-    testthat,
+    purrr,
     tibble,
     utils
+Suggests:
+    remotes,
+    testthat
 Encoding: UTF-8
 LazyData: true
 Remotes: jhudsl/text2speech,
