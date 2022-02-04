@@ -452,7 +452,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 
   # Get prompt if its there
   if (!any(grepl("^\\? ", question_df$original))) {
-    stop("Could not find prompt for question. Question prompts start line with '?'")
+    warning("Could not find prompt for question. Question prompts start line with '?'")
   }
   prompt <- question_df$original[question_df$type == "prompt"]
 
