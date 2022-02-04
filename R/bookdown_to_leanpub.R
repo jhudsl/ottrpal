@@ -33,12 +33,12 @@ bookdown_to_leanpub <- function(path = ".",
 
   # Establish path
   path <- bookdown_path(path)
-  
+
   rmd_regex <- "[.][R|r]md$"
-  
+
   # Extract the names of the Rmd files (the chapters)
   rmd_files <- bookdown_rmd_files(path = path)
-  
+
   bib_files <- list.files(pattern = "[.]bib$")
   if (length(bib_files) > 0) {
     pandoc_args <- paste0("--bibliography=", path.expand(normalizePath(bib_files)))
@@ -139,13 +139,13 @@ bookdown_to_leanpub <- function(path = ".",
 #'
 #' @return A list of output files and diagnostics
 #' @export
-#' 
+#'
 #' @examples \dontrun{
-#' 
+#'
 #' ottr::bookdown_to_embed_leanpub(base_url = "")
-#' 
+#'
 #' ottr::bookdown_to_embed_leanpub(chapt_img_key = "chapter_urls.tsv")
-#' 
+#'
 #' }
 bookdown_to_embed_leanpub <- function(path = ".",
                                       chapt_img_key = NULL,
@@ -164,17 +164,17 @@ bookdown_to_embed_leanpub <- function(path = ".",
 
   if (!is.null(chapt_img_key)) {
     message(paste("Reading in a chapt_img_key TSV file:", chapt_img_key))
-    readr::read_tsv(chapt_img_key)
+    chapt_df <- readr::read_tsv(chapt_img_key)
   } else {
     message("Creating a chapt_img_key TSV file")
     if (is.null(base_url)) {
       stop("No base_url is supplied and no chapt_img_key file was supplied. Need one or the other.")
     }
-    chapt_df <- get_chapters(bookdown_index = bookdown_index, 
+    chapt_df <- get_chapters(bookdown_index = bookdown_index,
                              base_url = base_url)
   }
-  
-  # If there's no img_path supplied, then use a default image for each. 
+
+  # If there's no img_path supplied, then use a default image for each.
   if (!("img_path" %in% colnames(chapt_df))) {
     if (is.null(default_img)) {
       default_img <- "https://docs.google.com/presentation/d/1jEUxUY1qXDZ3DUtvTU6NCc6ASG5nx4Gwczv5aAglYX4/edit#slide=id.p"
@@ -185,14 +185,14 @@ bookdown_to_embed_leanpub <- function(path = ".",
     if (!dir.exists(img_dir)) {
       dir.create(img_dir, recursive = TRUE)
     }
-    
+
     # Download default image
     chapt_df$img_path <- gs_png_download(url = default_img, output_dir = img_dir, overwrite = TRUE)
   }
-  
-  md_output_files <- chapt_df %>% 
+
+  md_output_files <- chapt_df %>%
     # Make the data.frame be in the same order
-    dplyr::select(dplyr::any_of("url"), dplyr::any_of("chapt_title"), dplyr::any_of("img_path")) %>% 
+    dplyr::select(dplyr::any_of("url"), dplyr::any_of("chapt_title"), dplyr::any_of("img_path")) %>%
     # Run it make_embed_markdown on each row
     purrr::pmap( ~ make_embed_markdown(url = ..1, chapt_title = ..2, img_path = ..3))
 
@@ -366,9 +366,9 @@ make_embed_markdown <- function(url,
 #' @param bookdown_index The file path of the rendered bookdown index.html file
 #' @param base_url The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
 #' e.g. https://jhudatascience.org/OTTR_Template/coursera
-#' 
-#' @return A data.frame of the chapter urls and their titles that are to be ported to Leanpub. 
-#' This can be passed to 
+#'
+#' @return A data.frame of the chapter urls and their titles that are to be ported to Leanpub.
+#' This can be passed to
 #'
 #' @export
 #'
