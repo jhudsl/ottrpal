@@ -6,6 +6,7 @@
 \usage{
 bookdown_to_book_txt(
   path = ".",
+  md_files = NULL,
   output_dir = "manuscript",
   quiz_dir = "quizzes",
   verbose = TRUE
@@ -13,6 +14,8 @@ bookdown_to_book_txt(
 }
 \arguments{
 \item{path}{path to the bookdown book, must have a `_bookdown.yml` file}
+
+\item{md_files}{vector of file path of the md's to be included}
 
 \item{output_dir}{output directory to put files.  It should likely be
 relative to path}

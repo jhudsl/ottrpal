@@ -13,7 +13,7 @@ get_chapters(bookdown_index = file.path("docs", "index.html"), base_url = NULL)
 e.g. https://jhudatascience.org/OTTR_Template/coursera}
 }
 \value{
-A data.frame of the chapter urls and their titles that are to be ported to Leanpub. 
+A data.frame of the chapter urls and their titles that are to be ported to Leanpub.
 This can be passed to
 }
 \description{

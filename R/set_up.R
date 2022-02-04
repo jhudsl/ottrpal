@@ -181,7 +181,7 @@ copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
 #' set this to NULL
 #' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
-#'
+#' @param embed is this being run by bookdown_to_embed_leanpub? TRUE/FALSE
 #' @return A list of output files and diagnostics
 #' @export
 #'
@@ -194,12 +194,18 @@ set_up_leanpub <- function(path = ".",
                            run_quiz_checks = FALSE,
                            remove_resources_start = FALSE,
                            verbose = TRUE,
-                           footer_text = NULL) {
+                           footer_text = NULL, 
+                           embed = NULL) {
 
-  if (clean_up && dir.exists(output_dir)) {
+  if (clean_up) {
     message(paste("Clearing out old version of output files:", output_dir))
-    file.remove(output_dir, recursive = TRUE)
-    dir.create(output_dir, showWarnings = FALSE)
+    
+    file.remove(output_dir, recursive = TRUE, showWarnings = FALSE)
+  } 
+  
+  # If output directory doesn't exist, make it
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
   
   # Declare regex for finding rmd files
@@ -244,41 +250,32 @@ set_up_leanpub <- function(path = ".",
       clean_envir = FALSE
     )
   }
+  
+  # We only need to copy these things if we are not doing embed
+  if (!embed) {
+    if (verbose) message("Copying Resources")
+    copy_resources(path, output_dir = output_dir)
+    
+    if (verbose) message("Copying docs files")
+    copy_docs(path, output_dir = output_dir)
 
-  # may be irrelevant since copy_docs does everything
-  if (verbose) {
-    message("Copying Resources")
-  }
-  copy_resources(path, output_dir = output_dir)
-
-  if (verbose) {
-    message("Copying Docs folder")
-  }
-
-  copy_docs(path, output_dir = output_dir)
-  if (verbose) {
-    message("Copying docs files")
-  }
-
-  copy_bib(path, output_dir = output_dir)
-  if (verbose) {
-    message("Copying bib files")
+    if (verbose) message("Copying bib files")
+    copy_bib(path, output_dir = output_dir)
   }
 
   if (!is.null(quiz_dir)) {
     #### Run quiz checks
     if (run_quiz_checks) {
       message("Checking quizzes")
-      quiz_checks <- check_quizzes(quiz_dir,
+      quiz_checks <- check_quizzes(
+        quiz_dir,
         verbose = verbose
       )
     }
+    if (verbose) message("Copying quiz files")
     copy_quizzes(
       quiz_dir = quiz_dir,
       output_dir = output_dir
     )
-    if (verbose) {
-      message("Copying quiz files")
-    }
   }
 }

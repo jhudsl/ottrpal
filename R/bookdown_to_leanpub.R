@@ -14,6 +14,8 @@
 #' @param quiz_dir directory that contains the quiz .md files that should be
 #' checked and incorporated into the Book.txt file. If you don't have quizzes,
 #' set this to NULL
+#' @param clean_up TRUE/FALSE the old output directory should be deleted and 
+#' everything created fresh.
 #' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
 #'
@@ -28,8 +30,20 @@ bookdown_to_leanpub <- function(path = ".",
                                 run_quiz_checks = FALSE,
                                 remove_resources_start = FALSE,
                                 verbose = TRUE,
-                                footer_text = NULL) {
-  set_up_leanpub()
+                                footer_text = NULL, 
+                                clean_up = FALSE) {
+  # Run the set up 
+  set_up_leanpub(path = path,
+                 embed = FALSE,
+                 clean_up = clean_up,
+                 render = render,
+                 output_dir = output_dir,
+                 make_book_txt = make_book_txt,
+                 quiz_dir = quiz_dir,
+                 run_quiz_checks = run_quiz_checks,
+                 remove_resources_start = remove_resources_start,
+                 verbose = verbose,
+                 footer_text = footer_text)
 
   # Establish path
   path <- bookdown_path(path)
@@ -40,6 +54,7 @@ bookdown_to_leanpub <- function(path = ".",
   rmd_files <- bookdown_rmd_files(path = path)
 
   bib_files <- list.files(pattern = "[.]bib$")
+  
   if (length(bib_files) > 0) {
     pandoc_args <- paste0("--bibliography=", path.expand(normalizePath(bib_files)))
   } else {
@@ -78,7 +93,7 @@ bookdown_to_leanpub <- function(path = ".",
       message("Running bookdown_to_book_txt")
     }
     bookdown_to_book_txt(
-      path = path,
+      md_files = rmd_files,
       output_dir = output_dir,
       quiz_dir = quiz_dir,
       verbose = verbose
@@ -134,6 +149,8 @@ bookdown_to_leanpub <- function(path = ".",
 #' @param quiz_dir directory that contains the quiz .md files that should be
 #' checked and incorporated into the Book.txt file. If you don't have quizzes,
 #' set this to NULL
+#' @param clean_up TRUE/FALSE the old output directory should be deleted and 
+#' everything created fresh.
 #' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
 #'
@@ -147,10 +164,12 @@ bookdown_to_leanpub <- function(path = ".",
 #' ottr::bookdown_to_embed_leanpub(chapt_img_key = "chapter_urls.tsv")
 #'
 #' }
+
 bookdown_to_embed_leanpub <- function(path = ".",
                                       chapt_img_key = NULL,
                                       bookdown_index = file.path("docs", "index.html"),
                                       base_url = NULL,
+                                      clean_up = FALSE,
                                       default_img = NULL,
                                       render = TRUE,
                                       output_dir = "manuscript",
@@ -160,13 +179,29 @@ bookdown_to_embed_leanpub <- function(path = ".",
                                       remove_resources_start = FALSE,
                                       verbose = TRUE,
                                       footer_text = NULL) {
-  set_up_leanpub()
+  # Run the set up 
+  set_up_leanpub(path = path,
+                 embed = TRUE,
+                 clean_up = clean_up,
+                 render = render,
+                 output_dir = output_dir,
+                 make_book_txt = make_book_txt,
+                 quiz_dir = quiz_dir,
+                 run_quiz_checks = run_quiz_checks,
+                 remove_resources_start = remove_resources_start,
+                 verbose = verbose,
+                 footer_text = footer_text)
 
+  # If TSV chapter image key file is specified read it in
   if (!is.null(chapt_img_key)) {
+    
     message(paste("Reading in a chapt_img_key TSV file:", chapt_img_key))
     chapt_df <- readr::read_tsv(chapt_img_key)
+    
   } else {
+    # If its not supplied, create it from the get_chapters function
     message("Creating a chapt_img_key TSV file")
+    
     if (is.null(base_url)) {
       stop("No base_url is supplied and no chapt_img_key file was supplied. Need one or the other.")
     }
@@ -176,6 +211,8 @@ bookdown_to_embed_leanpub <- function(path = ".",
 
   # If there's no img_path supplied, then use a default image for each.
   if (!("img_path" %in% colnames(chapt_df))) {
+    
+    # If no default image is supplied
     if (is.null(default_img)) {
       default_img <- "https://docs.google.com/presentation/d/1jEUxUY1qXDZ3DUtvTU6NCc6ASG5nx4Gwczv5aAglYX4/edit#slide=id.p"
     }
@@ -199,11 +236,11 @@ bookdown_to_embed_leanpub <- function(path = ".",
   ####################### Book.txt creation ####################################
   out <- NULL
   if (make_book_txt) {
-    if (verbose > 1) {
-      message("Running bookdown_to_book_txt")
-    }
+    if (verbose) message("Running bookdown_to_book_txt")
+     md_files <- basename(unlist(md_output_files))
+     
     bookdown_to_book_txt(
-      path = output_dir,
+      md_files = ,
       output_dir = output_dir,
       quiz_dir = quiz_dir,
       verbose = verbose
@@ -239,6 +276,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
 #' Create Book.txt file from files existing in quiz directory
 #'
 #' @param path path to the bookdown book, must have a `_bookdown.yml` file
+#' @param md_files vector of file path of the md's to be included
 #' @param output_dir output directory to put files.  It should likely be
 #' relative to path
 #' @param quiz_dir Where are the quizzes stored? Default looks for folder called "quizzes".
@@ -248,32 +286,37 @@ bookdown_to_embed_leanpub <- function(path = ".",
 #' @export
 #'
 bookdown_to_book_txt <- function(path = ".",
+                                 md_files = NULL,
                                  output_dir = "manuscript",
                                  quiz_dir = "quizzes",
                                  verbose = TRUE) {
-  # Establish path
-  path <- bookdown_path(path)
+  
+  # If md_files are not speciied, then try to get them
+  if (is.null(md_files)) {
+    # Establish path
+    path <- bookdown_path(path)
 
-  rmd_regex <- "[.][R|r]md$"
+    rmd_regex <- "[.][R|r]md$"
 
-  # Extract the names of the Rmd files (the chapters)
-  rmd_files <- bookdown_rmd_files(path = path)
+    # Extract the names of the Rmd files (the chapters)
+    md_files <- bookdown_rmd_files(path = path)
+  }
 
   if (!is.null(quiz_dir)) {
     # Find the quiz files in the quiz directory
     quiz_files <- list.files(pattern = "\\.md$", quiz_dir)
 
     # Put files in one vector
-    all_files <- c(rmd_files, quiz_files)
+    all_files <- c(md_files, quiz_files)
 
     # Make a vector specifying the file type: quiz or not
     file_type <- c(
-      rep("non-quiz", length(rmd_files)),
+      rep("non-quiz", length(md_files)),
       rep("quiz", length(quiz_files))
     )
   } else {
-    all_files <- rmd_files
-    file_type <- rep("non-quiz", length(rmd_files))
+    all_files <- md_files
+    file_type <- rep("non-quiz", length(md_files))
   }
   # Put all files in one data.frame
   all_files <- data.frame(
