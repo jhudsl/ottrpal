@@ -28,9 +28,18 @@ bookdown_to_leanpub <- function(path = ".",
                                 run_quiz_checks = FALSE,
                                 remove_resources_start = FALSE,
                                 verbose = TRUE,
-                                footer_text = NULL) {
-  set_up_leanpub(...)
+                                footer_text = NULL,
+                                ...) {
+  set_up_leanpub()
 
+  # Establish path
+  path <- bookdown_path(path)
+  
+  rmd_regex <- "[.][R|r]md$"
+  
+  # Extract the names of the Rmd files (the chapters)
+  rmd_files <- bookdown_rmd_files(path = path)
+  
   bib_files <- list.files(pattern = "[.]bib$")
   if (length(bib_files) > 0) {
     pandoc_args <- paste0("--bibliography=", path.expand(normalizePath(bib_files)))
@@ -132,13 +141,11 @@ bookdown_to_leanpub <- function(path = ".",
 #' @return A list of output files and diagnostics
 #' @export
 #' 
-#' @examples
-#' \dontrun{
+#' @examples \dontrun{
 #' 
-#' ottr::bookdown_to_embed_leanpub(base_url = ")
+#' ottr::bookdown_to_embed_leanpub(base_url = "")
 #' 
-#' ottr::bookdown_to_embed_leanpub(chapt_img_key = "chapt)
-#' 
+#' ottr::bookdown_to_embed_leanpub(chapt_img_key = "chapter_urls.tsv")
 #' 
 #' }
 bookdown_to_embed_leanpub <- function(path = ".",
@@ -153,8 +160,9 @@ bookdown_to_embed_leanpub <- function(path = ".",
                                       run_quiz_checks = FALSE,
                                       remove_resources_start = FALSE,
                                       verbose = TRUE,
-                                      footer_text = NULL) {
-  set_up_leanpub(...)
+                                      footer_text = NULL, 
+                                      ...) {
+  set_up_leanpub()
 
   if (!is.null(chapt_img_key)) {
     message(paste("Reading in a chapt_img_key TSV file:", chapt_img_key))
@@ -181,7 +189,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
     }
     
     # Download default image
-    chapt_df$img_path <- leanbuild::gs_png_download(url = default_img, output_dir = img_dir, overwrite = TRUE)
+    chapt_df$img_path <- gs_png_download(url = default_img, output_dir = img_dir, overwrite = TRUE)
   }
   
   md_output_files <- chapt_df %>% 

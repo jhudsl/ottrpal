@@ -17,7 +17,8 @@ bookdown_to_embed_leanpub(
   run_quiz_checks = FALSE,
   remove_resources_start = FALSE,
   verbose = TRUE,
-  footer_text = NULL
+  footer_text = NULL,
+  ...
 )
 }
 \arguments{
@@ -67,10 +68,9 @@ Convert Bookdown to Embed version of Leanpub
 \examples{
 \dontrun{
 
-ottr::bookdown_to_embed_leanpub(base_url = ")
+ottr::bookdown_to_embed_leanpub(base_url = "")
 
-ottr::bookdown_to_embed_leanpub(chapt_img_key = "chapt)
-
+ottr::bookdown_to_embed_leanpub(chapt_img_key = "chapter_urls.tsv")
 
 }
 }
