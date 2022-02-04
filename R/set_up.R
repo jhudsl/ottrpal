@@ -167,6 +167,8 @@ copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
 #' @param path path to the bookdown book, must have a `_bookdown.yml` file
 #' @param output_dir output directory to put files.  It should likely be
 #' relative to path
+#' @param clean_up TRUE/FALSE the old output directory should be deleted and 
+#' everything created fresh.
 #' @param render if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.
 #' @param verbose print diagnostic messages
 #' @param remove_resources_start remove the word `resources/` at the front

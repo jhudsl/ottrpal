@@ -120,7 +120,7 @@ bookdown_to_leanpub <- function(path = ".",
 #' If no chapter title column supplied, the basename of the url will be used,
 #' If no image column supplied, default image used.
 #' @param bookdown_index The file path of the rendered bookdown index.html file
-#' @param s The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
+#' @param base_url The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
 #' e.g. https://jhudatascience.org/OTTR_Template/coursera
 #' @param default_img A google slide link to the default image to be used for all chapters
 #' @param output_dir output directory to put files.  It should likely be
@@ -314,9 +314,12 @@ bookdown_to_book_txt <- function(path = ".",
 #' Make Leanpub file that has embed webpage of a chapter
 #'
 #' @param url The url to the chapter that is to be embed
-#' @param chapt_name Title of chapter to be used as file name and printed on iframe
-#' @param img File path to image to use for poster
-#' @return A
+#' @param chapt_title Title of chapter to be used as file name and printed on iframe
+#' @param img_path File path to image to use for poster
+#' @param output_dir output directory to put files.  It should likely be
+#' relative to path
+#' @param verbose print diagnostic messages
+#' @return A markdown file with an iframe of the provided chapter
 #'
 #' @export
 make_embed_markdown <- function(url,
@@ -326,7 +329,7 @@ make_embed_markdown <- function(url,
                                 verbose = TRUE) {
   # Arguments:
   #   url: The url to the chapter
-  #   chapt_name: The title of the chapter to be used as a header
+  #   chapt_title: The title of the chapter to be used as a header
   #   img: file path to the image to be used in the preview
   #
   # Returns: A markdown document ready for Leanpub and the image copied to the manuscript folder
@@ -386,10 +389,10 @@ get_chapters <- function(bookdown_index = file.path("docs", "index.html"),
       dplyr::bind_rows() %>%
       dplyr::rename_with(~ gsub("-", "_", .x, fixed = TRUE)) %>%
       dplyr::mutate(
-        chapt_name = stringr::word(rvest::html_text(nodes), sep = "\n", 1),
+        chapt_title = stringr::word(rvest::html_text(nodes), sep = "\n", 1),
         url = paste0(base_url, data_path)
       ) %>%
-      dplyr::select(url, chapt_title = chapt_name) %>%
+      dplyr::select(url, chapt_title) %>%
       as.data.frame() %>%
       dplyr::distinct(url, .keep_all = TRUE)
   } else {

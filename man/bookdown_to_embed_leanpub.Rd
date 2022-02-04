@@ -32,6 +32,9 @@ If no image column supplied, default image used.}
 
 \item{bookdown_index}{The file path of the rendered bookdown index.html file}
 
+\item{base_url}{The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
+e.g. https://jhudatascience.org/OTTR_Template/coursera}
+
 \item{default_img}{A google slide link to the default image to be used for all chapters}
 
 \item{render}{if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.}
@@ -55,9 +58,6 @@ of any image path.}
 
 \item{footer_text}{Optionally can add a bit of text that will be added to the
 end of each file before the references section.}
-
-\item{s}{The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
-e.g. https://jhudatascience.org/OTTR_Template/coursera}
 }
 \value{
 A list of output files and diagnostics

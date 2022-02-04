@@ -20,6 +20,9 @@ set_up_leanpub(
 \arguments{
 \item{path}{path to the bookdown book, must have a `_bookdown.yml` file}
 
+\item{clean_up}{TRUE/FALSE the old output directory should be deleted and 
+everything created fresh.}
+
 \item{render}{if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.}
 
 \item{output_dir}{output directory to put files.  It should likely be

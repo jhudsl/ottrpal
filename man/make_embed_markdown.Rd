@@ -15,12 +15,17 @@ make_embed_markdown(
 \arguments{
 \item{url}{The url to the chapter that is to be embed}
 
-\item{chapt_name}{Title of chapter to be used as file name and printed on iframe}
+\item{chapt_title}{Title of chapter to be used as file name and printed on iframe}
 
-\item{img}{File path to image to use for poster}
+\item{img_path}{File path to image to use for poster}
+
+\item{output_dir}{output directory to put files.  It should likely be
+relative to path}
+
+\item{verbose}{print diagnostic messages}
 }
 \value{
-A
+A markdown file with an iframe of the provided chapter
 }
 \description{
 Make Leanpub file that has embed webpage of a chapter
