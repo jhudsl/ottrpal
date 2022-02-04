@@ -9,6 +9,7 @@ bookdown_to_embed_leanpub(
   chapt_img_key = NULL,
   bookdown_index = file.path("docs", "index.html"),
   base_url = NULL,
+  clean_up = FALSE,
   default_img = NULL,
   render = TRUE,
   output_dir = "manuscript",
@@ -33,6 +34,9 @@ If no image column supplied, default image used.}
 
 \item{base_url}{The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
 e.g. https://jhudatascience.org/OTTR_Template/coursera}
+
+\item{clean_up}{TRUE/FALSE the old output directory should be deleted and 
+everything created fresh.}
 
 \item{default_img}{A google slide link to the default image to be used for all chapters}
 
