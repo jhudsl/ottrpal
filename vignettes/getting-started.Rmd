@@ -223,8 +223,8 @@ If there is text you would like added to the end of each chapter (like a link to
 survey_link <- "Please provide any feedback you have in [this survey](www.some_link.org)"
 
 # Supply the footer text in the main function
-ottr::bookdown_to_leanpub(make_book_txt = TRUE, 
-                               footer_text = survey_link)
+ottr::bookdown_to_leanpub(make_book_txt = TRUE,
+                          footer_text = survey_link)
 ```
 
 ### Wrapping up 

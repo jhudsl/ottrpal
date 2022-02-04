@@ -22,8 +22,6 @@ Imports: googledrive,
     httr,
     fs,
     jsonlite,
-    utils,
-    tibble,
     rmarkdown (>= 2.10),
     xml2,
     rvest,
@@ -37,10 +35,13 @@ Imports: googledrive,
     yaml,
     stringr,
     knitr (>= 1.33),
-    qpdf
+    qpdf,
+    purrr
 Suggests:
     remotes,
-    testthat
+    testthat,
+    tibble,
+    utils
 Encoding: UTF-8
 LazyData: true
 Remotes: jhudsl/text2speech,
@@ -50,4 +51,4 @@ Type: Package
 VignetteBuilder: knitr
 URL: https://github.com/jhudsl/ottr
 BugReports: https://github.comjhudsl/ottr/issues
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2

@@ -20,3 +20,11 @@ vignettes/.httr-oauth$
 ^run_test\.R$
 ^\.github$
 ^pkgdown$
+^vignettes/01-intro.Rmd$
+^vignettes/02-example-chapter.Rmd$
+^vignettes/_bookdown.yml$
+^vignettes/index.Rmd$
+^vignettes/quizzes$
+^vignettes/references.bib$
+^vignettes/toc_close.css$
+^package_bundles/$

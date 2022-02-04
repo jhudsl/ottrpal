@@ -245,10 +245,10 @@ extract_quiz <- function(quiz_lines) {
   end <- grep("^\\s*\\{\\s*/\\s*quiz", quiz_lines)
 
   if (length(start) == 0) {
-    stop("Quiz should start with a { } tag and end with {\\quiz}.")
+    warning("Quiz should start with a { } tag and end with {\\quiz}.")
   }
   if (length(end) == 0) {
-    stop("Could not find end tag of quiz; should end with: {\\quiz}.")
+    warning("Could not find end tag of quiz; should end with: {\\quiz}.")
   }
   # Extract main quiz tag
   quiz_tag <- quiz_lines[start]
@@ -452,7 +452,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 
   # Get prompt if its there
   if (!any(grepl("^\\? ", question_df$original))) {
-    stop("Could not find prompt for question. Question prompts start line with '?'")
+    warning("Could not find prompt for question. Question prompts start line with '?'")
   }
   prompt <- question_df$original[question_df$type == "prompt"]
 
