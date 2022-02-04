@@ -245,10 +245,10 @@ extract_quiz <- function(quiz_lines) {
   end <- grep("^\\s*\\{\\s*/\\s*quiz", quiz_lines)
 
   if (length(start) == 0) {
-    stop("Quiz should start with a { } tag and end with {\\quiz}.")
+    warning("Quiz should start with a { } tag and end with {\\quiz}.")
   }
   if (length(end) == 0) {
-    stop("Could not find end tag of quiz; should end with: {\\quiz}.")
+    warning("Could not find end tag of quiz; should end with: {\\quiz}.")
   }
   # Extract main quiz tag
   quiz_tag <- quiz_lines[start]
