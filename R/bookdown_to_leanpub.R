@@ -28,8 +28,7 @@ bookdown_to_leanpub <- function(path = ".",
                                 run_quiz_checks = FALSE,
                                 remove_resources_start = FALSE,
                                 verbose = TRUE,
-                                footer_text = NULL,
-                                ...) {
+                                footer_text = NULL) {
   set_up_leanpub()
 
   # Establish path
@@ -160,8 +159,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
                                       run_quiz_checks = FALSE,
                                       remove_resources_start = FALSE,
                                       verbose = TRUE,
-                                      footer_text = NULL, 
-                                      ...) {
+                                      footer_text = NULL) {
   set_up_leanpub()
 
   if (!is.null(chapt_img_key)) {
