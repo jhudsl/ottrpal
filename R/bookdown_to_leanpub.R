@@ -144,7 +144,6 @@ bookdown_to_embed_leanpub <- function(path = ".",
                                       footer_text = NULL) {
   set_up_leanpub(...)
 
-  
   if (!is.null(chapt_img_key)) {
     message(paste("Reading in a chapt_img_key TSV file:", chapt_img_key))
     readr::read_tsv(chapt_img_key)
@@ -153,7 +152,6 @@ bookdown_to_embed_leanpub <- function(path = ".",
     chapt_df <- get_chapters(bookdown_index = bookdown_index, 
                              base_url = base_url)
   }
-  
   
   # If there's no img_path supplied, then use a default image for each. 
   if (!("img_path" %in% colnames(chapt_df))) {
@@ -168,12 +166,12 @@ bookdown_to_embed_leanpub <- function(path = ".",
     }
     
     # Download default image
-    chapt_df$img_path <- leanbuild::gs_png_download(url = default_img, output_dir = file.path(img_dir, "embed_chapt_images"), overwrite = TRUE)
+    chapt_df$img_path <- leanbuild::gs_png_download(url = default_img, output_dir = img_dir, overwrite = TRUE)
   }
   
-  output_files <- chapt_df %>% 
+  md_output_files <- chapt_df %>% 
     # Make the data.frame be in the same order
-    dplyr::select(dplyr::any_of(url, chapt_title, img_path)) %>% 
+    dplyr::select(dplyr::any_of("url"), dplyr::any_of("chapt_title"), dplyr::any_of("img_path")) %>% 
     # Run it make_embed_markdown on each row
     purrr::pmap( ~ make_embed_markdown(url = ..1, chapt_title = ..2, img_path = ..3))
 
@@ -184,7 +182,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
       message("Running bookdown_to_book_txt")
     }
     bookdown_to_book_txt(
-      path = path,
+      path = output_dir,
       output_dir = output_dir,
       quiz_dir = quiz_dir,
       verbose = verbose
