@@ -110,6 +110,9 @@ bookdown_to_leanpub <- function(path = ".",
 #' Column names `url`, `chapt_title`, and `img_path` must be used.
 #' If no chapter title column supplied, the basename of the url will be used,
 #' If no image column supplied, default image used.
+#' @param bookdown_index The file path of the rendered bookdown index.html file
+#' @param s The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
+#' e.g. https://jhudatascience.org/OTTR_Template/coursera
 #' @param default_img A google slide link to the default image to be used for all chapters
 #' @param output_dir output directory to put files.  It should likely be
 #' relative to path
@@ -128,7 +131,16 @@ bookdown_to_leanpub <- function(path = ".",
 #'
 #' @return A list of output files and diagnostics
 #' @export
-#'
+#' 
+#' @examples
+#' \dontrun{
+#' 
+#' ottr::bookdown_to_embed_leanpub(base_url = ")
+#' 
+#' ottr::bookdown_to_embed_leanpub(chapt_img_key = "chapt)
+#' 
+#' 
+#' }
 bookdown_to_embed_leanpub <- function(path = ".",
                                       chapt_img_key = NULL,
                                       bookdown_index = file.path("docs", "index.html"),
@@ -149,6 +161,9 @@ bookdown_to_embed_leanpub <- function(path = ".",
     readr::read_tsv(chapt_img_key)
   } else {
     message("Creating a chapt_img_key TSV file")
+    if (is.null(base_url)) {
+      stop("No base_url is supplied and no chapt_img_key file was supplied. Need one or the other.")
+    }
     chapt_df <- get_chapters(bookdown_index = bookdown_index, 
                              base_url = base_url)
   }

@@ -50,4 +50,4 @@ Type: Package
 VignetteBuilder: knitr
 URL: https://github.com/jhudsl/ottr
 BugReports: https://github.comjhudsl/ottr/issues
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
