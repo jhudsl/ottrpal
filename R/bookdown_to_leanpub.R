@@ -14,7 +14,7 @@
 #' @param quiz_dir directory that contains the quiz .md files that should be
 #' checked and incorporated into the Book.txt file. If you don't have quizzes,
 #' set this to NULL
-#' @param clean_up TRUE/FALSE the old output directory should be deleted and 
+#' @param clean_up TRUE/FALSE the old output directory should be deleted and
 #' everything created fresh.
 #' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
@@ -30,9 +30,9 @@ bookdown_to_leanpub <- function(path = ".",
                                 run_quiz_checks = FALSE,
                                 remove_resources_start = FALSE,
                                 verbose = TRUE,
-                                footer_text = NULL, 
+                                footer_text = NULL,
                                 clean_up = FALSE) {
-  # Run the set up 
+  # Run the set up
   set_up_leanpub(path = path,
                  embed = FALSE,
                  clean_up = clean_up,
@@ -54,7 +54,7 @@ bookdown_to_leanpub <- function(path = ".",
   rmd_files <- bookdown_rmd_files(path = path)
 
   bib_files <- list.files(pattern = "[.]bib$")
-  
+
   if (length(bib_files) > 0) {
     pandoc_args <- paste0("--bibliography=", path.expand(normalizePath(bib_files)))
   } else {
@@ -149,7 +149,7 @@ bookdown_to_leanpub <- function(path = ".",
 #' @param quiz_dir directory that contains the quiz .md files that should be
 #' checked and incorporated into the Book.txt file. If you don't have quizzes,
 #' set this to NULL
-#' @param clean_up TRUE/FALSE the old output directory should be deleted and 
+#' @param clean_up TRUE/FALSE the old output directory should be deleted and
 #' everything created fresh.
 #' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
@@ -179,7 +179,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
                                       remove_resources_start = FALSE,
                                       verbose = TRUE,
                                       footer_text = NULL) {
-  # Run the set up 
+  # Run the set up
   set_up_leanpub(path = path,
                  embed = TRUE,
                  clean_up = clean_up,
@@ -194,14 +194,14 @@ bookdown_to_embed_leanpub <- function(path = ".",
 
   # If TSV chapter image key file is specified read it in
   if (!is.null(chapt_img_key)) {
-    
+
     message(paste("Reading in a chapt_img_key TSV file:", chapt_img_key))
     chapt_df <- readr::read_tsv(chapt_img_key)
-    
+
   } else {
     # If its not supplied, create it from the get_chapters function
     message("Creating a chapt_img_key TSV file")
-    
+
     if (is.null(base_url)) {
       stop("No base_url is supplied and no chapt_img_key file was supplied. Need one or the other.")
     }
@@ -211,7 +211,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
 
   # If there's no img_path supplied, then use a default image for each.
   if (!("img_path" %in% colnames(chapt_df))) {
-    
+
     # If no default image is supplied
     if (is.null(default_img)) {
       default_img <- "https://docs.google.com/presentation/d/1jEUxUY1qXDZ3DUtvTU6NCc6ASG5nx4Gwczv5aAglYX4/edit#slide=id.p"
@@ -238,9 +238,9 @@ bookdown_to_embed_leanpub <- function(path = ".",
   if (make_book_txt) {
     if (verbose) message("Running bookdown_to_book_txt")
      md_files <- basename(unlist(md_output_files))
-     
+
     bookdown_to_book_txt(
-      md_files = ,
+      md_files = md_files,
       output_dir = output_dir,
       quiz_dir = quiz_dir,
       verbose = verbose
@@ -290,8 +290,8 @@ bookdown_to_book_txt <- function(path = ".",
                                  output_dir = "manuscript",
                                  quiz_dir = "quizzes",
                                  verbose = TRUE) {
-  
-  # If md_files are not speciied, then try to get them
+
+  # If md_files are not specified, then try to get them
   if (is.null(md_files)) {
     # Establish path
     path <- bookdown_path(path)
