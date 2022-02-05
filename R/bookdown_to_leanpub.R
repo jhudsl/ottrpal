@@ -383,7 +383,7 @@ make_embed_markdown <- function(url,
   file_contents <- c(
     paste("#", chapt_title),
     " ",
-    paste0("{type: iframe, title:", chapt_title, " width: 400, height: 400, poster:", img_path, "}"),
+    paste0("{type: iframe, title:", chapt_title, ", width: 400, height: 400, poster:", img_path, "}"),
     paste0("![](", url, ")")
   )
 
