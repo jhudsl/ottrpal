@@ -78,10 +78,16 @@ This will ensure that the images are stored in the correct place and will be ren
 
 ## Running ottr
 
-The `ottr` package converts your files using this main function:
+The `ottr` package converts your files using one of these main functions:
 
 ```{r}
 ottr::bookdown_to_leanpub()
+```
+
+OR 
+
+```{r}
+ottr::bookdown_to_embed_leanpub()
 ```
 
 By default, `ottr` will re-run a `bookdown::render_book("index.Rmd")` rendering of your chapters first before converting the files to the Leanpub ready format.
