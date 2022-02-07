@@ -7,6 +7,8 @@
 make_embed_markdown(
   url,
   chapt_title,
+  width_spec = 800,
+  height_spec = 600,
   img_path,
   output_dir = "manuscript",
   verbose = TRUE
@@ -16,6 +18,10 @@ make_embed_markdown(
 \item{url}{The url to the chapter that is to be embed}
 
 \item{chapt_title}{Title of chapter to be used as file name and printed on iframe}
+
+\item{width_spec}{How wide should the iframe be in pixels?}
+
+\item{height_spec}{How high should the iframe be in pixels?}
 
 \item{img_path}{File path to image to use for poster}
 

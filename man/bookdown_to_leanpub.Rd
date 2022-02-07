@@ -42,7 +42,7 @@ of any image path.}
 \item{footer_text}{Optionally can add a bit of text that will be added to the
 end of each file before the references section.}
 
-\item{clean_up}{TRUE/FALSE the old output directory should be deleted and 
+\item{clean_up}{TRUE/FALSE the old output directory should be deleted and
 everything created fresh.}
 }
 \value{
