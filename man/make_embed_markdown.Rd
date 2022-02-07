@@ -11,7 +11,8 @@ make_embed_markdown(
   height_spec = 600,
   img_path,
   output_dir = "manuscript",
-  verbose = TRUE
+  verbose = TRUE,
+  footer_text = ""
 )
 }
 \arguments{
@@ -29,6 +30,9 @@ make_embed_markdown(
 relative to path}
 
 \item{verbose}{print diagnostic messages}
+
+\item{footer_text}{Optionally can add a bit of text that will be added to the
+end of each file before the references section.}
 }
 \value{
 A markdown file with an iframe of the provided chapter
