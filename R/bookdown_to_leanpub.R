@@ -394,7 +394,9 @@ make_embed_markdown <- function(url,
            ", height:", height_spec,
            ", poster:", img_path, "}"),
     paste0("![](", url, ")"),
-    footer_text
+    " ",
+    footer_text,
+    " "
   )
 
   write(file_contents, file = output_file)
