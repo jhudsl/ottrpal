@@ -356,6 +356,8 @@ bookdown_to_book_txt <- function(path = ".",
 #'
 #' @param url The url to the chapter that is to be embed
 #' @param chapt_title Title of chapter to be used as file name and printed on iframe
+#' @param width_spec How wide should the iframe be in pixels?
+#' @param height_spec How high should the iframe be in pixels?
 #' @param img_path File path to image to use for poster
 #' @param output_dir output directory to put files.  It should likely be
 #' relative to path
@@ -365,6 +367,8 @@ bookdown_to_book_txt <- function(path = ".",
 #' @export
 make_embed_markdown <- function(url,
                                 chapt_title,
+                                width_spec = 800,
+                                height_spec = 600,
                                 img_path,
                                 output_dir = "manuscript",
                                 verbose = TRUE) {
@@ -383,7 +387,10 @@ make_embed_markdown <- function(url,
   file_contents <- c(
     paste("#", chapt_title),
     " ",
-    paste0("{type: iframe, title:", chapt_title, ", width: 400, height: 400, poster:", img_path, "}"),
+    paste0("{type: iframe, title:", chapt_title,
+           ", width:", width_spec,
+           ", height:", height_spec,
+           ", poster:", img_path, "}"),
     paste0("![](", url, ")")
   )
 
