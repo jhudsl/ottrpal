@@ -178,7 +178,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
                                       run_quiz_checks = FALSE,
                                       remove_resources_start = FALSE,
                                       verbose = TRUE,
-                                      footer_text = NULL) {
+                                      footer_text = "") {
   # Run the set up
   set_up_leanpub(path = path,
                  embed = TRUE,
@@ -189,8 +189,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
                  quiz_dir = quiz_dir,
                  run_quiz_checks = run_quiz_checks,
                  remove_resources_start = remove_resources_start,
-                 verbose = verbose,
-                 footer_text = footer_text)
+                 verbose = verbose)
 
   # If TSV chapter image key file is specified read it in
   if (!is.null(chapt_img_key)) {
@@ -231,7 +230,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
     # Make the data.frame be in the same order
     dplyr::select(dplyr::any_of("url"), dplyr::any_of("chapt_title"), dplyr::any_of("img_path")) %>%
     # Run it make_embed_markdown on each row
-    purrr::pmap( ~ make_embed_markdown(url = ..1, chapt_title = ..2, img_path = ..3))
+    purrr::pmap( ~ make_embed_markdown(url = ..1, chapt_title = ..2, img_path = ..3, footer_text = footer_text))
 
   ####################### Book.txt creation ####################################
   out <- NULL
@@ -362,6 +361,8 @@ bookdown_to_book_txt <- function(path = ".",
 #' @param output_dir output directory to put files.  It should likely be
 #' relative to path
 #' @param verbose print diagnostic messages
+#' @param footer_text Optionally can add a bit of text that will be added to the
+#' end of each file before the references section.
 #' @return A markdown file with an iframe of the provided chapter
 #'
 #' @export
@@ -371,7 +372,8 @@ make_embed_markdown <- function(url,
                                 height_spec = 600,
                                 img_path,
                                 output_dir = "manuscript",
-                                verbose = TRUE) {
+                                verbose = TRUE,
+                                footer_text = "") {
   # Arguments:
   #   url: The url to the chapter
   #   chapt_title: The title of the chapter to be used as a header
@@ -391,7 +393,8 @@ make_embed_markdown <- function(url,
            ", width:", width_spec,
            ", height:", height_spec,
            ", poster:", img_path, "}"),
-    paste0("![](", url, ")")
+    paste0("![](", url, ")"),
+    footer_text
   )
 
   write(file_contents, file = output_file)
