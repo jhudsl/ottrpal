@@ -214,12 +214,12 @@ convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
 #'
 #' @importFrom utils download.file
 #'
-render_coursera <- function(output_dir = file.path("docs", "coursera"),
-                            output_yaml = "_output.yml",
-                            convert_quizzes = FALSE,
-                            input_quiz_dir = "quizzes",
-                            output_quiz_dir = "coursera_quizzes",
-                            verbose = TRUE) {
+render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
+                          output_yaml = "_output.yml",
+                          convert_quizzes = FALSE,
+                          input_quiz_dir = "quizzes",
+                          output_quiz_dir = "coursera_quizzes",
+                          verbose = TRUE) {
 
   # Find root directory by finding `_bookdown.yml` file
   root_dir <- bookdown_path()
@@ -305,7 +305,7 @@ render_coursera <- function(output_dir = file.path("docs", "coursera"),
   )
 
   ###### Now do the rendering! ######
-  message("Render bookdown without TOC for Coursera")
+  message("Render bookdown without TOC")
 
   # Do the render
   bookdown::render_book(
