@@ -215,11 +215,11 @@ convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
 #' @importFrom utils download.file
 #'
 render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
-                          output_yaml = "_output.yml",
-                          convert_quizzes = FALSE,
-                          input_quiz_dir = "quizzes",
-                          output_quiz_dir = "coursera_quizzes",
-                          verbose = TRUE) {
+                               output_yaml = "_output.yml",
+                               convert_quizzes = FALSE,
+                               input_quiz_dir = "quizzes",
+                               output_quiz_dir = "coursera_quizzes",
+                               verbose = TRUE) {
 
   # Find root directory by finding `_bookdown.yml` file
   root_dir <- bookdown_path()
