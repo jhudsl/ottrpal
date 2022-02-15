@@ -1,4 +1,4 @@
 library(testthat)
-library(ottr)
+library(ottrpal)
 
-test_check("ottr")
+test_check("ottrpal")

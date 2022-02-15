@@ -11,7 +11,7 @@ good_quiz_path <- function() {
   list.files(
     pattern = "quiz_good.md$",
     recursive = TRUE,
-    system.file("extdata", package = "ottr"),
+    system.file("extdata", package = "ottrpal"),
     full.names = TRUE
   )
 }
@@ -27,7 +27,7 @@ bad_quiz_path <- function() {
   list.files(
     pattern = "quiz_bad.md$",
     recursive = TRUE,
-    system.file("extdata", package = "ottr"),
+    system.file("extdata", package = "ottrpal"),
     full.names = TRUE
   )
 }
@@ -40,11 +40,11 @@ bad_quiz_path <- function() {
 #' @importFrom fs dir_copy
 #' @examples
 #' # Run this to get the files we need
-#' example_files <- ottr::example_repo_setup()
+#' example_files <- ottrpal::example_repo_setup()
 example_repo_setup <- function(dest_dir = ".") {
   bookdown_path <- list.files(
     pattern = "_bookdown.yml$",
-    system.file("extdata/", package = "ottr"),
+    system.file("extdata/", package = "ottrpal"),
     full.names = TRUE
   )
 
@@ -65,7 +65,7 @@ example_repo_setup <- function(dest_dir = ".") {
 #' @examples
 #'
 #' # Run this to get the files we need
-#' example_files <- ottr::example_repo_setup()
+#' example_files <- ottrpal::example_repo_setup()
 #'
 #' # Run this to delete them
 #' example_repo_cleanup(files_to_remove = basename(example_files))

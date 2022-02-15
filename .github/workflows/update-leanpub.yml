@@ -3,7 +3,7 @@
 
 name: Update Leanpub Upon Merge
 
-# Triggers the workflow AFTER changes to ottr have been merged
+# Triggers the workflow AFTER changes to ottrpal have been merged
 on:
   workflow_dispatch:
   push:
@@ -24,20 +24,20 @@ jobs:
           repository: jhudsl/OTTR_Quizzes
           token: ${{ secrets.GH_PAT }}
 
-      # Copy over the latest ottr and use that for the run
-      - name: Get latest ottr
+      # Copy over the latest ottrpal and use that for the run
+      - name: Get latest ottrpal
         run: |
           sudo apt-get install  -y --no-install-recommends subversion
 
-          # Copy over the latest ottr build
-          svn export https://github.com/${GITHUB_REPOSITORY}.git/branches/master ottr/
+          # Copy over the latest ottrpal build
+          svn export https://github.com/${GITHUB_REPOSITORY}.git/branches/master ottrpal/
 
       # Run leanpub rendering
-      - name: Run ottr::bookdown_to_leanpub
+      - name: Run ottrpal::bookdown_to_leanpub
         run: |
-          Rscript -e "devtools::load_all('ottr'); ottr::bookdown_to_leanpub(footer_text = '*Please provide any feedback with [this form!](https://forms.gle/hc8Xt3Y2Znjb6M4Y7) We appreciate your thoughts.*')"
-          Rscript -e "devtools::load_all('ottr'); ottr::render_coursera(convert_quizzes = TRUE)"
-          rm -r ottr
+          Rscript -e "devtools::load_all('ottrpal'); ottrpal::bookdown_to_leanpub(footer_text = '*Please provide any feedback with [this form!](https://forms.gle/hc8Xt3Y2Znjb6M4Y7) We appreciate your thoughts.*')"
+          Rscript -e "devtools::load_all('ottrpal'); ottrpal::render_coursera(convert_quizzes = TRUE)"
+          rm -r ottrpal
 
 
       - name: Create PR with newly rendered docs files
@@ -45,15 +45,15 @@ jobs:
         id: cpr
         with:
           token: ${{ secrets.GH_PAT }}
-          commit-message: Show latest ottr changes
+          commit-message: Show latest ottrpal changes
           signoff: false
           branch: auto_copy_rendered_files
           delete-branch: true
-          title: 'GHA: Automated transfer re-render with ottr update'
+          title: 'GHA: Automated transfer re-render with ottrpal update'
           body: |
             ### Description:
-             This PR has changes to this repository's files using the latest ottr package changes!
-             If they don't look right, file an issue on the ottr package: https://github.com/jhudsl/ottr/issuesand do not merge.
+             This PR has changes to this repository's files using the latest ottrpal package changes!
+             If they don't look right, file an issue on the ottrpal package: https://github.com/jhudsl/ottrpal/issuesand do not merge.
           labels: |
             automated
           reviewers: $GITHUB_ACTOR

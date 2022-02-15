@@ -7,13 +7,13 @@
 check_quiz_question_attributes(question_df, quiz_name = NULL, verbose = TRUE)
 }
 \arguments{
-\item{question_df}{a data.frame obtained from [ottr::parse_quiz_df] and dplyr::group_split(question).}
+\item{question_df}{a data.frame obtained from [ottrpal::parse_quiz_df] and dplyr::group_split(question).}
 
 \item{quiz_name}{inherited from parse}
 
 \item{verbose}{print diagnostic messages}
 }
 \description{
-This is ran automatically by [ottr::check_all_questions] for all questions.
+This is ran automatically by [ottrpal::check_all_questions] for all questions.
 It checks that the attributes specified are accepted ones by Leanpub.
 }

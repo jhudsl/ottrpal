@@ -264,7 +264,7 @@ extract_quiz <- function(quiz_lines) {
 
 #' Check Quiz Attributes
 #'
-#' @param quiz_specs The output from [ottr::parse_quiz].
+#' @param quiz_specs The output from [ottrpal::parse_quiz].
 #' @param quiz_name A character string indicating the name of the quiz being checked.
 #' @param verbose Would you like progress messages? TRUE/FALSE
 #'
@@ -314,10 +314,10 @@ check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) 
 }
 #' Check a question's attributes
 #'
-#' This is ran automatically by [ottr::check_all_questions] for all questions.
+#' This is ran automatically by [ottrpal::check_all_questions] for all questions.
 #' It checks that the attributes specified are accepted ones by Leanpub.
 #'
-#' @param question_df a data.frame obtained from [ottr::parse_quiz_df] and dplyr::group_split(question).
+#' @param question_df a data.frame obtained from [ottrpal::parse_quiz_df] and dplyr::group_split(question).
 #' @param quiz_name inherited from parse
 #' @param verbose print diagnostic messages
 #'
@@ -361,14 +361,14 @@ check_quiz_question_attributes <- function(question_df,
 
 #' Check all quiz questions
 #'
-#' Takes output from [ottr::parse_quiz] and runs checks on each question in a quiz by calling [ottr::check_question] for each question.
+#' Takes output from [ottrpal::parse_quiz] and runs checks on each question in a quiz by calling [ottrpal::check_question] for each question.
 #' First splits questions into their own data frame. Returns a list of messages/warnings about each question's set up.
 #'
-#' @param quiz_specs quiz_specs which is output from [ottr::parse_quiz].
+#' @param quiz_specs quiz_specs which is output from [ottrpal::parse_quiz].
 #' @param quiz_name The name of the quiz being checked.
 #' @param verbose Whether progress messages should be given.
 #'
-#' @return A list of the output from [ottr::check_question] with messages/warnings regarding each question and each check.
+#' @return A list of the output from [ottrpal::check_question] with messages/warnings regarding each question and each check.
 #'
 #' @export check_all_questions
 #'
@@ -420,7 +420,7 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 #'
 #' Check quiz question set up to see if it is compliant with Leanpub and Coursera needs.
 #' Based off of [Markua guide](https://leanpub.com/markua/read#leanpub-auto-quizzes-and-exercises).
-#' Is called by [ottr::check_all_questions] and run for each question.
+#' Is called by [ottrpal::check_all_questions] and run for each question.
 #'
 #' @param question_df Which is an individual question's data frame after being parse from
 #' @param quiz_name The name of the quiz the question is from
@@ -604,7 +604,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 #'
 #' Check the formatting of all quizzes in a given directory.
 #'
-#' @param quiz_dir A path to a directory full of quizzes that should all be checked with [ottr::check_all_quizzes].
+#' @param quiz_dir A path to a directory full of quizzes that should all be checked with [ottrpal::check_all_quizzes].
 #' @param verbose print diagnostic messages
 #' @param write_report TRUE/FALSE save warning report to a CSV file?
 #'

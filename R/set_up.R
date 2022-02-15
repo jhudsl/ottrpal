@@ -174,7 +174,7 @@ copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
 #' @param remove_resources_start remove the word `resources/` at the front
 #' of any image path.
 #' @param run_quiz_checks TRUE/FALSE run quiz checks
-#' @param make_book_txt Should [ottr::bookdown_to_book_txt()] be run
+#' @param make_book_txt Should [ottrpal::bookdown_to_book_txt()] be run
 #' to create a `Book.txt` in the output directory?
 #' @param quiz_dir directory that contains the quiz .md files that should be
 #' checked and incorporated into the Book.txt file. If you don't have quizzes,
