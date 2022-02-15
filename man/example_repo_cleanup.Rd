@@ -17,7 +17,7 @@ Clean up example repo files
 \examples{
 
 # Run this to get the files we need
-example_files <- ottr::example_repo_setup()
+example_files <- ottr_aide::example_repo_setup()
 
 # Run this to delete them
 example_repo_cleanup(files_to_remove = basename(example_files))

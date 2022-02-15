@@ -1,4 +1,4 @@
 library(testthat)
-library(ottr)
+library(ottr_aide)
 
-test_check("ottr")
+test_check("ottr_aide")

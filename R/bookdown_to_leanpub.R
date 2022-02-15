@@ -9,7 +9,7 @@
 #' @param remove_resources_start remove the word `resources/` at the front
 #' of any image path.
 #' @param run_quiz_checks TRUE/FALSE run quiz checks
-#' @param make_book_txt Should [ottr::bookdown_to_book_txt()] be run
+#' @param make_book_txt Should [ottr_aide::bookdown_to_book_txt()] be run
 #' to create a `Book.txt` in the output directory?
 #' @param quiz_dir directory that contains the quiz .md files that should be
 #' checked and incorporated into the Book.txt file. If you don't have quizzes,
@@ -135,7 +135,7 @@ bookdown_to_leanpub <- function(path = ".",
 #' If no image column supplied, default image used.
 #' @param bookdown_index The file path of the rendered bookdown index.html file
 #' @param base_url The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
-#' e.g. https://jhudatascience.org/OTTR_Template/coursera
+#' e.g. https://jhudatascience.org/ottr_aide_Template/coursera
 #' @param default_img A google slide link to the default image to be used for all chapters
 #' @param output_dir output directory to put files.  It should likely be
 #' relative to path
@@ -144,7 +144,7 @@ bookdown_to_leanpub <- function(path = ".",
 #' @param remove_resources_start remove the word `resources/` at the front
 #' of any image path.
 #' @param run_quiz_checks TRUE/FALSE run quiz checks
-#' @param make_book_txt Should [ottr::bookdown_to_book_txt()] be run
+#' @param make_book_txt Should [ottr_aide::bookdown_to_book_txt()] be run
 #' to create a `Book.txt` in the output directory?
 #' @param quiz_dir directory that contains the quiz .md files that should be
 #' checked and incorporated into the Book.txt file. If you don't have quizzes,
@@ -159,9 +159,9 @@ bookdown_to_leanpub <- function(path = ".",
 #'
 #' @examples \dontrun{
 #'
-#' ottr::bookdown_to_embed_leanpub(base_url = "")
+#' ottr_aide::bookdown_to_embed_leanpub(base_url = "")
 #'
-#' ottr::bookdown_to_embed_leanpub(chapt_img_key = "chapter_urls.tsv")
+#' ottr_aide::bookdown_to_embed_leanpub(chapt_img_key = "chapter_urls.tsv")
 #'
 #' }
 
@@ -420,7 +420,7 @@ make_embed_markdown <- function(url,
 #'
 #' @param bookdown_index The file path of the rendered bookdown index.html file
 #' @param base_url The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
-#' e.g. https://jhudatascience.org/OTTR_Template/coursera
+#' e.g. https://jhudatascience.org/ottr_aide_Template/coursera
 #'
 #' @return A data.frame of the chapter urls and their titles that are to be ported to Leanpub.
 #' This can be passed to

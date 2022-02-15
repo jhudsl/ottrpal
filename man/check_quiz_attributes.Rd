@@ -7,7 +7,7 @@
 check_quiz_attributes(quiz_specs, quiz_name = NULL, verbose = TRUE)
 }
 \arguments{
-\item{quiz_specs}{The output from [ottr::parse_quiz].}
+\item{quiz_specs}{The output from [ottr_aide::parse_quiz].}
 
 \item{quiz_name}{A character string indicating the name of the quiz being checked.}
 

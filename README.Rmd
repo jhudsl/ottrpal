@@ -3,7 +3,7 @@ output: github_document
 ---
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/jhudsl/ottr/workflows/R-CMD-check/badge.svg)](https://github.com/jhudsl/ottr/actions)
+[![R-CMD-check](https://github.com/jhudsl/ottr_aide/workflows/R-CMD-check/badge.svg)](https://github.com/jhudsl/ottr_aide/actions)
 <!-- badges: end -->
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -16,17 +16,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-# ottr Package:
+# ottr_aide Package:
 
-The goal of `ottr` is to provide tools to convert from Bookdown content to Leanpub content and do some checks.
+The goal of `ottr_aide` is to provide tools to convert from Bookdown content to Leanpub content and do some checks.
 
 ## Installation
 
-You can install `ottr` from GitHub with:
+You can install `ottr_aide` from GitHub with:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("remotes")
-remotes::install_github("jhudsl/ottr")
+remotes::install_github("jhudsl/ottr_aide")
 ```
 
 
@@ -36,9 +36,9 @@ Within a bookdown repository, you can run the following command to convert your
 content to a Leanpub-ready format.
 
 ```{r, eval = FALSE}
-ottr::bookdown_to_leanpub()
+ottr_aide::bookdown_to_leanpub()
 ```
 
 By default the output files will be sent to a `manuscript` folder which is what Leanpub looks for.
 
-For an example of what this looks like, see [this template repository](https://github.com/jhudsl/OTTR_Quizzes).
+For an example of what this looks like, see [this template repository](https://github.com/jhudsl/ottr_aide_Quizzes).

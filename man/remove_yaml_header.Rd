@@ -16,7 +16,7 @@ A character vector of the text without the YAML header
 Remove YAML header
 }
 \examples{
-file <- system.file("extdata/00_template.Rmd", package = "ottr")
+file <- system.file("extdata/00_template.Rmd", package = "ottr_aide")
 out <- remove_yaml_header(file)
 head(out)
 }
