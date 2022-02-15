@@ -1,4 +1,4 @@
-Package: ottr_aide
+Package: ottrsidekick
 Version: 0.1.2
 Title: Tools for Creating Automated Courses
 Description: Leverages the 'bookdown' package and other tools to create courses
@@ -49,6 +49,6 @@ Remotes: jhudsl/text2speech,
 ByteCompile: true
 Type: Package
 VignetteBuilder: knitr
-URL: https://github.com/jhudsl/ottr_aide
-BugReports: https://github.comjhudsl/ottr_aide/issues
+URL: https://github.com/jhudsl/ottrsidekick
+BugReports: https://github.comjhudsl/ottrsidekick/issues
 RoxygenNote: 7.1.2

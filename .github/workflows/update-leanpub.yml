@@ -3,7 +3,7 @@
 
 name: Update Leanpub Upon Merge
 
-# Triggers the workflow AFTER changes to ottr_aide have been merged
+# Triggers the workflow AFTER changes to ottrsidekick have been merged
 on:
   workflow_dispatch:
   push:
@@ -12,7 +12,7 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    # I have it check out the image that is built from: https://github.com/jhudsl/ottr_aide_Template/blob/main/docker/Dockerfile
+    # I have it check out the image that is built from: https://github.com/jhudsl/ottrsidekick_Template/blob/main/docker/Dockerfile
     container:
       image: jhudsl/course_template
 
@@ -21,23 +21,23 @@ jobs:
       - name: Checkout code from Leanpub test repo
         uses: actions/checkout@v2
         with:
-          repository: jhudsl/ottr_aide_Quizzes
+          repository: jhudsl/ottrsidekick_Quizzes
           token: ${{ secrets.GH_PAT }}
 
-      # Copy over the latest ottr_aide and use that for the run
-      - name: Get latest ottr_aide
+      # Copy over the latest ottrsidekick and use that for the run
+      - name: Get latest ottrsidekick
         run: |
           sudo apt-get install  -y --no-install-recommends subversion
 
-          # Copy over the latest ottr_aide build
-          svn export https://github.com/${GITHUB_REPOSITORY}.git/branches/master ottr_aide/
+          # Copy over the latest ottrsidekick build
+          svn export https://github.com/${GITHUB_REPOSITORY}.git/branches/master ottrsidekick/
 
       # Run leanpub rendering
-      - name: Run ottr_aide::bookdown_to_leanpub
+      - name: Run ottrsidekick::bookdown_to_leanpub
         run: |
-          Rscript -e "devtools::load_all('ottr_aide'); ottr_aide::bookdown_to_leanpub(footer_text = '*Please provide any feedback with [this form!](https://forms.gle/hc8Xt3Y2Znjb6M4Y7) We appreciate your thoughts.*')"
-          Rscript -e "devtools::load_all('ottr_aide'); ottr_aide::render_coursera(convert_quizzes = TRUE)"
-          rm -r ottr_aide
+          Rscript -e "devtools::load_all('ottrsidekick'); ottrsidekick::bookdown_to_leanpub(footer_text = '*Please provide any feedback with [this form!](https://forms.gle/hc8Xt3Y2Znjb6M4Y7) We appreciate your thoughts.*')"
+          Rscript -e "devtools::load_all('ottrsidekick'); ottrsidekick::render_coursera(convert_quizzes = TRUE)"
+          rm -r ottrsidekick
 
 
       - name: Create PR with newly rendered docs files
@@ -45,15 +45,15 @@ jobs:
         id: cpr
         with:
           token: ${{ secrets.GH_PAT }}
-          commit-message: Show latest ottr_aide changes
+          commit-message: Show latest ottrsidekick changes
           signoff: false
           branch: auto_copy_rendered_files
           delete-branch: true
-          title: 'GHA: Automated transfer re-render with ottr_aide update'
+          title: 'GHA: Automated transfer re-render with ottrsidekick update'
           body: |
             ### Description:
-             This PR has changes to this repository's files using the latest ottr_aide package changes!
-             If they don't look right, file an issue on the ottr_aide package: https://github.com/jhudsl/ottr_aide/issuesand do not merge.
+             This PR has changes to this repository's files using the latest ottrsidekick package changes!
+             If they don't look right, file an issue on the ottrsidekick package: https://github.com/jhudsl/ottrsidekick/issuesand do not merge.
           labels: |
             automated
           reviewers: $GITHUB_ACTOR

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Check all quizzes in a directory — check_quizzes • ottr_aide</title>
+<title>Check all quizzes in a directory — check_quizzes • ottrsidekick</title>
 
 
 <!-- jquery -->
@@ -71,7 +71,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">ottr_aide</a>
+        <a class="navbar-link" href="../index.html">ottrsidekick</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
@@ -105,7 +105,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/jhudsl/ottr_aide/">
+  <a href="https://github.com/jhudsl/ottrsidekick/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -124,7 +124,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check all quizzes in a directory</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jhudsl/ottr_aide/blob/master/R/quiz.R'><code>R/quiz.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/jhudsl/ottrsidekick/blob/master/R/quiz.R'><code>R/quiz.R</code></a></small>
     <div class="hidden name"><code>check_quizzes.Rd</code></div>
     </div>
 
@@ -139,7 +139,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>quiz_dir</th>
-      <td><p>A path to a directory full of quizzes that should all be checked with [ottr_aide::check_all_quizzes].</p></td>
+      <td><p>A path to a directory full of quizzes that should all be checked with [ottrsidekick::check_all_quizzes].</p></td>
     </tr>
     <tr>
       <th>write_report</th>
@@ -164,8 +164,8 @@
 <span class='co'>## Now check the quizzes in that directory</span>
 <span class='va'>all_quiz_results</span> <span class='op'>&lt;-</span> <span class='fu'>check_quizzes</span><span class='op'>(</span>quiz_dir <span class='op'>=</span> <span class='va'>quiz_dir</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'> Checking quiz: /tmp/RtmpEsbVt7/temp_libpath1222c397ac8/ottr_aide/extdata/quiz_bad.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: It would be a shame  ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Colon detected in question on lines: 7 in question starting with:It would be a shame  ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: What a shame if we p ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: Shame shame if we sa ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: What if we don't put ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='warning'>Warning: No correct answers provided for What if we don't put ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: What if only give co ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='warning'>Warning: No incorrect answer options provided for What if only give co ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'> Checking quiz: /tmp/RtmpEsbVt7/temp_libpath1222c397ac8/ottr_aide/extdata/quiz_good.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: First question to as ... in quiz: quiz_good.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: Example without choo ... in quiz: quiz_good.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: Question example wit ... in quiz: quiz_good.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: A more complicated e ... in quiz: quiz_good.md</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'> Checking quiz: /tmp/RtmpEsbVt7/temp_libpath1222c397ac8/ottrsidekick/extdata/quiz_bad.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: It would be a shame  ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Colon detected in question on lines: 7 in question starting with:It would be a shame  ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: What a shame if we p ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: Shame shame if we sa ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: What if we don't put ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='warning'>Warning: No correct answers provided for What if we don't put ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: What if only give co ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='warning'>Warning: No incorrect answer options provided for What if only give co ... in quiz: quiz_bad.md</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'> Checking quiz: /tmp/RtmpEsbVt7/temp_libpath1222c397ac8/ottrsidekick/extdata/quiz_good.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: First question to as ... in quiz: quiz_good.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: Example without choo ... in quiz: quiz_good.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: Question example wit ... in quiz: quiz_good.md</span></div><div class='output co'>#&gt; <span class='message'>Checking question: A more complicated e ... in quiz: quiz_good.md</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'> Question error report saved to 'question_error_report.tsv'</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

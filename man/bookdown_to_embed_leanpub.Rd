@@ -33,7 +33,7 @@ If no image column supplied, default image used.}
 \item{bookdown_index}{The file path of the rendered bookdown index.html file}
 
 \item{base_url}{The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
-e.g. https://jhudatascience.org/ottr_aide_Template/coursera}
+e.g. https://jhudatascience.org/ottrsidekick_Template/coursera}
 
 \item{clean_up}{TRUE/FALSE the old output directory should be deleted and
 everything created fresh.}
@@ -45,7 +45,7 @@ everything created fresh.}
 \item{output_dir}{output directory to put files.  It should likely be
 relative to path}
 
-\item{make_book_txt}{Should [ottr_aide::bookdown_to_book_txt()] be run
+\item{make_book_txt}{Should [ottrsidekick::bookdown_to_book_txt()] be run
 to create a `Book.txt` in the output directory?}
 
 \item{quiz_dir}{directory that contains the quiz .md files that should be
@@ -71,9 +71,9 @@ Convert Bookdown to Embed version of Leanpub
 \examples{
 \dontrun{
 
-ottr_aide::bookdown_to_embed_leanpub(base_url = "")
+ottrsidekick::bookdown_to_embed_leanpub(base_url = "")
 
-ottr_aide::bookdown_to_embed_leanpub(chapt_img_key = "chapter_urls.tsv")
+ottrsidekick::bookdown_to_embed_leanpub(chapt_img_key = "chapter_urls.tsv")
 
 }
 }

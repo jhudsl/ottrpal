@@ -1,6 +1,6 @@
 ---
 name: Problem Report
-about: Create a report to help improve ottr_aide and its documentation
+about: Create a report to help improve ottrsidekick and its documentation
 title: problem
 labels: bug
 assignees: cansavvy
@@ -24,7 +24,7 @@ A clear and concise description of what you expected to happen.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
-What does the render look like versus what did you write and supply to `ottr_aide`?
+What does the render look like versus what did you write and supply to `ottrsidekick`?
 
 **Additional context**
 Add any other context about the problem here.

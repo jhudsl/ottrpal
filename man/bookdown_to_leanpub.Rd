@@ -25,7 +25,7 @@ bookdown_to_leanpub(
 \item{output_dir}{output directory to put files.  It should likely be
 relative to path}
 
-\item{make_book_txt}{Should [ottr_aide::bookdown_to_book_txt()] be run
+\item{make_book_txt}{Should [ottrsidekick::bookdown_to_book_txt()] be run
 to create a `Book.txt` in the output directory?}
 
 \item{quiz_dir}{directory that contains the quiz .md files that should be

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Check all quiz questions — check_all_questions • ottr_aide</title>
+<title>Check all quiz questions — check_all_questions • ottrsidekick</title>
 
 
 <!-- jquery -->
@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Check all quiz questions — check_all_questions" />
-<meta property="og:description" content="Takes output from [ottr_aide::parse_quiz] and runs checks on each question in a quiz by calling [ottr_aide::check_question] for each question.
+<meta property="og:description" content="Takes output from [ottrsidekick::parse_quiz] and runs checks on each question in a quiz by calling [ottrsidekick::check_question] for each question.
 First splits questions into their own data frame. Returns a list of messages/warnings about each question's set up." />
 
 
@@ -72,7 +72,7 @@ First splits questions into their own data frame. Returns a list of messages/war
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">ottr_aide</a>
+        <a class="navbar-link" href="../index.html">ottrsidekick</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
@@ -106,7 +106,7 @@ First splits questions into their own data frame. Returns a list of messages/war
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/jhudsl/ottr_aide/">
+  <a href="https://github.com/jhudsl/ottrsidekick/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -125,12 +125,12 @@ First splits questions into their own data frame. Returns a list of messages/war
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check all quiz questions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jhudsl/ottr_aide/blob/master/R/quiz.R'><code>R/quiz.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/jhudsl/ottrsidekick/blob/master/R/quiz.R'><code>R/quiz.R</code></a></small>
     <div class="hidden name"><code>check_all_questions.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Takes output from [ottr_aide::parse_quiz] and runs checks on each question in a quiz by calling [ottr_aide::check_question] for each question.
+    <p>Takes output from [ottrsidekick::parse_quiz] and runs checks on each question in a quiz by calling [ottrsidekick::check_question] for each question.
 First splits questions into their own data frame. Returns a list of messages/warnings about each question's set up.</p>
     </div>
 
@@ -141,7 +141,7 @@ First splits questions into their own data frame. Returns a list of messages/war
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>quiz_specs</th>
-      <td><p>quiz_specs which is output from [ottr_aide::parse_quiz].</p></td>
+      <td><p>quiz_specs which is output from [ottrsidekick::parse_quiz].</p></td>
     </tr>
     <tr>
       <th>quiz_name</th>
@@ -155,7 +155,7 @@ First splits questions into their own data frame. Returns a list of messages/war
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of the output from [ottr_aide::check_question] with messages/warnings regarding each question and each check.</p>
+    <p>A list of the output from [ottrsidekick::check_question] with messages/warnings regarding each question and each check.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>

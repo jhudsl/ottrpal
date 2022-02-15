@@ -40,7 +40,7 @@ partition_yaml_front_matter <- function(input_lines) {
 #' @export
 #'
 #' @examples
-#' file <- system.file("extdata/00_template.Rmd", package = "ottr_aide")
+#' file <- system.file("extdata/00_template.Rmd", package = "ottrsidekick")
 #' out <- remove_yaml_header(file)
 #' head(out)
 remove_yaml_header <- function(file) {

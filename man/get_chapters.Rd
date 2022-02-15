@@ -10,7 +10,7 @@ get_chapters(bookdown_index = file.path("docs", "index.html"), base_url = NULL)
 \item{bookdown_index}{The file path of the rendered bookdown index.html file}
 
 \item{base_url}{The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
-e.g. https://jhudatascience.org/ottr_aide_Template/coursera}
+e.g. https://jhudatascience.org/ottrsidekick_Template/coursera}
 }
 \value{
 A data.frame of the chapter urls and their titles that are to be ported to Leanpub.

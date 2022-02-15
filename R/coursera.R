@@ -229,7 +229,7 @@ render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
   toc_close_css <- file.path(root_dir, "assets", "toc_close.css")
 
   if (!file.exists(toc_close_css)) {
-    download.file("https://raw.githubusercontent.com/jhudsl/ottr_aide/master/inst/extdata/toc_close.css",
+    download.file("https://raw.githubusercontent.com/jhudsl/ottrsidekick/master/inst/extdata/toc_close.css",
       destfile = toc_close_css
     )
   }
