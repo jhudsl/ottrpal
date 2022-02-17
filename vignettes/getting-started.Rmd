@@ -53,7 +53,7 @@ remotes::install_github("jhudsl/ottrpal")
 If you'd like to use our example repository you can fork it on Github and clone it to your own computer
 [Follow these instructions to fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository) and then you can clone it using a command line.
 
-But for the purposes of this example we will download a zip file of the files we need and set those up using this function: 
+But for the purposes of this example we will download a zip file of the files we need and set those up using this function:
 
 ```{r}
 # Run this to get the files we need
@@ -62,7 +62,7 @@ example_files <- ottrpal::example_repo_setup()
 
 ## Running ottrpal
 
-The `ottrpal` package converts your files using this base function, where `base_url` is where the OTTR course pages are published. 
+The `ottrpal` package converts your files using this base function, where `base_url` is where the OTTR course pages are published.
 
 ```{r, eval = FALSE}
 ottrpal::bookdown_to_embed_leanpub(base_url = "https://jhudatascience.org/OTTR_Template/")
@@ -82,8 +82,8 @@ You can create a `Book.txt` file manually, or if your quizzes and chapters are n
 
 To have `ottrpal` attempt to autogenerate this file, set `make_book_txt` to `TRUE`.
 
-```{r}
-ottrpal::bookdown_to_embed_leanpub(base_url = "https://jhudatascience.org/OTTR_Template/", 
+```{r, eval = FALSE}
+ottrpal::bookdown_to_embed_leanpub(base_url = "https://jhudatascience.org/OTTR_Template/",
                                    make_book_txt = TRUE)
 ```
 
@@ -105,9 +105,9 @@ Also note that any `index.Rmd` will always be placed first and any `about.Rmd` f
 By default, ottrpal will look for a folder called `quizzes/` to find your quiz `.md` files.
 If your quizzes are located somewhere else, you will need to use the `quiz_dir` argument to specify that:
 
-```{r}
-ottrpal::bookdown_to_embed_leanpub(base_url = "https://jhudatascience.org/OTTR_Template/", 
-                                   make_book_txt = TRUE, 
+```{r, eval = FALSE}
+ottrpal::bookdown_to_embed_leanpub(base_url = "https://jhudatascience.org/OTTR_Template/",
+                                   make_book_txt = TRUE,
                                    quiz_dir = "some_directory")
 ```
 
@@ -122,12 +122,12 @@ You should not edit the files in `manuscript/` by hand since a re-run of `ottrpa
 
 If there is text you would like added to the end of each chapter (like a link to a feedback survey for example), you can supply a character string to the `footer_text` argument in the main `ottrpal::bookdown_to_leanpub()` function.
 
-```{r}
+```{r, eval = FALSE}
 # Set up a character string
 survey_link <- "Please provide any feedback you have in [this survey](www.some_link.org)"
 
 # Supply the footer text in the main function
-ottrpal::bookdown_to_embed_leanpub(base_url = "https://jhudatascience.org/OTTR_Template/", 
-                                   make_book_txt = TRUE, 
+ottrpal::bookdown_to_embed_leanpub(base_url = "https://jhudatascience.org/OTTR_Template/",
+                                   make_book_txt = TRUE,
                                    footer_text = survey_link)
 ```
