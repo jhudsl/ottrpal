@@ -33,17 +33,19 @@ bookdown_to_leanpub <- function(path = ".",
                                 footer_text = NULL,
                                 clean_up = FALSE) {
   # Run the set up
-  set_up_leanpub(path = path,
-                 embed = FALSE,
-                 clean_up = clean_up,
-                 render = render,
-                 output_dir = output_dir,
-                 make_book_txt = make_book_txt,
-                 quiz_dir = quiz_dir,
-                 run_quiz_checks = run_quiz_checks,
-                 remove_resources_start = remove_resources_start,
-                 verbose = verbose,
-                 footer_text = footer_text)
+  set_up_leanpub(
+    path = path,
+    embed = FALSE,
+    clean_up = clean_up,
+    render = render,
+    output_dir = output_dir,
+    make_book_txt = make_book_txt,
+    quiz_dir = quiz_dir,
+    run_quiz_checks = run_quiz_checks,
+    remove_resources_start = remove_resources_start,
+    verbose = verbose,
+    footer_text = footer_text
+  )
 
   # Establish path
   path <- bookdown_path(path)
@@ -162,9 +164,7 @@ bookdown_to_leanpub <- function(path = ".",
 #' ottrpal::bookdown_to_embed_leanpub(base_url = "")
 #'
 #' ottrpal::bookdown_to_embed_leanpub(chapt_img_key = "chapter_urls.tsv")
-#'
 #' }
-
 bookdown_to_embed_leanpub <- function(path = ".",
                                       chapt_img_key = NULL,
                                       bookdown_index = file.path("docs", "index.html"),
@@ -180,23 +180,23 @@ bookdown_to_embed_leanpub <- function(path = ".",
                                       verbose = TRUE,
                                       footer_text = "") {
   # Run the set up
-  set_up_leanpub(path = path,
-                 embed = TRUE,
-                 clean_up = clean_up,
-                 render = render,
-                 output_dir = output_dir,
-                 make_book_txt = make_book_txt,
-                 quiz_dir = quiz_dir,
-                 run_quiz_checks = run_quiz_checks,
-                 remove_resources_start = remove_resources_start,
-                 verbose = verbose)
+  set_up_leanpub(
+    path = path,
+    embed = TRUE,
+    clean_up = clean_up,
+    render = render,
+    output_dir = output_dir,
+    make_book_txt = make_book_txt,
+    quiz_dir = quiz_dir,
+    run_quiz_checks = run_quiz_checks,
+    remove_resources_start = remove_resources_start,
+    verbose = verbose
+  )
 
   # If TSV chapter image key file is specified read it in
   if (!is.null(chapt_img_key)) {
-
     message(paste("Reading in a chapt_img_key TSV file:", chapt_img_key))
     chapt_df <- readr::read_tsv(chapt_img_key)
-
   } else {
     # If its not supplied, create it from the get_chapters function
     message("Creating a chapt_img_key TSV file")
@@ -204,8 +204,10 @@ bookdown_to_embed_leanpub <- function(path = ".",
     if (is.null(base_url)) {
       stop("No base_url is supplied and no chapt_img_key file was supplied. Need one or the other.")
     }
-    chapt_df <- get_chapters(bookdown_index = bookdown_index,
-                             base_url = base_url)
+    chapt_df <- get_chapters(
+      bookdown_index = bookdown_index,
+      base_url = base_url
+    )
   }
 
   # If there's no img_path supplied, then use a default image for each.
@@ -230,13 +232,13 @@ bookdown_to_embed_leanpub <- function(path = ".",
     # Make the data.frame be in the same order
     dplyr::select(dplyr::any_of("url"), dplyr::any_of("chapt_title"), dplyr::any_of("img_path")) %>%
     # Run it make_embed_markdown on each row
-    purrr::pmap( ~ make_embed_markdown(url = ..1, chapt_title = ..2, img_path = ..3, footer_text = footer_text))
+    purrr::pmap(~ make_embed_markdown(url = ..1, chapt_title = ..2, img_path = ..3, footer_text = footer_text))
 
   ####################### Book.txt creation ####################################
   out <- NULL
   if (make_book_txt) {
     if (verbose) message("Running bookdown_to_book_txt")
-     md_files <- basename(unlist(md_output_files))
+    md_files <- basename(unlist(md_output_files))
 
     bookdown_to_book_txt(
       md_files = md_files,
@@ -389,10 +391,12 @@ make_embed_markdown <- function(url,
   file_contents <- c(
     paste("#", chapt_title),
     " ",
-    paste0("{type: iframe, title:", chapt_title,
-           ", width:", width_spec,
-           ", height:", height_spec,
-           ", poster:", img_path, "}"),
+    paste0(
+      "{type: iframe, title:", chapt_title,
+      ", width:", width_spec,
+      ", height:", height_spec,
+      ", poster:", img_path, "}"
+    ),
     paste0("![](", url, ")"),
     " ",
     footer_text,

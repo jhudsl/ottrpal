@@ -148,17 +148,19 @@ copy_bib <- function(path = ".", output_dir = "manuscript") {
 copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
   quiz_dir <- file.path(quiz_dir)
 
-  if (!dir.exists(quiz_dir)) {
-    stop(paste(
-      "The quiz directory specified by quiz_dir:", quiz_dir, "does not exist.",
-      "If you don't have quizzes, set quiz_dir = NULL"
-    ))
-  }
-  quizzes <- list.files(path = file.path(quiz_dir), full.names = TRUE, pattern = "\\.md$")
-  if (length(quizzes) > 0) {
-    fs::file_copy(quizzes, file.path(output_dir, basename(quizzes)),
-      overwrite = TRUE
-    )
+  if (!is.null(quiz_dir)) {
+    if (!dir.exists(quiz_dir)) {
+      warning(paste(
+        "The quiz directory specified by quiz_dir:", quiz_dir, "does not exist.",
+        "If you don't have quizzes, set quiz_dir = NULL"
+      ))
+    }
+    quizzes <- list.files(path = file.path(quiz_dir), full.names = TRUE, pattern = "\\.md$")
+    if (length(quizzes) > 0) {
+      fs::file_copy(quizzes, file.path(output_dir, basename(quizzes)),
+        overwrite = TRUE
+      )
+    }
   }
 }
 
@@ -167,7 +169,7 @@ copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
 #' @param path path to the bookdown book, must have a `_bookdown.yml` file
 #' @param output_dir output directory to put files.  It should likely be
 #' relative to path
-#' @param clean_up TRUE/FALSE the old output directory should be deleted and 
+#' @param clean_up TRUE/FALSE the old output directory should be deleted and
 #' everything created fresh.
 #' @param render if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.
 #' @param verbose print diagnostic messages
@@ -194,20 +196,19 @@ set_up_leanpub <- function(path = ".",
                            run_quiz_checks = FALSE,
                            remove_resources_start = FALSE,
                            verbose = TRUE,
-                           footer_text = NULL, 
+                           footer_text = NULL,
                            embed = NULL) {
-
   if (clean_up) {
     message(paste("Clearing out old version of output files:", output_dir))
-    
+
     file.remove(output_dir, recursive = TRUE, showWarnings = FALSE)
-  } 
-  
+  }
+
   # If output directory doesn't exist, make it
   if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
-  
+
   # Declare regex for finding rmd files
   rmd_regex <- "[.][R|r]md$"
 
@@ -250,12 +251,12 @@ set_up_leanpub <- function(path = ".",
       clean_envir = FALSE
     )
   }
-  
+
   # We only need to copy these things if we are not doing embed
   if (!embed) {
     if (verbose) message("Copying Resources")
     copy_resources(path, output_dir = output_dir)
-    
+
     if (verbose) message("Copying docs files")
     copy_docs(path, output_dir = output_dir)
 
