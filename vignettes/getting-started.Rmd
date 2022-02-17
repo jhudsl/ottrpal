@@ -36,16 +36,6 @@ if (!("ottrpal" %in% installed.packages())) {
 - a directory containing quizzes in the form of `.md` files which have been written using the [Markua formatting specifications](https://leanpub.com/markua/read#leanpub-auto-quizzes-and-exercises) (see [example folder](https://github.com/jhudsl/OTTR_Quizzes/tree/main/quizzes)).  
 - A TSV file specifying `url`,	`chapt_title`,	`img_path` See this (https://github.com/jhudsl/OTTR_Template/blob/main/resources/chapt_screen_images/chapter_urls.tsv).
 
-## Using the example repository:
-
-If you'd like to use our example repository you can fork it on Github and clone it to your own computer
-[Follow these instructions to fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository) and then you can clone it using a command like:  
-
-```{sh}
-git clone https://github.com/{organization}/OTTR_Quizzes.git
-```
-But replace `{organization}` with the location of your forked repository.
-
 ## Installing ottrpal:
 
 You can install `ottrpal` from GitHub with:
@@ -106,7 +96,7 @@ If your quizzes are located somewhere else, you will need to use the `quiz_dir` 
 ottrpal::bookdown_to_embed_leanpub(quiz_dir = "some_directory")
 ```
 
-If you don't have quizzes, you can say `quiz_dir = NULL` to skip all quiz steps. 
+If you don't have quizzes, you can say `quiz_dir = NULL` to skip all quiz steps.
 
 ## About the output files
 
