@@ -209,7 +209,7 @@ set_up_leanpub <- function(path = ".",
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
 
-  if (embed && !render) {
+  if (!embed && render) {
     # Declare regex for finding rmd files
     rmd_regex <- "[.][R|r]md$"
 

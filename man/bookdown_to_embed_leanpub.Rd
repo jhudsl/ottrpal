@@ -7,7 +7,7 @@
 bookdown_to_embed_leanpub(
   path = ".",
   chapt_img_key = NULL,
-  bookdown_index = file.path("docs", "index.html"),
+  bookdown_index = file.path(base_url, "index.html"),
   base_url = NULL,
   clean_up = FALSE,
   default_img = NULL,

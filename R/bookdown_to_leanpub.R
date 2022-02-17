@@ -168,7 +168,7 @@ bookdown_to_leanpub <- function(path = ".",
 #'
 bookdown_to_embed_leanpub <- function(path = ".",
                                       chapt_img_key = NULL,
-                                      bookdown_index = file.path("docs", "index.html"),
+                                      bookdown_index = file.path(base_url, "index.html"),
                                       base_url = NULL,
                                       clean_up = FALSE,
                                       default_img = NULL,
@@ -206,7 +206,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
       stop("No base_url is supplied and no chapt_img_key file was supplied. Need one or the other.")
     }
     chapt_df <- get_chapters(
-      bookdown_index = bookdown_index,
+      bookdown_index = paste0(base_url, "index.html"),
       base_url = base_url
     )
   }
