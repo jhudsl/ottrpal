@@ -149,18 +149,18 @@ copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
   quiz_dir <- file.path(quiz_dir)
 
   if (!is.null(quiz_dir)) {
-  if (!dir.exists(quiz_dir)) {
-    warning(paste(
-      "The quiz directory specified by quiz_dir:", quiz_dir, "does not exist.",
-      "If you don't have quizzes, set quiz_dir = NULL"
-    ))
-  }
-  quizzes <- list.files(path = file.path(quiz_dir), full.names = TRUE, pattern = "\\.md$")
-  if (length(quizzes) > 0) {
-    fs::file_copy(quizzes, file.path(output_dir, basename(quizzes)),
-      overwrite = TRUE
-    )
-  }
+    if (!dir.exists(quiz_dir)) {
+      warning(paste(
+        "The quiz directory specified by quiz_dir:", quiz_dir, "does not exist.",
+        "If you don't have quizzes, set quiz_dir = NULL"
+      ))
+    }
+    quizzes <- list.files(path = file.path(quiz_dir), full.names = TRUE, pattern = "\\.md$")
+    if (length(quizzes) > 0) {
+      fs::file_copy(quizzes, file.path(output_dir, basename(quizzes)),
+        overwrite = TRUE
+      )
+    }
   }
 }
 
@@ -198,7 +198,6 @@ set_up_leanpub <- function(path = ".",
                            verbose = TRUE,
                            footer_text = NULL,
                            embed = NULL) {
-
   if (clean_up) {
     message(paste("Clearing out old version of output files:", output_dir))
 
