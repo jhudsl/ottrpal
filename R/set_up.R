@@ -209,49 +209,50 @@ set_up_leanpub <- function(path = ".",
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
 
-  # Declare regex for finding rmd files
-  rmd_regex <- "[.][R|r]md$"
+  if (!embed && render) {
+    # Declare regex for finding rmd files
+    rmd_regex <- "[.][R|r]md$"
 
-  # Get the path to the _bookdown.yml
-  path <- bookdown_path(path)
+    # Get the path to the _bookdown.yml
+    path <- bookdown_path(path)
 
-  if (verbose) {
-    message(paste0("Looking for bookdown file in ", path))
-  }
-  rmd_files <- bookdown_rmd_files(path = path)
-
-  if (verbose) {
-    message(paste0(c("Processing these files: ", rmd_files), collapse = "\n"))
-  }
-
-  if (render) {
     if (verbose) {
-      message("Rendering the Book")
+      message(paste0("Looking for bookdown file in ", path))
     }
-    # Get the index file path
-    index_file <- grep("index", rmd_files, ignore.case = TRUE, value = TRUE)
+    rmd_files <- bookdown_rmd_files(path = path)
 
-    index_file <- normalizePath(index_file)
-
-    if (length(index_file) == 0 || is.na(index_file)) {
-      index_file <- rmd_files[1]
+    if (verbose) {
+      message(paste0(c("Processing these files: ", rmd_files), collapse = "\n"))
     }
-    message(paste("index_file is", index_file))
 
-    if (rmarkdown::pandoc_version() >= "2.11") {
-      output_format <- bookdown::gitbook(pandoc_args = "--citeproc")
-      output_format$pandoc$args <- c(output_format$pandoc$args, "--citeproc")
-    } else {
-      warning("Pandoc version is not greater than 2.11 so citations will not be able to be rendered properly")
-      output_format <- NULL
+    if (render) {
+      if (verbose) {
+        message("Rendering the Book")
+      }
+      # Get the index file path
+      index_file <- grep("index", rmd_files, ignore.case = TRUE, value = TRUE)
+
+      index_file <- normalizePath(index_file)
+
+      if (length(index_file) == 0 || is.na(index_file)) {
+        index_file <- rmd_files[1]
+      }
+      message(paste("index_file is", index_file))
+
+      if (rmarkdown::pandoc_version() >= "2.11") {
+        output_format <- bookdown::gitbook(pandoc_args = "--citeproc")
+        output_format$pandoc$args <- c(output_format$pandoc$args, "--citeproc")
+      } else {
+        warning("Pandoc version is not greater than 2.11 so citations will not be able to be rendered properly")
+        output_format <- NULL
+      }
+      bookdown::render_book(
+        input = index_file,
+        output_format = output_format,
+        clean_envir = FALSE
+      )
     }
-    bookdown::render_book(
-      input = index_file,
-      output_format = output_format,
-      clean_envir = FALSE
-    )
   }
-
   # We only need to copy these things if we are not doing embed
   if (!embed) {
     if (verbose) message("Copying Resources")

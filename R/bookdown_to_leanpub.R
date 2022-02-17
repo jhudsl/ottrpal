@@ -159,15 +159,16 @@ bookdown_to_leanpub <- function(path = ".",
 #' @return A list of output files and diagnostics
 #' @export
 #'
-#' @examples \dontrun{
+#' @examples
 #'
-#' ottrpal::bookdown_to_embed_leanpub(base_url = "")
+#' ottrpal::bookdown_to_embed_leanpub(
+#'  base_url = "https://jhudatascience.org/OTTR_Template/",
+#'  make_book_txt = TRUE,
+#'  quiz_dir = NULL)
 #'
-#' ottrpal::bookdown_to_embed_leanpub(chapt_img_key = "chapter_urls.tsv")
-#' }
 bookdown_to_embed_leanpub <- function(path = ".",
                                       chapt_img_key = NULL,
-                                      bookdown_index = file.path("docs", "index.html"),
+                                      bookdown_index = file.path(base_url, "index.html"),
                                       base_url = NULL,
                                       clean_up = FALSE,
                                       default_img = NULL,
@@ -205,7 +206,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
       stop("No base_url is supplied and no chapt_img_key file was supplied. Need one or the other.")
     }
     chapt_df <- get_chapters(
-      bookdown_index = bookdown_index,
+      bookdown_index = paste0(base_url, "index.html"),
       base_url = base_url
     )
   }

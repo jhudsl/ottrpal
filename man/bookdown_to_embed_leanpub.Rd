@@ -7,7 +7,7 @@
 bookdown_to_embed_leanpub(
   path = ".",
   chapt_img_key = NULL,
-  bookdown_index = file.path("docs", "index.html"),
+  bookdown_index = file.path(base_url, "index.html"),
   base_url = NULL,
   clean_up = FALSE,
   default_img = NULL,
@@ -69,11 +69,10 @@ A list of output files and diagnostics
 Convert Bookdown to Embed version of Leanpub
 }
 \examples{
-\dontrun{
 
-ottrpal::bookdown_to_embed_leanpub(base_url = "")
+ottrpal::bookdown_to_embed_leanpub(
+ base_url = "https://jhudatascience.org/OTTR_Template/",
+ make_book_txt = TRUE,
+ quiz_dir = NULL)
 
-ottrpal::bookdown_to_embed_leanpub(chapt_img_key = "chapter_urls.tsv")
-
-}
 }
