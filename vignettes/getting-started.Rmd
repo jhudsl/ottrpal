@@ -60,16 +60,11 @@ But for the purposes of this example we will download a zip file of the files we
 example_files <- ottrpal::example_repo_setup()
 ```
 
-Each of your Rmds needs to have a chunk of code with this at the beginning of the file:
-`ottrpal::set_knitr_image_path()`
-
-This will ensure that the images are stored in the correct place and will be rendered correctly both in `Bookdown` and in Leanpub.
-
 ## Running ottrpal
 
 The `ottrpal` package converts your files using this base function, where `base_url` is where the OTTR course pages are published. 
 
-```{r}
+```{r, eval = FALSE}
 ottrpal::bookdown_to_embed_leanpub(base_url = "https://jhudatascience.org/OTTR_Template/")
 ```
 
