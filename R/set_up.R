@@ -115,20 +115,14 @@ copy_resources <- function(path = ".",
   # Get file path to bookdown.yml
   path <- bookdown_path(path)
 
-  # Assume image directory is `resources/images`
-  res_image_dir <- file.path(path, images_dir)
+  if (dir.exists(output_dir)) {
+    dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
+  }
 
-  # Create the directory if it doesn't exist
-  dir.create(res_image_dir, showWarnings = FALSE, recursive = TRUE)
-
-  manuscript_image_dir <- file.path(output_dir, images_dir)
-
-  dir.create(manuscript_image_dir, showWarnings = FALSE, recursive = TRUE)
-
-  manuscript_image_dir <- normalizePath(manuscript_image_dir)
-
-  if (dir.exists(res_image_dir)) {
-    R.utils::copyDirectory(res_image_dir, manuscript_image_dir, recursive = TRUE, overwrite = TRUE)
+  if (dir.exists(image_dir)) {
+    R.utils::copyDirectory(images_dir, output_dir, recursive = TRUE, overwrite = TRUE)
+  } else {
+    warning(paste("Input images directory does not exist:", images_dir))
   }
 }
 
