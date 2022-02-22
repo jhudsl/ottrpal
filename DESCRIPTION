@@ -1,16 +1,15 @@
 Package: ottrpal
-Version: 0.1.2
-Title: Tools for Creating Automated Courses
-Description: Leverages the 'bookdown' package and other tools to create courses
-  that can be hosted on Leanpub.
-Authors@R: c(person(given = "John",family = "Muschelli",
-  email = "muschellij2@gmail.com",
-  role = c("aut"),
-  comment = c(ORCID = "0000-0001-6469-1750")),
-  person(given = "Candace",family = "Savonen",
+Version: 1.0
+Title: Companion tools for OTTR courses
+Description: Tools for converting OTTR courses into Leanpub or Coursera courses
+Authors@R: c(person(given = "Candace",family = "Savonen",
   email = "cansav09@gmail.com",
   role = c("aut", "cre"),
   comment = c(ORCID = "0000-0001-6331-7070")),
+  person(given = "John",family = "Muschelli",
+  email = "muschellij2@gmail.com",
+  role = c("aut"),
+  comment = c(ORCID = "0000-0001-6469-1750")),
   person(given = "Carrie", family = "Wright",
   email = "cwrigh60@jhu.edu",
   role = c("ctb"))
@@ -50,5 +49,5 @@ ByteCompile: true
 Type: Package
 VignetteBuilder: knitr
 URL: https://github.com/jhudsl/ottrpal
-BugReports: https://github.comjhudsl/ottrpal/issues
+BugReports: https://github.com/jhudsl/ottrpal/issues
 RoxygenNote: 7.1.2
