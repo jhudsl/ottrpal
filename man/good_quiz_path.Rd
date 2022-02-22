@@ -12,4 +12,5 @@ Path to good example quiz
 \examples{
 
 quiz_path <- good_quiz_path()
+
 }

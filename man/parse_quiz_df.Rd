@@ -19,6 +19,7 @@ A data frame containing a type column which indicates what type of line each is.
 Parse quiz into a data.frame
 }
 \examples{
+\dontrun{
 
 # Use readLines() to read in a quiz
 quiz_path <- good_quiz_path()
@@ -26,4 +27,5 @@ quiz_lines <- readLines(quiz_path)
 
 # Can use this to parse the quiz into a data.frame
 quiz_df <- parse_quiz_df(quiz_lines)
+}
 }

@@ -11,7 +11,7 @@ utils::globalVariables(c("question", "original", "n", "metadata_check", "index")
 #'
 #' @export
 #'
-#' @examples
+#' @examples \dontrun{
 #'
 #' # Use readLines() to read in a quiz
 #' quiz_path <- good_quiz_path()
@@ -19,6 +19,7 @@ utils::globalVariables(c("question", "original", "n", "metadata_check", "index")
 #'
 #' # Can use this to parse the quiz into a data.frame
 #' quiz_df <- parse_quiz_df(quiz_lines)
+#' }
 parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
   quiz_df <- tibble::tibble(
     original = quiz_lines,
@@ -372,7 +373,7 @@ check_quiz_question_attributes <- function(question_df,
 #'
 #' @export check_all_questions
 #'
-#' @examples
+#' @examples \dontrun{
 #'
 #' # Using good quiz md example
 #'
@@ -386,6 +387,7 @@ check_quiz_question_attributes <- function(question_df,
 #' bad_quiz <- readLines(bad_quiz_path())
 #' bad_quiz_specs <- parse_quiz(bad_quiz)
 #' bad_quiz_checks <- check_all_questions(bad_quiz_specs)
+#' }
 check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 
   # Remove header part and split into per question data frames
@@ -430,7 +432,7 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 #'
 #' @export check_question
 #'
-#' @examples
+#' @examples \dontrun{
 #'
 #' # Use readLines to read in a quiz
 #' quiz_path <- good_quiz_path()
@@ -441,6 +443,7 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 #'   dplyr::group_split(question)
 #'
 #' good_quiz_checks <- check_question(questions_df[[2]])
+#' }
 check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 
   # Things are considered innocent until proven guilty
@@ -613,7 +616,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 #'
 #' @export check_quizzes
 #'
-#' @examples
+#' @examples \dontrun{
 #'
 #'
 #' ## Make a temporary quiz directory
@@ -621,6 +624,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 #'
 #' ## Now check the quizzes in that directory
 #' all_quiz_results <- check_quizzes(quiz_dir = quiz_dir)
+#' }
 check_quizzes <- function(quiz_dir = "quizzes",
                           write_report = TRUE,
                           verbose = TRUE) {
@@ -675,7 +679,7 @@ check_quizzes <- function(quiz_dir = "quizzes",
 #'
 #' @export check_quiz
 #'
-#' @examples
+#' @examples \dontrun{
 #'
 #' # Take a look at a good quiz's checks:
 #' quiz_path <- good_quiz_path()
@@ -684,6 +688,7 @@ check_quizzes <- function(quiz_dir = "quizzes",
 #' # Take a look at a failed quiz's checks:
 #' quiz_path <- good_quiz_path()
 #' failed_checks <- check_quiz(quiz_path)
+#' }
 check_quiz <- function(quiz_path, verbose = TRUE) {
   if (verbose) {
     message(paste0("\n Checking quiz: ", quiz_path))

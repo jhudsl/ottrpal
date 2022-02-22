@@ -18,6 +18,7 @@ A list of checks. "good" means the check passed. Failed checks will report where
 For a file path to a quiz, check whether it is properly formatted for Leanpub.
 }
 \examples{
+\dontrun{
 
 # Take a look at a good quiz's checks:
 quiz_path <- good_quiz_path()
@@ -26,4 +27,5 @@ good_checks <- check_quiz(quiz_path)
 # Take a look at a failed quiz's checks:
 quiz_path <- good_quiz_path()
 failed_checks <- check_quiz(quiz_path)
+}
 }

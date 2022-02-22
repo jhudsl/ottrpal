@@ -7,6 +7,7 @@
 #' @examples
 #'
 #' quiz_path <- good_quiz_path()
+#'
 good_quiz_path <- function() {
   list.files(
     pattern = "quiz_good.md$",
@@ -38,9 +39,11 @@ bad_quiz_path <- function() {
 #' @export
 #'
 #' @importFrom fs dir_copy
-#' @examples
+#' @examples \dontrun{
+#'
 #' # Run this to get the files we need
 #' example_files <- ottrpal::example_repo_setup()
+#'}
 example_repo_setup <- function(dest_dir = ".") {
   bookdown_path <- list.files(
     pattern = "_bookdown.yml$",
@@ -62,13 +65,14 @@ example_repo_setup <- function(dest_dir = ".") {
 #' @param verbose TRUE/FALSE would you like progress messages?
 #' @export
 #'
-#' @examples
+#' @examples \dontrun{
 #'
 #' # Run this to get the files we need
 #' example_files <- ottrpal::example_repo_setup()
 #'
 #' # Run this to delete them
 #' example_repo_cleanup(files_to_remove = basename(example_files))
+#' }
 example_repo_cleanup <- function(files_to_remove, verbose = FALSE) {
   message("Cleaning up and removing example repo files")
 

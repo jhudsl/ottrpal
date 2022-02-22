@@ -69,10 +69,11 @@ A list of output files and diagnostics
 Convert Bookdown to Embed version of Leanpub
 }
 \examples{
+\dontrun{
 
 ottrpal::bookdown_to_embed_leanpub(
  base_url = "https://jhudatascience.org/OTTR_Template/",
  make_book_txt = TRUE,
  quiz_dir = NULL)
-
+}
 }

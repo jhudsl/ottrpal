@@ -159,13 +159,13 @@ bookdown_to_leanpub <- function(path = ".",
 #' @return A list of output files and diagnostics
 #' @export
 #'
-#' @examples
+#' @examples \dontrun{
 #'
 #' ottrpal::bookdown_to_embed_leanpub(
 #'  base_url = "https://jhudatascience.org/OTTR_Template/",
 #'  make_book_txt = TRUE,
 #'  quiz_dir = NULL)
-#'
+#'}
 bookdown_to_embed_leanpub <- function(path = ".",
                                       chapt_img_key = NULL,
                                       bookdown_index = file.path(base_url, "index.html"),

@@ -22,6 +22,7 @@ Based off of [Markua guide](https://leanpub.com/markua/read#leanpub-auto-quizzes
 Is called by [ottrpal::check_all_questions] and run for each question.
 }
 \examples{
+\dontrun{
 
 # Use readLines to read in a quiz
 quiz_path <- good_quiz_path()
@@ -32,4 +33,5 @@ questions_df <- parse_quiz(quiz_lines)$data \%>\%
   dplyr::group_split(question)
 
 good_quiz_checks <- check_question(questions_df[[2]])
+}
 }

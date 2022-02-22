@@ -13,6 +13,9 @@ example_repo_setup(dest_dir = ".")
 Set up example repo files
 }
 \examples{
+\dontrun{
+
 # Run this to get the files we need
 example_files <- ottrpal::example_repo_setup()
+}
 }

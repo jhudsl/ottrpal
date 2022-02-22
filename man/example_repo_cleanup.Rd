@@ -15,10 +15,12 @@ example_repo_cleanup(files_to_remove, verbose = FALSE)
 Clean up example repo files
 }
 \examples{
+\dontrun{
 
 # Run this to get the files we need
 example_files <- ottrpal::example_repo_setup()
 
 # Run this to delete them
 example_repo_cleanup(files_to_remove = basename(example_files))
+}
 }

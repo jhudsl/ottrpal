@@ -21,6 +21,7 @@ Takes output from [ottrpal::parse_quiz] and runs checks on each question in a qu
 First splits questions into their own data frame. Returns a list of messages/warnings about each question's set up.
 }
 \examples{
+\dontrun{
 
 # Using good quiz md example
 
@@ -34,4 +35,5 @@ good_quiz_checks <- check_all_questions(good_quiz_specs)
 bad_quiz <- readLines(bad_quiz_path())
 bad_quiz_specs <- parse_quiz(bad_quiz)
 bad_quiz_checks <- check_all_questions(bad_quiz_specs)
+}
 }
