@@ -436,8 +436,11 @@ get_chapters <- function(bookdown_index = file.path("docs", "index.html"),
                          base_url = NULL) {
 
   # Read in html
-  index_html <- suppressWarnings(try(xml2::read_html(paste(bookdown_index, collapse = "\n"))))
-
+  if (file.exists(bookdown_index)) {
+    index_html <- suppressWarnings(try(xml2::read_html(paste(bookdown_index, collapse = "\n"))))
+  } else {
+    base_url <- suppressWarnings(try(xml2::read_html(paste(base_url, collapse = "\n"))))
+  }
   # Extract chapter nodes
   nodes <- rvest::html_nodes(index_html, xpath = paste0("//", 'li[@class="chapter"]'))
 
