@@ -9,6 +9,9 @@ set_knitr_image_path(verbose = FALSE)
 \arguments{
 \item{verbose}{print out what the figure path is}
 }
+\value{
+When used inside a knitted R Markdown document, will set the image path to a place compatible with 'ottrpal' output folders.
+}
 \description{
 Set image path for `knitr`
 }

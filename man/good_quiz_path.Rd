@@ -6,6 +6,9 @@
 \usage{
 good_quiz_path()
 }
+\value{
+The file path to an example good quiz included in the package that will pass the quiz checks.
+}
 \description{
 Path to good example quiz
 }

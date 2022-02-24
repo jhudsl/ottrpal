@@ -63,7 +63,7 @@ of any image path.}
 end of each file before the references section.}
 }
 \value{
-A list of output files and diagnostics
+A directory of output files in a folder 'manuscript' for publishing on Leanpub.
 }
 \description{
 Convert Bookdown to Embed version of Leanpub
