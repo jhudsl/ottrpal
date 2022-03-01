@@ -11,6 +11,9 @@ example_repo_cleanup(files_to_remove, verbose = FALSE)
 
 \item{verbose}{TRUE/FALSE would you like progress messages?}
 }
+\value{
+Will delete example files copied from [ottrpal::example_repo_setup()] function
+}
 \description{
 Clean up example repo files
 }

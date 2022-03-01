@@ -3,7 +3,7 @@
 #' Path to good example quiz
 #'
 #' @export
-#'
+#' @return The file path to an example good quiz included in the package that will pass the quiz checks.
 #' @examples
 #'
 #' quiz_path <- good_quiz_path()
@@ -20,6 +20,7 @@ good_quiz_path <- function() {
 #' Path to bad example quiz
 #'
 #' @export
+#' @return The file path to an example bad quiz included in the package that will fail the quiz checks.
 #'
 #' @examples
 #'
@@ -36,6 +37,8 @@ bad_quiz_path <- function() {
 #' Set up example repo files
 #'
 #' @param dest_dir The destination directory you would like the example repo files to be placed. By default is current directory.
+#' @return Sets up example files that can be used to test 'ottrpal' functions.
+#'
 #' @export
 #'
 #' @importFrom fs dir_copy
@@ -44,7 +47,7 @@ bad_quiz_path <- function() {
 #' # Run this to get the files we need
 #' example_files <- ottrpal::example_repo_setup()
 #'}
-example_repo_setup <- function(dest_dir = ".") {
+example_repo_setup <- function(dest_dir = tempdir()) {
   bookdown_path <- list.files(
     pattern = "_bookdown.yml$",
     system.file("extdata/", package = "ottrpal"),
@@ -63,6 +66,7 @@ example_repo_setup <- function(dest_dir = ".") {
 #'
 #' @param files_to_remove List of example files to delete.
 #' @param verbose TRUE/FALSE would you like progress messages?
+#' @return Will delete example files copied from [ottrpal::example_repo_setup()] function
 #' @export
 #'
 #' @examples \dontrun{
@@ -75,16 +79,6 @@ example_repo_setup <- function(dest_dir = ".") {
 #' }
 example_repo_cleanup <- function(files_to_remove, verbose = FALSE) {
   message("Cleaning up and removing example repo files")
-
-  files_to_remove <- c(
-    list.files("quizzes", recursive = TRUE, full.names = TRUE),
-    list.files("docs", recursive = TRUE, full.names = TRUE),
-    list.files("manuscript", recursive = TRUE, full.names = TRUE),
-    list.files("resources", recursive = TRUE, full.names = TRUE),
-    files_to_remove,
-    "question_error_report.tsv",
-    "Course_Name.rds"
-  )
 
   lapply(files_to_remove, function(file2remove, verbose = verbose) {
     if (file.exists(file2remove)) {

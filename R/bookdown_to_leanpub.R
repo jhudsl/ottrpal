@@ -156,7 +156,7 @@ bookdown_to_leanpub <- function(path = ".",
 #' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
 #'
-#' @return A list of output files and diagnostics
+#' @return A directory of output files in a folder 'manuscript' for publishing on Leanpub. 
 #' @export
 #'
 #' @examples \dontrun{

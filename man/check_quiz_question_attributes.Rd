@@ -13,6 +13,9 @@ check_quiz_question_attributes(question_df, quiz_name = NULL, verbose = TRUE)
 
 \item{verbose}{print diagnostic messages}
 }
+\value{
+Will return a warning for any quiz question attributes used that are not supported.
+}
 \description{
 This is ran automatically by [ottrpal::check_all_questions] for all questions.
 It checks that the attributes specified are accepted ones by Leanpub.

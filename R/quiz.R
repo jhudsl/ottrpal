@@ -321,7 +321,7 @@ check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) 
 #' @param question_df a data.frame obtained from [ottrpal::parse_quiz_df] and dplyr::group_split(question).
 #' @param quiz_name inherited from parse
 #' @param verbose print diagnostic messages
-#'
+#' @return Will return a warning for any quiz question attributes used that are not supported.
 #' @export
 #'
 check_quiz_question_attributes <- function(question_df,

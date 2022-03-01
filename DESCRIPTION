@@ -1,8 +1,8 @@
 Package: ottrpal
 Version: 1.0
-Title: Companion Tools for Open-source Tools for Training Resources (OTTR)
-Description: Tools for converting Open-source Tools for Training Resources (OTTR) courses into Leanpub or Coursera courses. ottrpal is for use with the OTTR Template repository to create courses.
-The OTTR repository can be found here: https://github.com/jhudsl/OTTR_Template .
+Title: Companion Tools for Open-Source Tools for Training Resources (OTTR)
+Description: Tools for converting Open-Source Tools for Training Resources (OTTR)
+  courses into Leanpub or Coursera courses. 'ottrpal' is for use with the OTTR Template repository to create courses.
 Authors@R: c(person(given = "Candace",family = "Savonen",
   email = "cansav09@gmail.com",
   role = c("aut", "cre"),
@@ -44,8 +44,6 @@ Suggests:
     utils
 Encoding: UTF-8
 LazyData: true
-Remotes: jhudsl/text2speech,
-    hairizuanbinnoorazman/rgoogleslides
 ByteCompile: true
 Type: Package
 VignetteBuilder: knitr

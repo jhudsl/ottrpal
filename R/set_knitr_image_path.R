@@ -3,7 +3,7 @@
 #'
 #' @param verbose print out what the figure path is
 #'
-#' @return NULL
+#' @return When used inside a knitted R Markdown document, will set the image path to a place compatible with 'ottrpal' output folders. 
 #' @export
 set_knitr_image_path <- function(verbose = FALSE) {
   fp <- knitr::fig_path()

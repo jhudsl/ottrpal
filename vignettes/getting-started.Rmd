@@ -10,25 +10,14 @@ vignette: >
 # Intro to ottrpal
 
 `ottrpal` contains tools and functions to be used with an [OTTR repository](https://github.com/jhudsl/OTTR_Template) course.
-It converts an [OTTR course](https://github.com/jhudsl/OTTR_Template/wiki) (Open-source Tools for Training Resources) into a files ready for upload to Massive Open Online Courses (MOOCs): [Coursera](https://www.coursera.org/) and [Leanpub](https://leanpub.com/).
+It converts an [OTTR course](https://github.com/jhudsl/OTTR_Template/wiki) (Open-Source Tools for Training Resources) into a files ready for upload to Massive Open Online Courses (MOOCs): [Coursera](https://www.coursera.org/) and [Leanpub](https://leanpub.com/).
 
 - Go to the [main OTTR guide](https://github.com/jhudsl/OTTR_Template/wiki) for how to start creating courses with OTTR.
 - [Read the ottrpal package documentation here](https://jhudatascience.org/ottrpal/docs/index.html).
 
 ## Installing ottrpal:
 
-You can install `ottrpal` from GitHub with:
-
-You will need to use the remotes package (and will need to install it if you don't have it).
-
-```{r}
-if (!("remotes" %in% installed.packages())) {
-  install.packages("remotes")
-}
-if (!("ottrpal" %in% installed.packages())) {
-  remotes::install_github("jhudsl/ottrpal")
-}
-```
+You can install `ottrpal` from CRAN or from GitHub. 
 
 ## Optional input files:
 
@@ -36,35 +25,16 @@ if (!("ottrpal" %in% installed.packages())) {
 - a directory containing quizzes in the form of `.md` files which have been written using the [Markua formatting specifications](https://leanpub.com/markua/read#leanpub-auto-quizzes-and-exercises) (see [example folder](https://github.com/jhudsl/OTTR_Quizzes/tree/main/quizzes)).  
 - A TSV file specifying `url`,	`chapt_title`,	`img_path` See this (https://github.com/jhudsl/OTTR_Template/blob/main/resources/chapt_screen_images/chapter_urls.tsv).
 
-## Installing ottrpal:
+## Set up an OTTR GitHub repository
 
-You can install `ottrpal` from GitHub with:
-
-You will need to use the remotes package (and will need to install it if you don't have it).
-``` r
-if (!("remotes" %in% installed.packages())) {
-  install.packages("remotes")
-}
-remotes::install_github("jhudsl/ottrpal")
-```
-
-## Set up example data
-
-If you'd like to use our example repository you can fork it on Github and clone it to your own computer
-[Follow these instructions to fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository) and then you can clone it using a command line.
-
-But for the purposes of this example we will download a zip file of the files we need and set those up using this function:
-
-```{r}
-# Run this to get the files we need
-example_files <- ottrpal::example_repo_setup()
-```
+Follow the [instructions here](https://github.com/jhudsl/OTTR_Template/wiki/Start-a-new-course) to set up your own OTTR GitHub repository for a new course. 
 
 ## Running ottrpal
 
-The `ottrpal` package converts your files using this base function, where `base_url` is where the OTTR course pages are published.
+In the base of your OTTR repository, you can run this command to set up a Leanpub version of your course. 
+The `ottrpal` package converts your files using this base function, where `base_url` is where the OTTR course pages are published, the GitHub pages URL. 
 
-```{r}
+```
 ottrpal::bookdown_to_embed_leanpub(base_url = "https://jhudatascience.org/OTTR_Template/")
 ```
 
@@ -134,11 +104,4 @@ ottrpal::bookdown_to_embed_leanpub(base_url = "https://jhudatascience.org/OTTR_T
 
 ```{r}
 sessionInfo()
-```
-
-```{r, include = FALSE}
-file.remove(c('01-intro.Rmd', '02-example-chapter.Rmd', 'Book.txt', '_bookdown.yml',
-   'index.Rmd', 'manuscript', 'quizzes', 'references.bib', 'resources', 'toc_close.css'),
-   showWarnings = FALSE
-   )
 ```
