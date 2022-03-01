@@ -30,7 +30,7 @@ You can install `ottrpal` from GitHub with:
 install.packages("ottrpal")
 ```
 
-If you want the development version (not advised), you will need to use the remotes package (and will need to install it if you don't have it).
+If you want the development version (not advised) you can install using the `remotes` pacakge to install from GitHub. 
 ``` r
 if (!("remotes" %in% installed.packages())) {
   install.packages("remotes")
