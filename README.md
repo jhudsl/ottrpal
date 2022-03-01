@@ -26,8 +26,11 @@ But replace `{organization}` with the location of your forked repository.
 ## Installing ottrpal:
 
 You can install `ottrpal` from GitHub with:
+```
+install.packages("ottrpal")
+```
 
-You will need to use the remotes package (and will need to install it if you don't have it).
+If you want the development version (not advised), you will need to use the remotes package (and will need to install it if you don't have it).
 ``` r
 if (!("remotes" %in% installed.packages())) {
   install.packages("remotes")
