@@ -4,6 +4,8 @@ on:
     branches:
       - main
 
+name: CRAN checks - ubuntu and debian
+
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}

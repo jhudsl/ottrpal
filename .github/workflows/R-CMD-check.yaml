@@ -10,7 +10,7 @@ on:
       - main
       - master
 
-name: R-CMD-check
+name: CRAN checks - windows and mac
 
 jobs:
   R-CMD-check:
