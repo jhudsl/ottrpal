@@ -17,11 +17,9 @@ Authors@R: c(person(given = "Candace",family = "Savonen",
   )
 Depends: R (>= 3.5.0)
 License: GPL-3
-Imports: googledrive,
-    dplyr,
+Imports: dplyr,
     httr,
     fs,
-    jsonlite,
     rmarkdown (>= 2.10),
     xml2,
     rvest,
@@ -35,7 +33,6 @@ Imports: googledrive,
     yaml,
     stringr,
     knitr (>= 1.33),
-    qpdf,
     purrr
 Suggests:
     remotes,
