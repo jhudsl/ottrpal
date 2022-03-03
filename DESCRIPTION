@@ -1,5 +1,5 @@
 Package: ottrpal
-Version: 1.0
+Version: 1.0.1
 Title: Companion Tools for Open-Source Tools for Training Resources (OTTR)
 Description: Tools for converting Open-Source Tools for Training Resources (OTTR)
   courses into Leanpub or Coursera courses. 'ottrpal' is for use with the OTTR Template repository to create courses.
@@ -17,11 +17,9 @@ Authors@R: c(person(given = "Candace",family = "Savonen",
   )
 Depends: R (>= 3.5.0)
 License: GPL-3
-Imports: googledrive,
-    dplyr,
+Imports: dplyr,
     httr,
     fs,
-    jsonlite,
     rmarkdown (>= 2.10),
     xml2,
     rvest,
@@ -35,7 +33,6 @@ Imports: googledrive,
     yaml,
     stringr,
     knitr (>= 1.33),
-    qpdf,
     purrr
 Suggests:
     remotes,

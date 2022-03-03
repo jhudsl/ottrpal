@@ -27,13 +27,6 @@ simple_references <- function(x, bib_files, add_reference_header = FALSE) {
       paste0("--bibliography=", path.expand(normalizePath(bib_files))),
       "--wrap=none"
     )
-    # o1 = tempfile(fileext = ".md")
-    # rmarkdown::pandoc_convert(input = tfile,
-    #                           to = "markdown_strict",
-    #                           output = o1,
-    #                           from = "markdown",
-    #                           citeproc = FALSE,
-    #                           options = NULL)
     o2 <- tempfile(fileext = ".md")
     rmarkdown::pandoc_convert(
       input = tfile,

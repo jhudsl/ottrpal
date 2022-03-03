@@ -151,14 +151,6 @@ get_caption <- function(x, element = "p") {
   rvest::html_text(nodes)
 }
 
-
-# don't need this as
-# https://leanpub.com/markua/read#leanpub-auto-adding-a-link-around-an-image
-# find_double = function(x) {
-#   x = "[![](resources/images/unnamed-chunk-3-1.png)](http://www.youtube.com/embed/9bZkp7q19f0?rel=0)"
-#   regex = "\\[!\\["
-#   # image_tag <- "{alt: 'an image', width=80%}"
-# }
 na_empty <- function(x) {
   x[is.na(x)] <- ""
   x

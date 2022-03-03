@@ -41,12 +41,13 @@ find_end_of_prompt <- function(start_prompt_index, type_vector) {
 #' @return A Coursera-ready quiz file saved to the output directory specified as a yaml.
 #' @export convert_quiz
 #'
-#' @examples
+#' @examples \dontrun{
 #'
 #' quiz_path <- good_quiz_path()
 #'
 #' # Provide path to quiz to convert
 #' convert_quiz(quiz_path)
+#' }
 convert_quiz <- function(quiz_path,
                          output_quiz_dir = dirname(quiz_path),
                          verbose = TRUE) {

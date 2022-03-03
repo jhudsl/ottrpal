@@ -21,9 +21,11 @@ A Coursera-ready quiz file saved to the output directory specified as a yaml.
 Convert a Leanpub-formatted md quiz file to a Coursera-formatted yaml quiz file in preparation for uploading to Coursera.
 }
 \examples{
+\dontrun{
 
 quiz_path <- good_quiz_path()
 
 # Provide path to quiz to convert
 convert_quiz(quiz_path)
+}
 }
