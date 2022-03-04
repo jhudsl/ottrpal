@@ -21,6 +21,9 @@ get_slide_id <- function(x) {
   x <- x[nchar(x) > 5]
   x
 }
+get_presentation_id <- function(x) {
+# PRESENTATION ID
+}
 
 #' Get Google Slide PNG URL
 #'
@@ -102,7 +105,15 @@ include_slide <- function(url,
 
   if (is.null(notes)) {
     file <- download_gs_file(url)
-    notes_df <- pptx_slide_note_df(file)
+    notes <- pptx_notes(file)
+    
+    slides <- httr::GET(
+      "https://docs.google.com/presentation/d/1IJ_uFxJud7OdIAr6p8ZOzvYs-SGDqa7g4cUHtUld03I/edit#slide=id.gd422c5de97_0_0&alt=media", 
+      httr::accept_json())
+    
+    slides$content
+    page_info <- httr::content(slides, as = "parsed")
+  
     knitr::opts_chunk$set(fig.alt = notes)
   }
   knitr::include_graphics(outfile, ...)
