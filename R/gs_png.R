@@ -96,9 +96,28 @@ gs_png_download <- function(url, output_dir = ".", overwrite = TRUE) {
 #' [knitr::include_graphics()]
 include_slide <- function(url,
                           output_dir = knitr::opts_chunk$get("fig.path"),
+                          notes = knitr::opts_chunk$get("fig.alt"),
                           overwrite = TRUE, ...) {
   outfile <- gs_png_download(url, output_dir, overwrite = overwrite)
+
+  if (is.null(notes)) {
+    file <- download_gs_file(url)
+    notes_df <- pptx_slide_note_df(file)
+    knitr::opts_chunk$set(fig.alt = notes)
+  }
   knitr::include_graphics(outfile, ...)
+}
+
+
+type_url <- function(id, page_id = NULL, type = "png") {
+  url <- paste0(
+    "https://docs.google.com/presentation/d/",
+    id, "/export/", type, "?id=", id
+  )
+  if (!is.null(page_id)) {
+    url <- paste0(url, "&pageid=", page_id)
+  }
+  url
 }
 
 #' Download Google Slides File
@@ -117,8 +136,8 @@ download_gs_file <- function(id, out_type = "pptx") {
   id <- get_slide_id(id)
   url <- type_url(id = id, page_id = NULL, type = out_type)
 
-  tfile <- tempfile(fileext = paste0(".", out_type))
-  result <- httr::GET(url, httr::write_disk(tfile))
+  temp_file <- tempfile(fileext = paste0(".", out_type))
+  result <- httr::GET(url, httr::write_disk(temp_file))
   warn_them <- FALSE
   fr_header <- result$headers$`x-frame-options`
   if (!is.null(fr_header)) {
@@ -149,5 +168,5 @@ download_gs_file <- function(id, out_type = "pptx") {
       )
     )
   }
-  tfile
+  return(temp_file)
 }

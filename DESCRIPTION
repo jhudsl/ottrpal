@@ -2,7 +2,7 @@ Package: ottrpal
 Version: 1.0.1
 Title: Companion Tools for Open-Source Tools for Training Resources (OTTR)
 Description: Tools for converting Open-Source Tools for Training Resources (OTTR)
-  courses into Leanpub or Coursera courses. 'ottrpal' is for use with the OTTR Template repository to create courses.
+  courses into Leanpub or Coursera courses. 'ottrpal' is for use with the OTTR Template GitHub repository to create courses.
 Authors@R: c(person(given = "Candace",family = "Savonen",
   email = "cansav09@gmail.com",
   role = c("aut", "cre"),
