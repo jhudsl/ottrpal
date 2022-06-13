@@ -156,7 +156,7 @@ bookdown_to_leanpub <- function(path = ".",
 #' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
 #'
-#' @return A directory of output files in a folder 'manuscript' for publishing on Leanpub. 
+#' @return A directory of output files in a folder 'manuscript' for publishing on Leanpub.
 #' @export
 #'
 #' @examples \dontrun{
@@ -208,7 +208,8 @@ bookdown_to_embed_leanpub <- function(path = ".",
     chapt_df <- get_chapters(
       bookdown_index = paste0(base_url, "index.html"),
       base_url = base_url
-    )
+    ) %>%
+    dplyr::mutate(chapt_title = gsub("\\:|\\?|\\&|\\!|\\'", "", chapt_title))
   }
 
   # If there's no img_path supplied, then use a default image for each.
