@@ -221,7 +221,16 @@ render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
                                input_quiz_dir = "quizzes",
                                output_quiz_dir = "coursera_quizzes",
                                verbose = TRUE) {
+  # Output files:
+  output_dir <- file.path(root_dir, output_dir)
 
+  ###### Check we have the files we need ######
+  # Create output folder if it does not exist
+  if (!dir.exists(output_dir)) {
+    message(paste0("Creating output folder: ", output_dir))
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  }
+  
   # Find root directory by finding `_bookdown.yml` file
   root_dir <- bookdown_path()
 
@@ -235,16 +244,6 @@ render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
     )
   }
   output_yaml_file <- file.path(root_dir, output_yaml)
-
-  # Output files:
-  output_dir <- file.path(root_dir, output_dir)
-
-  ###### Check we have the files we need ######
-  # Create output folder if it does not exist
-  if (!dir.exists(output_dir)) {
-    message(paste0("Creating output folder: ", output_dir))
-    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
-  }
 
   # Make sure we have that file
   if (!file.exists(toc_close_css)) {
