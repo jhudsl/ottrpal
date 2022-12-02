@@ -33,7 +33,7 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
         # Find which lines are the wrong answer options
         grepl("^[[:lower:]]{1}\\)", quiz_lines) ~ "wrong_answer",
         # Find which lines are the correct answer options
-        grepl("^[[:upper:]]{1}\\)|\\!", quiz_lines) ~ "correct_answer",
+        grepl("^[[:upper:]]{1}\\)|^\\!", quiz_lines) ~ "correct_answer",
         # Find the tags
         grepl("^\\{", quiz_lines) ~ "tag",
         # Mark empty lines
