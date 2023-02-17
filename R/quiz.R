@@ -368,6 +368,7 @@ check_quiz_question_attributes <- function(question_df,
 #' @param quiz_specs quiz_specs which is output from [ottrpal::parse_quiz].
 #' @param quiz_name The name of the quiz being checked.
 #' @param verbose Whether progress messages should be given.
+#' @param ignore_coursera Ignore ! and : in question prompts that would not be allowed in Leanpub quiz converted to Coursera quiz
 #'
 #' @return A list of the output from [ottrpal::check_question] with messages/warnings regarding each question and each check.
 #'
@@ -388,7 +389,7 @@ check_quiz_question_attributes <- function(question_df,
 #' bad_quiz_specs <- parse_quiz(bad_quiz)
 #' bad_quiz_checks <- check_all_questions(bad_quiz_specs)
 #' }
-check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
+check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE, ignore_coursera = TRUE) {
 
   # Remove header part and split into per question data frames
   question_dfs <- quiz_specs$data %>%
@@ -413,8 +414,13 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
   # Add names to question check list
   names(question_checks) <- question_names
 
-  question_checks <- dplyr::bind_rows(question_checks, .id = "question_names")
-
+  question_checks <- dplyr::bind_rows(question_checks, .id = "question_names") 
+  
+  if (ignore_coursera) {
+    # Remove warnings about colons and exclamation points
+    question_checks <- question_checks %>% 
+      dplyr::filter(!grepl("Exclamation|Colon", warning_msg))
+  }
   return(question_checks)
 }
 
