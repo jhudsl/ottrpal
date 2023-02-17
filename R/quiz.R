@@ -368,7 +368,6 @@ check_quiz_question_attributes <- function(question_df,
 #' @param quiz_specs quiz_specs which is output from [ottrpal::parse_quiz].
 #' @param quiz_name The name of the quiz being checked.
 #' @param verbose Whether progress messages should be given.
-#' @param ignore_coursera Ignore ! and : in question prompts that would not be allowed in Leanpub quiz converted to Coursera quiz
 #'
 #' @return A list of the output from [ottrpal::check_question] with messages/warnings regarding each question and each check.
 #'
@@ -389,7 +388,7 @@ check_quiz_question_attributes <- function(question_df,
 #' bad_quiz_specs <- parse_quiz(bad_quiz)
 #' bad_quiz_checks <- check_all_questions(bad_quiz_specs)
 #' }
-check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE, ignore_coursera = TRUE) {
+check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 
   # Remove header part and split into per question data frames
   question_dfs <- quiz_specs$data %>%
@@ -616,6 +615,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 #' @param quiz_dir A path to a directory full of quizzes that should all be checked with [ottrpal::check_all_quizzes].
 #' @param verbose print diagnostic messages
 #' @param write_report TRUE/FALSE save warning report to a CSV file?
+#' @param ignore_coursera Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility
 #'
 #' @return A list checks performed on each quiz
 #' @importFrom readr write_tsv
@@ -633,7 +633,8 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
 #' }
 check_quizzes <- function(quiz_dir = "quizzes",
                           write_report = TRUE,
-                          verbose = TRUE) {
+                          verbose = TRUE, 
+                          ignore_coursera = TRUE) {
   files <- list.files(
     pattern = "\\.md",
     ignore.case = TRUE,
@@ -667,6 +668,12 @@ check_quizzes <- function(quiz_dir = "quizzes",
       readr::write_tsv(question_report,
         file = "question_error_report.tsv"
       )
+      
+      if (ignore_coursera) {
+        # Remove warnings about colons and exclamation points
+        question_checks <- question_checks %>% 
+          dplyr::filter(!grepl("Exclamation|Colon", warning_msg))
+      }
     } else {
       message("\n No question errors to report!")
     }
