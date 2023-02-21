@@ -1,6 +1,6 @@
 # C. Savonen 2021
 
-utils::globalVariables(c("question", "original", "n", "metadata_check", "index"))
+utils::globalVariables(c("question", "original", "n", "metadata_check", "index", "ignore_coursera"))
 
 #' Parse quiz into a data.frame
 #'
@@ -33,13 +33,15 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
         # Find which lines are the wrong answer options
         grepl("^[[:lower:]]{1}\\)", quiz_lines) ~ "wrong_answer",
         # Find which lines are the correct answer options
-        grepl("^[[:upper:]]{1}\\)|^\\!", quiz_lines) ~ "correct_answer",
+        grepl("^[[:upper:]]{1}\\)", quiz_lines) ~ "correct_answer",
         # Find the tags
         grepl("^\\{", quiz_lines) ~ "tag",
         # Mark empty lines
         nchar(quiz_lines) == 0 ~ "empty",
         # Mark which lines have links
         grepl("\\!\\[|http", quiz_lines) ~ "link",
+        # Mark as a fill in the blank
+        grepl("^\\!", quiz_lines) ~ "fill_in_blank_answer",
         # Mark everything else as "other
         TRUE ~ "other"
       ),
@@ -368,6 +370,7 @@ check_quiz_question_attributes <- function(question_df,
 #' @param quiz_specs quiz_specs which is output from [ottrpal::parse_quiz].
 #' @param quiz_name The name of the quiz being checked.
 #' @param verbose Whether progress messages should be given.
+#' @param ignore_coursera Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility
 #'
 #' @return A list of the output from [ottrpal::check_question] with messages/warnings regarding each question and each check.
 #'
@@ -388,7 +391,7 @@ check_quiz_question_attributes <- function(question_df,
 #' bad_quiz_specs <- parse_quiz(bad_quiz)
 #' bad_quiz_checks <- check_all_questions(bad_quiz_specs)
 #' }
-check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
+check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE, ignore_coursera = TRUE) {
 
   # Remove header part and split into per question data frames
   question_dfs <- quiz_specs$data %>%
@@ -407,7 +410,8 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
   question_checks <- lapply(
     question_dfs,
     check_question,
-    quiz_name = quiz_name
+    quiz_name = quiz_name, 
+    ignore_coursera = ignore_coursera
   )
 
   # Add names to question check list
@@ -415,11 +419,6 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 
   question_checks <- dplyr::bind_rows(question_checks, .id = "question_names") 
   
-  if (ignore_coursera) {
-    # Remove warnings about colons and exclamation points
-    question_checks <- question_checks %>% 
-      dplyr::filter(!grepl("Exclamation|Colon", warning_msg))
-  }
   return(question_checks)
 }
 
@@ -432,6 +431,7 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 #' @param question_df Which is an individual question's data frame after being parse from
 #' @param quiz_name The name of the quiz the question is from
 #' @param verbose Whether progress messages should be given
+#' @param ignore_coursera Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility
 #'
 #' @return A list of messages/warnings regarding each check for the given question.
 #'
@@ -449,7 +449,7 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE) {
 #'
 #' good_quiz_checks <- check_question(questions_df[[2]])
 #' }
-check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
+check_question <- function(question_df, quiz_name = NA, verbose = TRUE, ignore_coursera = TRUE) {
 
   # Things are considered innocent until proven guilty
   colon_msg <- tot_ans_msg <- cor_ans_msg <- inc_ans_msg <- exclam_msg <- "good"
@@ -459,7 +459,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
   question_start_index <- min(question_df$index)
 
   # Get prompt if its there
-  if (!any(grepl("^\\? ", question_df$original))) {
+  if (!any(grepl("^\\?", question_df$original))) {
     warning("Could not find prompt for question. Question prompts start line with '?'")
   }
   prompt <- question_df$original[question_df$type == "prompt"]
@@ -488,7 +488,9 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
       paste0(colon_index, collapse = ", "),
       " in question starting with:",  quiz_identity
     )
-    warning(colon_msg)
+    if (!ignore_coursera) {
+      warning(colon_msg)
+    }
   } else {
     colon_index <- NA
   }
@@ -508,6 +510,10 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
     dplyr::filter(type == "wrong_answer") %>%
     dplyr::pull(n)
 
+  fill_in <- num_answers %>%
+    dplyr::filter(type == "fill_in_blank_answer") %>%
+    dplyr::pull(n)
+  
   total_answers <- sum(num_answers$n)
 
   # Now warn us if anything is fishy:
@@ -517,13 +523,13 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
     tot_ans_index <- question_start_index
   }
 
-  if (length(correct_answers) == 0) {
+  if (length(correct_answers) == 0 & length(fill_in) == 0) {
     cor_ans_msg <- paste0("No correct answers provided for ", quiz_identity)
     warning(cor_ans_msg)
     cor_ans_index <- question_start_index
   }
 
-  if (length(wrong_answers) == 0) {
+  if (length(wrong_answers) == 0 & length(fill_in) == 0) {
     inc_ans_msg <- paste0("No incorrect answer options provided for ", quiz_identity)
     warning(inc_ans_msg)
     inc_ans_index <- question_start_index
@@ -575,27 +581,41 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE) {
     exclam_msg <- paste0(
       "Exclamation point detected in answer for: ", quiz_identity
     )
-    warning(exclam_msg)
+    if (!ignore_coursera) {
+      warning(exclam_msg)
+    }
   } else {
     exclam_index <- NA
   }
 
   # Put these together in a helpful way
-  warning_msg <- c(
-    colon_msg,
-    tot_ans_msg,
-    cor_ans_msg,
-    inc_ans_msg,
-    exclam_msg
-  )
-  related_index <- c(
-    as.numeric(colon_index),
-    as.numeric(tot_ans_index),
-    as.numeric(cor_ans_index),
-    as.numeric(inc_ans_index),
-    as.numeric(exclam_index)
-  )
-
+  if (!ignore_coursera) {
+    warning_msg <- c(
+      colon_msg,
+      tot_ans_msg,
+      cor_ans_msg,
+      inc_ans_msg,
+      exclam_msg
+    )
+   related_index <- c(
+      as.numeric(colon_index),
+      as.numeric(tot_ans_index),
+      as.numeric(cor_ans_index),
+      as.numeric(inc_ans_index),
+      as.numeric(exclam_index)
+    )
+  } else {
+    warning_msg <- c(
+      tot_ans_msg,
+      cor_ans_msg,
+      inc_ans_msg
+    )
+    related_index <- c(
+      as.numeric(tot_ans_index),
+      as.numeric(cor_ans_index),
+      as.numeric(inc_ans_index)
+      )
+  }
   # Store all warning messages as a list; they will say "good" if nothing is detected as wrong
   question_result <- data.frame(
     quiz = rep(quiz_name, length(related_index)),
@@ -647,7 +667,7 @@ check_quizzes <- function(quiz_dir = "quizzes",
   }
 
   all_quiz_results <- lapply(files, function(quiz_path) {
-    check_quiz(quiz_path, verbose = verbose)
+    check_quiz(quiz_path, verbose = verbose, ignore_coursera = ignore_coursera)
   })
 
   # Name the results with the file names
@@ -669,11 +689,6 @@ check_quizzes <- function(quiz_dir = "quizzes",
         file = "question_error_report.tsv"
       )
       
-      if (ignore_coursera) {
-        # Remove warnings about colons and exclamation points
-        question_checks <- question_checks %>% 
-          dplyr::filter(!grepl("Exclamation|Colon", warning_msg))
-      }
     } else {
       message("\n No question errors to report!")
     }
@@ -687,6 +702,7 @@ check_quizzes <- function(quiz_dir = "quizzes",
 #'
 #' @param quiz_path A file path to a quiz markdown file
 #' @param verbose print diagnostic messages? TRUE/FALSE
+#' @param ignore_coursera Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility
 #'
 #' @return A list of checks. "good" means the check passed. Failed checks will report where it failed.
 #'
@@ -699,10 +715,10 @@ check_quizzes <- function(quiz_dir = "quizzes",
 #' good_checks <- check_quiz(quiz_path)
 #'
 #' # Take a look at a failed quiz's checks:
-#' quiz_path <- good_quiz_path()
+#' quiz_path <- bad_quiz_path()
 #' failed_checks <- check_quiz(quiz_path)
 #' }
-check_quiz <- function(quiz_path, verbose = TRUE) {
+check_quiz <- function(quiz_path, verbose = TRUE, ignore_coursera = TRUE) {
   if (verbose) {
     message(paste0("\n Checking quiz: ", quiz_path))
   }
@@ -720,15 +736,17 @@ check_quiz <- function(quiz_path, verbose = TRUE) {
   # Check main quiz attributes
   meta_checks <- check_quiz_attributes(quiz_specs,
     quiz_name = quiz_name
-  )
+    )
 
   # Check each question
   question_checks <- check_all_questions(
     quiz_specs,
     quiz_name = quiz_name,
-    verbose = verbose
+    verbose = verbose, 
+    ignore_coursera = ignore_coursera
   )
 
+  
   return(list(
     quiz_name = quiz_name,
     parsed_quiz = quiz_specs,

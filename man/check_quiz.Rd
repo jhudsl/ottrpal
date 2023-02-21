@@ -4,12 +4,14 @@
 \alias{check_quiz}
 \title{Check Quiz}
 \usage{
-check_quiz(quiz_path, verbose = TRUE)
+check_quiz(quiz_path, verbose = TRUE, ignore_coursera = TRUE)
 }
 \arguments{
 \item{quiz_path}{A file path to a quiz markdown file}
 
 \item{verbose}{print diagnostic messages? TRUE/FALSE}
+
+\item{ignore_coursera}{Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility}
 }
 \value{
 A list of checks. "good" means the check passed. Failed checks will report where it failed.
@@ -25,7 +27,7 @@ quiz_path <- good_quiz_path()
 good_checks <- check_quiz(quiz_path)
 
 # Take a look at a failed quiz's checks:
-quiz_path <- good_quiz_path()
+quiz_path <- bad_quiz_path()
 failed_checks <- check_quiz(quiz_path)
 }
 }

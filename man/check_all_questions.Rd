@@ -4,7 +4,12 @@
 \alias{check_all_questions}
 \title{Check all quiz questions}
 \usage{
-check_all_questions(quiz_specs, quiz_name = NA, verbose = TRUE)
+check_all_questions(
+  quiz_specs,
+  quiz_name = NA,
+  verbose = TRUE,
+  ignore_coursera = TRUE
+)
 }
 \arguments{
 \item{quiz_specs}{quiz_specs which is output from [ottrpal::parse_quiz].}
@@ -12,6 +17,8 @@ check_all_questions(quiz_specs, quiz_name = NA, verbose = TRUE)
 \item{quiz_name}{The name of the quiz being checked.}
 
 \item{verbose}{Whether progress messages should be given.}
+
+\item{ignore_coursera}{Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility}
 }
 \value{
 A list of the output from [ottrpal::check_question] with messages/warnings regarding each question and each check.

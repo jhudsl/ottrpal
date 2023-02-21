@@ -4,7 +4,12 @@
 \alias{check_question}
 \title{Check Quiz Question Set Up}
 \usage{
-check_question(question_df, quiz_name = NA, verbose = TRUE)
+check_question(
+  question_df,
+  quiz_name = NA,
+  verbose = TRUE,
+  ignore_coursera = TRUE
+)
 }
 \arguments{
 \item{question_df}{Which is an individual question's data frame after being parse from}
@@ -12,6 +17,8 @@ check_question(question_df, quiz_name = NA, verbose = TRUE)
 \item{quiz_name}{The name of the quiz the question is from}
 
 \item{verbose}{Whether progress messages should be given}
+
+\item{ignore_coursera}{Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility}
 }
 \value{
 A list of messages/warnings regarding each check for the given question.
