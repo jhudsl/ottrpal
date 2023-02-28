@@ -370,7 +370,7 @@ check_quiz_question_attributes <- function(question_df,
 #' @param quiz_specs quiz_specs which is output from [ottrpal::parse_quiz].
 #' @param quiz_name The name of the quiz being checked.
 #' @param verbose Whether progress messages should be given.
-#' @param ignore_coursera Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility
+#' @param ignore_coursera Coursera doesn't like `!` or `:` in the quizzes. Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility.
 #'
 #' @return A list of the output from [ottrpal::check_question] with messages/warnings regarding each question and each check.
 #'
@@ -410,15 +410,15 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE, igno
   question_checks <- lapply(
     question_dfs,
     check_question,
-    quiz_name = quiz_name, 
+    quiz_name = quiz_name,
     ignore_coursera = ignore_coursera
   )
 
   # Add names to question check list
   names(question_checks) <- question_names
 
-  question_checks <- dplyr::bind_rows(question_checks, .id = "question_names") 
-  
+  question_checks <- dplyr::bind_rows(question_checks, .id = "question_names")
+
   return(question_checks)
 }
 
@@ -431,7 +431,7 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE, igno
 #' @param question_df Which is an individual question's data frame after being parse from
 #' @param quiz_name The name of the quiz the question is from
 #' @param verbose Whether progress messages should be given
-#' @param ignore_coursera Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility
+#' @param ignore_coursera Coursera doesn't like `!` or `:` in the quizzes. Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility
 #'
 #' @return A list of messages/warnings regarding each check for the given question.
 #'
@@ -513,7 +513,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE, ignore_c
   fill_in <- num_answers %>%
     dplyr::filter(type == "fill_in_blank_answer") %>%
     dplyr::pull(n)
-  
+
   total_answers <- sum(num_answers$n)
 
   # Now warn us if anything is fishy:
@@ -635,7 +635,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE, ignore_c
 #' @param quiz_dir A path to a directory full of quizzes that should all be checked with [ottrpal::check_all_quizzes].
 #' @param verbose print diagnostic messages
 #' @param write_report TRUE/FALSE save warning report to a CSV file?
-#' @param ignore_coursera Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility
+#' @param ignore_coursera Coursera doesn't like `!` or `:` in the quizzes. Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility
 #'
 #' @return A list checks performed on each quiz
 #' @importFrom readr write_tsv
@@ -653,7 +653,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE, ignore_c
 #' }
 check_quizzes <- function(quiz_dir = "quizzes",
                           write_report = TRUE,
-                          verbose = TRUE, 
+                          verbose = TRUE,
                           ignore_coursera = TRUE) {
   files <- list.files(
     pattern = "\\.md",
@@ -688,7 +688,7 @@ check_quizzes <- function(quiz_dir = "quizzes",
       readr::write_tsv(question_report,
         file = "question_error_report.tsv"
       )
-      
+
     } else {
       message("\n No question errors to report!")
     }
@@ -702,7 +702,7 @@ check_quizzes <- function(quiz_dir = "quizzes",
 #'
 #' @param quiz_path A file path to a quiz markdown file
 #' @param verbose print diagnostic messages? TRUE/FALSE
-#' @param ignore_coursera Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility
+#' @param ignore_coursera Coursera doesn't like `!` or `:` in the quizzes. Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility
 #'
 #' @return A list of checks. "good" means the check passed. Failed checks will report where it failed.
 #'
@@ -742,11 +742,11 @@ check_quiz <- function(quiz_path, verbose = TRUE, ignore_coursera = TRUE) {
   question_checks <- check_all_questions(
     quiz_specs,
     quiz_name = quiz_name,
-    verbose = verbose, 
+    verbose = verbose,
     ignore_coursera = ignore_coursera
   )
 
-  
+
   return(list(
     quiz_name = quiz_name,
     parsed_quiz = quiz_specs,

@@ -18,7 +18,7 @@ check_all_questions(
 
 \item{verbose}{Whether progress messages should be given.}
 
-\item{ignore_coursera}{Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility}
+\item{ignore_coursera}{Coursera doesn't like `!` or `:` in the quizzes. Do not convert quizzes to coursera and ignore ! and : in question prompts that would not be allowed in Leanpub quizzes when converted to a Coursera quiz. Default is to ignore Coursera compatibility.}
 }
 \value{
 A list of the output from [ottrpal::check_question] with messages/warnings regarding each question and each check.
