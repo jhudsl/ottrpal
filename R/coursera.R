@@ -221,6 +221,10 @@ render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
                                input_quiz_dir = "quizzes",
                                output_quiz_dir = "coursera_quizzes",
                                verbose = TRUE) {
+
+  # Find root directory by finding `_bookdown.yml` file
+  root_dir <- bookdown_path()
+  
   # Output files:
   output_dir <- file.path(root_dir, output_dir)
 
@@ -230,9 +234,6 @@ render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
     message(paste0("Creating output folder: ", output_dir))
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
-  
-  # Find root directory by finding `_bookdown.yml` file
-  root_dir <- bookdown_path()
 
   ###### Declare all the file paths relative to root directory ######
   # Input files:
