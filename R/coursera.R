@@ -295,15 +295,27 @@ render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
   # Retrieve yaml file specs
   output_yaml_lines <- yaml::yaml.load_file(output_yaml_file)
 
-  # Copy over css file that's specified
+  # Copy over css file(s) that's specified
   org_css_file <- output_yaml_lines$`bookdown::gitbook`$css
-  css_file <- file.path(output_dir, org_css_file)
-
-  # Write it as "style.css"
-  fs::file_copy(org_css_file,
-    css_file,
-    overwrite = TRUE
-  )
+  
+  # Check if there are multiple .css 
+  if(length(org_css_file) > 1){
+    # Read all .css
+    css_files_read <- sapply(org_css_file, readLines)
+    
+    # Make a "mega .css" and write
+    css_lines_cat <- rbind(unlist(css_files_read))
+    css_file <- file.path(output_dir, org_css_file[1])
+    writeLines(css_lines_cat, css_file)
+  } else {
+    css_file <- file.path(output_dir, org_css_file)
+    
+    # Write it as "style.css"
+    fs::file_copy(org_css_file,
+                  css_file,
+                  overwrite = TRUE
+    )
+  }
 
   ###### Now do the rendering! ######
   message("Render bookdown without TOC")
