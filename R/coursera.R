@@ -304,6 +304,9 @@ render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
     css_files_read <- sapply(org_css_file, readLines)
     
     # Make a "mega .css" and write
+    if (verbose) {
+      message("Combining .css files")
+    }
     css_lines_cat <- rbind(unlist(css_files_read))
     css_file <- file.path(output_dir, org_css_file[1])
     writeLines(css_lines_cat, css_file)
@@ -324,8 +327,7 @@ render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
   bookdown::render_book(
     input = "index.Rmd",
     output_yaml = output_yaml_file,
-    output_dir = output_dir,
-    clean_envir = FALSE
+    output_dir = output_dir
   )
 
   # Read in TOC closing CSS lines
