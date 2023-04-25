@@ -46,7 +46,7 @@ bad_quiz_path <- function() {
 #'
 #' # Run this to get the files we need
 #' example_files <- ottrpal::example_repo_setup()
-#'}
+#' }
 example_repo_setup <- function(dest_dir = tempdir()) {
   bookdown_path <- list.files(
     pattern = "_bookdown.yml$",

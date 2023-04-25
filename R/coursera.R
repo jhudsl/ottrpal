@@ -172,7 +172,6 @@ convert_quiz <- function(quiz_path,
 convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
                                      output_quiz_dir = "coursera_quizzes",
                                      verbose = TRUE) {
-
   # Create directory if it is not yet created
   if (!dir.exists(output_quiz_dir)) {
     dir.create(output_quiz_dir, recursive = TRUE)
@@ -221,10 +220,9 @@ render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
                                input_quiz_dir = "quizzes",
                                output_quiz_dir = "coursera_quizzes",
                                verbose = TRUE) {
-
   # Find root directory by finding `_bookdown.yml` file
   root_dir <- bookdown_path()
-  
+
   # Output files:
   output_dir <- file.path(root_dir, output_dir)
 
@@ -297,12 +295,12 @@ render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
 
   # Copy over css file(s) that's specified
   org_css_file <- output_yaml_lines$`bookdown::gitbook`$css
-  
-  # Check if there are multiple .css 
-  if(length(org_css_file) > 1){
+
+  # Check if there are multiple .css
+  if (length(org_css_file) > 1) {
     # Read all .css
     css_files_read <- sapply(org_css_file, readLines)
-    
+
     # Make a "mega .css" and write
     if (verbose) {
       message("Combining .css files")
@@ -312,11 +310,11 @@ render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
     writeLines(css_lines_cat, css_file)
   } else {
     css_file <- file.path(output_dir, org_css_file)
-    
+
     # Write it as "style.css"
     fs::file_copy(org_css_file,
-                  css_file,
-                  overwrite = TRUE
+      css_file,
+      overwrite = TRUE
     )
   }
 

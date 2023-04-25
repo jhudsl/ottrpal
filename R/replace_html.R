@@ -1,4 +1,3 @@
-
 #' Convert youtube link
 #'
 #' @param utube_link a link to a youtube video that may or may not be "www.youtube.com/embed" or "www.youtube.com/watch?v="
@@ -8,7 +7,6 @@
 #' @export
 #'
 convert_utube_link <- function(utube_link) {
-
   # If it has a youtube embed link, switch to the watch format link
   if (grepl("www.youtube.com/embed", utube_link)) {
     utube_link <- paste0(

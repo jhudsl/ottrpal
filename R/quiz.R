@@ -62,7 +62,6 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
   # Rename "other" as also part of prompts
   for (index in 1:length(start_prompt_indices)) {
     if (start_prompt_indices[index] != end_prompt_indices[index]) {
-
       # Mark things as a part of prompts
       quiz_df$type[(start_prompt_indices[index] + 1):(end_prompt_indices[index] - 1)] <- "extended_prompt"
 
@@ -114,7 +113,6 @@ parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
 #' # Extract metadata tags
 #' meta <- extract_meta(tags)
 extract_meta <- function(tags) {
-
   # trim whitespace
   tags <- trimws(tags)
 
@@ -144,7 +142,6 @@ extract_meta <- function(tags) {
 #' tag <- "{quiz, id: quiz_name_here, attempts: 10}"
 #' parse_q_tag(tag)
 parse_q_tag <- function(tag) {
-
   # Trim whitespace
   tag <- trimws(tag)
 
@@ -276,7 +273,6 @@ extract_quiz <- function(quiz_lines) {
 #'
 #'
 check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) {
-
   # Assume good until otherwise
   metadata_msg <- "good"
 
@@ -329,7 +325,6 @@ check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) 
 check_quiz_question_attributes <- function(question_df,
                                            quiz_name = NULL,
                                            verbose = TRUE) {
-
   # Assume good until shown otherwise
   attr_msg <- "good"
 
@@ -392,7 +387,6 @@ check_quiz_question_attributes <- function(question_df,
 #' bad_quiz_checks <- check_all_questions(bad_quiz_specs)
 #' }
 check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE, ignore_coursera = TRUE) {
-
   # Remove header part and split into per question data frames
   question_dfs <- quiz_specs$data %>%
     dplyr::filter(question > 0) %>%
@@ -450,7 +444,6 @@ check_all_questions <- function(quiz_specs, quiz_name = NA, verbose = TRUE, igno
 #' good_quiz_checks <- check_question(questions_df[[2]])
 #' }
 check_question <- function(question_df, quiz_name = NA, verbose = TRUE, ignore_coursera = TRUE) {
-
   # Things are considered innocent until proven guilty
   colon_msg <- tot_ans_msg <- cor_ans_msg <- inc_ans_msg <- exclam_msg <- "good"
   colon_index <- tot_ans_index <- cor_ans_index <- inc_ans_index <- exclam_index <- NA
@@ -486,7 +479,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE, ignore_c
     colon_msg <- paste0(
       "Colon detected in question on lines: ",
       paste0(colon_index, collapse = ", "),
-      " in question starting with:",  quiz_identity
+      " in question starting with:", quiz_identity
     )
     if (!ignore_coursera) {
       warning(colon_msg)
@@ -537,7 +530,6 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE, ignore_c
 
   #### If choose answer, make sure that there are more answers than specified in tag
   if ("tag" %in% question_df$type) {
-
     # Retrieve lines with tags
     tags <- question_df$original[question_df$type == "tag"]
 
@@ -597,7 +589,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE, ignore_c
       inc_ans_msg,
       exclam_msg
     )
-   related_index <- c(
+    related_index <- c(
       as.numeric(colon_index),
       as.numeric(tot_ans_index),
       as.numeric(cor_ans_index),
@@ -614,7 +606,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE, ignore_c
       as.numeric(tot_ans_index),
       as.numeric(cor_ans_index),
       as.numeric(inc_ans_index)
-      )
+    )
   }
   # Store all warning messages as a list; they will say "good" if nothing is detected as wrong
   question_result <- data.frame(
@@ -688,7 +680,6 @@ check_quizzes <- function(quiz_dir = "quizzes",
       readr::write_tsv(question_report,
         file = "question_error_report.tsv"
       )
-
     } else {
       message("\n No question errors to report!")
     }
@@ -736,7 +727,7 @@ check_quiz <- function(quiz_path, verbose = TRUE, ignore_coursera = TRUE) {
   # Check main quiz attributes
   meta_checks <- check_quiz_attributes(quiz_specs,
     quiz_name = quiz_name
-    )
+  )
 
   # Check each question
   question_checks <- check_all_questions(
