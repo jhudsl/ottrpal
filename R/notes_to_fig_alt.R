@@ -255,7 +255,3 @@ xml_notes <- function(file, collapse_text = TRUE, xpath = "//a:r//a:t") {
   }
   return(txt)
 }
-
-
-httr::GET(paste0("https://slides.googleapis.com/v1/presentations/", id, "?fields=slides.objectId"))
-authorize()
