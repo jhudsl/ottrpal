@@ -1,5 +1,5 @@
 Package: ottrpal
-Version: 1.0.1
+Version: 1.1.1
 Title: Companion Tools for Open-Source Tools for Training Resources (OTTR)
 Description: Tools for converting Open-Source Tools for Training Resources (OTTR)
   courses into Leanpub or Coursera courses. 'ottrpal' is for use with the OTTR Template repository to create courses.
@@ -46,4 +46,4 @@ Type: Package
 VignetteBuilder: knitr
 URL: https://github.com/jhudsl/ottrpal
 BugReports: https://github.com/jhudsl/ottrpal/issues
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
