@@ -94,7 +94,7 @@ If there is text you would like added to the end of each chapter (like a link to
 
 ```
 # Set up a character string
-survey_link <- "Please provide any feedback you have in [this survey](www.some_link.org)"
+survey_link <- "Please provide any feedback you have by filing a GitHub issue [here](https://github.com/jhudsl/OTTR_Template/issues)"
 
 # Supply the footer text in the main function
 ottrpal::bookdown_to_embed_leanpub(base_url = "https://jhudatascience.org/OTTR_Template/",

@@ -31,7 +31,7 @@ You can install `ottrpal` from GitHub with:
 install.packages("ottrpal")
 ```
 
-If you want the development version (not advised) you can install using the `remotes` pacakge to install from GitHub. 
+If you want the development version (not advised) you can install using the `remotes` pacakge to install from GitHub.
 ``` r
 if (!("remotes" %in% installed.packages())) {
   install.packages("remotes")
@@ -98,7 +98,7 @@ If there is text you would like added to the end of each chapter (like a link to
 
 ```{r}
 # Set up a character string
-survey_link <- "Please provide any feedback you have in [this survey](www.some_link.org)"
+survey_link <- "Please provide any feedback you have by filing a GitHub issue [here](https://github.com/jhudsl/OTTR_Template/issues)"
 
 # Supply the footer text in the main function
 ottrpal::bookdown_to_embed_leanpub(footer_text = survey_link)
