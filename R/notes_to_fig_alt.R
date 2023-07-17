@@ -10,10 +10,10 @@
 get_gs_pptx <- function(id) {
   id <- as.character(id)
   pres_id <- get_slide_id(id)
-  url <- pptx_url(id = pres_id)
-  
+  url <- export_url(id = pres_id)
+
   pptx_file <- file.path(paste0(pres_id, ".pptx"))
-  
+
   # Only download it if it isn't yet present
   if (!file.exists(pptx_file)) {
     result <- httr::GET(url, httr::write_disk(pptx_file))
@@ -49,7 +49,7 @@ get_gs_pptx <- function(id) {
 }
 
 
-pptx_url <- function(id, page_id = NULL, type = "pptx") {
+export_url <- function(id, page_id = NULL, type = "pptx") {
   url = paste0(
     "https://docs.google.com/presentation/d/",
     id, "/export/", type, "?id=", id)
