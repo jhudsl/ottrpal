@@ -45,7 +45,7 @@ get_gs_pptx <- function(id) {
       )
     }
   }
-  return(pptx_file)
+  pptx_file
 }
 
 
@@ -79,18 +79,22 @@ pptx_notes <- function(file, ...) {
   if (is.null(df)) {
     return(NULL)
   }
-  # need factor because they can be dumb with characters
-  # and numerics and the file naming of PPTX files
+  # factorize file names
   fac <- basename(df$file)
   fac <- factor(fac, levels = unique(fac))
+  # split df by file names
+  # (notesSlide1.xml, notesSlide2.xml, ...)
   ss <- split(df, fac)
+  # concatenate all notes in each slide
   res <- sapply(ss, function(x) {
     paste(x$text, collapse = " ")
   })
   if (any(trimws(res) %in% "")) {
     warning("Slides with no notes exists")
   }
+  # if notes don't exist, put semicolon
   res[res == ""] <- ";"
+
   return(res)
 }
 
@@ -138,6 +142,7 @@ pptx_slide_note_df <- function(file, ...) {
     assoc_notes <- paste0("notesSlide", assoc_notes)
     assoc_notes <- file.path(note_dir, assoc_notes)
     no_fe <- !file.exists(assoc_notes)
+    # if assoc_notes don't exist
     if (any(no_fe)) {
       file.create(assoc_notes[no_fe])
       notes <- assoc_notes
@@ -185,30 +190,38 @@ pptx_reorder_xml <- function(files) {
     ))
     return(files)
   }
-  files <- files[order(nums)]
+  files[order(nums)]
 }
 
 #' @export
 #' @rdname pptx_notes
 unzip_pptx <- function(file) {
+  # return a file path that can be used for temporary files
   tdir <- tempfile()
+  # create tdir (temporary file path)
   dir.create(tdir)
-  res <- unzip(file, exdir = tdir)
-  rm(res)
+  # extract file
+  unzip(file, exdir = tdir)
+
+  # file path to xml files of slides
   slide_dir <- file.path(tdir, "ppt", "slides")
   slides <- list.files(
     path = slide_dir, pattern = "[.]xml$",
     full.names = TRUE
   )
+  # order xml files (slide1.xml, slide2.xml, ...)
   slides <- pptx_reorder_xml(slides)
 
+  # file path to xml files of notes
   note_dir <- file.path(tdir, "ppt", "notesSlides")
   notes <- list.files(
     path = note_dir, pattern = "[.]xml$",
     full.names = TRUE
   )
+  # order xml files (notesSlide1.xml, notesSlide2.xml, ...)
   notes <- pptx_reorder_xml(notes)
 
+  # create core.xml file path
   tdir <- normalizePath(tdir)
   props_dir <- file.path(tdir, "docProps")
   props_file <- file.path(props_dir, "core.xml")
@@ -216,6 +229,7 @@ unzip_pptx <- function(file) {
     "core.xml",
     package = "ariExtra"
   )
+  # copy core.xml from ariExtra to props_file
   if (!dir.exists(props_file)) {
     dir.create(props_dir, recursive = TRUE)
     file.copy(ari_core_file, props_file,
