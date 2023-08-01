@@ -44,6 +44,8 @@ Suggests:
     utils
 VignetteBuilder: 
     knitr
+Remotes:
+    jhudsl/ariExtra
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
