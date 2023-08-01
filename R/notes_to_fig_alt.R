@@ -281,7 +281,6 @@ xml_notes <- function(file, collapse_text = TRUE, xpath = "//a:r//a:t") {
 #'  to obtain an access token from Google's OAuth 2.0 server.
 #'
 #' @return Character vector of object ID(s)
-#' @importFrom ariExtra get_slide_id
 #' @importFrom httr config
 #' @importFrom httr GET
 #' @importFrom httr accept_json
@@ -298,7 +297,7 @@ xml_notes <- function(file, collapse_text = TRUE, xpath = "//a:r//a:t") {
 #' }
 extract_object_id = function(slide_url, token = NULL) {
   # Get Slide ID from URL
-  id <- ariExtra::get_slide_id(slide_url)
+  id <- get_slide_id(slide_url)
   # Using Slide ID, create url that we'll send to GET
   get_url <- gsub("{presentationId}", id,
               "https://slides.googleapis.com/v1/presentations/{presentationId}", fixed=TRUE)
