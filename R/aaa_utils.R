@@ -231,3 +231,15 @@ add_footer <- function(rmd_path, footer_text = NULL) {
     append = TRUE
   )
 }
+
+# Get Presentation ID from URL
+get_pres_id <- function(x) {
+  x = sub(".*presentation/", "", x)
+  x = sub("/d/e", "/d", x) # if you publish by accident
+  x = sub("^(d|e)/", "", x)
+  x = strsplit(x, "/")[[1]]
+  x = x[ !grepl("^(edit|pub|export|png)", x)]
+  x = x[ nchar(x) > 5]
+  x
+}
+
