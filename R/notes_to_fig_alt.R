@@ -70,10 +70,11 @@ export_url <- function(id, page_id = NULL, type = "pptx") {
 #'
 #' @importFrom utils unzip
 #' @examples
-#'
+#' \dontrun{
 #' pptx_notes(ex_file)
 #' pptx_slide_note_df(ex_file)
 #' pptx_slide_text_df(ex_file)
+#' }
 pptx_notes <- function(file, ...) {
   df <- pptx_slide_note_df(file, ...)
   if (is.null(df)) {
@@ -275,7 +276,7 @@ xml_notes <- function(file, collapse_text = TRUE, xpath = "//a:r//a:t") {
 #' Performs a HTTP GET method to request the IDs of every slide in a Google Slides presentation.
 #' The ID of the first slide is always 'p'.
 #'
-#' @param slide_url Public link to Google Slides.
+#' @param slide_url URL whose 'General access' is set to 'Anyone with the link'
 #' @param token OAuth 2.0 Access Token. If you don't have a token, use [authorize()]
 #'  to obtain an access token from Google's OAuth 2.0 server.
 #'
@@ -292,7 +293,8 @@ xml_notes <- function(file, collapse_text = TRUE, xpath = "//a:r//a:t") {
 #' # First, obtain access token and store token for extract_object_id() to use
 #' authorize(client_id = "MY_CLIENT_ID", client_secret = "MY_CLIENT_SECRET")
 #' # Use stored token to talk to Google Slides API
-#' extract_object_id(slide_url = "https://docs.google.com/presentation/d/1H5aF_ROKVxE-HFHhoOy9vU2Y-y2M_PiV0q-JBL17Gss/edit?usp=sharing")
+#' extract_object_id(slide_url = "https://docs.google.com/presentation/d/1H5aF_ROKVxE-H
+#'                                FHhoOy9vU2Y-y2M_PiV0q-JBL17Gss/edit?usp=sharing")
 #' }
 extract_object_id = function(slide_url, token = NULL) {
   # Get Slide ID from URL
@@ -318,9 +320,23 @@ extract_object_id = function(slide_url, token = NULL) {
 
 
 
-get_id_notes <- function(slide_url) {
+#' Retrieve Speaker Notes and their corresponding Object (Slide) IDs from a Google Slides presentation
+#'
+#' Google Slides API calls a presentation slide ID as an 'object ID'.
+#'
+#' @param slide_url URL whose 'General access' is set to 'Anyone with the link'
+#'
+#' @return Data frame of Object IDs and Speaker notes.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'  get_object_id_notes("https://docs.google.com/presentation/d/
+#'                       1H5aF_ROKVxE-HFHhoOy9vU2Y-y2M_PiV0q-JBL17Gss/edit?usp=sharing")
+#' }
+get_object_id_notes <- function(slide_url) {
   # page ids
-  page_ids <- get_page_ids(slide_url)
+  object_ids <- extract_object_id(slide_url)
   # download as pptx
   pptx_file <- get_gs_pptx(slide_url)
   # Extract speaker notes
@@ -328,6 +344,6 @@ get_id_notes <- function(slide_url) {
   # Get rid of filenames in name
   names(speaker_notes) <- NULL
 
-  data.frame(id = page_ids, notes = speaker_notes)
+  data.frame(id = object_ids, notes = speaker_notes)
 }
 
