@@ -95,7 +95,7 @@ pptx_notes <- function(file, ...) {
   # if notes don't exist, put semicolon
   res[res == ""] <- ";"
 
-  return(res)
+  res
 }
 
 #' @export
@@ -269,3 +269,65 @@ xml_notes <- function(file, collapse_text = TRUE, xpath = "//a:r//a:t") {
   }
   return(txt)
 }
+
+#' Extract Object IDs using Google Slides API
+#'
+#' Performs a HTTP GET method to request the IDs of every slide in a Google Slides presentation.
+#' The ID of the first slide is always 'p'.
+#'
+#' @param slide_url Public link to Google Slides.
+#' @param token OAuth 2.0 Access Token. If you don't have a token, use [authorize()]
+#'  to obtain an access token from Google's OAuth 2.0 server.
+#'
+#' @return Character vector of object ID(s)
+#' @importFrom ariExtra get_slide_id
+#' @importFrom httr config
+#' @importFrom httr GET
+#' @importFrom httr accept_json
+#' @importFrom httr content
+#' @importFrom jsonlite fromJSON
+#' @export
+#' @examples
+#' \dontrun{
+#' # First, obtain access token and store token for extract_object_id() to use
+#' authorize(client_id = "MY_CLIENT_ID", client_secret = "MY_CLIENT_SECRET")
+#' # Use stored token to talk to Google Slides API
+#' extract_object_id(slide_url = "https://docs.google.com/presentation/d/1H5aF_ROKVxE-HFHhoOy9vU2Y-y2M_PiV0q-JBL17Gss/edit?usp=sharing")
+#' }
+extract_object_id = function(slide_url, token = NULL) {
+  # Get Slide ID from URL
+  id <- ariExtra::get_slide_id(slide_url)
+  # Using Slide ID, create url that we'll send to GET
+  get_url <- gsub("{presentationId}", id,
+              "https://slides.googleapis.com/v1/presentations/{presentationId}", fixed=TRUE)
+
+  # if token not provided, fetch token
+  if (is.null(token)) {
+    token <- get_token()
+  } # else user provides token
+
+  # Perform GET HTTP request
+  config <- httr::config(token = token)
+  result <- httr::GET(get_url, config = config, httr::accept_json())
+  # Read in result
+  result_content <- httr::content(result, "text")
+  result_list <- jsonlite::fromJSON(result_content)
+
+  result_list$slides$objectId
+}
+
+
+
+get_id_notes <- function(slide_url) {
+  # page ids
+  page_ids <- get_page_ids(slide_url)
+  # download as pptx
+  pptx_file <- get_gs_pptx(slide_url)
+  # Extract speaker notes
+  speaker_notes <- pptx_notes(pptx_file)
+  # Get rid of filenames in name
+  names(speaker_notes) <- NULL
+
+  data.frame(id = page_ids, notes = speaker_notes)
+}
+
