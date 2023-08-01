@@ -28,8 +28,9 @@ Either a character vector or `NULL`
 Get Notes from a PowerPoint (usually from Google Slides)
 }
 \examples{
-
+\dontrun{
 pptx_notes(ex_file)
 pptx_slide_note_df(ex_file)
 pptx_slide_text_df(ex_file)
+}
 }

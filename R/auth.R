@@ -33,7 +33,7 @@ get_token <- function() {
 #' @param client_id Google Cloud Client ID
 #' @param client_secret Google Cloud Client secret
 #' @param token OAuth 2.0 Access Token
-#' @param ...
+#' @param ... Additional arguments to [httr::oauth2.0_token()]
 #'
 #' @return A Token2.0 reference class (RC) object.
 #' @export

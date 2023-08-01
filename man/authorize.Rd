@@ -13,7 +13,7 @@ authorize(client_id = NULL, client_secret = NULL, token = NULL, ...)
 
 \item{token}{OAuth 2.0 Access Token}
 
-\item{...}{}
+\item{...}{Additional arguments to [httr::oauth2.0_token()]}
 }
 \value{
 A Token2.0 reference class (RC) object.

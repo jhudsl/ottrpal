@@ -7,7 +7,7 @@
 extract_object_id(slide_url, token = NULL)
 }
 \arguments{
-\item{slide_url}{Public link to Google Slides.}
+\item{slide_url}{URL whose 'General access' is set to 'Anyone with the link'}
 
 \item{token}{OAuth 2.0 Access Token. If you don't have a token, use [authorize()]
 to obtain an access token from Google's OAuth 2.0 server.}
@@ -24,6 +24,7 @@ The ID of the first slide is always 'p'.
 # First, obtain access token and store token for extract_object_id() to use
 authorize(client_id = "MY_CLIENT_ID", client_secret = "MY_CLIENT_SECRET")
 # Use stored token to talk to Google Slides API
-extract_object_id(slide_url = "https://docs.google.com/presentation/d/1H5aF_ROKVxE-HFHhoOy9vU2Y-y2M_PiV0q-JBL17Gss/edit?usp=sharing")
+extract_object_id(slide_url = "https://docs.google.com/presentation/d/1H5aF_ROKVxE-H
+                               FHhoOy9vU2Y-y2M_PiV0q-JBL17Gss/edit?usp=sharing")
 }
 }
