@@ -1,7 +1,3 @@
-.onAttach <- function(libname, pkgname) {
-  packageStartupMessage("Use authorize() function to begin give the package the proper credentials to run. ")
-}
-
 .tokenEnv <- new.env(parent = emptyenv())
 .tokenEnv$Token <- NULL
 
