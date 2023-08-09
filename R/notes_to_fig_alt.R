@@ -304,6 +304,13 @@ extract_object_id = function(slide_url, token = NULL) {
 
   # if token not provided, fetch token
   if (is.null(token)) {
+
+    token_try <- try(get_token(), silent = TRUE)
+
+    # We will supply credentials if none can be grabbed by get_token()
+    if (is.null(token_try)) {
+      auth_from_secret()
+    }
     token <- get_token()
   } # else user provides token
 

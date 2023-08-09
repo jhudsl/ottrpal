@@ -2,42 +2,26 @@
 % Please edit documentation in R/auth.R
 \name{authorize}
 \alias{authorize}
-\title{Authorize R package to access Google Slides API}
+\title{Authorize R package to access Google classroom API}
 \usage{
-authorize(client_id = NULL, client_secret = NULL, token = NULL, ...)
+authorize(token = NULL, cache = FALSE, ...)
 }
 \arguments{
-\item{client_id}{Google Cloud Client ID}
+\item{token}{an output from \code{\link{oauth2.0_token}} to set as the authentication token.}
 
-\item{client_secret}{Google Cloud Client secret}
+\item{cache}{Should the token be cached as an .httr-oauth file?}
 
-\item{token}{OAuth 2.0 Access Token}
-
-\item{...}{Additional arguments to [httr::oauth2.0_token()]}
+\item{...}{additional arguments to send to \code{\link{oauth2.0_token}}}
 }
 \value{
-A Token2.0 reference class (RC) object.
+OAuth token saved to the environment so the package can use the users' Google data
 }
 \description{
-By providing a Google Cloud Client ID and Client Secret, you obtain an access
-token from Google's OAuth 2.0 server. This access token is used to access the
-Google Slides API. If you supply a token, this function will save it for
-future use. For instructions on creating a Client ID and Client Secret, see
-\url{https://www.hairizuan.com/rgoogleslides-using-your-own-account-client-id-and-secret/}.
-}
-\details{
-If this is your first time running authorize(), it will ask you if you want
-to use a local file ('.httr-oauth') to cache the access token. If you say
-"Yes", you will not have to run this function in future R sessions. Make sure
-to provide ottrpal complete access to your Google Drive files and Google
-Slides presentations.
+This is a function to authorize the R package to access the Googleclassroom API interactively.
 }
 \examples{
 \dontrun{
-# Generate token from Client ID and Client Secret
-authorize(client_id = "MY_CLIENT_ID", client_secret = "MY_CLIENT_SECRET")
 
-# Provides user-generated token
-authorize(token = my_token)
+authorize()
 }
 }
