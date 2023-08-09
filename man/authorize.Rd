@@ -2,7 +2,7 @@
 % Please edit documentation in R/auth.R
 \name{authorize}
 \alias{authorize}
-\title{Authorize R package to access Google classroom API}
+\title{Authorize R package to access Google slides API}
 \usage{
 authorize(token = NULL, cache = FALSE, ...)
 }
