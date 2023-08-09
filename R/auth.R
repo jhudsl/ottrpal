@@ -2,18 +2,18 @@
   packageStartupMessage("Use authorize() function to begin give the package the proper credentials to run. ")
 }
 
-.classroomEnv <- new.env(parent = emptyenv())
-.classroomEnv$Token <- NULL
+.tokenEnv <- new.env(parent = emptyenv())
+.tokenEnv$Token <- NULL
 
 # Set token to environment
 set_token <- function(value) {
-  .classroomEnv$Token <- value
+  .tokenEnv$Token <- value
   return(value)
 }
 
 # Get token from environment
 get_token <- function() {
-  .classroomEnv$Token
+  .tokenEnv$Token
 }
 
 ### Declare all the scopes
