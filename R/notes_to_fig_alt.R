@@ -324,8 +324,6 @@ extract_object_id = function(slide_url, token = NULL) {
   result_list$slides$objectId
 }
 
-
-
 #' Retrieve Speaker Notes and their corresponding Object (Slide) IDs from a Google Slides presentation
 #'
 #' Google Slides API calls a presentation slide ID as an 'object ID'.
