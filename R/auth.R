@@ -22,11 +22,11 @@ scopes_list <- c(
 )
 
 
-#' Authorize R package to access Google slides API
-#' @description This is a function to authorize the R package to access the Googleclassroom API interactively.
-#' @param token an output from \code{\link{oauth2.0_token}} to set as the authentication token.
+#' Authorize R package to access the Google Slides API
+#' @description This is a function to authorize the R package to access the Google Slides API interactively.
+#' @param token An output from \code{\link{oauth2.0_token}} to set as the authentication token.
 #' @param cache Should the token be cached as an .httr-oauth file?
-#' @param ... additional arguments to send to \code{\link{oauth2.0_token}}
+#' @param ... Additional arguments to send to \code{\link{oauth2.0_token}}
 #' @return OAuth token saved to the environment so the package can use the users' Google data
 #' @importFrom utils menu installed.packages
 #' @importFrom httr oauth_app oauth_endpoints oauth2.0_token
@@ -57,11 +57,11 @@ authorize <- function(token = NULL, cache = FALSE, ...) {
   return(invisible(token))
 }
 
-#' Use secrets to Authorize R package to access Google slides API
-#' @description This is a function to authorize the R package to access the Slides API. If no
+#' Use secrets to authorize R package to access Google Slides API
+#' @description This is a function to authorize the R package to access the Google Slides API. If no
 #' client.id and client.secret is provided, the package would provide predefined values.
-#' @param access_token Access token can be obtained from running authorize interactively: token <-authorize(); token$credentials$access_token
-#' @param refresh_token Refresh token can be obtained from running authorize interactively: token <-authorize(); token$credentials$refresh_token
+#' @param access_token Access token can be obtained from running authorize() interactively: token <-authorize(); token$credentials$access_token
+#' @param refresh_token Refresh token can be obtained from running authorize() interactively: token <-authorize(); token$credentials$refresh_token
 #' @return OAuth token saved to the environment so the package can use the users' Google data
 #' @importFrom utils menu installed.packages
 #' @importFrom httr oauth_app oauth_endpoints oauth2.0_token
@@ -77,7 +77,6 @@ authorize <- function(token = NULL, cache = FALSE, ...) {
 #' }
 #'
 auth_from_secret <- function(access_token = NULL, refresh_token = NULL) {
-
   if (is.null(access_token) | is.null(refresh_token)) {
     decrypted <- openssl::aes_cbc_decrypt(
       readRDS(encrypt_creds_user_path()),
