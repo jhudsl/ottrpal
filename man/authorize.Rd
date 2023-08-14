@@ -2,22 +2,22 @@
 % Please edit documentation in R/auth.R
 \name{authorize}
 \alias{authorize}
-\title{Authorize R package to access Google slides API}
+\title{Authorize R package to access the Google Slides API}
 \usage{
 authorize(token = NULL, cache = FALSE, ...)
 }
 \arguments{
-\item{token}{an output from \code{\link{oauth2.0_token}} to set as the authentication token.}
+\item{token}{An output from \code{\link{oauth2.0_token}} to set as the authentication token.}
 
 \item{cache}{Should the token be cached as an .httr-oauth file?}
 
-\item{...}{additional arguments to send to \code{\link{oauth2.0_token}}}
+\item{...}{Additional arguments to send to \code{\link{oauth2.0_token}}}
 }
 \value{
 OAuth token saved to the environment so the package can use the users' Google data
 }
 \description{
-This is a function to authorize the R package to access the Googleclassroom API interactively.
+This is a function to authorize the R package to access the Google Slides API interactively.
 }
 \examples{
 \dontrun{

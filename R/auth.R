@@ -65,6 +65,7 @@ authorize <- function(token = NULL, cache = FALSE, ...) {
 #' @return OAuth token saved to the environment so the package can use the users' Google data
 #' @importFrom utils menu installed.packages
 #' @importFrom httr oauth_app oauth_endpoints oauth2.0_token
+#' @importFrom openssl aes_cbc_decrypt
 #' @export
 #' @examples \dontrun{
 #'

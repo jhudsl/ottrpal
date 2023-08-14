@@ -27,6 +27,7 @@ Imports:
     jsonlite,
     knitr (>= 1.33),
     magrittr,
+    openssl,
     purrr,
     R.utils,
     readr,

@@ -2,20 +2,20 @@
 % Please edit documentation in R/auth.R
 \name{auth_from_secret}
 \alias{auth_from_secret}
-\title{Use secrets to Authorize R package to access Google slides API}
+\title{Use secrets to authorize R package to access Google Slides API}
 \usage{
 auth_from_secret(access_token = NULL, refresh_token = NULL)
 }
 \arguments{
-\item{access_token}{Access token can be obtained from running authorize interactively: token <-authorize(); token$credentials$access_token}
+\item{access_token}{Access token can be obtained from running authorize() interactively: token <-authorize(); token$credentials$access_token}
 
-\item{refresh_token}{Refresh token can be obtained from running authorize interactively: token <-authorize(); token$credentials$refresh_token}
+\item{refresh_token}{Refresh token can be obtained from running authorize() interactively: token <-authorize(); token$credentials$refresh_token}
 }
 \value{
 OAuth token saved to the environment so the package can use the users' Google data
 }
 \description{
-This is a function to authorize the R package to access the Slides API. If no
+This is a function to authorize the R package to access the Google Slides API. If no
 client.id and client.secret is provided, the package would provide predefined values.
 }
 \examples{
