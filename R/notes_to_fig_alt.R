@@ -279,7 +279,8 @@ xml_notes <- function(file, collapse_text = TRUE, xpath = "//a:r//a:t") {
 #' @param slide_url URL whose 'General access' is set to 'Anyone with the link'
 #' @param token OAuth 2.0 Access Token. If you don't have a token, use [authorize()]
 #'  to obtain an access token from Google's OAuth 2.0 server.
-#'
+#' @param access_token Access token can be obtained from running authorize() interactively: token <-authorize(); token$credentials$access_token This allows it to be passed in using two secrets
+#' @param refresh_token Refresh token can be obtained from running authorize() interactively: token <-authorize(); token$credentials$refresh_token This allows it to be passed in using two secrets
 #' @return Character vector of object ID(s)
 #' @importFrom httr config
 #' @importFrom httr GET
@@ -295,7 +296,7 @@ xml_notes <- function(file, collapse_text = TRUE, xpath = "//a:r//a:t") {
 #' extract_object_id(slide_url = "https://docs.google.com/presentation/d/1H5aF_ROKVxE-H
 #'                                FHhoOy9vU2Y-y2M_PiV0q-JBL17Gss/edit?usp=sharing")
 #' }
-extract_object_id = function(slide_url, token = NULL) {
+extract_object_id = function(slide_url, token = NULL, access_token = NULL, refresh_token = NULL) {
   # Get Slide ID from URL
   id <- get_slide_id(slide_url)
   # Using Slide ID, create url that we'll send to GET
@@ -309,7 +310,8 @@ extract_object_id = function(slide_url, token = NULL) {
 
     # We will supply credentials if none can be grabbed by get_token()
     if (is.null(token_try)) {
-      auth_from_secret()
+      auth_from_secret(access_token = access_token,
+                       refresh_token = refresh_token)
     }
     token <- get_token()
   } # else user provides token

@@ -77,17 +77,21 @@ authorize <- function(token = NULL, cache = FALSE, ...) {
 #' }
 #'
 auth_from_secret <- function(access_token = NULL, refresh_token = NULL) {
+
+  # If no tokens are specified, we'll grab the default ones.
   if (is.null(access_token) | is.null(refresh_token)) {
     decrypted <- openssl::aes_cbc_decrypt(
       readRDS(encrypt_creds_user_path()),
       key = readRDS(key_encrypt_creds_path())
     )
+    access_token <- unserialize(decrypted)[[1]]$access_token
+    refresh_token <- unserialize(decrypted)[[1]]$refresh_token
   }
 
   credentials <- list(
-    access_token =  unserialize(decrypted)[[1]]$access_token,
+    access_token = access_token,
     expires_in = 3599L,
-    refresh_token = unserialize(decrypted)[[1]]$refresh_token,
+    refresh_token = refresh_token,
     scope = scopes_list,
     token_type = "Bearer"
   )
