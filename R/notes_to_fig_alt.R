@@ -273,14 +273,18 @@ xml_notes <- function(file, collapse_text = TRUE, xpath = "//a:r//a:t") {
 
 #' Extract Object IDs using Google Slides API
 #'
-#' Performs a HTTP GET method to request the IDs of every slide in a Google Slides presentation.
-#' The ID of the first slide is always 'p'.
+#' Performs a HTTP GET method to request the IDs of every slide in a Google
+#' Slides presentation. The ID of the first slide is always 'p'.
 #'
 #' @param slide_url URL whose 'General access' is set to 'Anyone with the link'
-#' @param token OAuth 2.0 Access Token. If you don't have a token, use [authorize()]
-#'  to obtain an access token from Google's OAuth 2.0 server.
-#' @param access_token Access token can be obtained from running authorize() interactively: token <-authorize(); token$credentials$access_token This allows it to be passed in using two secrets
-#' @param refresh_token Refresh token can be obtained from running authorize() interactively: token <-authorize(); token$credentials$refresh_token This allows it to be passed in using two secrets
+#' @param token OAuth 2.0 Access Token. If you don't have a token, use
+#'   [authorize()] to obtain an access token from Google's OAuth 2.0 server.
+#' @param access_token Access token can be obtained from running authorize()
+#'   interactively: token <-authorize(); token$credentials$access_token This
+#'   allows it to be passed in using two secrets
+#' @param refresh_token Refresh token can be obtained from running authorize()
+#'   interactively: token <-authorize(); token$credentials$refresh_token This
+#'   allows it to be passed in using two secrets
 #' @return Character vector of object ID(s)
 #' @importFrom httr config
 #' @importFrom httr GET
