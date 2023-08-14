@@ -6,7 +6,6 @@
 #' @export
 
 get_bookdown_spec <- function(path = ".") {
-
   # Get the file path to _bookdown.yaml
   file_path <- bookdown_file(path = path)
 
@@ -26,7 +25,6 @@ get_bookdown_spec <- function(path = ".") {
 #' @export
 
 bookdown_path <- function(path = ".") {
-
   # See what unzip is being used
   operating_system <- Sys.info()[1]
 
@@ -82,7 +80,6 @@ bookdown_rmd_files <- function(path = ".") {
 #' @export
 #'
 bookdown_destination <- function(path = ".") {
-
   # Find _bookdown.yml
   root_dir <- bookdown_path(path = file.path(path))
 
@@ -111,7 +108,6 @@ bookdown_destination <- function(path = ".") {
 copy_resources <- function(path = ".",
                            images_dir = "resources",
                            output_dir = "manuscript") {
-
   # Get file path to bookdown.yml
   path <- bookdown_path(path)
 

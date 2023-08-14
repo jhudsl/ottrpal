@@ -1,4 +1,3 @@
-
 #' Check Leanpub Course or Book
 #'
 #' @param path path to the Leanpub book/course

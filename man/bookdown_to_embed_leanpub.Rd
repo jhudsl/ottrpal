@@ -72,8 +72,9 @@ Convert Bookdown to Embed version of Leanpub
 \dontrun{
 
 ottrpal::bookdown_to_embed_leanpub(
- base_url = "https://jhudatascience.org/OTTR_Template/",
- make_book_txt = TRUE,
- quiz_dir = NULL)
+  base_url = "https://jhudatascience.org/OTTR_Template/",
+  make_book_txt = TRUE,
+  quiz_dir = NULL
+)
 }
 }

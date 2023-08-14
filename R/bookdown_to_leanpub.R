@@ -1,4 +1,3 @@
-
 #' Convert Bookdown to Leanpub
 #'
 #' @param path path to the bookdown book, must have a `_bookdown.yml` file
@@ -162,10 +161,11 @@ bookdown_to_leanpub <- function(path = ".",
 #' @examples \dontrun{
 #'
 #' ottrpal::bookdown_to_embed_leanpub(
-#'  base_url = "https://jhudatascience.org/OTTR_Template/",
-#'  make_book_txt = TRUE,
-#'  quiz_dir = NULL)
-#'}
+#'   base_url = "https://jhudatascience.org/OTTR_Template/",
+#'   make_book_txt = TRUE,
+#'   quiz_dir = NULL
+#' )
+#' }
 bookdown_to_embed_leanpub <- function(path = ".",
                                       chapt_img_key = NULL,
                                       bookdown_index = file.path(base_url, "index.html"),
@@ -209,12 +209,11 @@ bookdown_to_embed_leanpub <- function(path = ".",
       bookdown_index = paste0(base_url, "index.html"),
       base_url = base_url
     ) %>%
-    dplyr::mutate(chapt_title = gsub("\\:|\\?|\\&|\\!|\\'", "", chapt_title))
+      dplyr::mutate(chapt_title = gsub("\\:|\\?|\\&|\\!|\\'", "", chapt_title))
   }
 
   # If there's no img_path supplied, then use a default image for each.
   if (!("img_path" %in% colnames(chapt_df))) {
-
     # If no default image is supplied
     if (is.null(default_img)) {
       default_img <- "https://docs.google.com/presentation/d/1jEUxUY1qXDZ3DUtvTU6NCc6ASG5nx4Gwczv5aAglYX4/edit#slide=id.p"
@@ -293,7 +292,6 @@ bookdown_to_book_txt <- function(path = ".",
                                  output_dir = "manuscript",
                                  quiz_dir = "quizzes",
                                  verbose = TRUE) {
-
   # If md_files are not specified, then try to get them
   if (is.null(md_files)) {
     # Establish path
@@ -435,7 +433,6 @@ make_embed_markdown <- function(url,
 #'
 get_chapters <- function(bookdown_index = file.path("docs", "index.html"),
                          base_url = NULL) {
-
   # Read in html
   index_html <- suppressWarnings(try(xml2::read_html(paste(bookdown_index, collapse = "\n"))))
 

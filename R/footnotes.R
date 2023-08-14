@@ -7,14 +7,12 @@
 #' @rdname footnotes
 #'
 convert_footnotes <- function(content) {
-
   #### Find footnotes
   # For a vector of content read in, look for Bookdown-formatted footnotes and format them as Leanpub wants them
   start_footnote_indices <- grep("\\^\\[", content)
 
   # Don't bother if there are no footnotes
   if (length(start_footnote_indices) > 0) {
-
     # Find the line which the footnote ends at
     end_footnote_indices <- sapply(start_footnote_indices,
       find_end_of_footnote,
@@ -60,7 +58,6 @@ convert_footnotes <- function(content) {
 
 # Given an index of the start of a footnote, find the end of it.
 find_end_of_footnote <- function(start_footnote_index, content) {
-
   # See if the end of the footnote is in the same line
   end_bracket <- grepl("\\]$", content[start_footnote_index])
 

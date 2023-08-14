@@ -11,3 +11,5 @@ tests/testthat/googlesheets_token.rds
 run_test.R
 /doc/
 /Meta/
+.secrets
+inst/extdata/tmp/default*
