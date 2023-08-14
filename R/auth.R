@@ -109,12 +109,12 @@ app_set_up <- function() {
     readRDS(encrypt_creds_path()),
     key = readRDS(key_encrypt_creds_path())
   )
-  app <- oauth_app(
+  app <- httr::oauth_app(
     appname = "ottrpal",
     key = unserialize(decrypted)$client_id,
     secret = unserialize(decrypted)$client_secret
   )
-  endpoint <- oauth_endpoints("google")
+  endpoint <- httr::oauth_endpoints("google")
 
   return(list(app = app, endpoint = endpoint))
 }
