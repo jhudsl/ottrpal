@@ -4,20 +4,33 @@
 \alias{extract_object_id}
 \title{Extract Object IDs using Google Slides API}
 \usage{
-extract_object_id(slide_url, token = NULL)
+extract_object_id(
+  slide_url,
+  token = NULL,
+  access_token = NULL,
+  refresh_token = NULL
+)
 }
 \arguments{
 \item{slide_url}{URL whose 'General access' is set to 'Anyone with the link'}
 
-\item{token}{OAuth 2.0 Access Token. If you don't have a token, use [authorize()]
-to obtain an access token from Google's OAuth 2.0 server.}
+\item{token}{OAuth 2.0 Access Token. If you don't have a token, use
+[authorize()] to obtain an access token from Google's OAuth 2.0 server.}
+
+\item{access_token}{Access token can be obtained from running authorize()
+interactively (token <-authorize(); token$credentials$access_token). This
+allows it to be passed in using two secrets.}
+
+\item{refresh_token}{Refresh token can be obtained from running authorize()
+interactively (token <-authorize(); token$credentials$refresh_token). This
+allows it to be passed in using two secrets.}
 }
 \value{
 Character vector of object ID(s)
 }
 \description{
-Performs a HTTP GET method to request the IDs of every slide in a Google Slides presentation.
-The ID of the first slide is always 'p'.
+Performs a HTTP GET method to request the IDs of every slide in a Google
+Slides presentation. The ID of the first slide is always 'p'.
 }
 \examples{
 \dontrun{
