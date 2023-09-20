@@ -1,4 +1,9 @@
 
+# ottrpal 1.2 
+
+* Has the ability to transfer notes from a Google slide to fill in the alternative text and captions for the images for `include_slide()`
+* Can accommodate multiple css files https://github.com/jhudsl/ottrpal/pull/115
+
 # ottrpal 1.0
 
 * Attempt to fix citeproc error by @cansavvy in https://github.com/jhudsl/ottrpal/pull/7

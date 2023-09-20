@@ -1,13 +1,14 @@
 Type: Package
 Package: ottrpal
 Title: Companion Tools for Open-Source Tools for Training Resources (OTTR)
-Version: 1.1.1
+Version: 1.2
 Authors@R: c(
-    person("Candace", "Savonen", , "cansav09@gmail.com", role = c("aut", "cre"),
+    person("Candace", "Savonen", , c("cansav09@gmail.com","csavonen@fredhutch.org"), role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-6331-7070")),
     person("John", "Muschelli", , "muschellij2@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0001-6469-1750")),
-    person("Carrie", "Wright", , "cwrigh60@jhu.edu", role = "ctb")
+    person("Carrie", "Wright", , "cwrigh60@jhu.edu", role = "ctb"),
+    person("Howard", "Baek", , "notifications@github.com", role = "ctb")
   )
 Description: Tools for converting Open-Source Tools for Training Resources
     (OTTR) courses into Leanpub or Coursera courses. 'ottrpal' is for use
