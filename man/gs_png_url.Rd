@@ -2,14 +2,14 @@
 % Please edit documentation in R/gs_png.R
 \name{gs_png_url}
 \alias{gs_png_url}
-\alias{get_slide_page}
+\alias{get_slide_id}
 \alias{gs_png_download}
 \alias{include_slide}
 \title{Get Google Slide PNG URL}
 \usage{
 gs_png_url(url)
 
-get_slide_page(url)
+get_slide_id(url)
 
 gs_png_download(url, output_dir = ".", overwrite = TRUE)
 
@@ -35,6 +35,10 @@ A character vector of URLs
 }
 \description{
 Get Google Slide PNG URL
+
+Extract Slide ID from URL
+
+Download a slide from Google Slides
 }
 \examples{
 url <- paste0(
@@ -42,6 +46,6 @@ url <- paste0(
   "12DPZgPteQBwgal6kSPP58zhPhjZ7QSPZLe3NkA8M3eo/edit",
   "#slide=id.gc8648f14c3_0_397&t=4"
 )
-id <- get_slide_id(url)
+id <- get_presentation_id(url)
 gs_png_url(url)
 }
