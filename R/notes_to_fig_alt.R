@@ -1,7 +1,7 @@
-#' Download Google Slides pptx file
+#' Download Google Slides as PPTX
 #'
 #' @param id Identifier of Google slides presentation, passed to
-#' \code{\link{get_slide_id}}
+#' \code{\link{get_presentation_id}}
 #'
 #' @note This downloads presentations if they are public and also try to make
 #' sure it does not fail on large files
@@ -9,7 +9,7 @@
 #' @export
 get_gs_pptx <- function(id) {
   id <- as.character(id)
-  pres_id <- get_slide_id(id)
+  pres_id <- get_presentation_id(id)
   url <- export_url(id = pres_id)
 
   pptx_file <- file.path(paste0(pres_id, ".pptx"))
@@ -21,7 +21,7 @@ get_gs_pptx <- function(id) {
     fr_header <- result$headers$`x-frame-options`
     if (!is.null(fr_header)) {
       if (all(fr_header == "DENY")) {
-       warn_them <- TRUE
+        warn_them <- TRUE
       }
     }
     if (httr::status_code(result) >= 300) {
@@ -38,7 +38,7 @@ get_gs_pptx <- function(id) {
     }
     if (warn_them) {
       warning(
-       paste0(
+        paste0(
           "This presentation may not be available, ",
           "did you turn link sharing on?"
         )
@@ -48,13 +48,12 @@ get_gs_pptx <- function(id) {
   pptx_file
 }
 
-
-export_url <- function(id, page_id = NULL, type = "pptx") {
+export_url <- function(presentation_id, slide_id = NULL, type = "pptx") {
   url = paste0(
     "https://docs.google.com/presentation/d/",
-    id, "/export/", type, "?id=", id)
-  if (!is.null(page_id)) {
-    url = paste0(url, "&pageid=", page_id)
+    presentation_id, "/export/", type, "?id=", presentation_id)
+  if (!is.null(slide_id)) {
+    url = paste0(url, "&pageid=", slide_id)
   }
   url
 }
@@ -227,14 +226,14 @@ unzip_pptx <- function(file) {
   props_dir <- file.path(tdir, "docProps")
   props_file <- file.path(props_dir, "core.xml")
   ari_core_file <- system.file("extdata", "docProps",
-    "core.xml",
-    package = "ariExtra"
+                               "core.xml",
+                               package = "ariExtra"
   )
   # copy core.xml from ariExtra to props_file
   if (!dir.exists(props_file)) {
     dir.create(props_dir, recursive = TRUE)
     file.copy(ari_core_file, props_file,
-      overwrite = TRUE
+              overwrite = TRUE
     )
   }
 
@@ -302,10 +301,10 @@ xml_notes <- function(file, collapse_text = TRUE, xpath = "//a:r//a:t") {
 #' }
 extract_object_id = function(slide_url, token = NULL, access_token = NULL, refresh_token = NULL) {
   # Get Slide ID from URL
-  id <- get_slide_id(slide_url)
+  id <- get_presentation_id(slide_url)
   # Using Slide ID, create url that we'll send to GET
   get_url <- gsub("{presentationId}", id,
-              "https://slides.googleapis.com/v1/presentations/{presentationId}", fixed=TRUE)
+                  "https://slides.googleapis.com/v1/presentations/{presentationId}", fixed=TRUE)
 
   # if token not provided, fetch token
   if (is.null(token)) {
