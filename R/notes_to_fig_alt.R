@@ -48,53 +48,6 @@ get_gs_pptx <- function(id) {
   pptx_file
 }
 
-
-# WIP: get_gs_slide_pptx()
-get_gs_slide_pptx <- function(link) {
-  link <- as.character(link)
-  presentation_id <- get_presentation_id(link)
-  slide_id <- get_slide_id(link)
-  url <- export_url(presentation_id = presentation_id, slide_id = slide_id)
-
-  pptx_file <- file.path(paste0(presentation_id, slide_id, ".pptx"))
-
-  # Only download it if it isn't yet present
-  if (!file.exists(pptx_file)) {
-    result <- httr::GET(url, httr::write_disk(pptx_file))
-    warn_them <- FALSE
-    fr_header <- result$headers$`x-frame-options`
-    if (!is.null(fr_header)) {
-      if (all(fr_header == "DENY")) {
-        warn_them <- TRUE
-      }
-    }
-    if (httr::status_code(result) >= 300) {
-      warn_them <- TRUE
-    }
-    # don't write something if not really a pptx
-    ctype <- result$headers$`content-type`
-    if (httr::status_code(result) >= 400 &&
-        !is.null(ctype) && grepl("html", ctype)) {
-      file.remove(pptx_file)
-    }
-    if (grepl("ServiceLogin", result$url)) {
-      warn_them <- TRUE
-    }
-    if (warn_them) {
-      warning(
-        paste0(
-          "This presentation may not be available, ",
-          "did you turn link sharing on?"
-        )
-      )
-    }
-  }
-  pptx_file
-}
-
-
-
-
 export_url <- function(presentation_id, slide_id = NULL, type = "pptx") {
   url = paste0(
     "https://docs.google.com/presentation/d/",

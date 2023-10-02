@@ -100,6 +100,14 @@ gs_png_download <- function(url, output_dir = ".", overwrite = TRUE) {
 include_slide <- function(url,
                           output_dir = knitr::opts_chunk$get("fig.path"),
                           overwrite = TRUE, ...) {
+  # Get speaker notes for ALL slides
+  all_speaker_notes <- get_object_id_notes(url)
+
+  # Get slide speaker notes
+  slide_id <- get_slide_id(url)
+  slide_speaker_notes <- all_speaker_notes[all_speaker_notes$id == slide_id, "notes"]
+
+  alt_text <<- slide_speaker_notes
   outfile <- gs_png_download(url, output_dir, overwrite = overwrite)
   knitr::include_graphics(outfile, ...)
 }
