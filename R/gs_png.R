@@ -100,7 +100,6 @@ gs_png_download <- function(url, output_dir = ".", overwrite = TRUE) {
 include_slide <- function(url,
                           output_dir = knitr::opts_chunk$get("fig.path"),
                           overwrite = TRUE, ...) {
-  alt_text <<- # extract alt text from slide
   outfile <- gs_png_download(url, output_dir, overwrite = overwrite)
   knitr::include_graphics(outfile, ...)
 }
