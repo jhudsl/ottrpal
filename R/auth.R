@@ -12,6 +12,7 @@ get_token <- function() {
   .tokenEnv$Token
 }
 
+
 ### Declare all the scopes
 scopes_list <- c(
   "https://www.googleapis.com/auth/drive",
@@ -122,4 +123,14 @@ app_set_up <- function() {
   endpoint <- httr::oauth_endpoints("google")
 
   return(list(app = app, endpoint = endpoint))
+}
+
+set_default_creds <- function() {
+  decrypted <- openssl::aes_cbc_decrypt(
+    readRDS(encrypt_creds_user_path()),
+    key = readRDS(key_encrypt_creds_path())
+  )
+  auth_from_secret(access_token = unserialize(decrypted)$access_token,
+                   refresh_token = unserialize(decrypted)$refresh_token)
+
 }
