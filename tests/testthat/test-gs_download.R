@@ -1,4 +1,6 @@
 testthat::test_that("Download a Slide ", {
+
+  if (.Platform$OS.type != "windows") {
   output_dir = tempdir()
   outfile = ottrpal::include_slide(
     paste0("https://docs.google.com/presentation/d/",
@@ -11,4 +13,5 @@ testthat::test_that("Download a Slide ", {
   testthat::expect_true(
     bn == "12DPZgPteQBwgal6kSPP58zhPhjZ7QSPZLe3NkA8M3eo_gc87451c247_0_17.png"
   )
+  }
 })
