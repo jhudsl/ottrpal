@@ -2,4 +2,4 @@
 
 0 errors | 0 warnings | 0 notes
 
-* This is an update to add two features: the ability to sync google slide notes with figure captures and the ability to use multiple css files.
+* This update allows for differential handling to help with the windows curl test failing
