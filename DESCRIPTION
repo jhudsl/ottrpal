@@ -1,7 +1,7 @@
 Type: Package
 Package: ottrpal
 Title: Companion Tools for Open-Source Tools for Training Resources (OTTR)
-Version: 1.2
+Version: 1.2.1
 Authors@R: c(
     person("Candace", "Savonen", , c("cansav09@gmail.com","csavonen@fredhutch.org"), role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-6331-7070")),
