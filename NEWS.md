@@ -1,5 +1,9 @@
 
-# ottrpal 1.2 
+# ottrpal 1.2.1
+
+* Fixed minor windows curl bug for CRAN compatibility
+
+# ottrpal 1.2
 
 * Has the ability to transfer notes from a Google slide to fill in the alternative text and captions for the images for `include_slide()`
 * Can accommodate multiple css files https://github.com/jhudsl/ottrpal/pull/115
