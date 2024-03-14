@@ -9,9 +9,9 @@
 
 # Intro to ottrpal package
 
-`ottrpal` converts an [OTTR course](https://github.com/jhudsl/OTTR_Template/wiki) (Open-source Tools for Training Resources) into a files ready for upload to Massive Open Online Courses (MOOCs): [Coursera](https://www.coursera.org/) and [Leanpub](https://leanpub.com/).
+`ottrpal` converts an [OTTR course](https://www.ottrproject.org/index.html#ottr-for-courses) (Open-source Tools for Training Resources) into a files ready for upload to Massive Open Online Courses (MOOCs): [Coursera](https://www.coursera.org/) and [Leanpub](https://leanpub.com/).
 
-- Go to the [main OTTR guide](https://github.com/jhudsl/OTTR_Template/wiki) for how to start creating courses with OTTR.
+- Go to the [main OTTR guide](https://www.ottrproject.org/) for how to start creating courses with OTTR.
 - [Read the ottrpal package documentation here](https://jhudatascience.org/ottrpal/docs/index.html).
 
 ## Using the example repository:
