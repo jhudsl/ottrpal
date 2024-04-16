@@ -215,14 +215,20 @@ convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
 #' @importFrom utils download.file
 #' @import bookdown_path
 #'
+# TODO: add a quarto/rmd argument here
 render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
+                               render_type = "rmd"
                                output_yaml = "_output.yml",
                                convert_quizzes = FALSE,
                                input_quiz_dir = "quizzes",
                                output_quiz_dir = "coursera_quizzes",
                                verbose = TRUE) {
-  # Find root directory by finding `_bookdown.yml` file
-  root_dir <- bookdown_path()
+
+  # TODO: Look for a _quarto.yml OR a _bookdown.yml file for the root_dir
+  # TODO: declare in render_type whether this is an Rmd or quarto
+
+  # TODO: root directory will be where _quarto.yml OR a _bookdown.yml is found
+  root_dir <- list.file(pattern = "")
 
   # Output files:
   output_dir <- file.path(root_dir, output_dir)
@@ -235,20 +241,8 @@ render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
   }
 
   ###### Declare all the file paths relative to root directory ######
-  # Input files:
-  toc_close_css <- file.path(root_dir, "assets", "toc_close.css")
-
-  if (!file.exists(toc_close_css)) {
-    download.file("https://raw.githubusercontent.com/jhudsl/ottrpal/master/inst/extdata/toc_close.css",
-      destfile = toc_close_css
-    )
-  }
   output_yaml_file <- file.path(root_dir, output_yaml)
 
-  # Make sure we have that file
-  if (!file.exists(toc_close_css)) {
-    stop(paste0("Could not find: ", toc_close_css))
-  }
   # Make sure we know where the output yaml is
   if (!file.exists(output_yaml_file)) {
     stop(paste0("Could not find: ", output_yaml_file))
@@ -280,15 +274,29 @@ render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
       fs::dir_copy(needed_dir, file.path(output_dir, needed_dir), overwrite = TRUE)
     }
   })
+  
+  if (render_type == "rmd") {
+    # Input files:
+    toc_close_css <- file.path(root_dir, "assets", "toc_close.css")
 
-  # Slightly different path for the libs folder
-  libs_path <- file.path("docs", "libs")
-  if (!dir.exists(file.path(output_dir, "libs"))) {
-    if (verbose) {
-      message(file.path("docs", "libs"))
-    }
-    fs::dir_copy(libs_path, file.path(output_dir, "libs"), overwrite = TRUE)
-  }
+    if (!file.exists(toc_close_css)) {
+      download.file("https://raw.githubusercontent.com/jhudsl/ottrpal/master/inst/extdata/toc_close.css",
+        destfile = toc_close_css
+        )
+        }
+        # Make sure we have that file
+        if (!file.exists(toc_close_css)) {
+        stop(paste0("Could not find: ", toc_close_css))
+        }
+
+    # Slightly different path for the libs folder
+    libs_path <- file.path("docs", "libs")
+    if (!dir.exists(file.path(output_dir, "libs"))) {
+      if (verbose) {
+        message(file.path("docs", "libs"))
+        }
+        fs::dir_copy(libs_path, file.path(output_dir, "libs"), overwrite = TRUE)
+        }
 
   ###### Copy over CSS file ######
   # Retrieve yaml file specs
@@ -339,6 +347,13 @@ render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
 
   # Write to "style.css"
   writeLines(append(full_css, toc_close_css_lines), css_file)
+  }
+
+  if (render_type == "quarto") {
+
+  # TODO: Put code here about how to get rid of TOC
+
+  }
 
   # Only convert the quizzes if set to TRUE
   if (convert_quizzes) {

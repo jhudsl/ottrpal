@@ -23,7 +23,6 @@ get_bookdown_spec <- function(path = ".") {
 #'
 #' @return Returns the directory where the _bookdown.yml is contained.
 #' @export
-
 bookdown_path <- function(path = ".") {
   # See what unzip is being used
   operating_system <- Sys.info()[1]
