@@ -19,7 +19,7 @@ create_rstudio_project_template <- function(path, ...) {
   )
 
   # Step 3. Write to file
-  writeLines(contents, con = file.path(path, "FILE_NAME_HERE"))
+  writeLines(contents, con = file.path(path, "INDEX"))
 
   # Repeat Steps 1~3 for each file
 }
