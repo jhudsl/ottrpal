@@ -1,4 +1,4 @@
-create_rstudio_project_template <- function(path, ...) {
+setup_project <- function(path, ...) {
   # ensure path exists
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
 

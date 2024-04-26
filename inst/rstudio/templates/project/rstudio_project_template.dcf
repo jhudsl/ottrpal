@@ -1,4 +1,4 @@
-Binding: create_rstudio_project_template
+Binding: setup_project
 Title: OTTR Course Template
 OpenFiles: INDEX
 Icon: logo.png
