@@ -17,7 +17,7 @@ book:
     - intro.qmd
 
   sidebar:
-    logo: "img/logo.jpeg"
+    logo: "img/logo.png"
     logo-href: "https://hutchdatascience.org/"
     foreground: "#1B365D"
 

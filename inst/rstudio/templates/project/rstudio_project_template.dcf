@@ -1,24 +1,8 @@
 Binding: setup_project
-Title: OTTR Course (ottrpal)
+Title: OTTR Course
 Icon: logo.png
 
-Parameter: text
-Widget: TextInput
-Label: Course Title
-Position: left
-
-Parameter: text
-Widget: TextInput
-Label: Author
-Position: left
-
-Parameter: text
-Widget: TextInput
-Label: Feedback Form
-Position: right
-
-
-Parameter: text
-Widget: TextInput
+Parameter: style_set
+Widget: SelectInput
 Label: Style Set
-Position: right
+Fields: FHDaSL, AnVIL
