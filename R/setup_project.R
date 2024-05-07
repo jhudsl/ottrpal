@@ -4,12 +4,15 @@ setup_project <- function(path, ...) {
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
 
   # Move boilerplate files into path
+
   # Vector of filenames to be copied
-  boilerplate_file <- c("index.qmd")
+  boilerplate_file <- c("index.qmd", "intro.qmd", "404.qmd",
+                        "favicon.ico", "logo.jpeg", "style.css",
+                        "references.bib")
 
   # Function to copy each file
   copy_files <- function(file_name) {
-    source_path <- system.file(paste0("ottr/", file_name), package = "ottrpal")
+    source_path <- system.file(paste0("ottr/", file_name), package = "ottrtemplate")
     destination_path <- paste0(path, "/", file_name)
     file.copy(source_path, destination_path)
   }
@@ -24,14 +27,4 @@ setup_project <- function(path, ...) {
     val <- dots[[i]]
     paste0(key, ": ", val)
   })
-
-  # collect into single text string
-  contents <- paste(
-    paste(header, collapse = "\n"),
-    paste(text, collapse = "\n"),
-    sep = "\n"
-  )
-
-  # write to index file
-  # writeLines(contents, con = file.path(path, "INDEX"))
 }

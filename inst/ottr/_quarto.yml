@@ -1,0 +1,61 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  date: "4/3/2024"
+  favicon: img/favicon.ico
+  bread-crumbs: false
+
+  page-navigation: true
+  search: true
+  repo-url: https://github.com/fhdsl/ottr
+  repo-actions: [edit]
+
+  chapters:
+    - index.qmd
+    - intro.qmd
+
+  sidebar:
+    logo: "img/logo.jpeg"
+    logo-href: "https://hutchdatascience.org/"
+    foreground: "#1B365D"
+
+  page-footer:
+    left: |
+      This book was built with <a href="https://quarto.org/" style="color: #fff;">Quarto</a> using
+      <a href="https://github.com/fhdsl/ottr" style="color: #fff;">OTTR</a>.
+    center: |
+      All illustrations <a href="https://creativecommons.org/licenses/by/4.0/" style="color: #fff;">CC-BY. </a>
+      <br>
+      All other materials <a href= "https://creativecommons.org/licenses/by/4.0/" style="color: #fff;"> CC-BY </a> unless noted otherwise.
+    right:
+      - icon: github
+        href: https://github.com/
+      - icon: twitter
+        href: https://twitter.com/
+
+
+bibliography: references.bib
+
+format:
+  html:
+    grid:
+       sidebar-width: 260px
+    css: style.css
+    linkcolor: "#00C1D5"
+    mainfont: "Karla"
+
+    sidebar: true
+    toc: true
+
+    code-link: true
+    code-copy: true
+
+    link-external-newwindow: true
+
+    image: img/favicon.ico
+    license: "CC BY"
+knitr:
+  opts_chunk:
+    fig.path: "resources/images/figure/"
