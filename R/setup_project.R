@@ -8,6 +8,10 @@ setup_project <- function(path, ...) {
   dir.create(paste0(path, "/img"), recursive = TRUE, showWarnings = FALSE)
   # create img/box-images folder within path
   dir.create(paste0(path, "/img/box-images"), recursive = TRUE, showWarnings = FALSE)
+  # create .github folder within path
+  dir.create(paste0(path, "/.github"), recursive = TRUE, showWarnings = FALSE)
+  # create .github/workflows folder within path
+  dir.create(paste0(path, "/.github/workflows"), recursive = TRUE, showWarnings = FALSE)
 
   # Move boilerplate files into path
 
@@ -28,8 +32,7 @@ setup_project <- function(path, ...) {
     file.copy(source_path, destination_path)
   }
 
-
-  # Vector of filenames to be copied (non-images)
+  # Vector of filenames to be copied
   boilerplate_file <- c("index.qmd", "intro.qmd", "404.qmd",
                        "style.css", "references.bib", "_quarto.yml")
   # Apply the function to each file in the vector
@@ -42,6 +45,7 @@ setup_project <- function(path, ...) {
   quarto_yml$book$author <- dots$author
   quarto_yml$book$`repo-url` <- dots$repo_url
 
+  # For Custom Style set, user provides logo
   if (dots$style_set == "Custom") {
      file.copy(paste0(normalizePath(dirname(dots$logo)), "/logo.png"), paste0(path, "/img/", "logo.png"))
   }
@@ -56,4 +60,14 @@ setup_project <- function(path, ...) {
                             "img/box-images/thinking_face.png", "img/box-images/under_construction.png")
   # Apply the function to each file in the vector
   lapply(boilerplate_file_img, copy_files, dots$style_set)
+
+  # Vector of filenames to be copied (Github Actions)
+  boilerplate_file_gha <- c(".github/workflows/pull_request.yml", ".github/workflows/delete-preview.yml",
+                            ".github/workflows/render-all.yml")
+  # Apply the function to each file in the vector
+  lapply(boilerplate_file_gha, copy_files, dots$style_set)
+
+
+
+
 }
