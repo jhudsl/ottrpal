@@ -3,14 +3,16 @@ project:
   output-dir: docs
 
 book:
-  date: "4/3/2024"
+  title: "Quarto Based OTTR Course"
+  author: "Fred Hutch Data Science Lab"
+  date: "1/1/2025"
   favicon: img/favicon.ico
   bread-crumbs: false
 
   page-navigation: true
   search: true
   repo-url: https://github.com/fhdsl/ottr
-  repo-actions: [edit]
+  repo-actions: [edit, issue]
 
   chapters:
     - index.qmd
@@ -31,9 +33,9 @@ book:
       All other materials <a href= "https://creativecommons.org/licenses/by/4.0/" style="color: #fff;"> CC-BY </a> unless noted otherwise.
     right:
       - icon: github
-        href: https://github.com/
-      - icon: twitter
-        href: https://twitter.com/
+        href: https://github.com/fhdsl
+      - icon: slack
+        href: https://fhdata.slack.com/join/signup#/domain-signup
 
 
 bibliography: references.bib

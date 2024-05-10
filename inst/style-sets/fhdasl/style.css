@@ -5,6 +5,7 @@
 p.caption {
   color: #777;
   margin-top: 10px;
+}
 
 /* Styles for paragraph code, which inherit white-space property */
 p code {

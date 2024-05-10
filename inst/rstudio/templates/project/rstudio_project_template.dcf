@@ -5,4 +5,23 @@ Icon: logo.png
 Parameter: style_set
 Widget: SelectInput
 Label: Style Set
-Fields: FHDaSL, AnVIL, GDSCN
+Fields: FHDaSL, AnVIL, GDSCN, Custom
+
+Parameter: title
+Widget: TextInput
+Label: Course Title
+Position: right
+
+Parameter: author
+Widget: TextInput
+Label: Course Author
+Position: right
+
+Parameter: logo
+Widget: FileInput
+Label: Logo (for Custom Style Set)
+
+Parameter: repo_url
+Widget: TextInput
+Label: GitHub Repo URL
+Position: right
