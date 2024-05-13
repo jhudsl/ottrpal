@@ -13,30 +13,11 @@ setup_project <- function(path, ...) {
   # create .github/workflows folder within path
   dir.create(paste0(path, "/.github/workflows"), recursive = TRUE, showWarnings = FALSE)
 
-  # Move boilerplate files into path
-
-  # Function to copy each file
-  copy_files <- function(file_name, style_set) {
-    if (style_set == "FHDaSL") {
-      style_set <- "fhdasl"
-    } else if (style_set == "AnVIL") {
-      style_set <- "anvil"
-    } else if (style_set == "GDSCN") {
-      style_set <- "gdscn"
-    } else {
-      style_set <- "custom"
-    }
-
-    source_path <- system.file(paste0("style-sets/", style_set, "/",  file_name), package = "ottrpal")
-    destination_path <- paste0(path, "/", file_name)
-    file.copy(source_path, destination_path)
-  }
-
   # Vector of filenames to be copied
   boilerplate_file <- c("index.qmd", "intro.qmd", "404.qmd",
                        "style.css", "references.bib", "_quarto.yml")
   # Apply the function to each file in the vector
-  lapply(boilerplate_file, copy_files, dots$style_set)
+  lapply(boilerplate_file, copy_files, dots$style_set, path)
 
   path_quarto_yml <- paste0(path, "/", "_quarto.yml")
 
@@ -59,15 +40,28 @@ setup_project <- function(path, ...) {
                             "img/box-images/github.png", "img/box-images/dictionary.png",
                             "img/box-images/thinking_face.png", "img/box-images/under_construction.png")
   # Apply the function to each file in the vector
-  lapply(boilerplate_file_img, copy_files, dots$style_set)
+  lapply(boilerplate_file_img, copy_files, dots$style_set, path)
 
   # Vector of filenames to be copied (Github Actions)
   boilerplate_file_gha <- c(".github/workflows/pull_request.yml", ".github/workflows/delete-preview.yml",
                             ".github/workflows/render-all.yml")
   # Apply the function to each file in the vector
-  lapply(boilerplate_file_gha, copy_files, dots$style_set)
+  lapply(boilerplate_file_gha, copy_files, dots$style_set, path)
+}
 
+# Function to copy each file
+copy_files <- function(file_name, style_set, project_path) {
+  if (style_set == "FHDaSL") {
+    style_set <- "fhdasl"
+  } else if (style_set == "AnVIL") {
+    style_set <- "anvil"
+  } else if (style_set == "GDSCN") {
+    style_set <- "gdscn"
+  } else {
+    style_set <- "custom"
+  }
 
-
-
+  source_path <- system.file(paste0("style-sets/", style_set, "/",  file_name), package = "ottrpal")
+  destination_path <- paste0(project_path, "/", file_name)
+  file.copy(source_path, destination_path)
 }
