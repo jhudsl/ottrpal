@@ -5,13 +5,13 @@ setup_project <- function(path, ...) {
   # create directory
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
   # create img folder within  path
-  dir.create(paste0(path, "/img"), recursive = TRUE, showWarnings = FALSE)
+  dir.create(file.path(path, "img"), recursive = TRUE, showWarnings = FALSE)
   # create img/box-images folder within path
-  dir.create(paste0(path, "/img/box-images"), recursive = TRUE, showWarnings = FALSE)
+  dir.create(file.path(path, "img", "box-images"), recursive = TRUE, showWarnings = FALSE)
   # create .github folder within path
-  dir.create(paste0(path, "/.github"), recursive = TRUE, showWarnings = FALSE)
+  dir.create(file.path(path, ".github"), recursive = TRUE, showWarnings = FALSE)
   # create .github/workflows folder within path
-  dir.create(paste0(path, "/.github/workflows"), recursive = TRUE, showWarnings = FALSE)
+  dir.create(file.path(path, ".github", "workflows"), recursive = TRUE, showWarnings = FALSE)
 
   # Vector of filenames to be copied
   boilerplate_file <- c("index.qmd", "intro.qmd", "404.qmd",
@@ -19,7 +19,7 @@ setup_project <- function(path, ...) {
   # Apply the function to each file in the vector
   lapply(boilerplate_file, copy_files, dots$style_set, path)
 
-  path_quarto_yml <- paste0(path, "/", "_quarto.yml")
+  path_quarto_yml <- file.path(path, "_quarto.yml")
 
   quarto_yml <- yaml::read_yaml(path_quarto_yml)
   quarto_yml$book$title <- dots$title
@@ -28,7 +28,7 @@ setup_project <- function(path, ...) {
 
   # For Custom Style set, user provides logo
   if (dots$style_set == "Custom") {
-     file.copy(paste0(normalizePath(dirname(dots$logo)), "/logo.png"), paste0(path, "/img/", "logo.png"))
+     file.copy(file.path(normalizePath(dirname(dots$logo)), "logo.png"), file.path(path, "img", "logo.png"))
   }
 
   write(yaml::as.yaml(quarto_yml, handlers = list(logical = yaml::verbatim_logical)),
@@ -61,7 +61,7 @@ copy_files <- function(file_name, style_set, project_path) {
     style_set <- "custom"
   }
 
-  source_path <- system.file(paste0("style-sets/", style_set, "/",  file_name), package = "ottrpal")
-  destination_path <- paste0(project_path, "/", file_name)
+  source_path <- system.file(file.path("style-sets", style_set, file_name), package = "ottrpal")
+  destination_path <- file.path(project_path, file_name)
   file.copy(source_path, destination_path)
 }
