@@ -43,10 +43,7 @@ h1, h2, h3, h4 {
 }
 
 /* Sidebar Logo */
-.sidebar-logo {
-  width: 200px;
-  margin: 5px;
-}
+.sidebar-logo {}
 
 /* Stylized boxes */
 div.notice, div.warning, div.github, div.dictionary, div.reflection, div.wip {
