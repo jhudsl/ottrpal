@@ -1,4 +1,15 @@
-setup_project <- function(path, ...) {
+#' Template Function to Initiate a New Quarto-Based OTTR Course
+#'
+#' This function will be invoked by RStudio to create a new RStudio Project
+#' containing boilerplates files required to start a new Quarto-based OTTR course.
+#'
+#' For more details, refer to the RStudio Project Templates link:
+#' https://rstudio.github.io/rstudio-extensions/rstudio_project_templates.html
+#'
+#' @param path Path to newly created project
+#' @param ... User inputs
+#' @noRd
+setup_project_quarto <- function(path, ...) {
   # collect inputs
   dots <- list(...)
 
@@ -49,7 +60,7 @@ setup_project <- function(path, ...) {
   lapply(boilerplate_file_gha, copy_files, dots$style_set, path)
 }
 
-# Function to copy each file
+# Utility function to copy each file
 copy_files <- function(file_name, style_set, project_path) {
   if (style_set == "FHDaSL") {
     style_set <- "fhdasl"

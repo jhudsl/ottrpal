@@ -1,5 +1,5 @@
-Binding: setup_project
-Title: OTTR Course
+Binding: setup_project_quarto
+Title: Quarto-Based OTTR Course
 Icon: logo.png
 
 Parameter: style_set
