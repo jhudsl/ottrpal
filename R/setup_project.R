@@ -26,7 +26,7 @@ setup_project_quarto <- function(path, ...) {
 
   # Vector of filenames to be copied
   boilerplate_file <- c("index.qmd", "intro.qmd", "404.qmd",
-                       "style.css", "references.bib", "_quarto.yml")
+                       "style.css", "references.bib", "_quarto.yml", "config_automation.yml")
   # Apply the function to each file in the vector
   lapply(boilerplate_file, copy_files, dots$style_set, path)
 
