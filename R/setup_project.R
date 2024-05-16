@@ -64,6 +64,8 @@ setup_project_quarto <- function(path, ...) {
 copy_files <- function(file_name, style_set, project_path) {
   if (style_set == "FHDaSL") {
     style_set <- "fhdasl"
+  } else if (style_set == "ITN") {
+    style_set <- "itn"
   } else if (style_set == "AnVIL") {
     style_set <- "anvil"
   } else if (style_set == "GDSCN") {

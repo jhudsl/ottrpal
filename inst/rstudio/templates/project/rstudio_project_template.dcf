@@ -5,7 +5,7 @@ Icon: logo.png
 Parameter: style_set
 Widget: SelectInput
 Label: Style Set
-Fields: FHDaSL, AnVIL, GDSCN, Custom
+Fields: FHDaSL, ITN, AnVIL, GDSCN, Custom
 
 Parameter: title
 Widget: TextInput
