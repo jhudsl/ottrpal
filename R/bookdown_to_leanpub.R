@@ -444,6 +444,9 @@ get_chapters <- function(bookdown_index = file.path("docs", "index.html"),
     # Get the sidebar stuff
     nodes <- rvest::html_nodes(index_html, xpath = paste0("//", 'div[@class="sidebar-item-container"]'))
 
+    # We only want chapters
+    nodes <- nodes[grep("chapter",as.character(nodes))]
+
     # Extract chapter nodes from the sidebar
     chapt_titles <- nodes %>%
       rvest::html_nodes('span.chapter-title') %>%
@@ -453,7 +456,8 @@ get_chapters <- function(bookdown_index = file.path("docs", "index.html"),
       rvest::html_nodes('span.chapter-number') %>%
       rvest::html_text()
 
-    data_path <- rvest::html_nodes(nodes, xpath = paste0("//", 'a[@class="sidebar-item-text sidebar-link"]')) %>%
+    data_path <- nodes %>%
+      rvest::html_nodes('a.sidebar-item-text.sidebar-link') %>%
       rvest::html_attr('href') %>%
       stringr::str_remove("^\\.\\/")
 
