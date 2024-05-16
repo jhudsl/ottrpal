@@ -21,7 +21,7 @@ get_gs_pptx <- function(id) {
     fr_header <- result$headers$`x-frame-options`
     if (!is.null(fr_header)) {
       if (all(fr_header == "DENY")) {
-       warn_them <- TRUE
+        warn_them <- TRUE
       }
     }
     if (httr::status_code(result) >= 300) {
@@ -30,7 +30,7 @@ get_gs_pptx <- function(id) {
     # don't write something if not really a pptx
     ctype <- result$headers$`content-type`
     if (httr::status_code(result) >= 400 &&
-        !is.null(ctype) && grepl("html", ctype)) {
+      !is.null(ctype) && grepl("html", ctype)) {
       file.remove(pptx_file)
     }
     if (grepl("ServiceLogin", result$url)) {
@@ -38,7 +38,7 @@ get_gs_pptx <- function(id) {
     }
     if (warn_them) {
       warning(
-       paste0(
+        paste0(
           "This presentation may not be available, ",
           "did you turn link sharing on?"
         )
@@ -50,11 +50,12 @@ get_gs_pptx <- function(id) {
 
 
 export_url <- function(id, page_id = NULL, type = "pptx") {
-  url = paste0(
+  url <- paste0(
     "https://docs.google.com/presentation/d/",
-    id, "/export/", type, "?id=", id)
+    id, "/export/", type, "?id=", id
+  )
   if (!is.null(page_id)) {
-    url = paste0(url, "&pageid=", page_id)
+    url <- paste0(url, "&pageid=", page_id)
   }
   url
 }
@@ -300,22 +301,25 @@ xml_notes <- function(file, collapse_text = TRUE, xpath = "//a:r//a:t") {
 #' extract_object_id(slide_url = "https://docs.google.com/presentation/d/1H5aF_ROKVxE-H
 #'                                FHhoOy9vU2Y-y2M_PiV0q-JBL17Gss/edit?usp=sharing")
 #' }
-extract_object_id = function(slide_url, token = NULL, access_token = NULL, refresh_token = NULL) {
+extract_object_id <- function(slide_url, token = NULL, access_token = NULL, refresh_token = NULL) {
   # Get Slide ID from URL
   id <- get_slide_id(slide_url)
   # Using Slide ID, create url that we'll send to GET
   get_url <- gsub("{presentationId}", id,
-              "https://slides.googleapis.com/v1/presentations/{presentationId}", fixed=TRUE)
+    "https://slides.googleapis.com/v1/presentations/{presentationId}",
+    fixed = TRUE
+  )
 
   # if token not provided, fetch token
   if (is.null(token)) {
-
     token_try <- try(get_token(), silent = TRUE)
 
     # We will supply credentials if none can be grabbed by get_token()
     if (is.null(token_try)) {
-      auth_from_secret(access_token = access_token,
-                       refresh_token = refresh_token)
+      auth_from_secret(
+        access_token = access_token,
+        refresh_token = refresh_token
+      )
     }
     token <- get_token()
   } # else user provides token
@@ -341,7 +345,7 @@ extract_object_id = function(slide_url, token = NULL, access_token = NULL, refre
 #'
 #' @examples
 #' \dontrun{
-#'  get_object_id_notes("https://docs.google.com/presentation/d/
+#' get_object_id_notes("https://docs.google.com/presentation/d/
 #'                       1H5aF_ROKVxE-HFHhoOy9vU2Y-y2M_PiV0q-JBL17Gss/edit?usp=sharing")
 #' }
 get_object_id_notes <- function(slide_url) {
@@ -356,4 +360,3 @@ get_object_id_notes <- function(slide_url) {
 
   data.frame(id = object_ids, notes = speaker_notes)
 }
-
