@@ -47,7 +47,7 @@ format:
     grid:
        sidebar-width: 260px
     css: style.css
-    linkcolor: "#012d72"
+    linkcolor: '#68ace5'
     mainfont: "Karla"
 
     sidebar: true

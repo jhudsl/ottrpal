@@ -25,7 +25,7 @@ setup_project_quarto <- function(path, ...) {
   dir.create(file.path(path, ".github", "workflows"), recursive = TRUE, showWarnings = FALSE)
 
   # Vector of filenames to be copied
-  boilerplate_file <- c("index.qmd", "intro.qmd", "404.qmd",
+  boilerplate_file <- c("index.qmd", "intro.qmd", "404.qmd", "theme.scss",
                        "style.css", "references.bib", "_quarto.yml", "config_automation.yml")
   # Apply the function to each file in the vector
   lapply(boilerplate_file, copy_files, dots$style_set, path)
