@@ -171,3 +171,9 @@ iframe {
     background-color: #1B365D;
     color: #fff !important;
 }
+
+
+/* Sidebar Hover Color */
+div.sidebar-item-container .active, div.sidebar-item-container .show>.nav-link, div.sidebar-item-container .sidebar-link>code {
+  color: #00C1D5;
+}

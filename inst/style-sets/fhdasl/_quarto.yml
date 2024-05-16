@@ -42,6 +42,8 @@ bibliography: references.bib
 
 format:
   html:
+    theme:
+      - theme.scss
     grid:
        sidebar-width: 260px
     css: style.css
