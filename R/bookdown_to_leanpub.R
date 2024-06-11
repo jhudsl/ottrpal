@@ -440,7 +440,7 @@ get_chapters <- function(bookdown_index = file.path("docs", "index.html"),
   nodes <- rvest::html_nodes(index_html, xpath = paste0("//", 'li[@class="chapter"]'))
 
   # If the Rmd way didn't work, lets try the quarto way
-  if (length(nodes) < 0) {
+  if (length(nodes) < 1) {
     # Get the sidebar stuff
     nodes <- rvest::html_nodes(index_html, xpath = paste0("//", 'div[@class="sidebar-item-container"]'))
 
