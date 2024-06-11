@@ -78,7 +78,6 @@ authorize <- function(token = NULL, cache = FALSE, ...) {
 #' }
 #'
 auth_from_secret <- function(access_token = NULL, refresh_token = NULL) {
-
   # If no tokens are specified, we'll grab the default ones.
   if (is.null(access_token) | is.null(refresh_token)) {
     decrypted <- openssl::aes_cbc_decrypt(

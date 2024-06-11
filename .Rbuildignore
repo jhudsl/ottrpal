@@ -33,3 +33,4 @@ vignettes/.httr-oauth$
 ^package_bundles/leanbuild_0.1.2.tgz*
 inst/extdata/tmp/default*
 
+^CRAN-SUBMISSION$
