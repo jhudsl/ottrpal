@@ -1,3 +1,6 @@
+# ottrpal 1.3.0
+
+* Added Quarto compatibility https://github.com/jhudsl/ottrpal/pull/129.
 
 # ottrpal 1.2.1
 
