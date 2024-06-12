@@ -23,7 +23,6 @@ good_quiz_path <- function() {
 #' @return The file path to an example bad quiz included in the package that will fail the quiz checks.
 #'
 #' @examples
-#'
 #' quiz_path <- bad_quiz_path()
 bad_quiz_path <- function() {
   list.files(

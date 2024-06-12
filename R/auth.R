@@ -32,7 +32,6 @@ scopes_list <- c(
 #' @importFrom httr oauth_app oauth_endpoints oauth2.0_token
 #' @export
 #' @examples \dontrun{
-#'
 #' authorize()
 #' }
 authorize <- function(token = NULL, cache = FALSE, ...) {
@@ -60,15 +59,14 @@ authorize <- function(token = NULL, cache = FALSE, ...) {
 #' Use secrets to authorize R package to access Google Slides API
 #' @description This is a function to authorize the R package to access the Google Slides API. If no
 #' client.id and client.secret is provided, the package would provide predefined values.
-#' @param access_token Access token can be obtained from running authorize() interactively: token <-authorize(); token$credentials$access_token
-#' @param refresh_token Refresh token can be obtained from running authorize() interactively: token <-authorize(); token$credentials$refresh_token
+#' @param access_token Access token can be obtained from running [authorize()] interactively.
+#' @param refresh_token Refresh token can be obtained from running [authorize()] interactively.
 #' @return OAuth token saved to the environment so the package can use the users' Google data
 #' @importFrom utils menu installed.packages
 #' @importFrom httr oauth_app oauth_endpoints oauth2.0_token
 #' @importFrom openssl aes_cbc_decrypt
 #' @export
 #' @examples \dontrun{
-#'
 #' token <- authorize()
 #'
 #' auth_from_secret(

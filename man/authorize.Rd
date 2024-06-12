@@ -21,7 +21,6 @@ This is a function to authorize the R package to access the Google Slides API in
 }
 \examples{
 \dontrun{
-
 authorize()
 }
 }

@@ -2,16 +2,16 @@
 % Please edit documentation in R/set_up.R
 \name{bookdown_destination}
 \alias{bookdown_destination}
-\title{Declare file path to docs/ folder}
+\title{Declare file path to `docs/` folder}
 \usage{
 bookdown_destination(path = ".")
 }
 \arguments{
-\item{path}{Where to look for the _bookdown.yml file. Passes toget_bookdown_spec() function. By default looks in current directory}
+\item{path}{Where to look for the `_bookdown.yml` file. Passes [get_bookdown_spec()] function. By default looks in current directory}
 }
 \value{
-The file paths to Rmds listed in the _bookdown.yml file.
+The file paths to Rmds listed in the `_bookdown.yml` file.
 }
 \description{
-Declare file path to docs/ folder
+Declare file path to `docs/` folder
 }

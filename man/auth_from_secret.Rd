@@ -7,9 +7,9 @@
 auth_from_secret(access_token = NULL, refresh_token = NULL)
 }
 \arguments{
-\item{access_token}{Access token can be obtained from running authorize() interactively: token <-authorize(); token$credentials$access_token}
+\item{access_token}{Access token can be obtained from running [authorize()] interactively.}
 
-\item{refresh_token}{Refresh token can be obtained from running authorize() interactively: token <-authorize(); token$credentials$refresh_token}
+\item{refresh_token}{Refresh token can be obtained from running [authorize()] interactively.}
 }
 \value{
 OAuth token saved to the environment so the package can use the users' Google data
@@ -20,7 +20,6 @@ client.id and client.secret is provided, the package would provide predefined va
 }
 \examples{
 \dontrun{
-
 token <- authorize()
 
 auth_from_secret(

@@ -10,7 +10,7 @@ bookdown_path(path = ".")
 \item{path}{Where to look for the file. By default looks in current directory.}
 }
 \value{
-Returns the directory where the _bookdown.yml is contained.
+Returns the directory where the `_bookdown.yml` is contained.
 }
 \description{
 Find main Bookdown directory

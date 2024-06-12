@@ -7,10 +7,11 @@
 bookdown_file(path = ".")
 }
 \arguments{
-\item{path}{Where to look for the _bookdown.yml file. Passes to the bookdown_file() function. By default looks in current directory}
+\item{path}{Where to look for the _bookdown.yml file.
+Passes to the [bookdown_file()] function. By default looks in current directory}
 }
 \value{
-The file path to _bookdown.yml
+The file path to `_bookdown.yml`
 }
 \description{
 Find file path to _bookdown.yml

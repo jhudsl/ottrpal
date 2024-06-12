@@ -4,7 +4,6 @@
 #'
 #' @return The yaml contents using yaml::yaml.load_file()
 #' @export
-
 get_bookdown_spec <- function(path = ".") {
   # Get the file path to _bookdown.yaml
   file_path <- bookdown_file(path = path)
@@ -21,8 +20,7 @@ get_bookdown_spec <- function(path = ".") {
 #'
 #' @param path  Where to look for the file. By default looks in current directory.
 #'
-#' @return Returns the directory where the _bookdown.yml is contained.
-#' @export
+#' @return Returns the directory where the `_bookdown.yml` is contained.
 bookdown_path <- function(path = ".") {
   # See what unzip is being used
   operating_system <- Sys.info()[1]
@@ -34,9 +32,10 @@ bookdown_path <- function(path = ".") {
 
 #' Find file path to _bookdown.yml
 #'
-#' @param path  Where to look for the _bookdown.yml file. Passes to the bookdown_file() function. By default looks in current directory
+#' @param path  Where to look for the _bookdown.yml file.
+#' Passes to the [bookdown_file()] function. By default looks in current directory
 #'
-#' @return The file path to _bookdown.yml
+#' @return The file path to `_bookdown.yml`
 #' @export
 #'
 bookdown_file <- function(path = ".") {
@@ -71,11 +70,11 @@ bookdown_rmd_files <- function(path = ".") {
   return(files)
 }
 
-#' Declare file path to docs/ folder
+#' Declare file path to `docs/` folder
 #'
-#' @param path  Where to look for the _bookdown.yml file. Passes toget_bookdown_spec() function. By default looks in current directory
+#' @param path  Where to look for the `_bookdown.yml` file. Passes [get_bookdown_spec()] function. By default looks in current directory
 #'
-#' @return The file paths to Rmds listed in the _bookdown.yml file.
+#' @return The file paths to Rmds listed in the `_bookdown.yml` file.
 #' @export
 #'
 bookdown_destination <- function(path = ".") {

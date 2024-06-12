@@ -1,0 +1,567 @@
+pkgname <- "rgoogleclassroom"
+source(file.path(R.home("share"), "R", "examples-header.R"))
+options(warn = 1)
+library('rgoogleclassroom')
+
+base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+cleanEx()
+nameEx("auth_from_secret")
+### * auth_from_secret
+
+flush(stderr()); flush(stdout())
+
+### Name: auth_from_secret
+### Title: Use secrets to Authorize R package to access Google classroom
+###   API
+### Aliases: auth_from_secret
+
+### ** Examples
+
+## Not run: 
+##D 
+##D token <- authorize()
+##D 
+##D auth_from_secret(
+##D   token$credentials$access_token,
+##D   token$credentials$refresh_token
+##D )
+## End(Not run)
+
+
+
+
+cleanEx()
+nameEx("authorize")
+### * authorize
+
+flush(stderr()); flush(stdout())
+
+### Name: authorize
+### Title: Authorize R package to access Google classroom API
+### Aliases: authorize
+
+### ** Examples
+
+## Not run: 
+##D 
+##D authorize()
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("copy_form")
+### * copy_form
+
+flush(stderr()); flush(stdout())
+
+### Name: copy_form
+### Title: Make a copy of an existing form
+### Aliases: copy_form
+
+### ** Examples
+
+## Not run: 
+##D #'
+##D # Make the form
+##D form_info <- copy_form(form_id = "https://docs.google.com/forms/d/someformidhere/edit",
+##D                        new_name = "copied form")
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("create_course")
+### * create_course
+
+flush(stderr()); flush(stdout())
+
+### Name: create_course
+### Title: Create a new course
+### Aliases: create_course
+
+### ** Examples
+
+## Not run: 
+##D 
+##D owner_id <- get_owner_id()
+##D course_df <- create_course(owner_id, name = "New course")
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("create_coursework")
+### * create_coursework
+
+flush(stderr()); flush(stdout())
+
+### Name: create_coursework
+### Title: Create a new coursework
+### Aliases: create_coursework
+
+### ** Examples
+
+## Not run: 
+##D topic_id <- get_topic_list("604042323237")$topic$topicId[1]
+##D course_id <- get_course_list()$courses$id[1]
+##D 
+##D create_coursework(course_id, topic_id,
+##D   title = "a new quiz", due_date = "2025-12-1",
+##D   description = "blah blah", link = "https://www.datatrail.org/"
+##D )
+## End(Not run)
+
+
+
+
+cleanEx()
+nameEx("create_form")
+### * create_form
+
+flush(stderr()); flush(stdout())
+
+### Name: create_form
+### Title: Create a new form
+### Aliases: create_form
+
+### ** Examples
+
+## Not run: 
+##D #'
+##D # Make the form
+##D form_info <- create_form(
+##D   title = "A great quiz",
+##D   description = "This quiz is tricky"
+##D )
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("create_material")
+### * create_material
+
+flush(stderr()); flush(stdout())
+
+### Name: create_material
+### Title: Create a new material
+### Aliases: create_material
+
+### ** Examples
+
+## Not run: 
+##D course_id <- get_course_list()$courses$id[3]
+##D topic_id <- get_topic_list(course_id)$topic$topicId[1]
+##D 
+##D create_material(course_id, topic_id, title = "new material")
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("create_multiple_choice_question")
+### * create_multiple_choice_question
+
+flush(stderr()); flush(stdout())
+
+### Name: create_multiple_choice_question
+### Title: Create a multiple choice question
+### Aliases: create_multiple_choice_question
+
+### ** Examples
+
+## Not run: 
+##D 
+##D create_multiple_choice_question(
+##D   form_id = "12345",
+##D   question = "What answer do you want?",
+##D   choice_vector = c("A", "B", "C", "D"),
+##D   correct_answer = 3,
+##D   shuffle_opt = TRUE
+##D )
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("create_quiz")
+### * create_quiz
+
+flush(stderr()); flush(stdout())
+
+### Name: create_quiz
+### Title: Create a quiz at a course
+### Aliases: create_quiz
+
+### ** Examples
+
+## Not run: 
+##D 
+##D course_id <- get_course_list()$courses$id[1]
+##D topic_id <- get_topic_list(course_id)$topic$topicId[1]
+##D 
+##D create_quiz(course_id,
+##D   quiz_title = "new quiz", quiz_description = "This is a great quiz",
+##D   topic_id = topic_id, due_date = "2025-12-1"
+##D )
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("create_text_question")
+### * create_text_question
+
+flush(stderr()); flush(stdout())
+
+### Name: create_text_question
+### Title: Create a text question
+### Aliases: create_text_question
+
+### ** Examples
+
+## Not run: 
+##D 
+##D create_text_question(
+##D   form_id = "12345",
+##D   question = "Put text here that is for filling in the blank",
+##D   point_value = 1
+##D )
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("date_handler")
+### * date_handler
+
+flush(stderr()); flush(stdout())
+
+### Name: date_handler
+### Title: Handle and parse a due_date
+### Aliases: date_handler
+
+### ** Examples
+
+## Not run: 
+##D date_handler("2025-12-1")
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("get_course_list")
+### * get_course_list
+
+flush(stderr()); flush(stdout())
+
+### Name: get_course_list
+### Title: Get list of courses
+### Aliases: get_course_list
+
+### ** Examples
+
+## Not run: 
+##D 
+##D owner_id <- get_owner_id()
+##D course_df <- get_course_list(owner_id)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("get_coursework_list")
+### * get_coursework_list
+
+flush(stderr()); flush(stdout())
+
+### Name: get_coursework_list
+### Title: Get list of courseworks for a course
+### Aliases: get_coursework_list
+
+### ** Examples
+
+## Not run: 
+##D 
+##D course_id <- get_course_list()$courses$id[1]
+##D 
+##D get_coursework_list(course_id)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("get_form_properties")
+### * get_form_properties
+
+flush(stderr()); flush(stdout())
+
+### Name: get_form_properties
+### Title: Get Google Form Properties
+### Aliases: get_form_properties
+
+### ** Examples
+
+## Not run: 
+##D 
+##D # Make the form
+##D form_info <- create_form(title = "A great quiz", description = "This quiz is tricky")
+##D 
+##D # Get info about the form
+##D form_info <- get_form_properties(form_id = form_info$formId)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("get_form_responses")
+### * get_form_responses
+
+flush(stderr()); flush(stdout())
+
+### Name: get_form_responses
+### Title: Get form responses
+### Aliases: get_form_responses
+
+### ** Examples
+
+## Not run: 
+##D 
+##D form_url <- "https://docs.google.com/forms/d/1woWtLVviIhrwb-NYEjVMO_IV2-62vOhaS4N0/edit#responses"
+##D get_form_responses(form_url = form_url)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("get_linked_quizzes_list")
+### * get_linked_quizzes_list
+
+flush(stderr()); flush(stdout())
+
+### Name: get_linked_quizzes_list
+### Title: Get list of forms used in a course as quizzes
+### Aliases: get_linked_quizzes_list
+
+### ** Examples
+
+## Not run: 
+##D course_id <- get_course_list()$courses$id[1]
+##D quiz_list <- get_linked_quizzes_list(course_id)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("get_materials_list")
+### * get_materials_list
+
+flush(stderr()); flush(stdout())
+
+### Name: get_materials_list
+### Title: Get list of materials for a course
+### Aliases: get_materials_list
+
+### ** Examples
+
+## Not run: 
+##D course_id <- get_course_list()$courses$id[1]
+##D materials_df <- get_materials_list(course_id)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("get_materials_properties")
+### * get_materials_properties
+
+flush(stderr()); flush(stdout())
+
+### Name: get_materials_properties
+### Title: Get Google Classroom Materials properties
+### Aliases: get_materials_properties
+
+### ** Examples
+
+## Not run: 
+##D course_id <- get_course_list()$courses$id[3]
+##D materials_id <- get_materials_list(course_id)$material_id$courseWorkMaterial$id[1]
+##D 
+##D get_materials_properties(course_id, materials_id)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("get_topic_list")
+### * get_topic_list
+
+flush(stderr()); flush(stdout())
+
+### Name: get_topic_list
+### Title: Get list of topics for a course
+### Aliases: get_topic_list
+
+### ** Examples
+
+## Not run: 
+##D 
+##D course_id <- get_course_list()$courses$id[1]
+##D 
+##D get_topic_list(course_id)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("make_form_quiz")
+### * make_form_quiz
+
+flush(stderr()); flush(stdout())
+
+### Name: make_form_quiz
+### Title: Turn a form into a quiz
+### Aliases: make_form_quiz
+
+### ** Examples
+
+## Not run: 
+##D 
+##D # Make the form
+##D form_info <- create_form(title = quiz_title)
+##D 
+##D # Now make it a quiz
+##D make_form_quiz(form_id = form_info$formId)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("markdown_quiz_path")
+### * markdown_quiz_path
+
+flush(stderr()); flush(stdout())
+
+### Name: markdown_quiz_path
+### Title: Get file path to an example quiz
+### Aliases: markdown_quiz_path
+
+### ** Examples
+
+## Not run: 
+##D 
+##D # Find quiz path
+##D 
+##D quiz_path <- markdown_quiz_path()
+## End(Not run)
+
+
+
+
+cleanEx()
+nameEx("ottr_quiz_to_google")
+### * ottr_quiz_to_google
+
+flush(stderr()); flush(stdout())
+
+### Name: ottr_quiz_to_google
+### Title: Create Google Form Quiz from Markua quiz
+### Aliases: ottr_quiz_to_google
+
+### ** Examples
+
+## Not run: 
+##D 
+##D # Using quiz example
+##D 
+##D quiz_path <- markdown_quiz_path()
+##D 
+##D ottr_quiz_to_google(
+##D   markdown_quiz_path(),
+##D   course_id = "606463350924",
+##D   make_new_quiz = TRUE,
+##D   due_date = "2025-12-1"
+##D )
+## End(Not run)
+
+
+
+
+cleanEx()
+nameEx("time_handler")
+### * time_handler
+
+flush(stderr()); flush(stdout())
+
+### Name: time_handler
+### Title: Handle and parse a time
+### Aliases: time_handler
+
+### ** Examples
+
+## Not run: 
+##D time_handler("21:30:59")
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("translate_questions_api")
+### * translate_questions_api
+
+flush(stderr()); flush(stdout())
+
+### Name: translate_questions_api
+### Title: Translate Markua questions for submission to Google API
+### Aliases: translate_questions_api
+
+### ** Examples
+
+## Not run: 
+##D 
+##D # Using quiz example
+##D 
+##D quiz_path <- markdown_quiz_path()
+##D parsed_questions <- translate_questions_api(quiz_path)
+## End(Not run)
+
+
+
+
+cleanEx()
+nameEx("update_form_settings")
+### * update_form_settings
+
+flush(stderr()); flush(stdout())
+
+### Name: update_form_settings
+### Title: Create a multiple choice question
+### Aliases: update_form_settings
+
+### ** Examples
+
+## Not run: 
+##D 
+##D update_form_settings(
+##D   form_id = "12345",
+##D   new_title = NULL,
+##D   new_description = NULL
+##D )
+## End(Not run)
+
+
+
+### * <FOOTER>
+###
+cleanEx()
+options(digits = 7L)
+base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+grDevices::dev.off()
+###
+### Local variables: ***
+### mode: outline-minor ***
+### outline-regexp: "\\(> \\)?### [*]+" ***
+### End: ***
+quit('no')

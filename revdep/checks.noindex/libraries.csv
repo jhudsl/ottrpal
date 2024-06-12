@@ -1,0 +1,6 @@
+package,old,new,delta
+ottrpal,1.2.1,1.3.0,*
+evaluate,NA,0.24.0,*
+highr,NA,0.11,*
+knitr,NA,1.47,*
+rlang,NA,1.1.4,*

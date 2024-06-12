@@ -13,6 +13,5 @@ The file path to an example bad quiz included in the package that will fail the 
 Path to bad example quiz
 }
 \examples{
-
 quiz_path <- bad_quiz_path()
 }
