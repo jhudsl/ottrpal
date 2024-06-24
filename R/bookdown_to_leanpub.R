@@ -206,7 +206,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
       stop("No base_url is supplied and no chapt_img_key file was supplied. Need one or the other.")
     }
     chapt_df <- get_chapters(
-      bookdown_index = paste0(base_url, "index.html"),
+      html_page = paste0(base_url, "index.html"),
       base_url = base_url
     ) %>%
       dplyr::mutate(chapt_title = gsub("\\:|\\?|\\&|\\!|\\'", "", chapt_title))
@@ -431,10 +431,9 @@ make_embed_markdown <- function(url,
 #'
 #' @export
 #'
-get_chapters <- function(bookdown_index = file.path("docs", "index.html"),
-                         base_url = NULL) {
+get_chapters <- function(html_page = file.path("docs", "index.html")) {
   # Read in html
-  index_html <- suppressWarnings(try(xml2::read_html(bookdown_index)))
+  index_html <- suppressWarnings(try(xml2::read_html(html_page)))
 
   # Extract chapter nodes the Rmd way
   nodes <- rvest::html_nodes(index_html, xpath = paste0("//", 'li[@class="chapter"]'))
@@ -469,7 +468,7 @@ get_chapters <- function(bookdown_index = file.path("docs", "index.html"),
       dplyr::rename_with(~ gsub("-", "_", .x, fixed = TRUE)) %>%
       dplyr::mutate(
         chapt_title = stringr::word(rvest::html_text(nodes), sep = "\n", 1),
-        url = paste0(base_url, data_path)
+        url = paste0(base_url, "/", data_path)
       ) %>%
       dplyr::select(url, chapt_title) %>%
       as.data.frame() %>%
@@ -477,7 +476,7 @@ get_chapters <- function(bookdown_index = file.path("docs", "index.html"),
   }
 
   if (nrow(chapt_data) < 1) {
-    stop(paste("Chapter retrieval from:", bookdown_index, "Failed."))
+    stop(paste("Chapter retrieval from:", html_page, "Failed."))
   }
 
   return(chapt_data)
