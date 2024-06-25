@@ -213,7 +213,6 @@ convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
 #' @rdname coursera
 #'
 #' @importFrom utils download.file
-#' @import bookdown_path
 #'
 render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
                                output_yaml = "_output.yml",

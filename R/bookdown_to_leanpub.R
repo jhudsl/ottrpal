@@ -306,13 +306,36 @@ make_embed_markdown <- function(url,
 get_chapters <- function(bookdown_index = file.path("docs", "index.html"),
                          base_url = NULL) {
   # Read in html
-  index_html <- suppressWarnings(try(xml2::read_html(paste(bookdown_index, collapse = "\n"))))
+  index_html <- suppressWarnings(try(xml2::read_html(bookdown_index)))
 
-  # Extract chapter nodes
+  # Extract chapter nodes the Rmd way
   nodes <- rvest::html_nodes(index_html, xpath = paste0("//", 'li[@class="chapter"]'))
 
-  if (length(nodes) > 0) {
-    # Format into a data.frame
+  # If the Rmd way didn't work, lets try the quarto way
+  if (length(nodes) < 1) {
+    # Get the sidebar stuff
+    nodes <- rvest::html_nodes(index_html, xpath = paste0("//", 'div[@class="sidebar-item-container"]'))
+
+    # We only want chapters
+    nodes <- nodes[grep("chapter",as.character(nodes))]
+
+    # Extract chapter nodes from the sidebar
+    chapt_titles <- nodes %>%
+      rvest::html_nodes('span.chapter-title') %>%
+      rvest::html_text()
+
+    data_level <- nodes %>%
+      rvest::html_nodes('span.chapter-number') %>%
+      rvest::html_text()
+
+    data_path <- nodes %>%
+      rvest::html_nodes('a.sidebar-item-text.sidebar-link') %>%
+      rvest::html_attr('href') %>%
+      stringr::str_remove("^\\.\\/")
+
+    chapt_data <- data.frame(chapt_titles, data_level, data_path)
+
+  } else {
     chapt_data <- rvest::html_attrs(nodes) %>%
       dplyr::bind_rows() %>%
       dplyr::rename_with(~ gsub("-", "_", .x, fixed = TRUE)) %>%
@@ -323,7 +346,9 @@ get_chapters <- function(bookdown_index = file.path("docs", "index.html"),
       dplyr::select(url, chapt_title) %>%
       as.data.frame() %>%
       dplyr::distinct(url, .keep_all = TRUE)
-  } else {
+  }
+
+  if (nrow(chapt_data) < 1) {
     stop(paste("Chapter retrieval from:", bookdown_index, "Failed."))
   }
 
