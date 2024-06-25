@@ -37,6 +37,7 @@ Imports:
     rvest,
     stringr,
     xml2,
+    quarto,
     yaml
 Suggests:
     remotes,
