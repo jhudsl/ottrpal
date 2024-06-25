@@ -1,7 +1,7 @@
 
 test_that("Tocless render for Rmd", {
   # render_without_toc()
-  dir <- download_ottr_template(dir = "inst/extdata", type = "rmd")
+  dir <- download_ottr_template(dir = ".", type = "rmd")
 
   # TODO: This should be functionalized and incorporated into the package
   # curl -o make_screenshots.R https://raw.githubusercontent.com/jhudsl/ottr-reports/main/scripts/make_screenshots.R
@@ -16,7 +16,7 @@ test_that("Tocless render for Rmd", {
 
 test_that("Create Leanpub IFrames for Rmd", {
 
-  dir <- download_ottr_template(dir = "inst/extdata", type = "rmd")
+  dir <- download_ottr_template(dir = ".", type = "rmd")
 
   # ottrpal::bookdown_to_embed_leanpub(
   #    render = FALSE, \
