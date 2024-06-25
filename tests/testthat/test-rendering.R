@@ -9,8 +9,8 @@ test_that("Quarto Rendering", {
 
   quarto::quarto_render(dir)
   quarto::quarto_render(dir,
-    metadata = list(sidebar = F, toc = F),
-    quarto_args = c("--output-dir", "docs/no_toc/")
+                        metadata = list(sidebar = F, toc = F),
+                        quarto_args = c("--output-dir", "docs/no_toc/")
   )
 })
 
