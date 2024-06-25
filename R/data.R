@@ -6,7 +6,7 @@
 #' @return This downloads the main branch repo files from the respective repo for testing purposes
 #' @export
 download_ottr_template <- function(dir = "inst/extdata", type = "rmd") {
-  if (!dir.exists(dir)) dir.create(dir, recursive = TRUE, showWarning = FALSE)
+  if (!dir.exists(dir)) dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 
   possible_types <- c("rmd", "quarto", "rmd_website", "quarto_website")
 
