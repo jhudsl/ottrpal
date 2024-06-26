@@ -9,38 +9,6 @@ utils::globalVariables(c(
 ))
 
 
-# get script path and number of paragraphs
-paragraph_from_script <- function(x) {
-  if (file.exists(x)) {
-    para <- readLines(x, warn = FALSE)
-    para <- trimws(para)
-    para <- para[!para %in% c("", " ")]
-    return(para)
-  } else {
-    return(NA)
-  }
-}
-
-n_para <- function(x) {
-  x <- paragraph_from_script(x)
-  if (length(x) == 0) {
-    return(0)
-  }
-  ifelse(all(is.na(x)), NA, length(x))
-}
-
-length0 <- function(x) {
-  length(x) == 0
-}
-
-length0_to_NA <- function(x) {
-  if (length0(x)) {
-    x <- NA
-  }
-  x
-}
-
-
 #' Google Slides Helper Functions
 #'
 #' @param file markdown file for manuscript

@@ -46,7 +46,7 @@ of any image path.}
 \item{footer_text}{Optionally can add a bit of text that will be added to the
 end of each file before the references section.}
 
-\item{embed}{is this being run by bookdown_to_embed_leanpub? TRUE/FALSE}
+\item{embed}{is this being run by website_to_embed_leanpub? TRUE/FALSE}
 }
 \value{
 A list of output files and diagnostics

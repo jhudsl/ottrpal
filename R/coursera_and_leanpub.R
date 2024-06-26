@@ -197,9 +197,9 @@ convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
   )
 }
 
-#' Create TOC-less Bookdown for use in Coursera
+#' Create TOC-less course website for use in Coursera or Leanpub
 #'
-#' Create a version of Leanpub that does not have a TOC and has quizzes in the Coursera yaml format. Requires Bookdown output files including "assets", "resources", and "libs".
+#' Create a version of the course that does not have a TOC and has quizzes in the Coursera yaml format. 
 #'
 #' @param output_dir A folder (existing or not) that the TOC-less Bookdown for Coursera files should be saved. By default is file.path("docs", "coursera")
 #' @param output_yaml A output.yml file to be provided to bookdown. By default is "_output.yml"

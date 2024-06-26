@@ -7,7 +7,7 @@
 get_bookdown_spec(path = ".")
 }
 \arguments{
-\item{path}{Where to look for the _bookdown.yml file. Passes to the bookdown_file() function. By default looks in current directory}
+\item{path}{Where to look for the _bookdown.yml file. By default looks in current directory}
 }
 \value{
 The yaml contents using yaml::yaml.load_file()

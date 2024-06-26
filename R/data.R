@@ -73,3 +73,29 @@ encrypt_creds_user_path <- function() {
     full.names = TRUE
   )
 }
+
+good_quiz_path <- function() {
+  list.files(
+    pattern = "quiz_good.md$",
+    recursive = TRUE,
+    system.file("extdata", package = "ottrpal"),
+    full.names = TRUE
+  )
+}
+
+#' Path to bad example quiz
+#'
+#' @export
+#' @return The file path to an example bad quiz included in the package that will fail the quiz checks.
+#'
+#' @examples
+#'
+#' quiz_path <- bad_quiz_path()
+bad_quiz_path <- function() {
+  list.files(
+    pattern = "quiz_bad.md$",
+    recursive = TRUE,
+    system.file("extdata", package = "ottrpal"),
+    full.names = TRUE
+  )
+}

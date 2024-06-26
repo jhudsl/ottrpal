@@ -1,12 +1,11 @@
-#' Convert Bookdown to Leanpub
+#' Convert Website Course to Leanpub
 #'
-#' @param path path to the bookdown book, must have a `_bookdown.yml` file
+#' @param path path to the bookdown or quarto course repository, must have a `_bookdown.yml` file or
 #' @param chapt_img_key File path to a TSV whose contents are the chapter urls (`url`),
 #' the chapter titles (`chapt_title`), the file path to the image to be used for the chapter (`img_path`).
 #' Column names `url`, `chapt_title`, and `img_path` must be used.
 #' If no chapter title column supplied, the basename of the url will be used,
 #' If no image column supplied, default image used.
-#' @param bookdown_index The file path of the rendered bookdown index.html file
 #' @param base_url The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
 #' e.g. https://jhudatascience.org/OTTR_Template/coursera
 #' @param default_img A google slide link to the default image to be used for all chapters
@@ -32,15 +31,14 @@
 #'
 #' @examples \dontrun{
 #'
-#' ottrpal::bookdown_to_embed_leanpub(
+#' ottrpal::website_to_embed_leanpub(
 #'   base_url = "https://jhudatascience.org/OTTR_Template/",
 #'   make_book_txt = TRUE,
 #'   quiz_dir = NULL
 #' )
 #' }
-bookdown_to_embed_leanpub <- function(path = ".",
+website_to_embed_leanpub <- function(path = ".",
                                       chapt_img_key = NULL,
-                                      bookdown_index = file.path(base_url, "index.html"),
                                       base_url = NULL,
                                       clean_up = FALSE,
                                       default_img = NULL,
@@ -148,7 +146,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
 
 #' Create Book.txt file from files existing in quiz directory
 #'
-#' @param path path to the bookdown book, must have a `_bookdown.yml` file
+#' @param path path to the bookdown or quarto course repository, must have a `_bookdown.yml` file or
 #' @param md_files vector of file path of the md's to be included
 #' @param output_dir output directory to put files.  It should likely be
 #' relative to path
@@ -158,7 +156,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
 #' @return A list of quiz and chapter files in order in a file called Book.txt -- How Leanpub wants it.
 #' @export
 #'
-bookdown_to_book_txt <- function(path = ".",
+course_to_book_txt <- function(path = ".",
                                  md_files = NULL,
                                  output_dir = "manuscript",
                                  quiz_dir = "quizzes",
@@ -166,7 +164,7 @@ bookdown_to_book_txt <- function(path = ".",
   # If md_files are not specified, then try to get them
   if (is.null(md_files)) {
     # Establish path
-    path <- bookdown_path(path)
+    path <- course_path(path)
 
     rmd_regex <- "[.][R|r]md$"
 
@@ -293,7 +291,6 @@ make_embed_markdown <- function(url,
 
 #' Make Leanpub file that has embed webpage of a chapter
 #'
-#' @param bookdown_index The file path of the rendered bookdown index.html file
 #' @param base_url The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
 #' e.g. https://jhudatascience.org/OTTR_Template/coursera
 #'

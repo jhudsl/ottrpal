@@ -1,13 +1,14 @@
 #' Load in Bookdown specifications from _bookdown.yml
 #'
-#' @param path  Where to look for the _bookdown.yml file. Passes to the bookdown_file() function. By default looks in current directory
+#' @param path  Where to look for the _bookdown.yml file. By default looks in current directory
 #'
 #' @return The yaml contents using yaml::yaml.load_file()
 #' @export
 
 get_bookdown_spec <- function(path = ".") {
-  # Get the file path to _bookdown.yaml
-  file_path <- bookdown_file(path = path)
+
+  root_dir <- course_path(path = file.path(path))
+  file_path <- file.path(root_dir, "_bookdown.yml")
 
   # Read in yaml
   suppressWarnings({
@@ -17,33 +18,19 @@ get_bookdown_spec <- function(path = ".") {
   return(yaml_contents)
 }
 
-#' Find main Bookdown directory
+#' Find main course git directory
 #'
 #' @param path  Where to look for the file. By default looks in current directory.
 #'
 #' @return Returns the directory where the _bookdown.yml is contained.
 #' @export
-bookdown_path <- function(path = ".") {
+course_path <- function(path = ".") {
   # See what unzip is being used
   operating_system <- Sys.info()[1]
 
-  path <- rprojroot::find_root(rprojroot::has_file("_bookdown.yml"), path = file.path(path))
+  path <- rprojroot::find_root(rprojroot::has_file(".git"), path = file.path(path))
 
   return(path)
-}
-
-#' Find file path to _bookdown.yml
-#'
-#' @param path  Where to look for the _bookdown.yml file. Passes to the bookdown_file() function. By default looks in current directory
-#'
-#' @return The file path to _bookdown.yml
-#' @export
-#'
-bookdown_file <- function(path = ".") {
-  root_dir <- bookdown_path(path = file.path(path))
-  file_path <- file.path(root_dir, "_bookdown.yml")
-
-  return(file_path)
 }
 
 #' Get file paths all Rmds in the bookdown directory
@@ -62,7 +49,7 @@ bookdown_rmd_files <- function(path = ".") {
       "No bookdown specification of the files, using ",
       "list.files(pattern ='.Rmd')"
     )
-    root_dir <- bookdown_path(path = file.path(path))
+    root_dir <- course_path(path = file.path(path))
     files <- list.files(
       pattern = "[.]Rmd", ignore.case = TRUE,
       path = root_dir, full.names = FALSE
@@ -80,7 +67,7 @@ bookdown_rmd_files <- function(path = ".") {
 #'
 bookdown_destination <- function(path = ".") {
   # Find _bookdown.yml
-  root_dir <- bookdown_path(path = file.path(path))
+  root_dir <- course_path(path = file.path(path))
 
   # Get specs from _bookdown.yml
   spec <- get_bookdown_spec(path = file.path(path))
@@ -108,7 +95,7 @@ copy_resources <- function(path = ".",
                            images_dir = "resources",
                            output_dir = "manuscript") {
   # Get file path to bookdown.yml
-  path <- bookdown_path(path)
+  path <- course_path(path)
 
   # Assume image directory is `resources/images`
   res_image_dir <- file.path(path, images_dir)
@@ -133,7 +120,7 @@ copy_docs <- function(path = ".", output_dir = "manuscript") {
 }
 
 copy_bib <- function(path = ".", output_dir = "manuscript") {
-  path <- bookdown_path(path)
+  path <- course_path(path)
   files <- list.files(path = path, full.names = TRUE, pattern = ".bib$")
   if (length(files) > 0) {
     file.copy(files, file.path(output_dir), overwrite = TRUE)
@@ -178,7 +165,7 @@ copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
 #' set this to NULL
 #' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
-#' @param embed is this being run by bookdown_to_embed_leanpub? TRUE/FALSE
+#' @param embed is this being run by website_to_embed_leanpub? TRUE/FALSE
 #' @return A list of output files and diagnostics
 #' @export
 #'
@@ -209,7 +196,7 @@ set_up_leanpub <- function(path = ".",
     rmd_regex <- "[.][R|r]md$"
 
     # Get the path to the _bookdown.yml
-    path <- bookdown_path(path)
+    path <- course_path(path)
 
     if (verbose) {
       message(paste0("Looking for bookdown file in ", path))
