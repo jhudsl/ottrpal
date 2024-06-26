@@ -430,7 +430,8 @@ make_embed_markdown <- function(url,
 #'
 #' @export
 #'
-get_chapters <- function(html_page = file.path("docs", "index.html")) {
+get_chapters <- function(html_page = file.path("docs", "index.html"),
+                         base_url = ".") {
   # Read in html
   index_html <- suppressWarnings(try(xml2::read_html(html_page)))
 
@@ -459,7 +460,7 @@ get_chapters <- function(html_page = file.path("docs", "index.html")) {
       rvest::html_attr('href') %>%
       stringr::str_remove("^\\.\\/")
 
-    chapt_data <- data.frame(chapt_titles, data_level, data_path)
+    chapt_data <- data.frame(chapt_titles, data_level, url = paste0(base_url, "/", data_path))
 
   } else {
     chapt_data <- rvest::html_attrs(nodes) %>%
