@@ -447,7 +447,7 @@ get_chapters <- function(html_page = file.path("docs", "index.html"),
     nodes <- nodes[grep("chapter",as.character(nodes))]
 
     # Extract chapter nodes from the sidebar
-    chapt_titles <- nodes %>%
+    chapt_title <- nodes %>%
       rvest::html_nodes('span.chapter-title') %>%
       rvest::html_text()
 
@@ -460,7 +460,7 @@ get_chapters <- function(html_page = file.path("docs", "index.html"),
       rvest::html_attr('href') %>%
       stringr::str_remove("^\\.\\/")
 
-    chapt_data <- data.frame(chapt_titles, data_level, url = paste0(base_url, "/", data_path))
+    chapt_data <- data.frame(chapt_title, data_level, url = paste0(base_url, "/", data_path))
 
   } else {
     chapt_data <- rvest::html_attrs(nodes) %>%
