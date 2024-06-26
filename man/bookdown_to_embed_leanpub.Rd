@@ -2,7 +2,7 @@
 % Please edit documentation in R/bookdown_to_leanpub.R
 \name{bookdown_to_embed_leanpub}
 \alias{bookdown_to_embed_leanpub}
-\title{Convert Bookdown to Embed version of Leanpub}
+\title{Convert Bookdown to Leanpub}
 \usage{
 bookdown_to_embed_leanpub(
   path = ".",
@@ -66,7 +66,7 @@ end of each file before the references section.}
 A directory of output files in a folder 'manuscript' for publishing on Leanpub.
 }
 \description{
-Convert Bookdown to Embed version of Leanpub
+Convert Bookdown to Leanpub
 }
 \examples{
 \dontrun{
