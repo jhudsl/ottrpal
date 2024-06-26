@@ -17,7 +17,7 @@ Google Slides API calls a presentation slide ID as an 'object ID'.
 }
 \examples{
 \dontrun{
- get_object_id_notes("https://docs.google.com/presentation/d/
+get_object_id_notes("https://docs.google.com/presentation/d/
                       1H5aF_ROKVxE-HFHhoOy9vU2Y-y2M_PiV0q-JBL17Gss/edit?usp=sharing")
 }
 }
