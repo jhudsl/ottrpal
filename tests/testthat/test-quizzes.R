@@ -17,7 +17,4 @@ test_that("Quiz checks", {
 
   ## Now check the quizzes in that directory
   all_quiz_results <- check_quizzes(quiz_dir = quiz_dir)
-
-  # Need to download OTTR course for testing
-  # ottrpal::check_quizzes(quiz_dir = file.path(root_dir, "quizzes"), write_report = TRUE, verbose = TRUE)
 })

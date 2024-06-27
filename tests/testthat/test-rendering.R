@@ -2,6 +2,7 @@ test_that("Rmd Rendering", {
   dir <- download_ottr_template(dir = ".", type = "rmd")
 
   bookdown::render_book("OTTR_Template-main")
+
   unlink(dir)
 })
 
@@ -22,7 +23,7 @@ test_that("Rmd Website Rendering", {
   rmarkdown::clean_site(dir, preview = FALSE)
 
   rmarkdown::render_site(dir)
-  
+
   unlink(dir)
 })
 
@@ -31,6 +32,6 @@ test_that("Quarto Website Rendering", {
   dir <- download_ottr_template(dir = ".", type = "quarto_website")
 
   quarto::quarto_render(dir)
-  
+
   unlink(dir)
 })
