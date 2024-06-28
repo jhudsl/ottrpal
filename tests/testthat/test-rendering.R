@@ -10,12 +10,13 @@ test_that("Quarto Rendering", {
   dir <- download_ottr_template(dir = ".", type = "quarto")
 
   # Render it normal
-  quarto::quarto_render("OTTR_Quarto-main")
+  quarto::quarto_render("OTTR_Quarto-main", as_job = FALSE)
 
   # Render it a different way
   quarto::quarto_render("OTTR_Quarto-main",
                         metadata = list(sidebar = F, toc = F),
-                        quarto_args = c("--output-dir", "OTTR_Quarto-main/docs/no_toc/")
+                        quarto_args = c("--output-dir", "docs/no_toc/"),
+                        as_job = FALSE
 
   )
   unlink(dir)
@@ -35,7 +36,7 @@ test_that("Rmd Website Rendering", {
 test_that("Quarto Website Rendering", {
   dir <- download_ottr_template(dir = ".", type = "quarto_website")
 
-  quarto::quarto_render(dir)
+  quarto::quarto_render(dir, as_job = FALSE)
 
   unlink(dir)
 })
