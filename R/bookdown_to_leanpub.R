@@ -78,7 +78,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
       stop("No base_url is supplied and no chapt_img_key file was supplied. Need one or the other.")
     }
     chapt_df <- get_chapters(
-      bookdown_index = paste0(base_url, "index.html"),
+      html_page = paste0(base_url, "index.html"),
       base_url = base_url
     ) %>%
       dplyr::mutate(chapt_title = gsub("\\:|\\?|\\&|\\!|\\'", "", chapt_title))
@@ -303,8 +303,7 @@ make_embed_markdown <- function(url,
 #'
 #' @export
 #'
-get_chapters <- function(bookdown_index = file.path("docs", "index.html"),
-                         base_url = NULL) {
+get_chapters <- function(bookdown_index = file.path("docs", "index.html"), base_url = NULL) {
   # Read in html
   index_html <- suppressWarnings(try(xml2::read_html(bookdown_index)))
 
