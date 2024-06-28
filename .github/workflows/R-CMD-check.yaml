@@ -31,6 +31,8 @@ jobs:
       - name: Check
         run: |
           options(crayon.enabled = TRUE)
+          devtools::document()
+          devtools::load_all()
           rcmdcheck::rcmdcheck(args = c("--no-manual"), check_dir = "check")
         shell: Rscript {0}
         env:
