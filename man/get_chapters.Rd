@@ -4,7 +4,7 @@
 \alias{get_chapters}
 \title{Make Leanpub file that has embed webpage of a chapter}
 \usage{
-get_chapters(bookdown_index = file.path("docs", "index.html"), base_url = NULL)
+get_chapters(html_page = file.path("docs", "index.html"))
 }
 \arguments{
 \item{bookdown_index}{The file path of the rendered bookdown index.html file}

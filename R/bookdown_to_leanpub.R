@@ -303,9 +303,11 @@ make_embed_markdown <- function(url,
 #'
 #' @export
 #'
-get_chapters <- function(bookdown_index = file.path("docs", "index.html"), base_url = NULL) {
+
+get_chapters <- function(html_page = file.path("docs", "index.html"),
+                         base_url = ".") {
   # Read in html
-  index_html <- suppressWarnings(try(xml2::read_html(bookdown_index)))
+  index_html <- suppressWarnings(try(xml2::read_html(html_page)))
 
   # Extract chapter nodes the Rmd way
   nodes <- rvest::html_nodes(index_html, xpath = paste0("//", 'li[@class="chapter"]'))
@@ -319,7 +321,7 @@ get_chapters <- function(bookdown_index = file.path("docs", "index.html"), base_
     nodes <- nodes[grep("chapter",as.character(nodes))]
 
     # Extract chapter nodes from the sidebar
-    chapt_titles <- nodes %>%
+    chapt_title <- nodes %>%
       rvest::html_nodes('span.chapter-title') %>%
       rvest::html_text()
 
@@ -332,7 +334,7 @@ get_chapters <- function(bookdown_index = file.path("docs", "index.html"), base_
       rvest::html_attr('href') %>%
       stringr::str_remove("^\\.\\/")
 
-    chapt_data <- data.frame(chapt_titles, data_level, data_path)
+    chapt_data <- data.frame(chapt_title, data_level, url = paste0(base_url, "/", data_path))
 
   } else {
     chapt_data <- rvest::html_attrs(nodes) %>%
@@ -340,7 +342,7 @@ get_chapters <- function(bookdown_index = file.path("docs", "index.html"), base_
       dplyr::rename_with(~ gsub("-", "_", .x, fixed = TRUE)) %>%
       dplyr::mutate(
         chapt_title = stringr::word(rvest::html_text(nodes), sep = "\n", 1),
-        url = paste0(base_url, data_path)
+        url = paste0(base_url, "/", data_path)
       ) %>%
       dplyr::select(url, chapt_title) %>%
       as.data.frame() %>%
@@ -348,7 +350,7 @@ get_chapters <- function(bookdown_index = file.path("docs", "index.html"), base_
   }
 
   if (nrow(chapt_data) < 1) {
-    stop(paste("Chapter retrieval from:", bookdown_index, "Failed."))
+    stop(paste("Chapter retrieval from:", html_page, "Failed."))
   }
 
   return(chapt_data)
