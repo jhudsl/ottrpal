@@ -1,42 +1,54 @@
 test_that("Rmd Rendering", {
-  dir <- download_ottr_template(dir = ".", type = "rmd")
+  rmd_dir <- download_ottr_template(dir = ".", type = "rmd")
 
-  bookdown::render_book("OTTR_Template-main")
+  dir.exists(rmd_dir)
 
-  unlink(dir)
+  bookdown::render_book(rmd_dir)
+
+  unlink(rmd_dir, recursive = TRUE)
+  file.remove(paste0(rmd_dir, ".zip"))
 })
 
 test_that("Quarto Rendering", {
-  dir <- download_ottr_template(dir = ".", type = "quarto")
+  quarto_dir <- download_ottr_template(dir = ".", type = "quarto")
+
+  dir.exists(quarto_dir)
 
   # Render it normal
-  quarto::quarto_render("OTTR_Quarto-main", as_job = FALSE)
+  quarto::quarto_render(quarto_dir, as_job = FALSE)
 
   # Render it a different way
-  quarto::quarto_render("OTTR_Quarto-main",
+  quarto::quarto_render(quarto_dir,
                         metadata = list(sidebar = F, toc = F),
                         quarto_args = c("--output-dir", "docs/no_toc/"),
                         as_job = FALSE
 
   )
-  unlink(dir)
+  unlink(quarto_dir, recursive = TRUE)
+  file.remove(paste0(quarto_dir, ".zip"))
 })
 
 test_that("Rmd Website Rendering", {
-  dir <- download_ottr_template(dir = ".", type = "rmd_website")
+  rmd_web_dir <- download_ottr_template(dir = ".", type = "rmd_website")
 
-  rmarkdown::clean_site(dir, preview = FALSE)
+  dir.exists(rmd_web_dir)
 
-  rmarkdown::render_site(dir)
+  rmarkdown::clean_site(rmd_web_dir, preview = FALSE)
 
-  unlink(dir)
+  rmarkdown::render_site(rmd_web_dir)
+
+  unlink(rmd_web_dir, recursive = TRUE)
+  file.remove(paste0(rmd_web_dir, ".zip"))
 })
 
 
 test_that("Quarto Website Rendering", {
-  dir <- download_ottr_template(dir = ".", type = "quarto_website")
+  quarto_web_dir <- download_ottr_template(dir = ".", type = "quarto_website")
 
-  quarto::quarto_render(dir, as_job = FALSE)
+  dir.exists(quarto_web_dir)
 
-  unlink(dir)
+  quarto::quarto_render(quarto_web_dir, as_job = FALSE)
+
+  unlink(quarto_web_dir, recursive = TRUE)
+  file.remove(paste0(quarto_web_dir, ".zip"))
 })

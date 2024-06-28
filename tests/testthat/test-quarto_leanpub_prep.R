@@ -30,4 +30,5 @@ test_that("Create Leanpub IFrames for Quarto", {
   # 3. Did the screenshot file path that's in the md lead to the appropriate file path?
 
   unlink(dir, recursive = TRUE)
+  file.remove(paste0(dir, ".zip"))
 })

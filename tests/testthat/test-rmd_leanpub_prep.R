@@ -3,7 +3,9 @@ test_that("Create Leanpub IFrames for Rmd", {
 
   dir <- download_ottr_template(dir = ".", type = "rmd")
 
-  bookdown::render_book("OTTR_Template-main")
+  dir.exists(dir)
+
+  bookdown::render_book(dir)
 
   # TODO: This should be functionalized and incorporated into the package
   # curl -o make_screenshots.R https://raw.githubusercontent.com/jhudsl/ottr-reports/main/scripts/make_screenshots.R
@@ -29,4 +31,5 @@ test_that("Create Leanpub IFrames for Rmd", {
   # 3. Did the screenshot file path that's in the md lead to the appropriate file path?
 
   unlink(dir, recursive = TRUE)
+  file.remove(paste0(dir, ".zip"))
 })
