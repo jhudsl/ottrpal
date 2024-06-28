@@ -14,7 +14,7 @@ jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
     container:
-      image: jhudsl/ottr_quarto
+      image: jhudsl/base_ottr
 
     steps:
       - uses: actions/checkout@v4
