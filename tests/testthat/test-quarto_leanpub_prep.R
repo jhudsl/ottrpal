@@ -2,7 +2,7 @@ test_that("Create Leanpub IFrames for Quarto", {
 
   dir <- download_ottr_template(dir = ".", type = "quarto")
 
-  quarto::quarto_render('.',
+  quarto::quarto_render(dir,
                         metadata = list(sidebar = F, toc = F),
                         quarto_args = c('--output-dir', 'docs/no_toc/'))
 
