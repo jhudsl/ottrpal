@@ -1,4 +1,4 @@
-#' Convert Bookdown to Leanpub
+no#' Convert Bookdown to Leanpub
 #'
 #' @param path path to the bookdown book, must have a `_bookdown.yml` file
 #' @param chapt_img_key File path to a TSV whose contents are the chapter urls (`url`),
@@ -40,7 +40,7 @@
 #' }
 bookdown_to_embed_leanpub <- function(path = ".",
                                       chapt_img_key = NULL,
-                                      bookdown_index = file.path(base_url, "index.html"),
+                                      html_page = file.path(base_url, "index.html"),
                                       base_url = NULL,
                                       clean_up = FALSE,
                                       default_img = NULL,
