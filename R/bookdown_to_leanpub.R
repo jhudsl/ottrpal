@@ -1,4 +1,4 @@
-no#' Convert Bookdown to Leanpub
+#' Convert Bookdown to Leanpub
 #'
 #' @param path path to the bookdown book, must have a `_bookdown.yml` file
 #' @param chapt_img_key File path to a TSV whose contents are the chapter urls (`url`),
