@@ -294,7 +294,7 @@ make_embed_markdown <- function(url,
 
 #' Make Leanpub file that has embed webpage of a chapter
 #'
-#' @param bookdown_index The file path of the rendered bookdown index.html file
+#' @param html_page The file path of the rendered index.html file. It can be a url
 #' @param base_url The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
 #' e.g. https://jhudatascience.org/OTTR_Template/coursera
 #'
