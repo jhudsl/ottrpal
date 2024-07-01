@@ -17,7 +17,7 @@
 #' @param remove_resources_start remove the word `resources/` at the front
 #' of any image path.
 #' @param run_quiz_checks TRUE/FALSE run quiz checks
-#' @param make_book_txt Should [ottrpal::bookdown_to_book_txt()] be run
+#' @param make_book_txt Should [ottrpal::course_to_book_txt()] be run
 #' to create a `Book.txt` in the output directory?
 #' @param quiz_dir directory that contains the quiz .md files that should be
 #' checked and incorporated into the Book.txt file. If you don't have quizzes,
@@ -110,10 +110,10 @@ website_to_embed_leanpub <- function(path = ".",
   ####################### Book.txt creation ####################################
   out <- NULL
   if (make_book_txt) {
-    if (verbose) message("Running bookdown_to_book_txt")
+    if (verbose) message("Running course_to_book_txt")
     md_files <- basename(unlist(md_output_files))
 
-    bookdown_to_book_txt(
+    course_to_book_txt(
       md_files = md_files,
       output_dir = output_dir,
       quiz_dir = quiz_dir,
