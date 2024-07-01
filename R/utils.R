@@ -91,81 +91,11 @@ get_image_from_slide <- function(file) {
   return(x)
 }
 
-
-list_one_file <- function(x, ending = "pdf") {
-  pdfs <- list.files(
-    pattern = paste0("[.]", ending),
-    path = x,
-    full.names = TRUE
-  )
-  if (length(pdfs) > 1) {
-    warning(paste0(
-      x, " had more than one ", ending, "! ",
-      "Only grabbing first"
-    ))
-    pdfs <- pdfs[1]
-  }
-  pdfs <- length0_to_NA(pdfs)
-  return(pdfs)
-}
-
-
-
-
-png_pattern <- function() {
-  paste0(
-    "^!\\[.+\\]\\((?!\\.png)\\)|",
-    "^!\\[\\]\\((?!\\.png)\\)|",
-    "^!\\[.+\\]\\((?!\\.png)\\)|",
-    "!\\[.+\\]\\(.+[^.png]\\)|",
-    "^!\\[.+\\]\\(https\\:\\/\\/www\\.youtu.+\\)"
-  )
-}
-
-yt_pattern <- function() {
-  paste0(
-    "^!\\[.+\\]\\(https\\:\\/\\/www\\.youtu.+\\)|",
-    "^!\\[.+\\]\\(https\\:\\/\\/youtu.+\\)"
-  )
-}
-
 is.Token <- function(token) {
   inherits(token, "Token") ||
     (inherits(token, "request") &&
       inherits(token$auth_token, "Token"))
 }
-
-
-na_false <- function(test) {
-  test[is.na(test)] <- FALSE
-  test
-}
-
-na_true <- function(test) {
-  test[is.na(test)] <- TRUE
-  test
-}
-
-
-os_type <- function() {
-  .Platform$OS.type
-}
-
-sys_type <- function() {
-  if (os_type() == "windows") {
-    "windows"
-  } else if (Sys.info()["sysname"] == "Darwin") {
-    "macos"
-  } else if (Sys.info()["sysname"] == "Linux") {
-    "linux"
-  } else if (os_type() == "unix") {
-    # "unix"
-    "linux"
-  } else {
-    stop("Unknown OS")
-  }
-}
-
 
 png_url <- function(id, page_id) {
   paste0(
