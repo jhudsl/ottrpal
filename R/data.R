@@ -37,10 +37,12 @@ download_ottr_template <- function(dir = "inst/extdata", type = "rmd") {
     download.file(url,
       destfile = file_path
     )
-
-    unzip(file_path, exdir = dir)
   }
   output_dir <- stringr::str_remove(file.path(dir, file_name), ".zip")
+
+  if (!dir.exists(output_dir)) {
+    unzip(file_path, exdir = dir)
+  }
 
   return(output_dir)
 }
