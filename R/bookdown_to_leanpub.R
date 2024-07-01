@@ -6,7 +6,7 @@
 #' Column names `url`, `chapt_title`, and `img_path` must be used.
 #' If no chapter title column supplied, the basename of the url will be used,
 #' If no image column supplied, default image used.
-#' @param bookdown_index The file path of the rendered bookdown index.html file
+#' @param html_page The file path of the rendered index.html file
 #' @param base_url The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
 #' e.g. https://jhudatascience.org/OTTR_Template/coursera
 #' @param default_img A google slide link to the default image to be used for all chapters
@@ -40,7 +40,7 @@
 #' }
 bookdown_to_embed_leanpub <- function(path = ".",
                                       chapt_img_key = NULL,
-                                      bookdown_index = file.path(base_url, "index.html"),
+                                      html_page = file.path(base_url, "index.html"),
                                       base_url = NULL,
                                       clean_up = FALSE,
                                       default_img = NULL,
@@ -79,6 +79,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
     }
     chapt_df <- get_chapters(
       html_page = paste0(base_url, "index.html"),
+      base_url = base_url
     ) %>%
       dplyr::mutate(chapt_title = gsub("\\:|\\?|\\&|\\!|\\'", "", chapt_title))
   }
@@ -293,7 +294,7 @@ make_embed_markdown <- function(url,
 
 #' Make Leanpub file that has embed webpage of a chapter
 #'
-#' @param bookdown_index The file path of the rendered bookdown index.html file
+#' @param html_page The file path of the rendered index.html file. It can be a url
 #' @param base_url The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
 #' e.g. https://jhudatascience.org/OTTR_Template/coursera
 #'
@@ -302,6 +303,7 @@ make_embed_markdown <- function(url,
 #'
 #' @export
 #'
+
 get_chapters <- function(html_page = file.path("docs", "index.html"),
                          base_url = ".") {
   # Read in html
