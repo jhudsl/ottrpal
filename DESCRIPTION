@@ -23,7 +23,6 @@ Imports:
     curl,
     dplyr,
     fs,
-    glue,
     httr,
     jsonlite,
     knitr (>= 1.33),

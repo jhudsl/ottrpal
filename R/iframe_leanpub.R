@@ -1,6 +1,6 @@
 #' Convert Website Course to Leanpub
 #'
-#' @param path path to the bookdown or quarto course repository, must have a `_bookdown.yml` file or
+#' @param path path to the bookdown or quarto course repository, must have a `_bookdown.yml` or `_quarto.yml` file
 #' @param chapt_img_key File path to a TSV whose contents are the chapter urls (`url`),
 #' the chapter titles (`chapt_title`), the file path to the image to be used for the chapter (`img_path`).
 #' Column names `url`, `chapt_title`, and `img_path` must be used.
@@ -149,7 +149,7 @@ website_to_embed_leanpub <- function(path = ".",
 
 #' Create Book.txt file from files existing in quiz directory
 #'
-#' @param path path to the bookdown or quarto course repository, must have a `_bookdown.yml` file or
+#' @param path path to the bookdown or quarto course repository, must have a `_bookdown.yml` or `_quarto.yml` file
 #' @param md_files vector of file path of the md's to be included
 #' @param output_dir output directory to put files.  It should likely be
 #' relative to path
@@ -172,7 +172,7 @@ course_to_book_txt <- function(path = ".",
     rmd_regex <- "[.][R|r]md$"
 
     # Extract the names of the Rmd files (the chapters)
-    md_files <- bookdown_rmd_files(path = path)
+    md_files <- qrqrmd_files(path = path)
   }
 
   if (!is.null(quiz_dir)) {
