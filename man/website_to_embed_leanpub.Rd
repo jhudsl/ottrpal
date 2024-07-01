@@ -7,6 +7,7 @@
 website_to_embed_leanpub(
   path = ".",
   chapt_img_key = NULL,
+  render = NULL,
   html_page = file.path(base_url, "index.html"),
   base_url = NULL,
   default_img = NULL,
@@ -27,6 +28,8 @@ the chapter titles (`chapt_title`), the file path to the image to be used for th
 Column names `url`, `chapt_title`, and `img_path` must be used.
 If no chapter title column supplied, the basename of the url will be used,
 If no image column supplied, default image used.}
+
+\item{render}{if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.}
 
 \item{html_page}{The file path of the rendered index.html file}
 
@@ -54,8 +57,6 @@ of any image path.}
 
 \item{footer_text}{Optionally can add a bit of text that will be added to the
 end of each file before the references section.}
-
-\item{render}{if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.}
 }
 \value{
 A directory of output files in a folder 'manuscript' for publishing on Leanpub.

@@ -38,6 +38,7 @@
 #' }
 website_to_embed_leanpub <- function(path = ".",
                                       chapt_img_key = NULL,
+                                      render = NULL,
                                       html_page = file.path(base_url, "index.html"),
                                       base_url = NULL,
                                       default_img = NULL,
@@ -51,6 +52,7 @@ website_to_embed_leanpub <- function(path = ".",
   # Run the set up
   set_up_leanpub(
     path = path,
+    render = render,
     output_dir = output_dir,
     make_book_txt = make_book_txt,
     quiz_dir = quiz_dir,
