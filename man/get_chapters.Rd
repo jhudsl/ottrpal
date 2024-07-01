@@ -7,6 +7,8 @@
 get_chapters(html_page = file.path("docs", "index.html"), base_url = ".")
 }
 \arguments{
+\item{html_page}{The file path of the rendered index.html file. It can be a url}
+
 \item{base_url}{The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
 e.g. https://jhudatascience.org/OTTR_Template/coursera}
 }

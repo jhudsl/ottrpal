@@ -7,6 +7,7 @@
 website_to_embed_leanpub(
   path = ".",
   chapt_img_key = NULL,
+  html_page = file.path(base_url, "index.html"),
   base_url = NULL,
   clean_up = FALSE,
   default_img = NULL,
@@ -29,6 +30,8 @@ Column names `url`, `chapt_title`, and `img_path` must be used.
 If no chapter title column supplied, the basename of the url will be used,
 If no image column supplied, default image used.}
 
+\item{html_page}{The file path of the rendered index.html file}
+
 \item{base_url}{The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
 e.g. https://jhudatascience.org/OTTR_Template/coursera}
 
@@ -42,7 +45,7 @@ everything created fresh.}
 \item{output_dir}{output directory to put files.  It should likely be
 relative to path}
 
-\item{make_book_txt}{Should [ottrpal::bookdown_to_book_txt()] be run
+\item{make_book_txt}{Should [ottrpal::course_to_book_txt()] be run
 to create a `Book.txt` in the output directory?}
 
 \item{quiz_dir}{directory that contains the quiz .md files that should be
