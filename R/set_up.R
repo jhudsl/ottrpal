@@ -185,6 +185,7 @@ copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
 #'
 set_up_leanpub <- function(path = ".",
                            clean_up = FALSE,
+                           render = NULL,
                            output_dir = "manuscript",
                            make_book_txt = FALSE,
                            quiz_dir = "quizzes",
