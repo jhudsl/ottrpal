@@ -51,7 +51,6 @@ website_to_embed_leanpub <- function(path = ".",
   # Run the set up
   set_up_leanpub(
     path = path,
-    render = render,
     output_dir = output_dir,
     make_book_txt = make_book_txt,
     quiz_dir = quiz_dir,
