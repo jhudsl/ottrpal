@@ -10,7 +10,6 @@ website_to_embed_leanpub(
   html_page = file.path(base_url, "index.html"),
   base_url = NULL,
   default_img = NULL,
-  render = TRUE,
   output_dir = "manuscript",
   make_book_txt = FALSE,
   quiz_dir = "quizzes",
@@ -36,8 +35,6 @@ e.g. https://jhudatascience.org/OTTR_Template/coursera}
 
 \item{default_img}{A google slide link to the default image to be used for all chapters}
 
-\item{render}{if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.}
-
 \item{output_dir}{output directory to put files.  It should likely be
 relative to path}
 
@@ -58,8 +55,7 @@ of any image path.}
 \item{footer_text}{Optionally can add a bit of text that will be added to the
 end of each file before the references section.}
 
-\item{clean_up}{TRUE/FALSE the old output directory should be deleted and
-everything created fresh.}
+\item{render}{if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.}
 }
 \value{
 A directory of output files in a folder 'manuscript' for publishing on Leanpub.

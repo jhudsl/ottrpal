@@ -22,8 +22,6 @@
 #' @param quiz_dir directory that contains the quiz .md files that should be
 #' checked and incorporated into the Book.txt file. If you don't have quizzes,
 #' set this to NULL
-#' @param clean_up TRUE/FALSE the old output directory should be deleted and
-#' everything created fresh.
 #' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
 #'
@@ -43,7 +41,6 @@ website_to_embed_leanpub <- function(path = ".",
                                       html_page = file.path(base_url, "index.html"),
                                       base_url = NULL,
                                       default_img = NULL,
-                                      render = TRUE,
                                       output_dir = "manuscript",
                                       make_book_txt = FALSE,
                                       quiz_dir = "quizzes",
@@ -54,7 +51,6 @@ website_to_embed_leanpub <- function(path = ".",
   # Run the set up
   set_up_leanpub(
     path = path,
-    clean_up = clean_up,
     render = render,
     output_dir = output_dir,
     make_book_txt = make_book_txt,
@@ -170,7 +166,7 @@ course_to_book_txt <- function(path = ".",
     rmd_regex <- "[.][R|r]md$"
 
     # Extract the names of the Rmd files (the chapters)
-    md_files <- qrqrmd_files(path = path)
+    md_files <- qrmd_files(path = path)
   }
 
   if (!is.null(quiz_dir)) {
