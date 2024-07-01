@@ -20,15 +20,10 @@ test_that("Create Leanpub IFrames for Rmd", {
   # 2. Does chapter_urls.tsv file made have columns with information that are labeled "url", "chapt_title" and "img_path"
 
   set_up_leanpub(
-    path =
     clean_up = TRUE,
     render = TRUE,
-    output_dir = output_dir,
-    make_book_txt = make_book_txt,
-    quiz_dir = quiz_dir,
-    run_quiz_checks = run_quiz_checks,
-    remove_resources_start = remove_resources_start,
-    verbose = verbose
+    make_book_txt = TRUE,
+    quiz_dir = NULL
   )
 
   website_to_embed_leanpub(
