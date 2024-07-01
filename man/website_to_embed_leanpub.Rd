@@ -9,7 +9,6 @@ website_to_embed_leanpub(
   chapt_img_key = NULL,
   html_page = file.path(base_url, "index.html"),
   base_url = NULL,
-  clean_up = FALSE,
   default_img = NULL,
   render = TRUE,
   output_dir = "manuscript",
@@ -35,9 +34,6 @@ If no image column supplied, default image used.}
 \item{base_url}{The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
 e.g. https://jhudatascience.org/OTTR_Template/coursera}
 
-\item{clean_up}{TRUE/FALSE the old output directory should be deleted and
-everything created fresh.}
-
 \item{default_img}{A google slide link to the default image to be used for all chapters}
 
 \item{render}{if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.}
@@ -61,6 +57,9 @@ of any image path.}
 
 \item{footer_text}{Optionally can add a bit of text that will be added to the
 end of each file before the references section.}
+
+\item{clean_up}{TRUE/FALSE the old output directory should be deleted and
+everything created fresh.}
 }
 \value{
 A directory of output files in a folder 'manuscript' for publishing on Leanpub.

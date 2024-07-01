@@ -180,7 +180,6 @@ copy_quizzes <- function(quiz_dir = "quizzes", output_dir = "manuscript") {
 #' set this to NULL
 #' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
-#' @param embed is this being run by website_to_embed_leanpub? TRUE/FALSE
 #' @return A list of output files and diagnostics
 #' @export
 #'
@@ -193,8 +192,7 @@ set_up_leanpub <- function(path = ".",
                            run_quiz_checks = FALSE,
                            remove_resources_start = FALSE,
                            verbose = TRUE,
-                           footer_text = NULL,
-                           embed = NULL) {
+                           footer_text = NULL) {
 
 
   # Check that render is something we can use
@@ -213,7 +211,7 @@ set_up_leanpub <- function(path = ".",
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
 
-  if (!embed && !is.null(render)) {
+  if (!is.null(render)) {
     # Declare regex for finding rmd files
     rmd_regex <- "[.][q|R|r]md$"
 
@@ -273,17 +271,6 @@ set_up_leanpub <- function(path = ".",
       quarto::quarto_render('.')
     }
 
-  }
-  # We only need to copy these things if we are not doing embed
-  if (!embed) {
-    if (verbose) message("Copying Resources")
-    copy_resources(path, output_dir = output_dir)
-
-    if (verbose) message("Copying docs files")
-    copy_docs(path, output_dir = output_dir)
-
-    if (verbose) message("Copying bib files")
-    copy_bib(path, output_dir = output_dir)
   }
 
   if (!is.null(quiz_dir)) {

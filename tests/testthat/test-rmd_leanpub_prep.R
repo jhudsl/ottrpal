@@ -19,11 +19,23 @@ test_that("Create Leanpub IFrames for Rmd", {
   # 2. Is the file 'resources/chapt_screen_images/chapter_urls.tsv' made fresh?
   # 2. Does chapter_urls.tsv file made have columns with information that are labeled "url", "chapt_title" and "img_path"
 
-  #ottrpal::bookdown_to_embed_leanpub(
-  #  render = FALSE,
-  #  chapt_img_key = 'resources/chapt_screen_images/chapter_urls.tsv',
-  #  make_book_txt = TRUE,
-  #  quiz_dir = NULL)
+  set_up_leanpub(
+    path =
+    clean_up = TRUE,
+    render = TRUE,
+    output_dir = output_dir,
+    make_book_txt = make_book_txt,
+    quiz_dir = quiz_dir,
+    run_quiz_checks = run_quiz_checks,
+    remove_resources_start = remove_resources_start,
+    verbose = verbose
+  )
+
+  website_to_embed_leanpub(
+    render = FALSE,
+    chapt_img_key = 'resources/chapt_screen_images/chapter_urls.tsv',
+    make_book_txt = TRUE,
+    quiz_dir = NULL)
 
   ## TEST HERE:
   # 1. Did each chapter get a md in the manuscript folder?
