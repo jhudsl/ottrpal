@@ -47,6 +47,38 @@ download_ottr_template <- function(dir = "inst/extdata", type = "rmd") {
   return(output_dir)
 }
 
+
+#' Path to good example quiz
+#'
+#' @export
+#' @return The file path to an example good quiz included in the package that should pass the quiz checks.
+#'
+good_quiz_path <- function() {
+  list.files(
+    pattern = "quiz_good.md$",
+    recursive = TRUE,
+    system.file("extdata", package = "ottrpal"),
+    full.names = TRUE
+  )
+}
+
+#' Path to bad example quiz
+#'
+#' @export
+#' @return The file path to an example bad quiz included in the package that will fail the quiz checks.
+#'
+#' @examples
+#'
+#' quiz_path <- bad_quiz_path()
+bad_quiz_path <- function() {
+  list.files(
+    pattern = "quiz_bad.md$",
+    recursive = TRUE,
+    system.file("extdata", package = "ottrpal"),
+    full.names = TRUE
+  )
+}
+
 #' Get file path to an key encryption RDS
 key_encrypt_creds_path <- function() {
   list.files(
@@ -70,32 +102,6 @@ encrypt_creds_path <- function() {
 encrypt_creds_user_path <- function() {
   list.files(
     pattern = "encrypted_default_user_creds.rds",
-    recursive = TRUE,
-    system.file("extdata", package = "ottrpal"),
-    full.names = TRUE
-  )
-}
-
-good_quiz_path <- function() {
-  list.files(
-    pattern = "quiz_good.md$",
-    recursive = TRUE,
-    system.file("extdata", package = "ottrpal"),
-    full.names = TRUE
-  )
-}
-
-#' Path to bad example quiz
-#'
-#' @export
-#' @return The file path to an example bad quiz included in the package that will fail the quiz checks.
-#'
-#' @examples
-#'
-#' quiz_path <- bad_quiz_path()
-bad_quiz_path <- function() {
-  list.files(
-    pattern = "quiz_bad.md$",
     recursive = TRUE,
     system.file("extdata", package = "ottrpal"),
     full.names = TRUE
