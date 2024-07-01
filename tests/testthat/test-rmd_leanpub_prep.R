@@ -25,7 +25,6 @@ test_that("Create Leanpub IFrames for Rmd", {
   )
 
   website_to_embed_leanpub(
-    render = FALSE,
     chapt_img_key = 'resources/chapt_screen_images/chapter_urls.tsv',
     make_book_txt = TRUE,
     quiz_dir = NULL)
