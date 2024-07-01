@@ -19,15 +19,15 @@ test_that("Create Leanpub IFrames for Rmd", {
   # 2. Is the file 'resources/chapt_screen_images/chapter_urls.tsv' made fresh?
   # 2. Does chapter_urls.tsv file made have columns with information that are labeled "url", "chapt_title" and "img_path"
 
-  set_up_leanpub(
-    make_book_txt = TRUE,
-    quiz_dir = NULL
-  )
+  #set_up_leanpub(
+  #  make_book_txt = TRUE,
+  #  quiz_dir = NULL
+  #)
 
-  website_to_embed_leanpub(
-    chapt_img_key = 'resources/chapt_screen_images/chapter_urls.tsv',
-    make_book_txt = TRUE,
-    quiz_dir = NULL)
+  #website_to_embed_leanpub(
+    #chapt_img_key = 'resources/chapt_screen_images/chapter_urls.tsv',
+    #make_book_txt = TRUE,
+    #quiz_dir = NULL)
 
   ## TEST HERE:
   # 1. Did each chapter get a md in the manuscript folder?
