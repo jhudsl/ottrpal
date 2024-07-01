@@ -31,4 +31,5 @@ A folder of coursera ready quiz files and html chapter files saved to output dir
 }
 \description{
 Create a version of the course that does not have a TOC and has quizzes in the Coursera yaml format.
+This is only needed to be used on Bookdown courses. Quarto has a simple command for this.
 }

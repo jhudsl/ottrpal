@@ -7,7 +7,7 @@
 set_up_leanpub(
   path = ".",
   clean_up = FALSE,
-  render = TRUE,
+  render = NULL,
   output_dir = "manuscript",
   make_book_txt = FALSE,
   quiz_dir = "quizzes",
@@ -19,12 +19,12 @@ set_up_leanpub(
 )
 }
 \arguments{
-\item{path}{path to the bookdown book, must have a `_bookdown.yml` file}
+\item{path}{path to the top of course repository (looks for .git folder)}
 
 \item{clean_up}{TRUE/FALSE the old output directory should be deleted and
 everything created fresh.}
 
-\item{render}{if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.}
+\item{render}{If NULL will not be run. If "quarto" or "bookdown" then the respective render type will be run}
 
 \item{output_dir}{output directory to put files.  It should likely be
 relative to path}

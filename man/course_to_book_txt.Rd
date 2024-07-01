@@ -13,7 +13,7 @@ course_to_book_txt(
 )
 }
 \arguments{
-\item{path}{path to the bookdown or quarto course repository, must have a `_bookdown.yml` file or}
+\item{path}{path to the bookdown or quarto course repository, must have a `_bookdown.yml` or `_quarto.yml` file}
 
 \item{md_files}{vector of file path of the md's to be included}
 

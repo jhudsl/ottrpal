@@ -10,7 +10,7 @@ course_path(path = ".")
 \item{path}{Where to look for the file. By default looks in current directory.}
 }
 \value{
-Returns the directory where the _bookdown.yml is contained.
+Returns the directory where the .git folder is contained.
 }
 \description{
 Find main course git directory

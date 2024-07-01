@@ -22,7 +22,7 @@ website_to_embed_leanpub(
 )
 }
 \arguments{
-\item{path}{path to the bookdown or quarto course repository, must have a `_bookdown.yml` file or}
+\item{path}{path to the bookdown or quarto course repository, must have a `_bookdown.yml` or `_quarto.yml` file}
 
 \item{chapt_img_key}{File path to a TSV whose contents are the chapter urls (`url`),
 the chapter titles (`chapt_title`), the file path to the image to be used for the chapter (`img_path`).
