@@ -39,7 +39,6 @@ jobs:
           GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check testthat
-        if: runner.os != 'Windows'
         id: check_check
         run: |
             error_num=$(Rscript --vanilla '.github/workflows/check_testthat.R')

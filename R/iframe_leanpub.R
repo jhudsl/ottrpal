@@ -1,6 +1,6 @@
-#' Convert Bookdown to Leanpub
+#' Convert Website Course to Leanpub
 #'
-#' @param path path to the bookdown book, must have a `_bookdown.yml` file
+#' @param path path to the bookdown or quarto course repository, must have a `_bookdown.yml` or `_quarto.yml` file
 #' @param chapt_img_key File path to a TSV whose contents are the chapter urls (`url`),
 #' the chapter titles (`chapt_title`), the file path to the image to be used for the chapter (`img_path`).
 #' Column names `url`, `chapt_title`, and `img_path` must be used.
@@ -17,13 +17,11 @@
 #' @param remove_resources_start remove the word `resources/` at the front
 #' of any image path.
 #' @param run_quiz_checks TRUE/FALSE run quiz checks
-#' @param make_book_txt Should [ottrpal::bookdown_to_book_txt()] be run
+#' @param make_book_txt Should [ottrpal::course_to_book_txt()] be run
 #' to create a `Book.txt` in the output directory?
 #' @param quiz_dir directory that contains the quiz .md files that should be
 #' checked and incorporated into the Book.txt file. If you don't have quizzes,
 #' set this to NULL
-#' @param clean_up TRUE/FALSE the old output directory should be deleted and
-#' everything created fresh.
 #' @param footer_text Optionally can add a bit of text that will be added to the
 #' end of each file before the references section.
 #'
@@ -32,19 +30,18 @@
 #'
 #' @examples \dontrun{
 #'
-#' ottrpal::bookdown_to_embed_leanpub(
+#' ottrpal::website_to_embed_leanpub(
 #'   base_url = "https://jhudatascience.org/OTTR_Template/",
 #'   make_book_txt = TRUE,
 #'   quiz_dir = NULL
 #' )
 #' }
-bookdown_to_embed_leanpub <- function(path = ".",
+website_to_embed_leanpub <- function(path = ".",
                                       chapt_img_key = NULL,
+                                      render = NULL,
                                       html_page = file.path(base_url, "index.html"),
                                       base_url = NULL,
-                                      clean_up = FALSE,
                                       default_img = NULL,
-                                      render = TRUE,
                                       output_dir = "manuscript",
                                       make_book_txt = FALSE,
                                       quiz_dir = "quizzes",
@@ -55,8 +52,6 @@ bookdown_to_embed_leanpub <- function(path = ".",
   # Run the set up
   set_up_leanpub(
     path = path,
-    embed = TRUE,
-    clean_up = clean_up,
     render = render,
     output_dir = output_dir,
     make_book_txt = make_book_txt,
@@ -110,10 +105,10 @@ bookdown_to_embed_leanpub <- function(path = ".",
   ####################### Book.txt creation ####################################
   out <- NULL
   if (make_book_txt) {
-    if (verbose) message("Running bookdown_to_book_txt")
+    if (verbose) message("Running course_to_book_txt")
     md_files <- basename(unlist(md_output_files))
 
-    bookdown_to_book_txt(
+    course_to_book_txt(
       md_files = md_files,
       output_dir = output_dir,
       quiz_dir = quiz_dir,
@@ -149,7 +144,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
 
 #' Create Book.txt file from files existing in quiz directory
 #'
-#' @param path path to the bookdown book, must have a `_bookdown.yml` file
+#' @param path path to the bookdown or quarto course repository, must have a `_bookdown.yml` or `_quarto.yml` file
 #' @param md_files vector of file path of the md's to be included
 #' @param output_dir output directory to put files.  It should likely be
 #' relative to path
@@ -159,7 +154,7 @@ bookdown_to_embed_leanpub <- function(path = ".",
 #' @return A list of quiz and chapter files in order in a file called Book.txt -- How Leanpub wants it.
 #' @export
 #'
-bookdown_to_book_txt <- function(path = ".",
+course_to_book_txt <- function(path = ".",
                                  md_files = NULL,
                                  output_dir = "manuscript",
                                  quiz_dir = "quizzes",
@@ -167,12 +162,12 @@ bookdown_to_book_txt <- function(path = ".",
   # If md_files are not specified, then try to get them
   if (is.null(md_files)) {
     # Establish path
-    path <- bookdown_path(path)
+    path <- course_path(path)
 
     rmd_regex <- "[.][R|r]md$"
 
     # Extract the names of the Rmd files (the chapters)
-    md_files <- bookdown_rmd_files(path = path)
+    md_files <- qrmd_files(path = path)
   }
 
   if (!is.null(quiz_dir)) {

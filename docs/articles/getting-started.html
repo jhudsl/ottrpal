@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>getting-started • ottrpal</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ottrpal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -64,7 +60,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jhudsl/ottrpal/">
+  <a href="https://github.com/jhudsl/ottrpal/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -79,385 +75,177 @@
 
       
 
-      </header><script src="getting-started_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>getting-started</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/jhudsl/ottrpal/blob/master/vignettes/getting-started.Rmd"><code>vignettes/getting-started.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jhudsl/ottrpal/blob/HEAD/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="hidden name"><code>getting-started.Rmd</code></div>
 
     </div>
 
     
     
-<div id="intro-to-ottrpal" class="section level1">
-<h1 class="hasAnchor">
-<a href="#intro-to-ottrpal" class="anchor"></a>Intro to ottrpal</h1>
-<p><code>ottrpal</code> converts a <a href="https://github.com/jtr13/bookdown-template">Bookdown repository</a> into a <a href="https://leanpub.com/">Leanpub-ready</a> set of files. The output rendered files from this package can be published using the <a href="https://leanpub.com/lfm/read#leanpub-auto-switching-writing-modes">Github writing mode on Leanpub</a>.</p>
-<p>If you aren’t familiar with <code>Bookdown</code> you may want with <a href="https://bookdown.org/yihui/bookdown/">their tutorials</a>.</p>
-<div id="installing-ottrpal" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installing-ottrpal" class="anchor"></a>Installing ottrpal:</h2>
-<p>You can install <code>ottrpal</code> from GitHub with:</p>
-<p>You will need to use the remotes package (and will need to install it if you don’t have it).</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="op">(</span><span class="st">"remotes"</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="op">(</span><span class="st">"ottrpal"</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"jhudsl/ottrpal"</span><span class="op">)</span>
-<span class="op">}</span></pre></div>
+<div class="section level2">
+<h2 id="intro-to-ottrpal">Intro to ottrpal<a class="anchor" aria-label="anchor" href="#intro-to-ottrpal"></a>
+</h2>
+<p><code>ottrpal</code> contains tools and functions to be used with an
+<a href="https://github.com/jhudsl/OTTR_Template" class="external-link">OTTR repository</a>
+course. It converts an <a href="https://github.com/jhudsl/OTTR_Template/wiki" class="external-link">OTTR course</a>
+(Open-Source Tools for Training Resources) into a files ready for upload
+to Massive Open Online Courses (MOOCs): <a href="https://www.coursera.org/" class="external-link">Coursera</a> and <a href="https://leanpub.com/" class="external-link">Leanpub</a>.</p>
+<ul>
+<li>Go to the <a href="https://github.com/jhudsl/OTTR_Template/wiki" class="external-link">main OTTR guide</a>
+for how to start creating courses with OTTR.</li>
+<li>
+<a href="https://jhudatascience.org/ottrpal/docs/index.html" class="external-link">Read
+the ottrpal package documentation here</a>.</li>
+</ul>
+<div class="section level3">
+<h3 id="installing-ottrpal">Installing ottrpal:<a class="anchor" aria-label="anchor" href="#installing-ottrpal"></a>
+</h3>
+<p>You can install <code>ottrpal</code> from CRAN or from GitHub.</p>
 </div>
-<div id="required-files" class="section level2">
-<h2 class="hasAnchor">
-<a href="#required-files" class="anchor"></a>Required files:</h2>
-<p>Before you are ready to run <code>ottrpal</code>, you will need the following files (which are standard in a <code>Bookdown</code> repository):<br>
-- a <code>_bookdown.yml</code> file which lists the <code>.Rmd</code> files that are to be rendered in a <code>rmd:</code> category (see <a href="https://github.com/jhudsl/OTTR_Quizzes/blob/main/_bookdown.yml">example file</a>). - <code>.Rmd</code> files which contain the chapter content (including your <code>index.Rmd</code> file which <code>Bookdown</code> has). - an <code>images</code> directory that contains any images that are referenced in the chapters. - <code>.bib</code> file(s) to complete any citation renders (see <a href="https://github.com/jhudsl/OTTR_Quizzes/blob/main/book.bib">example file</a>).</p>
-<p><em>Optionally:</em>. - <a href="https://leanpub.com/lfm/read#leanpub-auto-booktxt-sampletxt-and-manuscript-files">a <code>Book.txt</code> file</a> which lists the order of the chapters/quiz files (this can be autogenerated with <code>ottrpal</code>) (see <a href="https://github.com/jhudsl/OTTR_Quizzes/blob/main/Book.txt">example file</a>).<br>
-- a directory containing quizzes in the form of <code>.md</code> files which have been written using the <a href="https://leanpub.com/markua/read#leanpub-auto-quizzes-and-exercises">Markua formatting specifications</a> (see <a href="https://github.com/jhudsl/OTTR_Quizzes/tree/main/quizzes">example folder</a>).</p>
-<p>Here’s an example of what the Bookdown file set up (which ottrpal will look for) might be set up like:</p>
-<pre><code>A_Bookdown_Repo
-├── _bookdown.yml
-├── index.Rmd
-├── 01-chapter_one.Rmd
-├── docs
-│   └── ...
-├── references.bib
-├── quizzes
-│   ├── quiz_1.md
-│   └── ...
-├── resources/images
-│   ├── some-figures.png
-│   └── ...
-└── Book.txt</code></pre>
+<div class="section level3">
+<h3 id="optional-input-files">Optional input files:<a class="anchor" aria-label="anchor" href="#optional-input-files"></a>
+</h3>
+<ul>
+<li>
+<a href="https://leanpub.com/lfm/read#leanpub-auto-booktxt-sampletxt-and-manuscript-files" class="external-link">a
+<code>Book.txt</code> file</a> which lists the order of the
+chapters/quiz files (this can be autogenerated with
+<code>ottrpal</code>) (see <a href="https://github.com/jhudsl/OTTR_Template/blob/main/manuscript/Book.txt" class="external-link">example
+file</a>).<br>
+</li>
+<li>a directory containing quizzes in the form of <code>.md</code> files
+which have been written using the <a href="https://leanpub.com/markua/read#leanpub-auto-quizzes-and-exercises" class="external-link">Markua
+formatting specifications</a> (see <a href="https://github.com/jhudsl/OTTR_Quizzes/tree/main/quizzes" class="external-link">example
+folder</a>).<br>
+</li>
+<li>A TSV file specifying <code>url</code>, <code>chapt_title</code>,
+<code>img_path</code> See this (<a href="https://github.com/jhudsl/OTTR_Template/blob/main/resources/chapt_screen_images/chapter_urls.tsv" class="external-link uri">https://github.com/jhudsl/OTTR_Template/blob/main/resources/chapt_screen_images/chapter_urls.tsv</a>).</li>
+</ul>
 </div>
-<div id="set-up-example-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#set-up-example-data" class="anchor"></a>Set up example data</h2>
-<p>If you’d like to use our example repository you can fork it on Github and clone it to your own computer <a href="https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository">Follow these instructions to fork</a> and then you can clone it using a command line.</p>
-<p>But for the purposes of this example we will download a zip file of the files we need and set those up using this function:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="co"># Run this to get the files we need</span>
-<span class="va">example_files</span> <span class="op">&lt;-</span> <span class="fu">ottrpal</span><span class="fu">::</span><span class="fu"><a href="../reference/example_repo_setup.html">example_repo_setup</a></span><span class="op">(</span><span class="op">)</span></pre></div>
-<p>Each of your Rmds needs to have a chunk of code with this at the beginning of the file: <code><a href="../reference/set_knitr_image_path.html">ottrpal::set_knitr_image_path()</a></code></p>
-<p>This will ensure that the images are stored in the correct place and will be rendered correctly both in <code>Bookdown</code> and in Leanpub.</p>
+<div class="section level3">
+<h3 id="set-up-an-ottr-github-repository">Set up an OTTR GitHub repository<a class="anchor" aria-label="anchor" href="#set-up-an-ottr-github-repository"></a>
+</h3>
+<p>Follow the <a href="https://github.com/jhudsl/OTTR_Template/wiki/Start-a-new-course" class="external-link">instructions
+here</a> to set up your own OTTR GitHub repository for a new course.</p>
 </div>
-<div id="running-ottrpal" class="section level2">
-<h2 class="hasAnchor">
-<a href="#running-ottrpal" class="anchor"></a>Running ottrpal</h2>
-<p>The <code>ottrpal</code> package converts your files using this main function (which we won’t run just yet).</p>
-<pre><code><a href="../reference/bookdown_to_leanpub.html">ottrpal::bookdown_to_leanpub()</a></code></pre>
-<p>By default, <code>ottrpal</code> will re-run a <code><a href="https://pkgs.rstudio.com/bookdown/reference/render_book.html">bookdown::render_book("index.Rmd")</a></code> rendering of your chapters first before converting the files to the Leanpub ready format. It will only process the <code>Rmd</code> files that are listed in the <code>_bookdown.yml</code> file. However, if you wish to skip this step, you can set <code>render = FALSE</code> when running the <code><a href="../reference/bookdown_to_leanpub.html">ottrpal::bookdown_to_leanpub()</a></code> function.</p>
+<div class="section level3">
+<h3 id="running-ottrpal">Running ottrpal<a class="anchor" aria-label="anchor" href="#running-ottrpal"></a>
+</h3>
+<p>In the base of your OTTR repository, you can run this command to set
+up a Leanpub version of your course. The <code>ottrpal</code> package
+converts your files using this base function, where
+<code>base_url</code> is where the OTTR course pages are published, the
+GitHub pages URL.</p>
+<pre><code><span><span class="fu">ottrpal</span><span class="fu">::</span><span class="fu">bookdown_to_embed_leanpub</span><span class="op">(</span>base_url <span class="op">=</span> <span class="st">"https://jhudatascience.org/OTTR_Template/"</span><span class="op">)</span></span></code></pre>
+<p>By default, <code>ottrpal</code> will re-run a
+<code>bookdown::render_book("index.Rmd")</code> rendering of your
+chapters first before converting the files to the Leanpub ready format.
+However, if you wish to skip this step, you can set
+<code>render = FALSE</code> when running the
+<code>ottrpal::bookdown_to_embed_leanpub()</code> function.</p>
 </div>
-<div id="about-the-output-files" class="section level2">
-<h2 class="hasAnchor">
-<a href="#about-the-output-files" class="anchor"></a>About the output files</h2>
-<p>Leanpub’s Github writing mode will look for a directory called <code>manuscript</code> to publish from. You should not edit the files in <code>manuscript/</code> by hand since a re-run of <code>ottrpal</code> will cause your changes to be overwritten.</p>
+<div class="section level3">
+<h3 id="about-the-book-txt-file">About the Book.txt file:<a class="anchor" aria-label="anchor" href="#about-the-book-txt-file"></a>
+</h3>
+<p>Leanpub requires a <a href="https://leanpub.com/lfm/read#leanpub-auto-booktxt-sampletxt-and-manuscript-files" class="external-link"><code>Book.txt</code></a>
+file to know what order the chapters/quizzes should be published.</p>
+<p>By default, your <code>Book.txt</code> file will <em>not</em> be
+autogenerated but <code>ottrpal</code> will look in your given directory
+for an existing <code>Book.txt</code> file which it will copy over to
+the output directory.</p>
+<p>You can create a <code>Book.txt</code> file manually, or if your
+quizzes and chapters are numbered, <code>ottrpal</code> can create the
+<code>Book.txt</code> file based on the numbers going from low to high
+and quizzes following chapters of the same number.
+(e.g. <code>quiz_03.md</code> will be placed after
+<code>03-some_chapter_file.Rmd</code>).</p>
+<p>To have <code>ottrpal</code> attempt to autogenerate this file, set
+<code>make_book_txt</code> to <code>TRUE</code>.</p>
+<pre><code><span><span class="fu">ottrpal</span><span class="fu">::</span><span class="fu">bookdown_to_embed_leanpub</span><span class="op">(</span>base_url <span class="op">=</span> <span class="st">"https://jhudatascience.org/OTTR_Template/"</span>,</span>
+<span>                                   make_book_txt <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
+<p>If no <code>Book.txt</code> file is found and
+<code>make_book_txt</code> is set to <code>FALSE</code> (this is the
+default setting), <code>ottrpal</code> will fail.</p>
+<p>A <code>ottrpal</code> autogenerated <code>Book.txt</code> file might
+look something like this:</p>
+<pre><code><span><span class="va">index.Rmd</span></span>
+<span><span class="fl">01</span><span class="op">-</span><span class="va">chapter.Rmd</span></span>
+<span><span class="va">quiz_1.md</span></span>
+<span><span class="fl">02</span><span class="op">-</span><span class="va">chapter.Rmd</span></span>
+<span><span class="va">quiz_2.md</span></span>
+<span><span class="va">about.Rmd</span></span></code></pre>
+<p>Also note that any <code>index.Rmd</code> will always be placed first
+and any <code>about.Rmd</code> file will be placed last.</p>
 </div>
-<div id="about-the-book-txt-file" class="section level2">
-<h2 class="hasAnchor">
-<a href="#about-the-book-txt-file" class="anchor"></a>About the Book.txt file:</h2>
-<p>Leanpub requires a <a href="https://leanpub.com/lfm/read#leanpub-auto-booktxt-sampletxt-and-manuscript-files"><code>Book.txt</code></a> file to know what order the chapters/quizzes should be published.</p>
-<p>By default, your <code>Book.txt</code> file will <em>not</em> be autogenerated but <code>ottrpal</code> will look in your given directory for an existing <code>Book.txt</code> file which it will copy over to the output directory.</p>
-<p>You can create a <code>Book.txt</code> file manually, or if your quizzes and chapters are numbered, <code>ottrpal</code> can create the <code>Book.txt</code> file based on the numbers going from low to high and quizzes following chapters of the same number. (e.g. <code>quiz_03.md</code> will be placed after <code>03-some_chapter_file.Rmd</code>).</p>
-<p>To have <code>ottrpal</code> attempt to autogenerate this file with the main function you can set <code>make_book_txt</code> to <code>TRUE</code>. If no <code>Book.txt</code> file is found and <code>make_book_txt</code> is set to <code>FALSE</code> (this is the default setting), <code>ottrpal</code> will fail.</p>
-<p>So to run the main function and also have it make a <code>Book.txt</code> file for us, we can run the following:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu">ottrpal</span><span class="fu">::</span><span class="fu"><a href="../reference/bookdown_to_leanpub.html">bookdown_to_leanpub</a></span><span class="op">(</span>make_book_txt <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></pre></div>
-<pre><code>## Looking for bookdown file in /home/rstudio/GitRepos/ottrpal/vignettes</code></pre>
-<pre><code>## Processing these files: 
-## index.Rmd
-## 01-intro.Rmd
-## 02-example-chapter.Rmd</code></pre>
-<pre><code>## Rendering the Book</code></pre>
-<pre><code>## index_file is /home/rstudio/GitRepos/ottrpal/vignettes/index.Rmd</code></pre>
-<pre><code>## Warning in bookdown::render_book(input = index_file, output_format =
-## output_format, : The argument 'clean_envir' has been deprecated and will be
-## removed in future versions of bookdown.</code></pre>
-<pre><code>## /usr/lib/rstudio-server/bin/pandoc/pandoc +RTS -K512m -RTS Course_Name.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Course_Name.html --lua-filter /usr/local/lib/R/site-library/bookdown/rmarkdown/lua/custom-environment.lua --lua-filter /usr/local/lib/R/site-library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/lib/R/site-library/rmarkdown/rmarkdown/lua/latex-div.lua --metadata-file /tmp/RtmptI3G0C/file4ac41729876 --wrap preserve --citeproc --standalone --section-divs --table-of-contents --toc-depth 3 --template /usr/local/lib/R/site-library/bookdown/templates/gitbook.html --highlight-style pygments --number-sections --citeproc --include-in-header /tmp/RtmptI3G0C/rmarkdown-str4ac73aeac9e.html --mathjax</code></pre>
-<pre><code>## 
-## Output created: docs/index.html</code></pre>
-<pre><code>## Copying Resources</code></pre>
-<pre><code>## Copying Docs folder</code></pre>
-<pre><code>## Copying bib files</code></pre>
-<pre><code>## Autogenerated Book.txt saved to: manuscript/Book.txt</code></pre>
-<pre><code>## Leanpub ready files are saved to manuscript Go to https://leanpub.com/ to publish them using the GitHub writing mode.</code></pre>
-<p>Alternatively, we could run <code><a href="../reference/bookdown_to_book_txt.html">bookdown_to_book_txt()</a></code> function on its own:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit">
-<span class="fu">ottrpal</span><span class="fu">::</span><span class="fu"><a href="../reference/bookdown_to_book_txt.html">bookdown_to_book_txt</a></span><span class="op">(</span><span class="op">)</span></pre></div>
-<pre><code>## Autogenerated Book.txt saved to: manuscript/Book.txt</code></pre>
-<p>Also note that any <code>index.Rmd</code> will always be placed first and any <code>about.Rmd</code> file will be placed last.</p>
-<p>We can take a peek at what the autogenerated file looks like. By default the <code>Book.txt</code> file is saved to the <code>manuscript</code> directory along with all the other Leanpub-ready files.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"manuscript"</span>, <span class="st">"Book.txt"</span><span class="op">)</span><span class="op">)</span></pre></div>
-<pre><code>## [1] "index.Rmd"              "01-intro.Rmd"           "02-example-chapter.Rmd"</code></pre>
+<div class="section level3">
+<h3 id="setting-up-quizzes">Setting up quizzes:<a class="anchor" aria-label="anchor" href="#setting-up-quizzes"></a>
+</h3>
+<p>By default, ottrpal will look for a folder called
+<code>quizzes/</code> to find your quiz <code>.md</code> files. If your
+quizzes are located somewhere else, you will need to use the
+<code>quiz_dir</code> argument to specify that:</p>
+<pre><code><span><span class="fu">ottrpal</span><span class="fu">::</span><span class="fu">bookdown_to_embed_leanpub</span><span class="op">(</span>base_url <span class="op">=</span> <span class="st">"https://jhudatascience.org/OTTR_Template/"</span>,</span>
+<span>                                   make_book_txt <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                   quiz_dir <span class="op">=</span> <span class="st">"some_directory"</span><span class="op">)</span></span></code></pre>
+<p>If you don’t have quizzes, you can say <code>quiz_dir = NULL</code>
+to skip all quiz steps.</p>
 </div>
-<div id="setting-up-quizzes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#setting-up-quizzes" class="anchor"></a>Setting up quizzes:</h2>
-<p>First, we will set up a directory to put our quizzes in.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit">
-<span class="va">quiz_dir</span> <span class="op">&lt;-</span> <span class="st">"quizzes"</span>
-<span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.exists</a></span><span class="op">(</span><span class="va">quiz_dir</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">quiz_dir</span><span class="op">)</span>
-<span class="op">}</span></pre></div>
-<p>By default, ottrpal will look for a folder called <code>quizzes/</code> to find your quiz <code>.md</code> files. If your quizzes are located somewhere else, you will need to use the <code>quiz_dir</code> argument to specify that:</p>
-<pre><code><a href="../reference/bookdown_to_leanpub.html">ottrpal::bookdown_to_leanpub(quiz_dir = "some_other_directory")</a></code></pre>
-<p>Leanpub can be very particular about the formatting of the quizzes, so there are funtions to help you check the formatting of your quiz.</p>
-<p>In the main argument, you can set <code>run_quiz_checks</code> to <code>TRUE</code> (the default is <code>FALSE</code>).</p>
-<pre><code><a href="../reference/bookdown_to_leanpub.html">ottrpal::bookdown_to_leanpub(run_quiz_checks = TRUE)</a></code></pre>
-<p>But the quiz checks can also be run separately using the <code><a href="../reference/check_quizzes.html">check_quizzes()</a></code> function. It will again assume you have a directory called <code>quizzes</code> unless you specify otherwise:</p>
-<p>We can take a look at how <code><a href="../reference/check_quizzes.html">check_quizzes()</a></code> runs using a quiz examples: one that passes the checks and one that fails.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit">
-<span class="co"># Set up an good example quiz</span>
-<span class="va">good_quiz_path</span> <span class="op">&lt;-</span> <span class="fu">ottrpal</span><span class="fu">::</span><span class="fu"><a href="../reference/good_quiz_path.html">good_quiz_path</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">dest_quiz_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"quizzes"</span>, <span class="fu"><a href="https://rdrr.io/r/base/basename.html">basename</a></span><span class="op">(</span><span class="va">good_quiz_path</span><span class="op">)</span><span class="op">)</span>
-              
-<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="va">dest_quiz_path</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>         
-  <span class="fu"><a href="https://rdrr.io/r/base/files.html">file.copy</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">good_quiz_path</span>, 
-            to <span class="op">=</span> <span class="va">dest_quiz_path</span><span class="op">)</span>
-<span class="op">}</span></pre></div>
-<pre><code>## [1] TRUE</code></pre>
-<p>Run <code><a href="../reference/check_quizzes.html">check_quizzes()</a></code> to check all quizzes in the directory.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit">
-<span class="va">quiz_checklist</span> <span class="op">&lt;-</span> <span class="fu">ottrpal</span><span class="fu">::</span><span class="fu"><a href="../reference/check_quizzes.html">check_quizzes</a></span><span class="op">(</span>quiz_dir <span class="op">=</span> <span class="st">"quizzes"</span><span class="op">)</span></pre></div>
-<pre><code>## 
-##  Checking quiz: quizzes/quiz_good.md</code></pre>
-<pre><code>## Checking question: First question to as ... in quiz: quiz_good.md</code></pre>
-<pre><code>## Checking question: Example without choo ... in quiz: quiz_good.md</code></pre>
-<pre><code>## Checking question: Question example wit ... in quiz: quiz_good.md</code></pre>
-<pre><code>## Checking question: A more complicated e ... in quiz: quiz_good.md</code></pre>
-<pre><code>## 
-##  No question errors to report!</code></pre>
-<p>We can take a look at what a typical quiz format looks like:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit">
-<span class="va">quiz_lines</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span><span class="va">dest_quiz_path</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">quiz_lines</span><span class="op">)</span></pre></div>
-<pre><code>## [1] ""                                                                                           
-## [2] "{quiz, id: quiz_name_here, attempts: 10}"                                                   
-## [3] ""                                                                                           
-## [4] "## Template quiz"                                                                           
-## [5] ""                                                                                           
-## [6] "Put any other instructions your quiz takers need to know here like, Choose the best answer."</code></pre>
-<p>Now let’s add in a bad quiz and see how the report changes.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit">
-<span class="co"># Set up an good example quiz</span>
-<span class="va">bad_quiz_path</span> <span class="op">&lt;-</span> <span class="fu">ottrpal</span><span class="fu">::</span><span class="fu"><a href="../reference/bad_quiz_path.html">bad_quiz_path</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">dest_quiz_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"quizzes"</span>, <span class="fu"><a href="https://rdrr.io/r/base/basename.html">basename</a></span><span class="op">(</span><span class="va">bad_quiz_path</span><span class="op">)</span><span class="op">)</span>
-
-<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="va">dest_quiz_path</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>                
-  <span class="fu"><a href="https://rdrr.io/r/base/files.html">file.copy</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">bad_quiz_path</span>, 
-            to <span class="op">=</span> <span class="va">dest_quiz_path</span><span class="op">)</span>
-<span class="op">}</span></pre></div>
-<pre><code>## [1] TRUE</code></pre>
-<p>Let’s re-run <code><a href="../reference/check_quizzes.html">check_quizzes()</a></code>.</p>
-<div class="sourceCode" id="cb38"><pre class="downlit">
-<span class="va">quiz_checklist</span> <span class="op">&lt;-</span> <span class="fu">ottrpal</span><span class="fu">::</span><span class="fu"><a href="../reference/check_quizzes.html">check_quizzes</a></span><span class="op">(</span>quiz_dir <span class="op">=</span> <span class="st">"quizzes"</span><span class="op">)</span></pre></div>
-<pre><code>## 
-##  Checking quiz: quizzes/quiz_bad.md</code></pre>
-<pre><code>## Checking question: It would be a shame  ... in quiz: quiz_bad.md</code></pre>
-<pre><code>## Warning in FUN(X[[i]], ...): Colon detected in question on lines: 7 in question
-## starting with:It would be a shame ... in quiz: quiz_bad.md</code></pre>
-<pre><code>## Checking question: What a shame if we p ... in quiz: quiz_bad.md</code></pre>
-<pre><code>## Checking question: Shame shame if we sa ... in quiz: quiz_bad.md</code></pre>
-<pre><code>## Checking question: What if we don't put ... in quiz: quiz_bad.md</code></pre>
-<pre><code>## Warning in FUN(X[[i]], ...): No correct answers provided for What if we don't
-## put ... in quiz: quiz_bad.md</code></pre>
-<pre><code>## Checking question: What if only give co ... in quiz: quiz_bad.md</code></pre>
-<pre><code>## Warning in FUN(X[[i]], ...): No incorrect answer options provided for What if
-## only give co ... in quiz: quiz_bad.md</code></pre>
-<pre><code>## 
-##  Checking quiz: quizzes/quiz_good.md</code></pre>
-<pre><code>## Checking question: First question to as ... in quiz: quiz_good.md</code></pre>
-<pre><code>## Checking question: Example without choo ... in quiz: quiz_good.md</code></pre>
-<pre><code>## Checking question: Question example wit ... in quiz: quiz_good.md</code></pre>
-<pre><code>## Checking question: A more complicated e ... in quiz: quiz_good.md</code></pre>
-<pre><code>## 
-##  Question error report saved to 'question_error_report.tsv'</code></pre>
-<p>We have some warning messages about various items and the errors have been saved to <code>'question_error_report.tsv'</code> which we can read in and check out. Each line shows an error detected, what quiz file it was detected in, the line it’s roughly associated with and the warning message which explains what the problem is.</p>
-<div class="sourceCode" id="cb54"><pre class="downlit">
-<span class="va">error_df</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="st">"question_error_report.tsv"</span><span class="op">)</span></pre></div>
-<pre><code>## 
-## ── Column specification ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-## cols(
-##   question_names = col_character(),
-##   quiz = col_character(),
-##   warning_msg = col_character(),
-##   related_index = col_double()
-## )</code></pre>
-<div class="sourceCode" id="cb56"><pre class="downlit">
-<span class="va">error_df</span></pre></div>
-<pre><code>## # A tibble: 3 x 4
-##   question_names                quiz   warning_msg                 related_index
-##   &lt;chr&gt;                         &lt;chr&gt;  &lt;chr&gt;                               &lt;dbl&gt;
-## 1 It would be a shame if we pu… quiz_… Colon detected in question…             7
-## 2 What if we don't put a corre… quiz_… No correct answers provide…            31
-## 3 What if only give correct an… quiz_… No incorrect answer option…            38</code></pre>
-<p>Now you would just need to go into each of those files and fix the stated problem. Then you can re-run <code><a href="../reference/check_quizzes.html">check_quizzes()</a></code> and see if the warning is resolved.</p>
+<div class="section level3">
+<h3 id="about-the-output-files">About the output files<a class="anchor" aria-label="anchor" href="#about-the-output-files"></a>
+</h3>
+<p>Leanpub’s Github writing mode will look for a directory called
+<code>manuscript</code> to publish from. You should not edit the files
+in <code>manuscript/</code> by hand since a re-run of
+<code>ottrpal</code> will cause your changes to be overwritten.</p>
 </div>
-<div id="adding-footer-text" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adding-footer-text" class="anchor"></a>Adding footer text:</h2>
-<p>If there is text you would like added to the end of each chapter (like a link to a feedback survey for example), you can supply a character string to the <code>footer_text</code>argument in the main <code><a href="../reference/bookdown_to_leanpub.html">ottrpal::bookdown_to_leanpub()</a></code> function.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit">
-<span class="co"># Set up a character string</span>
-<span class="va">survey_link</span> <span class="op">&lt;-</span> <span class="st">"Please provide any feedback you have in [this survey](www.some_link.org)"</span>
-
-<span class="co"># Supply the footer text in the main function</span>
-<span class="fu">ottrpal</span><span class="fu">::</span><span class="fu"><a href="../reference/bookdown_to_leanpub.html">bookdown_to_leanpub</a></span><span class="op">(</span>make_book_txt <span class="op">=</span> <span class="cn">TRUE</span>, 
-                               footer_text <span class="op">=</span> <span class="va">survey_link</span><span class="op">)</span></pre></div>
-<pre><code>## Looking for bookdown file in /home/rstudio/GitRepos/ottrpal/vignettes</code></pre>
-<pre><code>## Processing these files: 
-## index.Rmd
-## 01-intro.Rmd
-## 02-example-chapter.Rmd</code></pre>
-<pre><code>## Rendering the Book</code></pre>
-<pre><code>## index_file is /home/rstudio/GitRepos/ottrpal/vignettes/index.Rmd</code></pre>
-<pre><code>## Warning in bookdown::render_book(input = index_file, output_format =
-## output_format, : The argument 'clean_envir' has been deprecated and will be
-## removed in future versions of bookdown.</code></pre>
-<pre><code>## /usr/lib/rstudio-server/bin/pandoc/pandoc +RTS -K512m -RTS Course_Name.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output Course_Name.html --lua-filter /usr/local/lib/R/site-library/bookdown/rmarkdown/lua/custom-environment.lua --lua-filter /usr/local/lib/R/site-library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/lib/R/site-library/rmarkdown/rmarkdown/lua/latex-div.lua --metadata-file /tmp/RtmptI3G0C/file4ac25ab66dd --wrap preserve --citeproc --standalone --section-divs --table-of-contents --toc-depth 3 --template /usr/local/lib/R/site-library/bookdown/templates/gitbook.html --highlight-style pygments --number-sections --citeproc --include-in-header /tmp/RtmptI3G0C/rmarkdown-str4ac5c28f07a.html --mathjax</code></pre>
-<pre><code>## 
-## Output created: docs/index.html</code></pre>
-<pre><code>## Copying Resources</code></pre>
-<pre><code>## Copying Docs folder</code></pre>
-<pre><code>## Copying bib files</code></pre>
-<pre><code>## Autogenerated Book.txt saved to: manuscript/Book.txt</code></pre>
-<pre><code>## Leanpub ready files are saved to manuscript Go to https://leanpub.com/ to publish them using the GitHub writing mode.</code></pre>
-<div id="wrapping-up" class="section level3">
-<h3 class="hasAnchor">
-<a href="#wrapping-up" class="anchor"></a>Wrapping up</h3>
-<p>If you don’t want those example files hanging around, we can run this function to cleanup the example files.</p>
-<pre><code>## Cleaning up and removing example repo files</code></pre>
-<pre><code>## Removing: quizzes/quiz_bad.md</code></pre>
-<pre><code>## Removing: quizzes/quiz_good.md</code></pre>
-<pre><code>## Removing: docs/01-intro.md</code></pre>
-<pre><code>## Removing: docs/02-example-chapter.md</code></pre>
-<pre><code>## Removing: docs/404.html</code></pre>
-<pre><code>## Removing: docs/example-chapter.html</code></pre>
-<pre><code>## Removing: docs/index.html</code></pre>
-<pre><code>## Removing: docs/index.md</code></pre>
-<pre><code>## Removing: docs/introduction.html</code></pre>
-<pre><code>## Removing: docs/libs/anchor-sections-1.0.1/anchor-sections.css</code></pre>
-<pre><code>## Removing: docs/libs/anchor-sections-1.0.1/anchor-sections.js</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/css/fontawesome/fontawesome-webfont.ttf</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/css/plugin-bookdown.css</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/css/plugin-clipboard.css</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/css/plugin-fontsettings.css</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/css/plugin-highlight.css</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/css/plugin-search.css</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/css/plugin-table.css</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/css/style.css</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/js/app.min.js</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/js/clipboard.min.js</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/js/jquery.highlight.js</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/js/plugin-bookdown.js</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/js/plugin-clipboard.js</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/js/plugin-fontsettings.js</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/js/plugin-search.js</code></pre>
-<pre><code>## Removing: docs/libs/gitbook-2.6.7/js/plugin-sharing.js</code></pre>
-<pre><code>## Removing: docs/libs/header-attrs-2.10/header-attrs.js</code></pre>
-<pre><code>## Removing: docs/libs/jquery-3.5.0/jquery-3.5.0.min.js</code></pre>
-<pre><code>## Removing: docs/reference-keys.txt</code></pre>
-<pre><code>## Removing: docs/resources/images/02-example-chapter_files/figure-html/1YmwKdIy9BeQ3EShgZhvtb3MgR8P6iDX4DfFD65W_gdQ_gcc4fbee202_0_141.png</code></pre>
-<pre><code>## Removing: docs/resources/images/02-example-chapter_files/figure-html/unnamed-chunk-3-1.png</code></pre>
-<pre><code>## Removing: docs/search_index.json</code></pre>
-<pre><code>## Removing: manuscript/01-intro.md</code></pre>
-<pre><code>## Removing: manuscript/02-example-chapter.md</code></pre>
-<pre><code>## Removing: manuscript/404.html</code></pre>
-<pre><code>## Removing: manuscript/Book.txt</code></pre>
-<pre><code>## Removing: manuscript/example-chapter.html</code></pre>
-<pre><code>## Removing: manuscript/index.html</code></pre>
-<pre><code>## Removing: manuscript/index.md</code></pre>
-<pre><code>## Removing: manuscript/introduction.html</code></pre>
-<pre><code>## Removing: manuscript/libs/anchor-sections-1.0.1/anchor-sections.css</code></pre>
-<pre><code>## Removing: manuscript/libs/anchor-sections-1.0.1/anchor-sections.js</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/css/fontawesome/fontawesome-webfont.ttf</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/css/plugin-bookdown.css</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/css/plugin-clipboard.css</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/css/plugin-fontsettings.css</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/css/plugin-highlight.css</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/css/plugin-search.css</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/css/plugin-table.css</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/css/style.css</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/js/app.min.js</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/js/clipboard.min.js</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/js/jquery.highlight.js</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/js/plugin-bookdown.js</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/js/plugin-clipboard.js</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/js/plugin-fontsettings.js</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/js/plugin-search.js</code></pre>
-<pre><code>## Removing: manuscript/libs/gitbook-2.6.7/js/plugin-sharing.js</code></pre>
-<pre><code>## Removing: manuscript/libs/header-attrs-2.10/header-attrs.js</code></pre>
-<pre><code>## Removing: manuscript/libs/jquery-3.5.0/jquery-3.5.0.min.js</code></pre>
-<pre><code>## Removing: manuscript/reference-keys.txt</code></pre>
-<pre><code>## Removing: manuscript/references.bib</code></pre>
-<pre><code>## Removing: manuscript/resources/images/02-example-chapter_files/figure-html/1YmwKdIy9BeQ3EShgZhvtb3MgR8P6iDX4DfFD65W_gdQ_gcc4fbee202_0_141.png</code></pre>
-<pre><code>## Removing: manuscript/resources/images/02-example-chapter_files/figure-html/unnamed-chunk-3-1.png</code></pre>
-<pre><code>## Removing: manuscript/search_index.json</code></pre>
-<pre><code>## Removing: resources/images/02-example-chapter_files/figure-html/1YmwKdIy9BeQ3EShgZhvtb3MgR8P6iDX4DfFD65W_gdQ_gcc4fbee202_0_141.png</code></pre>
-<pre><code>## Removing: resources/images/02-example-chapter_files/figure-html/unnamed-chunk-3-1.png</code></pre>
-<pre><code>## Removing: _bookdown.yml</code></pre>
-<pre><code>## Removing: 01-intro.Rmd</code></pre>
-<pre><code>## Removing: 02-example-chapter.Rmd</code></pre>
-<pre><code>## Removing: docs</code></pre>
-<pre><code>## Warning in file.remove(file2remove): cannot remove file 'docs', reason
-## 'Directory not empty'</code></pre>
-<pre><code>## Removing: index.Rmd</code></pre>
-<pre><code>## Removing: manuscript</code></pre>
-<pre><code>## Warning in file.remove(file2remove): cannot remove file 'manuscript', reason
-## 'Directory not empty'</code></pre>
-<pre><code>## Removing: quiz_bad.md</code></pre>
-<pre><code>## Removing: quiz_good.md</code></pre>
-<pre><code>## Removing: quiz_good.md.yml</code></pre>
-<pre><code>## Removing: quizzes</code></pre>
-<pre><code>## Removing: references.bib</code></pre>
-<pre><code>## Removing: resources</code></pre>
-<pre><code>## Warning in file.remove(file2remove): cannot remove file 'resources', reason
-## 'Directory not empty'</code></pre>
-<pre><code>## Removing: toc_close.css</code></pre>
-<pre><code>## Removing: question_error_report.tsv</code></pre>
-<pre><code>## Removing: Course_Name.rds</code></pre>
-<p>Lastly, we will print out the session info.</p>
-<div class="sourceCode" id="cb158"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></pre></div>
-<pre><code>## R version 4.0.2 (2020-06-22)
-## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Ubuntu 20.04.2 LTS
-## 
-## Matrix products: default
-## BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.8.so
-## 
-## locale:
-##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
-##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
-## 
-## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
-## 
-## loaded via a namespace (and not attached):
-##  [1] compiler_4.0.2    pillar_1.4.6      jquerylib_0.1.1   R.methodsS3_1.8.1
-##  [5] R.utils_2.10.1    tools_4.0.2       digest_0.6.25     evaluate_0.14    
-##  [9] memoise_1.1.0     lifecycle_1.0.0   tibble_3.0.3      pkgconfig_2.0.3  
-## [13] rlang_0.4.10      cli_2.0.2         rstudioapi_0.11   yaml_2.2.1       
-## [17] pkgdown_1.6.1     xfun_0.26         stringr_1.4.0     httr_1.4.2       
-## [21] dplyr_1.0.2       knitr_1.33        xml2_1.3.2        generics_0.0.2   
-## [25] desc_1.2.0        fs_1.5.0          vctrs_0.3.4       systemfonts_0.3.2
-## [29] hms_0.5.3         tidyselect_1.1.0  rprojroot_1.3-2   glue_1.4.2       
-## [33] R6_2.4.1          textshaping_0.1.1 fansi_0.4.1       rmarkdown_2.10   
-## [37] bookdown_0.24     purrr_0.3.4       readr_1.4.0       magrittr_1.5     
-## [41] backports_1.1.10  htmltools_0.5.0   ellipsis_0.3.1    assertthat_0.2.1 
-## [45] ottrpal_0.1.2   rvest_1.0.1       ragg_0.4.0        utf8_1.1.4       
-## [49] stringi_1.5.3     crayon_1.3.4      R.oo_1.24.0</code></pre>
-</div>
+<div class="section level3">
+<h3 id="adding-footer-text">Adding footer text:<a class="anchor" aria-label="anchor" href="#adding-footer-text"></a>
+</h3>
+<p>If there is text you would like added to the end of each chapter
+(like a link to a feedback survey for example), you can supply a
+character string to the <code>footer_text</code> argument in the main
+<code>ottrpal::bookdown_to_leanpub()</code> function.</p>
+<pre><code><span><span class="co"># Set up a character string</span></span>
+<span><span class="va">survey_link</span> <span class="op">&lt;-</span> <span class="st">"Please provide any feedback you have by filing a GitHub issue [here](https://github.com/jhudsl/OTTR_Template/issues)"</span></span>
+<span></span>
+<span><span class="co"># Supply the footer text in the main function</span></span>
+<span><span class="fu">ottrpal</span><span class="fu">::</span><span class="fu">bookdown_to_embed_leanpub</span><span class="op">(</span>base_url <span class="op">=</span> <span class="st">"https://jhudatascience.org/OTTR_Template/"</span>,</span>
+<span>                                   make_book_txt <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                   footer_text <span class="op">=</span> <span class="va">survey_link</span><span class="op">)</span></span></code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## R version 4.4.0 (2024-04-24)</span></span>
+<span><span class="co">## Platform: x86_64-apple-darwin20</span></span>
+<span><span class="co">## Running under: macOS Ventura 13.5.2</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Matrix products: default</span></span>
+<span><span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib </span></span>
+<span><span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## locale:</span></span>
+<span><span class="co">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## time zone: America/New_York</span></span>
+<span><span class="co">## tzcode source: internal</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## attached base packages:</span></span>
+<span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## loaded via a namespace (and not attached):</span></span>
+<span><span class="co">##  [1] vctrs_0.6.5       cli_3.6.3         knitr_1.47        rlang_1.1.4      </span></span>
+<span><span class="co">##  [5] xfun_0.45         purrr_1.0.2       textshaping_0.4.0 jsonlite_1.8.8   </span></span>
+<span><span class="co">##  [9] htmltools_0.5.8.1 ragg_1.3.2        sass_0.4.9        rmarkdown_2.27   </span></span>
+<span><span class="co">## [13] evaluate_0.24.0   jquerylib_0.1.4   fastmap_1.2.0     yaml_2.3.8       </span></span>
+<span><span class="co">## [17] lifecycle_1.0.4   memoise_2.0.1     compiler_4.4.0    fs_1.6.4         </span></span>
+<span><span class="co">## [21] htmlwidgets_1.6.4 rstudioapi_0.16.0 systemfonts_1.1.0 digest_0.6.36    </span></span>
+<span><span class="co">## [25] R6_2.5.1          magrittr_2.0.3    bslib_0.7.0.9000  tools_4.4.0      </span></span>
+<span><span class="co">## [29] pkgdown_2.0.9     cachem_1.1.0      desc_1.4.3</span></span></code></pre>
 </div>
 </div>
   </div>
@@ -473,11 +261,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by John Muschelli, Candace Savonen.</p>
+  <p></p>
+<p>Developed by Candace Savonen, John Muschelli.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>
@@ -485,6 +275,8 @@
 
   
 
+
+  
 
   </body>
 </html>
