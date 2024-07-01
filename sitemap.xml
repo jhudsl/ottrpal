@@ -34,24 +34,6 @@
     <loc>/reference/bad_quiz_path.html</loc>
   </url>
   <url>
-    <loc>/reference/bookdown_destination.html</loc>
-  </url>
-  <url>
-    <loc>/reference/bookdown_file.html</loc>
-  </url>
-  <url>
-    <loc>/reference/bookdown_path.html</loc>
-  </url>
-  <url>
-    <loc>/reference/bookdown_rmd_files.html</loc>
-  </url>
-  <url>
-    <loc>/reference/bookdown_to_book_txt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/bookdown_to_embed_leanpub.html</loc>
-  </url>
-  <url>
     <loc>/reference/check_all_questions.html</loc>
   </url>
   <url>
@@ -76,7 +58,10 @@
     <loc>/reference/convert_quiz.html</loc>
   </url>
   <url>
-    <loc>/reference/convert_utube_link.html</loc>
+    <loc>/reference/course_path.html</loc>
+  </url>
+  <url>
+    <loc>/reference/course_to_book_txt.html</loc>
   </url>
   <url>
     <loc>/reference/coursera.html</loc>
@@ -91,19 +76,10 @@
     <loc>/reference/encrypt_creds_user_path.html</loc>
   </url>
   <url>
-    <loc>/reference/example_repo_cleanup.html</loc>
-  </url>
-  <url>
-    <loc>/reference/example_repo_setup.html</loc>
-  </url>
-  <url>
     <loc>/reference/extract_meta.html</loc>
   </url>
   <url>
     <loc>/reference/extract_object_id.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_bookdown_spec.html</loc>
   </url>
   <url>
     <loc>/reference/get_chapters.html</loc>
@@ -116,6 +92,9 @@
   </url>
   <url>
     <loc>/reference/get_slide_id.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_yaml_spec.html</loc>
   </url>
   <url>
     <loc>/reference/good_quiz_path.html</loc>
@@ -133,10 +112,10 @@
     <loc>/reference/key_encrypt_creds_path.html</loc>
   </url>
   <url>
-    <loc>/reference/leanpub_check.html</loc>
+    <loc>/reference/make_embed_markdown.html</loc>
   </url>
   <url>
-    <loc>/reference/make_embed_markdown.html</loc>
+    <loc>/reference/output_destination.html</loc>
   </url>
   <url>
     <loc>/reference/parse_q_tag.html</loc>
@@ -154,10 +133,7 @@
     <loc>/reference/pptx_notes.html</loc>
   </url>
   <url>
-    <loc>/reference/remove_yaml_header.html</loc>
-  </url>
-  <url>
-    <loc>/reference/replace_html.html</loc>
+    <loc>/reference/qrmd_files.html</loc>
   </url>
   <url>
     <loc>/reference/set_knitr_image_path.html</loc>
@@ -166,7 +142,7 @@
     <loc>/reference/set_up_leanpub.html</loc>
   </url>
   <url>
-    <loc>/reference/simple_references.html</loc>
+    <loc>/reference/website_to_embed_leanpub.html</loc>
   </url>
   <url>
     <loc>/reference/xml_notes.html</loc>

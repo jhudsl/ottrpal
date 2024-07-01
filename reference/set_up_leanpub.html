@@ -66,22 +66,21 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">set_up_leanpub</span><span class="op">(</span></span>
 <span>  path <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>  clean_up <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  render <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  render <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="st">"manuscript"</span>,</span>
 <span>  make_book_txt <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  quiz_dir <span class="op">=</span> <span class="st">"quizzes"</span>,</span>
 <span>  run_quiz_checks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  remove_resources_start <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  footer_text <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  embed <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  footer_text <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>path</dt>
-<dd><p>path to the bookdown book, must have a `_bookdown.yml` file</p></dd>
+<dd><p>path to the top of course repository (looks for .git folder)</p></dd>
 
 
 <dt>clean_up</dt>
@@ -90,7 +89,7 @@ everything created fresh.</p></dd>
 
 
 <dt>render</dt>
-<dd><p>if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.</p></dd>
+<dd><p>If NULL will not be run. If "quarto" or "bookdown" then the respective render type will be run</p></dd>
 
 
 <dt>output_dir</dt>
@@ -99,7 +98,7 @@ relative to path</p></dd>
 
 
 <dt>make_book_txt</dt>
-<dd><p>Should [ottrpal::bookdown_to_book_txt()] be run
+<dd><p>Should [ottrpal::course_to_book_txt()] be run
 to create a `Book.txt` in the output directory?</p></dd>
 
 
@@ -125,10 +124,6 @@ of any image path.</p></dd>
 <dt>footer_text</dt>
 <dd><p>Optionally can add a bit of text that will be added to the
 end of each file before the references section.</p></dd>
-
-
-<dt>embed</dt>
-<dd><p>is this being run by bookdown_to_embed_leanpub? TRUE/FALSE</p></dd>
 
 </dl></div>
     <div id="value">
