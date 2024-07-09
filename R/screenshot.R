@@ -5,7 +5,6 @@
 #' @param output_dir default is "resources/chapt_screen_images"; Output directory where the chapter's screen images should be stored. For OTTR courses, don't change this unless you've changed the downstream functions accordingly. 
 #' @param base_url default is NULL; rendered bookdown URL where screenshots are taken from, if NULL, the function will use the repo_name and and git_pat to find the base_url
 #' @return the file path for file where chapter urls are saved
-#' @import cow
 #' @import dplyr
 #' @importFrom webshot2 webshot
 #' @importFrom magrittr %>%
@@ -27,7 +26,7 @@ make_screenshots <- function(git_pat, repo, output_dir = "resources/chapt_screen
   }
   
   if (is.null(base_url)){
-    base_url <- cow::get_pages_url(repo_name = repo, git_pat = git_pat) #what if these arguments are still NULL/not supplied?
+    base_url <- ottrpal::get_pages_url(repo_name = repo, git_pat = git_pat) #what if these arguments are still NULL/not supplied?
     base_url <- gsub("/$", "", base_url)
   }
   
