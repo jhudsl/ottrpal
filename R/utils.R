@@ -238,6 +238,113 @@ add_footer <- function(rmd_path, footer_text = NULL) {
   )
 }
 
+test_url <- function(url, ignore_urls) {
+
+  if (url %in% ignore_urls) {
+    message(paste0("Ignoring: ", url))
+    return("ignored")
+  }
+
+  message(paste0("Testing: ", url))
+
+  url_status <- try(httr::GET(url), silent = TRUE)
+
+  # Fails if host can't be resolved
+  status <- ifelse(suppressMessages(grepl("Could not resolve host", url_status)), "failed", "success")
+
+  if (status == "success") {
+    # Fails if 404'ed
+    status <- ifelse(try(url_status$status_code, silent = TRUE) == 404, "failed", "success")
+  }
+
+  return(status)
+}
+
+get_urls <- function(file, ignore_urls) {
+
+  message(paste("##### Testing URLs from file:", file))
+
+  # Read in a file and return the urls from it
+  content <- readLines(file)
+
+  # Set up the possible tags
+  html_tag <- "<a href="
+  include_url_tag <- "include_url\\("
+  include_slide_tag <- "include_slide\\("
+  markdown_tag <- "\\[.*\\]\\(http[s]?.*\\)"
+  markdown_tag_bracket <- "\\[.*\\]: http[s]?"
+  http_gen <- "http[s]?"
+  url_pattern <- "[(|<]?http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
+
+  # Other patterns
+  nested_parens <- "\\((.*)\\((.*)\\)(.*)\\)"
+  outermost_parens <- "^\\((.*)\\)(.*)$"
+
+  # Collect the different kinds of tags in a named vector
+  all_tags <- c(html = html_tag,
+                knitr = include_url_tag,
+                ottrpal = include_slide_tag,
+                markdown = markdown_tag,
+                markdown_bracket = markdown_tag_bracket,
+                other_http = http_gen)
+
+  url_list <- sapply(all_tags, grep, content, value = TRUE)
+  url_list$other_http <- setdiff(url_list$other_http, unlist(url_list[-6]))
+
+  # Extract the urls only of each type
+  if (length(url_list$html) > 0 ){
+    url_list$html <- sapply(url_list$html, function(html_line) {
+      head(rvest::html_attr(rvest::html_nodes(rvest::read_html(html_line), "a"), "href"))
+    })
+    url_list$html <- unlist(url_list$html)
+  }
+  url_list$knitr <- stringr::word(url_list$knitr, sep = "include_url\\(\"|\"\\)", 2)
+  url_list$ottrpal <- stringr::word(url_list$ottrpal, sep = "include_slide\\(\"|\"\\)", 2)
+
+  # Check markdown for parentheticals outside of [ ]( )
+  parens_index <- sapply(url_list$markdown, stringr::str_detect, nested_parens)
+
+  if (length(parens_index) >= 1) {
+    # Break down to parenthetical only
+    url_list$markdown[parens_index] <- stringr::str_extract(url_list$markdown[parens_index], nested_parens)
+    # Remove parentheticals outside [ ]( )
+    url_list$markdown[parens_index] <- stringr::word(stringr::str_replace(url_list$markdown[parens_index], outermost_parens, "\\1"), sep = "\\]", 2)
+
+    url_list$markdown[!parens_index] <- stringr::word(url_list$markdown[!parens_index], sep = "\\]", 2)
+    url_list$markdown <- grep("http", url_list$markdown, value = TRUE)
+  }
+  if (length(url_list$markdown_bracket) > 0 ){
+    url_list$markdown_bracket <- paste0("http", stringr::word(url_list$markdown_bracket, sep = "\\]: http", 2))
+  }
+  url_list$other_http <- stringr::word(stringr::str_extract(url_list$other_http, url_pattern), sep = "\\]", 1)
+
+  # Remove parentheses only if they are on the outside
+  url_list$other_http <- stringr::word(stringr::str_replace(url_list$other_http, outermost_parens, "\\1"), sep = "\\]", 1)
+  url_list$markdown <- stringr::word(stringr::str_replace(url_list$markdown, outermost_parens, "\\1"), sep = "\\]", 1)
+
+  # Remove `< >`
+  url_list$other_http <- stringr::word(stringr::str_replace(url_list$other_http, "^<(.*)>(.*)$", "\\1"), sep = "\\]", 1)
+
+  # If after the manipulations there's not actually a URL, remove it.
+  url_list <- lapply(url_list, na.omit)
+
+  # collapse list
+  urls <- unlist(url_list)
+
+  # Remove trailing characters
+  urls <- gsub("\\'\\:$|\\'|\\:$|\\.$", "", urls)
+
+  if (length(urls) > 0 ){
+    # Remove trailing characters
+    urls_status <- sapply(urls, test_url, ignore_urls)
+    url_df <- data.frame(urls, urls_status, file)
+    return(url_df)
+  } else {
+    message("No URLs found")
+  }
+}
+
+
 #' Pipe operator
 #'
 #' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
