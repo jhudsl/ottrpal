@@ -1,16 +1,22 @@
 #' A function to make screenshots from an OTTR bookdown website
 #' @description This function creates screenshots of course chapters that are stored in a created output directory 
-#' @param git_pat default is NULL; required argument; a Git secret
-#' @param repo default is NULL; required argument; GitHub repository name, e.g., jhudsl/OTTR_Template
+#' @param git_pat required argument; a Git secret -- see https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens for more info
+#' @param repo required argument; GitHub repository name, e.g., jhudsl/OTTR_Template
 #' @param output_dir default is "resources/chapt_screen_images"; Output directory where the chapter's screen images should be stored. For OTTR courses, don't change this unless you've changed the downstream functions accordingly. 
 #' @param base_url default is NULL; rendered bookdown URL where screenshots are taken from, if NULL, the function will use the repo_name and and git_pat to find the base_url
+#' @return the file path for file where chapter urls are saved
 #' @import cow
 #' @import dplyr
 #' @importFrom webshot2 webshot
 #' @importFrom magrittr %>%
 #' @importFrom rprojroot find_root has_dir
 #' @author Candace Savonen
-make_screenshots <- function(git_pat = NULL, repo = NULL, output_dir = "resources/chapt_screen_images", base_url = NULL){
+#' @examples \dontrun{
+#' 
+#'  make_screenshots(Sys.getenv("secrets.GH_PAT"), "jhudsl/OTTR_Template")
+#'  
+#' }
+make_screenshots <- function(git_pat, repo, output_dir = "resources/chapt_screen_images", base_url = NULL){
   
   # Find .git root directory
   root_dir <- find_root(has_dir(".git"))
@@ -56,5 +62,7 @@ make_screenshots <- function(git_pat = NULL, repo = NULL, output_dir = "resource
     readr::write_tsv(file.path(output_folder, "chapter_urls.tsv"))
   
   message(paste("Image Chapter key written to: ", file.path(output_folder, "chapter_urls.tsv")))
+  
+  return(file.path(output_folder, "chapter_urls.tsv"))
   
 }
