@@ -35,6 +35,7 @@ Imports:
     rprojroot,
     rvest,
     stringr,
+    webshot2,
     xml2,
     yaml
 Suggests:
