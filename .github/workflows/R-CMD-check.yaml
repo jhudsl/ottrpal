@@ -36,7 +36,7 @@ jobs:
           rcmdcheck::rcmdcheck(args = c("--no-manual"), check_dir = "check")
         shell: Rscript {0}
         env:
-          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+          GH_PAT: ${{ secrets.GH_PAT }}
 
       - name: Check testthat
         id: check_check
