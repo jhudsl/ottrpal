@@ -7,29 +7,28 @@
 set_up_leanpub(
   path = ".",
   clean_up = FALSE,
-  render = TRUE,
+  render = NULL,
   output_dir = "manuscript",
   make_book_txt = FALSE,
   quiz_dir = "quizzes",
   run_quiz_checks = FALSE,
   remove_resources_start = FALSE,
   verbose = TRUE,
-  footer_text = NULL,
-  embed = NULL
+  footer_text = NULL
 )
 }
 \arguments{
-\item{path}{path to the bookdown book, must have a `_bookdown.yml` file}
+\item{path}{path to the top of course repository (looks for .git folder)}
 
 \item{clean_up}{TRUE/FALSE the old output directory should be deleted and
 everything created fresh.}
 
-\item{render}{if `TRUE`, then [bookdown::render_book()] will be run on each Rmd.}
+\item{render}{If NULL will not be run. If "quarto" or "bookdown" then the respective render type will be run}
 
 \item{output_dir}{output directory to put files.  It should likely be
 relative to path}
 
-\item{make_book_txt}{Should [ottrpal::bookdown_to_book_txt()] be run
+\item{make_book_txt}{Should [ottrpal::course_to_book_txt()] be run
 to create a `Book.txt` in the output directory?}
 
 \item{quiz_dir}{directory that contains the quiz .md files that should be
@@ -45,8 +44,6 @@ of any image path.}
 
 \item{footer_text}{Optionally can add a bit of text that will be added to the
 end of each file before the references section.}
-
-\item{embed}{is this being run by bookdown_to_embed_leanpub? TRUE/FALSE}
 }
 \value{
 A list of output files and diagnostics

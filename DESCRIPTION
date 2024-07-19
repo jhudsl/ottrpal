@@ -1,7 +1,7 @@
 Type: Package
 Package: ottrpal
 Title: Companion Tools for Open-Source Tools for Training Resources (OTTR)
-Version: 1.2.1
+Version: 1.3.0
 Authors@R: c(
     person("Candace", "Savonen", , c("cansav09@gmail.com","csavonen@fredhutch.org"), role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-6331-7070")),
@@ -23,7 +23,6 @@ Imports:
     curl,
     dplyr,
     fs,
-    glue,
     httr,
     jsonlite,
     knitr (>= 1.33),
@@ -36,16 +35,19 @@ Imports:
     rprojroot,
     rvest,
     stringr,
+    webshot2,
     xml2,
     yaml
 Suggests:
-    remotes,
-    testthat,
+    testthat (>= 3.0.0),
     tibble,
     utils
+Remotes: 
+    jhudsl/cow
 VignetteBuilder: 
     knitr
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.1
+Config/testthat/edition: 3
