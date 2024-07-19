@@ -39,11 +39,11 @@ Imports:
     xml2,
     yaml
 Suggests:
-    remotes,
-    cow,
     testthat (>= 3.0.0),
     tibble,
     utils
+Remotes: 
+    jhudsl/cow
 VignetteBuilder: 
     knitr
 ByteCompile: true
