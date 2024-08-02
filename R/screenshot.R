@@ -12,6 +12,7 @@
 #' @importFrom webshot2 webshot
 #' @importFrom magrittr %>%
 #' @importFrom rprojroot find_root has_dir
+#' @importFrom janitor make_clean_names
 #' 
 #' @author Candace Savonen
 #'
@@ -41,7 +42,7 @@ make_screenshots <- function(git_pat, repo, output_dir = "resources/chapt_screen
   chapt_df <- ottrpal::get_chapters(html_page = file.path(root_dir, "docs", "index.html"),
                                     base_url = base_url)
   
-  # Now take screenshots for each
+  # Get file names and make unique
   file_names <- lapply(chapt_df$url, function(url){
     file_name <- gsub(".html", 
                       ".png", 
@@ -53,17 +54,21 @@ make_screenshots <- function(git_pat, repo, output_dir = "resources/chapt_screen
                       "",
                       file_name
                       )
-    
-    # Take the screenshot
-    webshot(url, file = file_name)
-    
-    return(file_name)
-  })
+    return(gsub(".png", "", file_name)) #remove .png so clean_names is adding any numbers before file extension
+  }) %>% 
+    make_clean_names() %>% #handle repeat chapter names
+    paste0(".png") #add back .png
   
-  # Save file of chapter urls and file_names
+  #add cleaned file names as a column in the dataframe with URLs
   chapt_df <- chapt_df %>%
     dplyr::mutate(img_path = unlist(file_names))
   
+  # Now take screenshots for each, referencing the dataframe for the URL and desired filename
+  lapply(1:nrow(chapt_df), 
+         function(x) webshot(chapt_df$url[x], 
+                             file = chapt_df$img_path[x]))
+  
+  # Save file of chapter urls and file_names
   chapt_df %>% 
     readr::write_tsv(file.path(output_folder, "chapter_urls.tsv"))
   
