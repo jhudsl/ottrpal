@@ -74,7 +74,7 @@ website_to_embed_leanpub <- function(path = ".",
     }
     chapt_df <- get_chapters(
       html_page = paste0(base_url, "index.html"),
-      base_url = base_url
+      base_url = file.path(base_url, "no_toc/")
     ) %>%
       dplyr::mutate(chapt_title = gsub("\\:|\\?|\\&|\\!|\\'", "", chapt_title))
   }
