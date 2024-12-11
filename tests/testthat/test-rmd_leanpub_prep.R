@@ -1,18 +1,33 @@
 
 test_that("Create Leanpub IFrames for Rmd", {
 
+  ### Set up the OTTR repo
   dir <- download_ottr_template(dir = ".", type = "rmd")
 
   dir.exists(dir)
 
   bookdown::render_book(dir)
 
-  # TODO: This should be functionalized and incorporated into the package
-  # curl -o make_screenshots.R https://raw.githubusercontent.com/jhudsl/ottr-reports/main/scripts/make_screenshots.R
-  # Rscript --vanilla make_screenshots.R
-  #             --git_pat sys.getEnv("GH_PAT")
-  #             --repo fhdsl/OTTR_Template
-  #             --output_dir resources/chapt_screen_images)
+  ### Now run functions we will test
+  base_url <- ottrpal::get_pages_url(repo_name = "jhudsl/OTTR_Template",
+                                     git_pat = Sys.getenv("secrets.GH_PAT"))
+
+  # TODO: Test that the URL can
+  #testthat::expect_condition()
+
+  chapt_df <- ottrpal::get_chapters(html_page = file.path("OTTR_Template-main", "docs", "index.html"))
+
+  # We want to make screenshots from the course
+  chapt_df_file <- make_screenshots(git_pat = Sys.getenv("secrets.GH_PAT"),
+                                    repo = "jhudsl/OTTR_Template",
+                                    path = "OTTR_Template-main")
+
+  testthat::expect_equal(chapt_df_file, "resources/chapt_screen_images/chapter_urls.tsv")
+
+  chapt_df <- readr::read_tsv("resources/chapt_screen_images/chapter_urls.tsv")
+
+  # Expect column names should still be the
+  expect_names(chapt_df, c("url", "chapt_title", "img_path"))
 
   ## TEST HERE:
   # 1. Does each chapter have screenshot?

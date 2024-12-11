@@ -151,3 +151,4 @@ add_footer <- function(rmd_path, footer_text = NULL) {
 #' @param rhs A function call using the magrittr semantics.
 #' @return The result of calling `rhs(lhs)`.
 NULL
+
