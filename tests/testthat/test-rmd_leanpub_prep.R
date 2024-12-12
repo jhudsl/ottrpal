@@ -1,18 +1,25 @@
 
-test_that("Create Leanpub IFrames for Rmd", {
+test_that("Get base URL", {
 
+  ### Now run functions we will test
+  base_url <- get_pages_url(repo_name = "jhudsl/OTTR_Template",
+                            git_pat = Sys.getenv("secrets.GH_PAT"))
+
+  # TODO: Test that the URL can
+  testthat::expect_true(base_url == "https://jhudatascience.org/OTTR_Template/")
+})
+
+test_that("Get chapters", {
   ### Set up the OTTR repo
   dir <- setup_ottr_template(dir = ".", type = "rmd")
 
-  ### Now run functions we will test
-  base_url <- ottrpal::get_pages_url(repo_name = "jhudsl/OTTR_Template",
-                                     git_pat = Sys.getenv("secrets.GH_PAT"))
+  chapt_df <- get_chapters(html_page = file.path("OTTR_Template-main", "docs", "index.html"))
 
-  # TODO: Test that the URL can
-  #testthat::expect_condition()
+  testthat::expect_named(chapt_df, c("url", "chapt_title"))
 
-  chapt_df <- ottrpal::get_chapters(html_page = file.path("OTTR_Template-main", "docs", "index.html"))
+})
 
+test_that("Make screenshots", {
   # We want to make screenshots from the course
   chapt_df_file <- make_screenshots(git_pat = Sys.getenv("secrets.GH_PAT"),
                                     repo = "jhudsl/OTTR_Template",
@@ -24,21 +31,19 @@ test_that("Create Leanpub IFrames for Rmd", {
 
   # Expect column names should still be the
   expect_names(chapt_df, c("url", "chapt_title", "img_path"))
+})
 
-  ## TEST HERE:
-  # 1. Does each chapter have screenshot?
-  # 2. Is the file 'resources/chapt_screen_images/chapter_urls.tsv' made fresh?
-  # 2. Does chapter_urls.tsv file made have columns with information that are labeled "url", "chapt_title" and "img_path"
-
+test_that("Set Up", {
   #set_up_leanpub(
   #  make_book_txt = TRUE,
   #  quiz_dir = NULL
   #)
+})
 
   #website_to_embed_leanpub(
-    #chapt_img_key = 'resources/chapt_screen_images/chapter_urls.tsv',
-    #make_book_txt = TRUE,
-    #quiz_dir = NULL)
+  #chapt_img_key = 'resources/chapt_screen_images/chapter_urls.tsv',
+  #make_book_txt = TRUE,
+  #quiz_dir = NULL)
 
   ## TEST HERE:
   # 1. Did each chapter get a md in the manuscript folder?

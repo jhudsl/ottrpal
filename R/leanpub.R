@@ -382,7 +382,7 @@ make_screenshots <- function(git_pat,
                              path = "."){
 
   # Find .git root directory
-  root_dir <- find_root(has_dir(".github"), path = path)
+  root_dir <- rprojroot::find_root(has_dir(".github"), path = path)
 
   output_folder <- file.path(output_dir)
   if (!dir.exists(output_folder)) {
