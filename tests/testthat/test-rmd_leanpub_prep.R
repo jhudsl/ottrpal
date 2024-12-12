@@ -50,5 +50,3 @@ test_that("Set Up", {
   # 2. Does each md link to the appropriate sceenshot?
   # 3. Did the screenshot file path that's in the md lead to the appropriate file path?
 
-  clean_up()
-})
