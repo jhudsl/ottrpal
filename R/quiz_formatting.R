@@ -845,13 +845,10 @@ check_quizzes <- function(path = ".",
                           verbose = TRUE,
                           ignore_coursera = TRUE) {
 
-  # Find .github root directory
-  root_dir <- course_path(path = path)
-
   files <- list.files(
     pattern = "\\.md",
     ignore.case = TRUE,
-    path = file.path(root_dir, quiz_dir),
+    path = quiz_dir,
     full.names = TRUE
   )
 
@@ -877,9 +874,9 @@ check_quizzes <- function(path = ".",
 
   if (write_report) {
     if (nrow(question_report) > 0) {
-      message("\n Question error report saved to:", file.path(root_dir, "question_error_report.tsv"))
+      message("\n Question error report saved to:", file.path(quiz_dir, "question_error_report.tsv"))
       readr::write_tsv(question_report,
-        file = file.path(root_dir, "question_error_report.tsv")
+        file = file.path(quiz_dir, "question_error_report.tsv")
       )
     } else {
       message("\n No question errors to report!")
