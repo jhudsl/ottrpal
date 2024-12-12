@@ -25,6 +25,7 @@ Imports:
     dplyr,
     fs,
     httr,
+    Gitnreds,
     janitor,
     jsonlite,
     knitr (>= 1.33),
