@@ -26,12 +26,12 @@ Imports:
     fs,
     httr,
     gitcreds,
-    janitor,
     jsonlite,
     knitr (>= 1.33),
     magrittr,
     openssl,
     purrr,
+    quarto,
     R.utils,
     readr,
     rmarkdown (>= 2.10),
@@ -45,8 +45,6 @@ Suggests:
     testthat (>= 3.0.0),
     tibble,
     utils
-Remotes:
-    jhudsl/cow
 VignetteBuilder: 
     knitr
 ByteCompile: true

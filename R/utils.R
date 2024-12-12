@@ -6,7 +6,7 @@
 utils::globalVariables(c(
   "num", "quiz_dir", "type_url", "file_name", "trimmed", "quiz",
   "quiz_path", "type", "q_num", "verbose", "chapt_title", "data_path", "image_dir",
-  "convert_footnotes", "rmd_files"
+  "convert_footnotes", "rmd_files", "root_dir"
 ))
 
 #' Find root of OTTR course provided

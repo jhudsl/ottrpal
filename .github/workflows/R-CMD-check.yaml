@@ -69,6 +69,8 @@ jobs:
         shell: Rscript {0}
 
       - name: Check
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           options(crayon.enabled = TRUE)
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), check_dir = "check")
