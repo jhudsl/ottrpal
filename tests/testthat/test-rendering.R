@@ -1,54 +1,43 @@
+## These tests make sure the infrastructure for setting up test OTTR repos is working
+## Makes sure that the repos are downloaded, rendered and then cleaned up.
+
 test_that("Rmd Rendering", {
-  rmd_dir <- download_ottr_template(dir = ".", type = "rmd")
+  rmd_dir <- setup_ottr_template(dir = ".", type = "rmd")
 
-  dir.exists(rmd_dir)
+  testthat::expect_true(dir.exists(rmd_dir))
 
-  bookdown::render_book(rmd_dir)
+  clean_up()
 
-  unlink(rmd_dir, recursive = TRUE)
-  file.remove(paste0(rmd_dir, ".zip"))
+  testthat::expect_true(!dir.exists(rmd_dir))
 })
 
 test_that("Quarto Rendering", {
-  quarto_dir <- download_ottr_template(dir = ".", type = "quarto")
+  quarto_dir <- setup_ottr_template(dir = ".", type = "quarto")
 
-  dir.exists(quarto_dir)
+  testthat::expect_true(dir.exists(quarto_dir))
 
-  # Render it normal
-  quarto::quarto_render(quarto_dir, as_job = FALSE)
+  clean_up()
 
-  # Render it a different way
-  quarto::quarto_render(quarto_dir,
-                        metadata = list(sidebar = F, toc = F),
-                        quarto_args = c("--output-dir", "docs/no_toc/"),
-                        as_job = FALSE
-
-  )
-  unlink(quarto_dir, recursive = TRUE)
-  file.remove(paste0(quarto_dir, ".zip"))
+  testthat::expect_true(!dir.exists(quarto_dir))
 })
 
 test_that("Rmd Website Rendering", {
-  rmd_web_dir <- download_ottr_template(dir = ".", type = "rmd_website")
+  rmd_web_dir <- setup_ottr_template(dir = ".", type = "rmd_website")
 
-  dir.exists(rmd_web_dir)
+  testthat::expect_true(dir.exists(rmd_web_dir))
 
-  rmarkdown::clean_site(rmd_web_dir, preview = FALSE)
+  clean_up()
 
-  rmarkdown::render_site(rmd_web_dir)
-
-  unlink(rmd_web_dir, recursive = TRUE)
-  file.remove(paste0(rmd_web_dir, ".zip"))
+  testthat::expect_true(!dir.exists(rmd_web_dir))
 })
 
 
 test_that("Quarto Website Rendering", {
-  quarto_web_dir <- download_ottr_template(dir = ".", type = "quarto_website")
+  quarto_web_dir <- setup_ottr_template(dir = ".", type = "quarto_website")
 
-  dir.exists(quarto_web_dir)
+  testthat::expect_true(dir.exists(quarto_web_dir))
 
-  quarto::quarto_render(quarto_web_dir, as_job = FALSE)
+  clean_up()
 
-  unlink(quarto_web_dir, recursive = TRUE)
-  file.remove(paste0(quarto_web_dir, ".zip"))
+  testthat::expect_true(!dir.exists(quarto_web_dir))
 })

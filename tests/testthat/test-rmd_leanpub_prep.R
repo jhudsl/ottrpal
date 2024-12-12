@@ -2,11 +2,7 @@
 test_that("Create Leanpub IFrames for Rmd", {
 
   ### Set up the OTTR repo
-  dir <- download_ottr_template(dir = ".", type = "rmd")
-
-  dir.exists(dir)
-
-  bookdown::render_book(dir)
+  dir <- setup_ottr_template(dir = ".", type = "rmd")
 
   ### Now run functions we will test
   base_url <- ottrpal::get_pages_url(repo_name = "jhudsl/OTTR_Template",
@@ -49,6 +45,5 @@ test_that("Create Leanpub IFrames for Rmd", {
   # 2. Does each md link to the appropriate sceenshot?
   # 3. Did the screenshot file path that's in the md lead to the appropriate file path?
 
-  unlink(dir, recursive = TRUE)
-  file.remove(paste0(dir, ".zip"))
+  clean_up()
 })

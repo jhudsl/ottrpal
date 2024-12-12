@@ -1,11 +1,11 @@
-#' Download files from main OTTR_Template to test
+#' Download and render files from main OTTR_Template to test
 #'
 #' @param dir What relative file path should the files be downloaded
 #' @param type Which OTTR repo are we downloading? Options are "rmd", "quarto", "rmd_website", "quarto_website"
 #'
 #' @return This downloads the main branch repo files from the respective repo for testing purposes
 #' @export
-download_ottr_template <- function(dir = "inst/extdata", type = "rmd") {
+setup_ottr_template <- function(dir = "inst/extdata", type) {
   if (!dir.exists(dir)) dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 
   possible_types <- c("rmd", "quarto", "rmd_website", "quarto_website")
@@ -44,7 +44,43 @@ download_ottr_template <- function(dir = "inst/extdata", type = "rmd") {
     unzip(file_path, exdir = dir)
   }
 
+  ## Render it
+  if (type == "rmd") bookdown::render_book(output_dir)
+  if (type == "rmd_website") rmarkdown::render_site(output_dir)
+
+  if (type == "quarto" | type == "quarto_website") {
+    quarto::quarto_render(output_dir, as_job = FALSE)
+  }
+  if (type == "quarto") {
+    quarto::quarto_render(output_dir,
+                          metadata = list(sidebar = F, toc = F),
+                          quarto_args = c('--output-dir', 'docs/no_toc/'),
+                          as_job = FALSE)
+  }
   return(output_dir)
+}
+
+#' Clean up OTTR_Template files used for testing
+#'
+#' @return Looks for dangling zips and directories downloaded for testing and removes them
+#' @export
+clean_up <- function() {
+
+  dirs <- c("OTTR_Template-main",
+            "OTTR_Quarto-main",
+            "OTTR_Template_Website-main",
+            "OTTR_Quarto_Website-main")
+
+  zips <- paste0(dirs, ".zip")
+
+  # Remove dirs and their files
+  sapply(dirs, unlink, recursive = TRUE)
+
+  # Which zips are out there?
+  existing_zips <- list.files(pattern = paste0(zips, collapse = "|"))
+
+  # Remove any dangling zips
+  sapply(existing_zips, unlink)
 }
 
 
