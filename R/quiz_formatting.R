@@ -819,6 +819,7 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE, ignore_c
 #'
 #' Check the formatting of all quizzes in a given directory.
 #'
+#' @param path path to the top of course repository (looks for .github folder)
 #' @param quiz_dir A path to a directory full of quizzes that should all be checked with [ottrpal::check_all_quizzes].
 #' @param verbose print diagnostic messages
 #' @param write_report TRUE/FALSE save warning report to a CSV file?
@@ -838,14 +839,19 @@ check_question <- function(question_df, quiz_name = NA, verbose = TRUE, ignore_c
 #' ## Now check the quizzes in that directory
 #' all_quiz_results <- check_quizzes(quiz_dir = quiz_dir)
 #' }
-check_quizzes <- function(quiz_dir = "quizzes",
+check_quizzes <- function(path = ".",
+                          quiz_dir = "quizzes",
                           write_report = TRUE,
                           verbose = TRUE,
                           ignore_coursera = TRUE) {
+
+  # Find .github root directory
+  root_dir <- course_path(path = path)
+
   files <- list.files(
     pattern = "\\.md",
     ignore.case = TRUE,
-    path = quiz_dir,
+    path = file.path(root_dir, quiz_dir),
     full.names = TRUE
   )
 
@@ -871,9 +877,9 @@ check_quizzes <- function(quiz_dir = "quizzes",
 
   if (write_report) {
     if (nrow(question_report) > 0) {
-      message("\n Question error report saved to 'question_error_report.tsv'")
+      message("\n Question error report saved to:", file.path(root_dir, "question_error_report.tsv"))
       readr::write_tsv(question_report,
-        file = "question_error_report.tsv"
+        file = file.path(root_dir, "question_error_report.tsv")
       )
     } else {
       message("\n No question errors to report!")

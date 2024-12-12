@@ -18,7 +18,8 @@
 #'
 #' @importFrom utils download.file
 #'
-render_without_toc <- function(output_dir = file.path("docs", "no_toc"),
+render_without_toc <- function(course_path = ".",
+                               output_dir = file.path("docs", "no_toc"),
                                output_yaml = "_output.yml",
                                convert_quizzes = FALSE,
                                input_quiz_dir = "quizzes",

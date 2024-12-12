@@ -10,6 +10,7 @@ website_to_embed_leanpub(
   render = NULL,
   html_page = file.path(base_url, "index.html"),
   base_url = NULL,
+  clean_up = TRUE,
   default_img = NULL,
   output_dir = "manuscript",
   make_book_txt = FALSE,

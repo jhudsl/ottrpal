@@ -53,9 +53,10 @@ setup_ottr_template <- function(dir = "inst/extdata", type) {
   }
   if (type == "quarto") {
     quarto::quarto_render(output_dir,
-                          metadata = list(sidebar = F, toc = F),
-                          quarto_args = c('--output-dir', 'docs/no_toc/'),
-                          as_job = FALSE)
+      metadata = list(sidebar = F, toc = F),
+      quarto_args = c("--output-dir", "docs/no_toc/"),
+      as_job = FALSE
+    )
   }
   return(output_dir)
 }
@@ -65,11 +66,12 @@ setup_ottr_template <- function(dir = "inst/extdata", type) {
 #' @return Looks for dangling zips and directories downloaded for testing and removes them
 #' @export
 clean_up <- function() {
-
-  dirs <- c("OTTR_Template-main",
-            "OTTR_Quarto-main",
-            "OTTR_Template_Website-main",
-            "OTTR_Quarto_Website-main")
+  dirs <- c(
+    "OTTR_Template-main",
+    "OTTR_Quarto-main",
+    "OTTR_Template_Website-main",
+    "OTTR_Quarto_Website-main"
+  )
 
   zips <- paste0(dirs, ".zip")
 

@@ -5,6 +5,7 @@
 \title{Create TOC-less course website for use in Coursera or Leanpub}
 \usage{
 render_without_toc(
+  course_path = ".",
   output_dir = file.path("docs", "no_toc"),
   output_yaml = "_output.yml",
   convert_quizzes = FALSE,

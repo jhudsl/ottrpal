@@ -27,26 +27,47 @@ test_that("Make screenshots", {
 
   testthat::expect_equal(chapt_df_file, "resources/chapt_screen_images/chapter_urls.tsv")
 
-  chapt_df <- readr::read_tsv("resources/chapt_screen_images/chapter_urls.tsv")
+  chapt_df <- readr::read_tsv(file.path("OTTR_Template-main",
+                                        "resources",
+                                        "chapt_screen_images",
+                                        "chapter_urls.tsv"))
 
   # Expect column names should still be the
-  expect_names(chapt_df, c("url", "chapt_title", "img_path"))
+  testthat::expect_names(chapt_df, c("url", "chapt_title", "img_path"))
+
+  testthat::expect_number(nrow(chapt_df), 5)
 })
 
-test_that("Set Up", {
-  #set_up_leanpub(
-  #  make_book_txt = TRUE,
-  #  quiz_dir = NULL
-  #)
+test_that("Set Up Leanpub", {
+  dir <- setup_ottr_template(dir = ".", type = "rmd")
+
+  # We're going to delete this so we can test making it again
+  unlink(file.path(dir, "manuscript"), recursive = TRUE)
+
+  # Now run the iframe maker bit
+  website_to_embed_leanpub(
+    path = dir,
+    chapt_img_key = file.path('resources', 'chapt_screen_images', 'chapter_urls.tsv'),
+    make_book_txt = TRUE,
+    quiz_dir = NULL,
+    output_dir = "manuscript")
+
+  testthat::expect_true(
+    file.exists(file.path(dir,
+                          "manuscript",
+                          "resources",
+                          "chapt_screen_images",
+                          "introduction.png")))
+
+  # Lets check what the file looks like
+  intro <- readLines(file.path(dir, "manuscript", "1-Introduction.md"))
+
+  # Make sure the png is pointed to
+  testthat::expect_true(any(grepl("poster:resources/chapt_screen_images/introduction.png", intro)))
+
+  # Make sure we link to the page
+  testthat::expect_true(any(grepl("![](https://jhudatascience.org/OTTR_Template/introduction.html)", intro, fixed = TRUE)))
+
+  clean_up()
 })
-
-  #website_to_embed_leanpub(
-  #chapt_img_key = 'resources/chapt_screen_images/chapter_urls.tsv',
-  #make_book_txt = TRUE,
-  #quiz_dir = NULL)
-
-  ## TEST HERE:
-  # 1. Did each chapter get a md in the manuscript folder?
-  # 2. Does each md link to the appropriate sceenshot?
-  # 3. Did the screenshot file path that's in the md lead to the appropriate file path?
 

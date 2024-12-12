@@ -78,6 +78,7 @@ get_slide_page <- function(url) {
 #' @param output_dir path to output png
 #' @param overwrite should the slide PNG be overwritten?
 gs_png_download <- function(url, output_dir = ".", overwrite = TRUE) {
+
   id <- get_slide_id(url)
   slide_id <- get_slide_page(url)
   url <- gs_png_url(url)
@@ -185,7 +186,7 @@ get_image_from_slide <- function(file) {
 is.Token <- function(token) {
   inherits(token, "Token") ||
     (inherits(token, "request") &&
-       inherits(token$auth_token, "Token"))
+      inherits(token$auth_token, "Token"))
 }
 
 png_url <- function(id, page_id) {
@@ -208,7 +209,7 @@ download_png_urls <- function(urls) {
     ctype <- strsplit(ctype, " ")[[1]]
     ctype <- sub(";$", "", ctype)
     if (any(ctype == "text/html") &&
-        !any(grepl("png", ctype))) {
+      !any(grepl("png", ctype))) {
       stop("Output is not a PNG!")
     }
     tfile
@@ -223,7 +224,7 @@ add_footer <- function(rmd_path, footer_text = NULL) {
   }
   footer_text <- paste0("\n", footer_text, collapse = "\n")
   write(as.character(footer_text),
-        file = rmd_path,
-        append = TRUE
+    file = rmd_path,
+    append = TRUE
   )
 }

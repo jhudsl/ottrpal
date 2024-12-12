@@ -5,34 +5,37 @@
 \title{Make Leanpub file that has embed webpage of a chapter}
 \usage{
 make_embed_markdown(
+  path = ".",
   url,
   chapt_title,
-  width_spec = 800,
-  height_spec = 600,
   img_path,
   output_dir = "manuscript",
-  verbose = TRUE,
-  footer_text = ""
+  footer_text = "",
+  width_spec = 800,
+  height_spec = 600,
+  verbose = TRUE
 )
 }
 \arguments{
+\item{path}{path to the bookdown or quarto course repository, must have a `_bookdown.yml` or `_quarto.yml` file}
+
 \item{url}{The url to the chapter that is to be embed}
 
 \item{chapt_title}{Title of chapter to be used as file name and printed on iframe}
-
-\item{width_spec}{How wide should the iframe be in pixels?}
-
-\item{height_spec}{How high should the iframe be in pixels?}
 
 \item{img_path}{File path to image to use for poster}
 
 \item{output_dir}{output directory to put files.  It should likely be
 relative to path}
 
-\item{verbose}{print diagnostic messages}
-
 \item{footer_text}{Optionally can add a bit of text that will be added to the
 end of each file before the references section.}
+
+\item{width_spec}{How wide should the iframe be in pixels?}
+
+\item{height_spec}{How high should the iframe be in pixels?}
+
+\item{verbose}{print diagnostic messages}
 }
 \value{
 A markdown file with an iframe of the provided chapter

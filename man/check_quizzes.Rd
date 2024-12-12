@@ -5,6 +5,7 @@
 \title{Check all quizzes in a directory}
 \usage{
 check_quizzes(
+  path = ".",
   quiz_dir = "quizzes",
   write_report = TRUE,
   verbose = TRUE,
@@ -12,6 +13,8 @@ check_quizzes(
 )
 }
 \arguments{
+\item{path}{path to the top of course repository (looks for .github folder)}
+
 \item{quiz_dir}{A path to a directory full of quizzes that should all be checked with [ottrpal::check_all_quizzes].}
 
 \item{write_report}{TRUE/FALSE save warning report to a CSV file?}

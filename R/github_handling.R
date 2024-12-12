@@ -197,14 +197,14 @@ check_git_repo <- function(repo_name,
     # If git_pat is supplied, use it
     test_repo <- report(
       try(system(paste0("git ls-remote https://", git_pat, "@github.com/", repo_name),
-                 intern = TRUE, ignore.stderr = TRUE
+        intern = TRUE, ignore.stderr = TRUE
       ))
     )
   } else {
     # Try to git ls-remote the repo_name given
     test_repo <- report
     try(system(paste0("git ls-remote https://github.com/", repo_name),
-               intern = TRUE, ignore.stderr = TRUE
+      intern = TRUE, ignore.stderr = TRUE
     ))
   }
   # If 128 is returned as a status attribute it means it failed
@@ -244,12 +244,10 @@ get_git_auth <- function(git_pat = NULL, git_username = "PersonalAccessToken", q
 
   # If git pat is not provided, try to get credentials with gitcreds
   if (is.null(git_pat)) {
-
     # Try getting credentials
     auth_arg <- try(gitcreds::gitcreds_get(), silent = TRUE)
 
     if (grepl("Could not find any credentials", auth_arg[1])) {
-
       # Only if we're running this interactively
       if (interactive()) {
         # Set credentials if null
