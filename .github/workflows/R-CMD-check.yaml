@@ -80,6 +80,7 @@ jobs:
         if: runner.os != 'Windows'
         id: check_check
         run: |
+            install.packages("tidyr", repos = 'http://cran.us.r-project.org')
             error_num=$(Rscript --vanilla '.github/workflows/check_testthat.R')
             echo "error_num=$error_num" >> $GITHUB_OUTPUT
 
