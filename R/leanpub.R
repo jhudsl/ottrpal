@@ -377,7 +377,7 @@ get_chapters <- function(html_page = file.path("docs", "index.html"),
 #' }
 make_screenshots <- function(git_pat,
                              repo,
-                             output_dir = file.path("resources", "chapt_screen_images"),
+                             output_dir = file.path(path, "resources", "chapt_screen_images"),
                              base_url = NULL,
                              path = "."){
 

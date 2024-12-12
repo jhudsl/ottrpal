@@ -34,6 +34,7 @@ jobs:
           devtools::document()
           devtools::load_all()
           rcmdcheck::rcmdcheck(args = c("--no-manual"), check_dir = "check")
+          devtools::test()
         shell: Rscript {0}
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
@@ -41,8 +42,8 @@ jobs:
       - name: Check testthat
         id: check_check
         run: |
-            error_num=$(Rscript --vanilla '.github/workflows/check_testthat.R')
-            echo "error_num=$error_num" >> $GITHUB_OUTPUT
+          error_num=$(Rscript '.github/workflows/check_testthat.R')
+          echo "error_num=$error_num" >> $GITHUB_OUTPUT
 
       - name: Stop if there are errors!
         if: ${{ steps.check_check.outputs.error_num != '0' }}

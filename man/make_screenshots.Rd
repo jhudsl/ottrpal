@@ -7,7 +7,7 @@
 make_screenshots(
   git_pat,
   repo,
-  output_dir = file.path("resources", "chapt_screen_images"),
+  output_dir = file.path(path, "resources", "chapt_screen_images"),
   base_url = NULL,
   path = "."
 )
