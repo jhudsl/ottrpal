@@ -40,17 +40,10 @@ jobs:
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), check_dir = "check")
         shell: Rscript {0}
 
-      - name: Check testthat
-        id: check_check
-        run: |
-            Rscript -e "install.packages('tidyr', repos = 'http://cran.us.r-project.org')"
-            Rscript -e "devtools::test()"
-            error_num=$(Rscript --vanilla '.github/workflows/check_testthat.R')
-            echo "error_num=$error_num" >> $GITHUB_OUTPUT
-
-      - name: Stop if there are errors!
-        if: ${{ steps.check_check.outputs.error_num != '0' }}
-        run: exit 1
+      - name: Check package
+        uses: r-lib/actions/check-r-package@v2
+        with:
+          args: 'c("--no-manual")'
 
       - name: Upload check results
         if: failure()
