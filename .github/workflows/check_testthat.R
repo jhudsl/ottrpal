@@ -6,7 +6,7 @@ library(magrittr)
 
 
 # Find .git root directory
-root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
+root_dir <- rprojroot::find_root(rprojroot::has_dir(".github"))
 
 out_file <- list.files(pattern = ".Rout$|Rout.fail$", file.path(root_dir, "check"),
  recursive = TRUE, full.names = TRUE)
