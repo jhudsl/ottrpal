@@ -1,6 +1,11 @@
+if (Sys.getenv("GH_PAT") != "") {
 
 test_that("Get base URL", {
-
+  # Authorize GitHub
+  auth_from_secret("github",
+                   token = Sys.getenv("GH_PAT"),
+                   in_test = FALSE
+  )
   ### Now run functions we will test
   base_url <- get_pages_url(repo_name = "jhudsl/OTTR_Template",
                             git_pat = Sys.getenv("secrets.GH_PAT"))
@@ -71,3 +76,4 @@ test_that("Set Up Leanpub", {
   clean_up()
 })
 
+}

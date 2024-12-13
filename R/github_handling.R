@@ -1,13 +1,43 @@
+#' Handler function for GET requests from GitHub
+#' @description This is a function to get the GitHub user's info
+#' @param token You can provide the Personal Access Token key directly or this function will attempt to grab a PAT that was stored using the `authorize("github")` function
+#' @param url What is the URL endpoint we are attempting to grab here?
+#' @return Information regarding a Github account
+#' @importFrom utils menu installed.packages
+#' @importFrom httr oauth_app oauth_endpoints oauth2.0_token
+#' @export
+get_github <- function(token = NULL, url) {
+  if (is.null(token)) {
+    # Get auth token
+    token <- get_token(app_name = "github")
+  }
+
+  # Github api get
+  result <- httr::GET(
+    url,
+    httr::add_headers(Authorization = paste0("Bearer ", token)),
+    httr::accept_json()
+  )
+
+  if (httr::status_code(result) != 200) {
+    httr::stop_for_status(result)
+  }
+
+  # Process and return results
+  result_content <- httr::content(result, "text")
+  result_list <- jsonlite::fromJSON(result_content)
+
+  return(result_list)
+}
+
 #' Retrieve pages url for a repo
 #'
 #' Given an repository on GitHub, retrieve the pages URL for it.
 #'
 #' @param repo_name The full name of the repo to get bookdown chapters from.
 #' e.g. "jhudsl/OTTR_Template"
-#' @param git_pat If private repositories are to be retrieved, a github personal
-#' access token needs to be supplied. If none is supplied, then this will attempt to
-#' grab from a git pat set in the environment with usethis::create_github_token().
-#' Authorization handled by \link[cow]{get_git_auth}
+#' @param token If private repositories are to be retrieved, a github personal
+#' access token needs to be supplied. Run `authorize("github")` to set this.
 #' @param verbose TRUE/FALSE do you want more progress messages?
 #' @param keep_json verbose TRUE/FALSE keep the json file locally?
 #'
@@ -26,25 +56,22 @@
 #' get_pages_url("jhudsl/Documentation_and_Usability")
 #' }
 get_pages_url <- function(repo_name,
-                          git_pat = NULL,
+                          token = NULL,
                           verbose = FALSE,
                           keep_json = FALSE) {
   page_url <- NA
 
   # Try to get credentials other way
-  auth_arg <- get_git_auth(git_pat = git_pat, quiet = !verbose)
-
-  git_pat <- try(auth_arg$password, silent = TRUE)
-
-  if (grepl("Error", git_pat[1])) {
-    warning("Cannot retrieve page info without GitHub credentials. Passing an NA.")
+  if (is.null(token)) {
+    # Get auth token
+    token <- get_token(app_name = "github")
   }
 
   # We can only retrieve pages if we have the credentials
-  if (!grepl("Error", git_pat[1])) {
+  if (!grepl("Error", token[1])) {
     exists <- check_git_repo(
       repo_name = repo_name,
-      git_pat = git_pat,
+      token = token,
       verbose = FALSE
     )
 
@@ -52,7 +79,7 @@ get_pages_url <- function(repo_name,
       # Get repo info
       repo_info <- get_repo_info(
         repo_name = repo_name,
-        git_pat = git_pat
+        token = token
       )
 
       # Declare URL
@@ -61,7 +88,7 @@ get_pages_url <- function(repo_name,
       # Github api get
       response <- httr::GET(
         url,
-        httr::add_headers(Authorization = paste0("token ", auth_arg$password)),
+        httr::add_headers(Authorization = paste0("token ", token)),
         httr::accept_json()
       )
 
@@ -87,7 +114,7 @@ get_pages_url <- function(repo_name,
 #'
 #' @param repo_name The full name of the repo to get bookdown chapters from.
 #' e.g. "jhudsl/OTTR_Template"
-#' @param git_pat If private repositories are to be retrieved, a github personal
+#' @param token If private repositories are to be retrieved, a github personal
 #' access token needs to be supplied. If none is supplied, then this will attempt to
 #' grab from a git pat set in the environment with usethis::create_github_token().
 #' Authorization handled by \link[githubr]{get_git_auth}
@@ -107,14 +134,22 @@ get_pages_url <- function(repo_name,
 #' @examples
 #'
 #' repo_info <- get_repo_info("jhudsl/Documentation_and_Usability")
+#'
 get_repo_info <- function(repo_name,
-                          git_pat = NULL,
+                          token = NULL,
                           verbose = FALSE) {
+
+  # Try to get credentials other way
+  if (is.null(token)) {
+    # Get auth token
+    token <- get_token(app_name = "github")
+  }
+
   repo_info <- NA
 
   exists <- check_git_repo(
     repo_name = repo_name,
-    git_pat = git_pat,
+    token = token,
     verbose = FALSE,
     silent = TRUE
   )
@@ -123,12 +158,7 @@ get_repo_info <- function(repo_name,
     # Declare URL
     url <- paste0("https://api.github.com/repos/", repo_name)
 
-    # Try to get credentials other way
-    auth_arg <- get_git_auth(git_pat = git_pat)
-
-    git_pat <- try(auth_arg$password, silent = TRUE)
-
-    if (grepl("Error", git_pat[1])) {
+    if (grepl("Error", token[1])) {
       # Github api get without authorization
       response <- httr::GET(
         url,
@@ -138,7 +168,7 @@ get_repo_info <- function(repo_name,
       # Github api get
       response <- httr::GET(
         url,
-        httr::add_headers(Authorization = paste0("token ", git_pat)),
+        httr::add_headers(Authorization = paste0("token ", token)),
         httr::accept_json()
       )
     }
@@ -148,7 +178,7 @@ get_repo_info <- function(repo_name,
     }
 
     # Get content as JSON
-    repo_info <- httr::content(response, as = "parsed")
+    repo_info <- httr::content(response)
   } else {
     warning(paste0(repo_name, " could not be found with the given credentials."))
   }
@@ -160,7 +190,7 @@ get_repo_info <- function(repo_name,
 #' Given a repository name, check with git ls-remote whether the repository exists and return a TRUE/FALSE
 #'
 #' @param repo_name the name of the repository, e.g. jhudsl/OTTR_Template
-#' @param git_pat A personal access token from GitHub. Only necessary if the
+#' @param token A personal access token from GitHub. Only necessary if the
 #' repository being checked is a private repository.
 #' @param silent TRUE/FALSE of whether the warning from the git ls-remote
 #' command should be echoed back if it does fail.
@@ -176,8 +206,10 @@ get_repo_info <- function(repo_name,
 #' @examples
 #'
 #' check_git_repo("jhudsl/OTTR_Template")
+#'
+#'
 check_git_repo <- function(repo_name,
-                           git_pat = NULL,
+                           token = NULL,
                            silent = TRUE,
                            return_repo = FALSE,
                            verbose = TRUE) {
@@ -187,16 +219,17 @@ check_git_repo <- function(repo_name,
   # If silent = TRUE don't print out the warning message from the 'try'
   report <- ifelse(silent, suppressWarnings, message)
 
-  # Try to get credentials
-  auth_arg <- get_git_auth(git_pat = git_pat, quiet = !verbose)
-
-  git_pat <- try(auth_arg$password, silent = TRUE)
+  # Try to get credentials other way
+  if (is.null(token)) {
+    # Get auth token
+    token <- get_token(app_name = "github")
+  }
 
   # Run git ls-remote
-  if (!grepl("Error", git_pat[1])) {
-    # If git_pat is supplied, use it
+  if (!grepl("Error", token[1])) {
+    # If token is supplied, use it
     test_repo <- report(
-      try(system(paste0("git ls-remote https://", git_pat, "@github.com/", repo_name),
+      try(system(paste0("git ls-remote https://", token, "@github.com/", repo_name),
         intern = TRUE, ignore.stderr = TRUE
       ))
     )
@@ -222,67 +255,4 @@ check_git_repo <- function(repo_name,
   }
 
   return(exists)
-}
-
-#' Handle GitHub PAT authorization
-#'
-#' Handle things whether or not a GitHub PAT is supplied.
-#'
-#' @param git_pat If private repositories are to be retrieved, a github personal
-#' access token needs to be supplied. If none is supplied, then this will attempt to
-#' grab from a git pat set in the environment with usethis::create_github_token().
-#' @param git_username Optional, can include username for credentials.
-#' @param quiet Use TRUE if you don't want the warning about no GitHub credentials.
-#'
-#' @return Authorization argument to supply to curl OR a blank string if no
-#' authorization is found or supplied.
-#'
-#' @export
-#'
-get_git_auth <- function(git_pat = NULL, git_username = "PersonalAccessToken", quiet = FALSE) {
-  auth_arg <- NULL
-
-  # If git pat is not provided, try to get credentials with gitcreds
-  if (is.null(git_pat)) {
-    # Try getting credentials
-    auth_arg <- try(gitcreds::gitcreds_get(), silent = TRUE)
-
-    if (grepl("Could not find any credentials", auth_arg[1])) {
-      # Only if we're running this interactively
-      if (interactive()) {
-        # Set credentials if null
-        auth_arg <- gitcreds::gitcreds_set()
-      } else {
-        if (!quiet) {
-          message("Could not find git credentials, please set by running usethis::create_github_token(),
-                    or directly providing a personal access token using the git_pat argument")
-        }
-      }
-    }
-  } else { # If git_pat is given, use it.
-    # Set to Renviron file temporarily
-    Sys.setenv(GITHUB_PAT = git_pat)
-
-    # Put it in gitcreds
-    auth_arg <- gitcreds::gitcreds_get()
-
-    # Delete from Renviron file
-    Sys.unsetenv("GITHUB_PAT")
-
-    # Set up rest of token
-    auth_arg$protocol <- "https"
-    auth_arg$host <- "github.com"
-    auth_arg$username <- git_username
-  }
-
-  # Check if we have authentication
-  git_pat <- try(auth_arg$password, silent = TRUE)
-
-  if (grepl("Error", git_pat[1])) {
-    if (!quiet) {
-      message("No github credentials found or provided; only public repositories will be successful.")
-    }
-  }
-
-  return(auth_arg)
 }

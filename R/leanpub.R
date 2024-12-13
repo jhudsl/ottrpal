@@ -327,10 +327,10 @@ get_chapters <- function(path = ".",
 #' @description This function creates screenshots of course chapters that are stored in a created output directory
 #'
 #' @param path path to the bookdown or quarto course repository, must have a `_bookdown.yml` or `_quarto.yml` file
-#' @param git_pat required argument; a Git secret -- see https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens for more info
+#' @param token required argument; a Git secret -- see https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens for more info
 #' @param repo required argument; GitHub repository name, e.g., jhudsl/OTTR_Template
 #' @param output_dir default is "resources/chapt_screen_images"; Output directory where the chapter's screen images should be stored. For OTTR courses, don't change this unless you've changed the downstream functions accordingly.
-#' @param base_url default is NULL; rendered bookdown URL where screenshots are taken from, if NULL, the function will use the repo_name and and git_pat to find the base_url
+#' @param base_url default is NULL; rendered bookdown URL where screenshots are taken from, if NULL, the function will use the repo_name and and token to find the base_url
 #' @param path default is to look for OTTR files in current directory based on existence of .github. But if you'd like to run this in a different path, you can point to that file path.
 #' @return the file path for file where chapter urls are saved
 #'
@@ -346,12 +346,12 @@ get_chapters <- function(path = ".",
 #' @examples \dontrun{
 #'
 #' make_screenshots(
-#'   git_pat = Sys.getenv("secrets.GH_PAT"),
+#'   token = Sys.getenv("secrets.GH_PAT"),
 #'   repo = "jhudsl/OTTR_Template"
 #' )
 #' }
 make_screenshots <- function(path = ".",
-                             git_pat,
+                             token,
                              repo,
                              output_dir = file.path(path, "resources", "chapt_screen_images"),
                              base_url = NULL) {
@@ -364,7 +364,7 @@ make_screenshots <- function(path = ".",
   }
 
   if (is.null(base_url)) {
-    base_url <- ottrpal::get_pages_url(repo_name = repo, git_pat = git_pat) # what if these arguments are still NULL/not supplied?
+    base_url <- ottrpal::get_pages_url(repo_name = repo, token = token) # what if these arguments are still NULL/not supplied?
     base_url <- gsub("/$", "", base_url)
   }
 
