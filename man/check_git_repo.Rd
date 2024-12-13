@@ -6,7 +6,7 @@
 \usage{
 check_git_repo(
   repo_name,
-  git_pat = NULL,
+  token = NULL,
   silent = TRUE,
   return_repo = FALSE,
   verbose = TRUE
@@ -15,7 +15,7 @@ check_git_repo(
 \arguments{
 \item{repo_name}{the name of the repository, e.g. jhudsl/OTTR_Template}
 
-\item{git_pat}{A personal access token from GitHub. Only necessary if the
+\item{token}{A personal access token from GitHub. Only necessary if the
 repository being checked is a private repository.}
 
 \item{silent}{TRUE/FALSE of whether the warning from the git ls-remote
@@ -36,4 +36,6 @@ Given a repository name, check with git ls-remote whether the repository exists 
 \examples{
 
 check_git_repo("jhudsl/OTTR_Template")
+
+
 }

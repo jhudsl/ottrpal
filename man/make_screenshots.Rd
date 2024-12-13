@@ -6,7 +6,7 @@
 \usage{
 make_screenshots(
   path = ".",
-  git_pat,
+  token,
   repo,
   output_dir = file.path(path, "resources", "chapt_screen_images"),
   base_url = NULL
@@ -15,13 +15,13 @@ make_screenshots(
 \arguments{
 \item{path}{default is to look for OTTR files in current directory based on existence of .github. But if you'd like to run this in a different path, you can point to that file path.}
 
-\item{git_pat}{required argument; a Git secret -- see https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens for more info}
+\item{token}{required argument; a Git secret -- see https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens for more info}
 
 \item{repo}{required argument; GitHub repository name, e.g., jhudsl/OTTR_Template}
 
 \item{output_dir}{default is "resources/chapt_screen_images"; Output directory where the chapter's screen images should be stored. For OTTR courses, don't change this unless you've changed the downstream functions accordingly.}
 
-\item{base_url}{default is NULL; rendered bookdown URL where screenshots are taken from, if NULL, the function will use the repo_name and and git_pat to find the base_url}
+\item{base_url}{default is NULL; rendered bookdown URL where screenshots are taken from, if NULL, the function will use the repo_name and and token to find the base_url}
 }
 \value{
 the file path for file where chapter urls are saved
@@ -33,7 +33,7 @@ This function creates screenshots of course chapters that are stored in a create
 \dontrun{
 
 make_screenshots(
-  git_pat = Sys.getenv("secrets.GH_PAT"),
+  token = Sys.getenv("secrets.GH_PAT"),
   repo = "jhudsl/OTTR_Template"
 )
 }
