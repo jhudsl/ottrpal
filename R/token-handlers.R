@@ -142,21 +142,21 @@ cache_secrets_folder <- function() {
   file_path <- list.files(
     pattern = "cached-secrets",
     recursive = TRUE,
-    tools::R_user_dir("metricminer", which = "cache"),
+    tools::R_user_dir("ottrpal", which = "cache"),
     full.names = TRUE,
     include.dirs = TRUE,
   )
 
   if (length(file_path) == 0) {
     dir.create(file.path(
-      tools::R_user_dir("metricminer", which = "cache"),
+      tools::R_user_dir("ottrpal", which = "cache"),
       "cached-secrets"
     ), recursive = TRUE, showWarnings = FALSE)
   }
   list.files(
     pattern = "cached-secrets",
     recursive = TRUE,
-    tools::R_user_dir("metricminer", which = "cache"),
+    tools::R_user_dir("ottrpal", which = "cache"),
     full.names = TRUE,
     include.dirs = TRUE,
   )
