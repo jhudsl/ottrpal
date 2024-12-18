@@ -7,6 +7,7 @@
 #' @importFrom utils menu installed.packages browseURL
 #' @importFrom httr oauth_app oauth_endpoints oauth2.0_token
 #' @importFrom stringr str_to_title
+#' @importFrom utils browseURL
 #' @export
 #' @examples \dontrun{
 #'
@@ -236,3 +237,19 @@ app_set_up <- function(app_name = "google") {
   return(list(app = app, endpoint = endpoint_url))
 }
 
+
+find_scopes <- function(app_name) {
+  ### Declare all the scopes
+  scopes <- list(
+    google = c(
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive.readonly",
+    "https://www.googleapis.com/auth/presentations",
+    "https://www.googleapis.com/auth/presentations.readonly"
+    ),
+    github = c("repo")
+  )
+
+  return(scopes[app_name])
+}

@@ -202,11 +202,12 @@ get_repo_info <- function(repo_name,
 #'
 #' @export
 #'
-#' @examples
+#' @examples \dontrun {
 #'
+#' authorize("github")
 #' check_git_repo("jhudsl/OTTR_Template")
 #'
-#'
+#'}
 check_git_repo <- function(repo_name,
                            token = NULL,
                            silent = TRUE,

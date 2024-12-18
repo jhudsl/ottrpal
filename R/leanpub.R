@@ -6,6 +6,7 @@
 #' Column names `url`, `chapt_title`, and `img_path` must be used.
 #' If no chapter title column supplied, the basename of the url will be used,
 #' If no image column supplied, default image used.
+#' @param clean_up Should the previous docs and manuscript folder be cleaned up? 
 #' @param html_page The file path of the rendered index.html file
 #' @param base_url The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
 #' e.g. https://jhudatascience.org/OTTR_Template/coursera

@@ -40,7 +40,11 @@ Imports:
     stringr,
     webshot2,
     xml2,
-    yaml
+    yaml, 
+    getPass, 
+    googledrive, 
+    googlesheets4, 
+    withr,
 Suggests:
     testthat (>= 3.0.0),
     tibble,

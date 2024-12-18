@@ -84,11 +84,19 @@ course_to_book_txt <- function(path = ".",
 #' @export
 #'
 qrmd_files <- function(path = ".") {
-  spec <- get_yaml_spec(file.path(path))
 
-  rmd_files <- spec$rmd_files
-  qmd_files <- grep(".qmd", unlist(spec$book$chapters), value = TRUE)
+  yaml <- list.files(path = path, pattern ="_bookdown.yml|_quarto.yml", full.names = TRUE)
 
+  spec <- yaml::read_yaml(yaml)
+
+  rmd_files <- qmd_files <- NULL
+
+  if (basename(yaml) == "_bookdown.yml") {
+    rmd_files <- spec$rmd_files
+  }
+  if (basename(yaml) == "_quarto.yml") {
+   qmd_files <- grep(".qmd", unlist(spec$book$chapters), value = TRUE)
+  }
   if (length(rmd_files) > 0 && length(qmd_files) > 0) stop("Both qmd and rmd files are found. Not sure what format to expect")
 
   # Make files whichever ones exist here
