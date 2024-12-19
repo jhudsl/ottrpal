@@ -2,26 +2,31 @@
 % Please edit documentation in R/auth.R
 \name{authorize}
 \alias{authorize}
-\title{Authorize R package to access the Google Slides API}
+\title{Authorize R package to access endpoints}
 \usage{
-authorize(token = NULL, cache = FALSE, ...)
+authorize(app_name = NULL, cache = FALSE, ...)
 }
 \arguments{
-\item{token}{An output from \code{\link{oauth2.0_token}} to set as the authentication token.}
+\item{app_name}{app would you like to authorize? Supported apps are 'google' 'calendly' and 'github'}
 
-\item{cache}{Should the token be cached as an .httr-oauth file?}
+\item{cache}{Should the token be cached as an .httr-oauth file or API keys stored as global options?}
 
 \item{...}{Additional arguments to send to \code{\link{oauth2.0_token}}}
 }
 \value{
-OAuth token saved to the environment so the package can use the users' Google data
+API token saved to the environment or the cache so it can be grabbed by functions
 }
 \description{
-This is a function to authorize the R package to access the Google Slides API interactively.
+This is a function to authorize the R package to access APIs interactively. To learn more about the privacy policy for ottrpal [read here](https://www.ottrproject.org/privacypolicy.html)
 }
 \examples{
 \dontrun{
 
 authorize()
+
+authorize("github")
+
+authorize("google")
+
 }
 }

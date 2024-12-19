@@ -2,30 +2,49 @@
 % Please edit documentation in R/auth.R
 \name{auth_from_secret}
 \alias{auth_from_secret}
-\title{Use secrets to authorize R package to access Google Slides API}
+\title{Use secrets to authorize R package to access endpoints}
 \usage{
-auth_from_secret(access_token = NULL, refresh_token = NULL)
+auth_from_secret(
+  app_name,
+  token,
+  access_token,
+  refresh_token,
+  cache = FALSE,
+  in_test = FALSE
+)
 }
 \arguments{
-\item{access_token}{Access token can be obtained from running authorize() interactively: token <-authorize(); token$credentials$access_token}
+\item{app_name}{Which app are you trying to authorize? 'google', 'calendly' or 'github'?}
 
-\item{refresh_token}{Refresh token can be obtained from running authorize() interactively: token <-authorize(); token$credentials$refresh_token}
+\item{token}{For calendly or github, pass in the API key or Personal Access Token that you have set up from going to https://github.com/settings/tokens/new or https://calendly.com/integrations/api_webhooks respectively.}
+
+\item{access_token}{For Google, access token can be obtained from running authorize interactively: token <-authorize(); token$credentials$access_token}
+
+\item{refresh_token}{For Google, refresh token can be obtained from running authorize interactively: token <-authorize(); token$credentials$refresh_token}
+
+\item{cache}{Should the credentials be cached? TRUE or FALSE?}
+
+\item{in_test}{If setting up auth in a test, set to TRUE so that way the authorization doesn't stick}
 }
 \value{
-OAuth token saved to the environment so the package can use the users' Google data
+OAuth token saved to the environment so the package access the API data
 }
 \description{
-This is a function to authorize the R package to access the Google Slides API. If no
-client.id and client.secret is provided, the package would provide predefined values.
+This is a function to authorize ottrpal to access calendly, github or google noninteractively from passing in a keys or tokens.
 }
 \examples{
 \dontrun{
 
-token <- authorize()
+# Example for GitHub
+# You go to https://github.com/settings/tokens/new to get a Personal Access Token
+auth_from_secret("github", token = "ghp_a_github_pat_here")
 
+# Example for authorizing for Google
+token <- authorize("google")
 auth_from_secret(
-  token$credentials$access_token,
-  token$credentials$refresh_token
+  app_name = "google",
+  access_token = token$credentials$access_token,
+  refresh_token = token$credentials$refresh_token
 )
 }
 

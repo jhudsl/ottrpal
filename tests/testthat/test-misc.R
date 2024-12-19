@@ -27,8 +27,6 @@ test_that("Example Test", {
 
 # get_slide_id()	Get Slide ID from URL
 
-# get_yaml_spec()	Load in yaml specifications from _bookdown.yml or _quarto.yml
-
 # gs_id_from_slide() get_image_link_from_slide() get_image_from_slide()	Google Slides Helper Functions
 
 #	gs_png_url() get_slide_page() gs_png_download() include_slide()	Get Google Slide PNG URL

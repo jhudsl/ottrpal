@@ -1,4 +1,12 @@
-test_that("Create Leanpub IFrames for Quarto", {
+if (Sys.getenv("GH_PAT") != "") {
+
+  # Authorize GitHub
+  auth_from_secret("github",
+                   token = Sys.getenv("GH_PAT"),
+                   in_test = FALSE
+  )
+
+  test_that("Create Leanpub IFrames for Quarto", {
 
   dir <- setup_ottr_template(dir = ".", type = "quarto")
 
@@ -27,3 +35,4 @@ test_that("Create Leanpub IFrames for Quarto", {
 
   clean_up()
 })
+}

@@ -16,7 +16,7 @@ test_that("Check bad quiz", {
   bad_quiz_specs <- parse_quiz(bad_quiz)
 
   # The following checks *should fail* because we're giving it a bad quiz.
-  bad_quiz_checks <- try(check_all_questions(bad_quiz_specs), silent = TRUE)
+  testthat::expect_warning(bad_quiz_checks <- try(check_all_questions(bad_quiz_specs), silent = TRUE))
 
   # It should find two errors
   testthat::expect_true(nrow(bad_quiz_checks) == 2)
@@ -28,7 +28,7 @@ test_that("Make a quiz report", {
 
   ## Now check the quizzes in that directory
   # The following checks *should also fail* because the bad quiz is in there
-  all_quiz_results <- try(check_quizzes(quiz_dir = quiz_dir), silent = TRUE)
+  testthat::expect_warning(all_quiz_results <- try(check_quizzes(quiz_dir = quiz_dir), silent = TRUE))
 
   # Should have a report saved to the quiz directory
   testthat::expect_true(file.exists(file.path(quiz_dir, "question_error_report.tsv")))

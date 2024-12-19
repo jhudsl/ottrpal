@@ -4,16 +4,13 @@
 \alias{get_pages_url}
 \title{Retrieve pages url for a repo}
 \usage{
-get_pages_url(repo_name, git_pat = NULL, verbose = FALSE, keep_json = FALSE)
+get_pages_url(repo_name, token = NULL, verbose = FALSE, keep_json = FALSE)
 }
 \arguments{
-\item{repo_name}{The full name of the repo to get bookdown chapters from.
-e.g. "jhudsl/OTTR_Template"}
+\item{repo_name}{The full name of the repo to get chapters from. e.g. 'jhudsl/OTTR_Template'}
 
-\item{git_pat}{If private repositories are to be retrieved, a github personal
-access token needs to be supplied. If none is supplied, then this will attempt to
-grab from a git pat set in the environment with usethis::create_github_token().
-Authorization handled by \link[cow]{get_git_auth}}
+\item{token}{If private repositories are to be retrieved, a github personal
+access token needs to be supplied. Run `authorize("github")` to set this.}
 
 \item{verbose}{TRUE/FALSE do you want more progress messages?}
 

@@ -4,16 +4,15 @@
 \alias{get_repo_info}
 \title{Retrieve information about a github repo}
 \usage{
-get_repo_info(repo_name, git_pat = NULL, verbose = FALSE)
+get_repo_info(repo_name, token = NULL, verbose = FALSE)
 }
 \arguments{
 \item{repo_name}{The full name of the repo to get bookdown chapters from.
 e.g. "jhudsl/OTTR_Template"}
 
-\item{git_pat}{If private repositories are to be retrieved, a github personal
+\item{token}{If private repositories are to be retrieved, a github personal
 access token needs to be supplied. If none is supplied, then this will attempt to
-grab from a git pat set in the environment with usethis::create_github_token().
-Authorization handled by \link[githubr]{get_git_auth}}
+grab from a git pat set in the environment with usethis::create_github_token().}
 
 \item{verbose}{TRUE/FALSE do you want more progress messages?}
 }
@@ -26,6 +25,8 @@ Given an repository on GitHub, retrieve the information about it from the
 GitHub API and read it into R.
 }
 \examples{
+\dontrun{
 
 repo_info <- get_repo_info("jhudsl/Documentation_and_Usability")
+}
 }
