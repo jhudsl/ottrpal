@@ -1,10 +1,6 @@
 test_that("Create Leanpub IFrames for Quarto", {
 
-  dir <- download_ottr_template(dir = ".", type = "quarto")
-
-  quarto::quarto_render(dir,
-                        metadata = list(sidebar = F, toc = F),
-                        quarto_args = c('--output-dir', 'docs/no_toc/'))
+  dir <- setup_ottr_template(dir = ".", type = "quarto")
 
   # TODO: This should be functionalized and incorporated into the package
   # curl -o make_screenshots.R https://raw.githubusercontent.com/jhudsl/ottr-reports/main/scripts/make_screenshots.R
@@ -29,6 +25,5 @@ test_that("Create Leanpub IFrames for Quarto", {
   # 2. Does each md link to the appropriate sceenshot?
   # 3. Did the screenshot file path that's in the md lead to the appropriate file path?
 
-  unlink(dir, recursive = TRUE)
-  file.remove(paste0(dir, ".zip"))
+  clean_up()
 })

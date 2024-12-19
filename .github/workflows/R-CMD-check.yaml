@@ -14,33 +14,37 @@ jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
     container:
-      image: jhudsl/base_ottr
+      image: jhudsl/base_ottr:main
 
     steps:
       - uses: actions/checkout@v4
 
+      - name: Query dependencies
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+        shell: Rscript {0}
+
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("devtools")
-          sessionInfo()
+          remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
-        env:
-          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check
-        run: |
-          options(crayon.enabled = TRUE)
-          devtools::document()
-          devtools::load_all()
-          rcmdcheck::rcmdcheck(args = c("--no-manual"), check_dir = "check")
-        shell: Rscript {0}
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          options(crayon.enabled = TRUE)
+          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), check_dir = "check")
+        shell: Rscript {0}
 
       - name: Check testthat
         id: check_check
         run: |
+            Rscript -e "install.packages('tidyr', repos = 'http://cran.us.r-project.org')"
+            Rscript -e "devtools::test()"
             error_num=$(Rscript --vanilla '.github/workflows/check_testthat.R')
             echo "error_num=$error_num" >> $GITHUB_OUTPUT
 
@@ -52,5 +56,4 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@main
         with:
-          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
