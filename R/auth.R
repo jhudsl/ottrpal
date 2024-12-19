@@ -222,7 +222,7 @@ auth_from_secret <- function(app_name, token, access_token, refresh_token, cache
 # This sets up the app creds no matter which way authorization is called
 app_set_up <- function(app_name = "google") {
   decrypted <- openssl::aes_cbc_decrypt(
-    readRDS(encrypt_creds_path("google")),
+    readRDS(encrypt_creds_path()),
     key = readRDS(key_encrypt_creds_path())
   )
 
