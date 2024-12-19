@@ -54,7 +54,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>A function to make screenshots from an OTTR bookdown website</h1>
-    <small class="dont-index">Source: <a href="https://github.com/jhudsl/ottrpal/blob/main/R/screenshot.R" class="external-link"><code>R/screenshot.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/jhudsl/ottrpal/blob/main/R/leanpub.R" class="external-link"><code>R/leanpub.R</code></a></small>
     <div class="hidden name"><code>make_screenshots.Rd</code></div>
     </div>
 
@@ -64,9 +64,10 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">make_screenshots</span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>  <span class="va">git_pat</span>,</span>
 <span>  <span class="va">repo</span>,</span>
-<span>  output_dir <span class="op">=</span> <span class="st">"resources/chapt_screen_images"</span>,</span>
+<span>  output_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">path</span>, <span class="st">"resources"</span>, <span class="st">"chapt_screen_images"</span><span class="op">)</span>,</span>
 <span>  base_url <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -75,7 +76,11 @@
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-git-pat">git_pat<a class="anchor" aria-label="anchor" href="#arg-git-pat"></a></dt>
+<dl><dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
+<dd><p>default is to look for OTTR files in current directory based on existence of .github. But if you'd like to run this in a different path, you can point to that file path.</p></dd>
+
+
+<dt id="arg-git-pat">git_pat<a class="anchor" aria-label="anchor" href="#arg-git-pat"></a></dt>
 <dd><p>required argument; a Git secret – see https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens for more info</p></dd>
 
 
@@ -104,8 +109,10 @@
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span> <span class="fu">make_screenshots</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"secrets.GH_PAT"</span><span class="op">)</span>, <span class="st">"jhudsl/OTTR_Template"</span><span class="op">)</span></span></span>
-<span class="r-in"><span> </span></span>
+<span class="r-in"><span><span class="fu">make_screenshots</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  git_pat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"secrets.GH_PAT"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  repo <span class="op">=</span> <span class="st">"jhudsl/OTTR_Template"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

@@ -54,7 +54,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Make Leanpub file that has embed webpage of a chapter</h1>
-    <small class="dont-index">Source: <a href="https://github.com/jhudsl/ottrpal/blob/main/R/iframe_leanpub.R" class="external-link"><code>R/iframe_leanpub.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/jhudsl/ottrpal/blob/main/R/leanpub.R" class="external-link"><code>R/leanpub.R</code></a></small>
     <div class="hidden name"><code>get_chapters.Rd</code></div>
     </div>
 
@@ -63,14 +63,22 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_chapters</span><span class="op">(</span>html_page <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"docs"</span>, <span class="st">"index.html"</span><span class="op">)</span>, base_url <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_chapters</span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  html_page <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"docs"</span>, <span class="st">"index.html"</span><span class="op">)</span>,</span>
+<span>  base_url <span class="op">=</span> <span class="st">"."</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-html-page">html_page<a class="anchor" aria-label="anchor" href="#arg-html-page"></a></dt>
+<dl><dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
+<dd><p>path to the bookdown or quarto course repository, must have a `_bookdown.yml` or `_quarto.yml` file</p></dd>
+
+
+<dt id="arg-html-page">html_page<a class="anchor" aria-label="anchor" href="#arg-html-page"></a></dt>
 <dd><p>The file path of the rendered index.html file. It can be a url</p></dd>
 
 
