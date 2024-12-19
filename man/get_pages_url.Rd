@@ -7,8 +7,7 @@
 get_pages_url(repo_name, token = NULL, verbose = FALSE, keep_json = FALSE)
 }
 \arguments{
-\item{repo_name}{The full name of the repo to get bookdown chapters from.
-e.g. "jhudsl/OTTR_Template"}
+\item{repo_name}{The full name of the repo to get chapters from. e.g. 'jhudsl/OTTR_Template'}
 
 \item{token}{If private repositories are to be retrieved, a github personal
 access token needs to be supplied. Run `authorize("github")` to set this.}

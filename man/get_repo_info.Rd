@@ -25,7 +25,8 @@ Given an repository on GitHub, retrieve the information about it from the
 GitHub API and read it into R.
 }
 \examples{
+\dontrun{
 
 repo_info <- get_repo_info("jhudsl/Documentation_and_Usability")
-
+}
 }

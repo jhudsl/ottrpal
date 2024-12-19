@@ -129,10 +129,10 @@ get_pages_url <- function(repo_name,
 #'
 #' @export
 #'
-#' @examples
+#' @examples \dontrun{
 #'
 #' repo_info <- get_repo_info("jhudsl/Documentation_and_Usability")
-#'
+#' }
 get_repo_info <- function(repo_name,
                           token = NULL,
                           verbose = FALSE) {
