@@ -66,7 +66,7 @@ This is only needed to be used on Bookdown courses. Quarto has a simple command 
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">render_without_toc</span><span class="op">(</span></span>
-<span>  course_path <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  path <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"docs"</span>, <span class="st">"no_toc"</span><span class="op">)</span>,</span>
 <span>  output_yaml <span class="op">=</span> <span class="st">"_output.yml"</span>,</span>
 <span>  convert_quizzes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -80,7 +80,11 @@ This is only needed to be used on Bookdown courses. Quarto has a simple command 
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-output-dir">output_dir<a class="anchor" aria-label="anchor" href="#arg-output-dir"></a></dt>
+<dl><dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
+<dd><p>path to the bookdown or quarto course repository, must have a `_bookdown.yml` or `_quarto.yml` file</p></dd>
+
+
+<dt id="arg-output-dir">output_dir<a class="anchor" aria-label="anchor" href="#arg-output-dir"></a></dt>
 <dd><p>A folder (existing or not) that the TOC-less Bookdown for Coursera files should be saved. By default is file.path("docs", "coursera")</p></dd>
 
 

@@ -63,7 +63,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_pages_url</span><span class="op">(</span><span class="va">repo_name</span>, git_pat <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>, keep_json <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_pages_url</span><span class="op">(</span><span class="va">repo_name</span>, token <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>, keep_json <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -71,15 +71,12 @@
 
 
 <dl><dt id="arg-repo-name">repo_name<a class="anchor" aria-label="anchor" href="#arg-repo-name"></a></dt>
-<dd><p>The full name of the repo to get bookdown chapters from.
-e.g. "jhudsl/OTTR_Template"</p></dd>
+<dd><p>The full name of the repo to get chapters from. e.g. 'jhudsl/OTTR_Template'</p></dd>
 
 
-<dt id="arg-git-pat">git_pat<a class="anchor" aria-label="anchor" href="#arg-git-pat"></a></dt>
+<dt id="arg-token">token<a class="anchor" aria-label="anchor" href="#arg-token"></a></dt>
 <dd><p>If private repositories are to be retrieved, a github personal
-access token needs to be supplied. If none is supplied, then this will attempt to
-grab from a git pat set in the environment with usethis::create_github_token().
-Authorization handled by get_git_auth</p></dd>
+access token needs to be supplied. Run `authorize("github")` to set this.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>

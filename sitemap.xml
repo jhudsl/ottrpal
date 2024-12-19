@@ -7,9 +7,11 @@
 <url><loc>/authors.html</loc></url>
 <url><loc>/index.html</loc></url>
 <url><loc>/news/index.html</loc></url>
+<url><loc>/reference/app_set_up.html</loc></url>
 <url><loc>/reference/auth_from_secret.html</loc></url>
 <url><loc>/reference/authorize.html</loc></url>
 <url><loc>/reference/bad_quiz_path.html</loc></url>
+<url><loc>/reference/cache_secrets_folder.html</loc></url>
 <url><loc>/reference/check_all_questions.html</loc></url>
 <url><loc>/reference/check_git_repo.html</loc></url>
 <url><loc>/reference/check_question.html</loc></url>
@@ -23,12 +25,13 @@
 <url><loc>/reference/course_path.html</loc></url>
 <url><loc>/reference/course_to_book_txt.html</loc></url>
 <url><loc>/reference/coursera.html</loc></url>
+<url><loc>/reference/delete_creds.html</loc></url>
 <url><loc>/reference/encrypt_creds_path.html</loc></url>
 <url><loc>/reference/encrypt_creds_user_path.html</loc></url>
 <url><loc>/reference/extract_meta.html</loc></url>
 <url><loc>/reference/extract_object_id.html</loc></url>
 <url><loc>/reference/get_chapters.html</loc></url>
-<url><loc>/reference/get_git_auth.html</loc></url>
+<url><loc>/reference/get_github.html</loc></url>
 <url><loc>/reference/get_gs_pptx.html</loc></url>
 <url><loc>/reference/get_object_id_notes.html</loc></url>
 <url><loc>/reference/get_pages_url.html</loc></url>
@@ -46,7 +49,9 @@
 <url><loc>/reference/parse_quiz_df.html</loc></url>
 <url><loc>/reference/pipe.html</loc></url>
 <url><loc>/reference/pptx_notes.html</loc></url>
+<url><loc>/reference/qrmd_files.html</loc></url>
 <url><loc>/reference/setup_ottr_template.html</loc></url>
+<url><loc>/reference/supported_endpoints.html</loc></url>
 <url><loc>/reference/website_to_embed_leanpub.html</loc></url>
 <url><loc>/reference/xml_notes.html</loc></url>
 </urlset>
