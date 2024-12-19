@@ -37,6 +37,8 @@ If no image column supplied, default image used.}
 \item{base_url}{The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
 e.g. https://jhudatascience.org/OTTR_Template/coursera}
 
+\item{clean_up}{Should the previous docs and manuscript folder be cleaned up?}
+
 \item{default_img}{A google slide link to the default image to be used for all chapters}
 
 \item{output_dir}{output directory to put files.  It should likely be

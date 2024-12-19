@@ -12,8 +12,7 @@ e.g. "jhudsl/OTTR_Template"}
 
 \item{token}{If private repositories are to be retrieved, a github personal
 access token needs to be supplied. If none is supplied, then this will attempt to
-grab from a git pat set in the environment with usethis::create_github_token().
-Authorization handled by \link[githubr]{get_git_auth}}
+grab from a git pat set in the environment with usethis::create_github_token().}
 
 \item{verbose}{TRUE/FALSE do you want more progress messages?}
 }

@@ -5,7 +5,7 @@
 \title{Create TOC-less course website for use in Coursera or Leanpub}
 \usage{
 render_without_toc(
-  course_path = ".",
+  path = ".",
   output_dir = file.path("docs", "no_toc"),
   output_yaml = "_output.yml",
   convert_quizzes = FALSE,
@@ -15,6 +15,8 @@ render_without_toc(
 )
 }
 \arguments{
+\item{path}{path to the bookdown or quarto course repository, must have a `_bookdown.yml` or `_quarto.yml` file}
+
 \item{output_dir}{A folder (existing or not) that the TOC-less Bookdown for Coursera files should be saved. By default is file.path("docs", "coursera")}
 
 \item{output_yaml}{A output.yml file to be provided to bookdown. By default is "_output.yml"}
