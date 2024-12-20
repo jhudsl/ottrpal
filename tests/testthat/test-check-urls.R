@@ -6,6 +6,7 @@ test_that("Test URL checks for OTTR main", {
    rmd_dir <- setup_ottr_template(type = "rmd", render = FALSE)
 
    status <- check_urls(rmd_dir)
+   testthat::expect_true(status < 2)
 
    # Make sure the report exists
    testthat::expect_true(file.exists(file.path(rmd_dir, output_file)))
@@ -18,9 +19,10 @@ test_that("Test URL checks for OTTR main", {
 })
 
 test_that("Test URL checks for OTTR Quarto main", {
-   qmd_dir <- setup_ottr_template(type = "qmd", render = FALSE)
+   qmd_dir <- setup_ottr_template(type = "quarto", render = FALSE)
 
    status <- check_urls(qmd_dir)
+   testthat::expect_true(status < 2)
 
    # Make sure the report exists
    testthat::expect_true(file.exists(file.path(qmd_dir, output_file)))
@@ -35,6 +37,7 @@ test_that("Test URL checks for OTTR web", {
    rmd_web <- setup_ottr_template(type = "rmd_website", render = FALSE)
 
    status <- check_urls(rmd_web, report_all = TRUE)
+   testthat::expect_true(status < 2)
 
    # Make sure the report exists
    testthat::expect_true(file.exists(file.path(rmd_web, output_file)))
@@ -50,6 +53,7 @@ test_that("Test URL checks for OTTR Quarto web", {
    qmd_web <- setup_ottr_template(type = "quarto_website", render = FALSE)
 
    status <- check_urls(qmd_web, report_all = TRUE)
+   testthat::expect_true(status < 2)
 
    # Make sure the report exists
    testthat::expect_true(file.exists(file.path(qmd_web, output_file)))
