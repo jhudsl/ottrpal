@@ -1,4 +1,3 @@
-
 #' Create Book.txt file from files existing in quiz directory
 #'
 #' @param path path to the bookdown or quarto course repository, must have a `_bookdown.yml` or `_quarto.yml` file
@@ -84,8 +83,7 @@ course_to_book_txt <- function(path = ".",
 #' @export
 #'
 qrmd_files <- function(path = ".") {
-
-  yaml <- list.files(path = path, pattern ="_bookdown.yml|_quarto.yml", full.names = TRUE)
+  yaml <- list.files(path = path, pattern = "_bookdown.yml|_quarto.yml", full.names = TRUE)
 
   spec <- yaml::read_yaml(yaml)
 
@@ -95,7 +93,7 @@ qrmd_files <- function(path = ".") {
     rmd_files <- spec$rmd_files
   }
   if (basename(yaml) == "_quarto.yml") {
-   qmd_files <- grep(".qmd", unlist(spec$book$chapters), value = TRUE)
+    qmd_files <- grep(".qmd", unlist(spec$book$chapters), value = TRUE)
   }
   if (length(rmd_files) > 0 && length(qmd_files) > 0) stop("Both qmd and rmd files are found. Not sure what format to expect")
 

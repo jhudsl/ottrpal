@@ -136,7 +136,6 @@ get_pages_url <- function(repo_name,
 get_repo_info <- function(repo_name,
                           token = NULL,
                           verbose = FALSE) {
-
   # Try to get credentials other way
   if (is.null(token)) {
     # Get auth token
@@ -205,8 +204,7 @@ get_repo_info <- function(repo_name,
 #'
 #' authorize("github")
 #' check_git_repo("jhudsl/OTTR_Template")
-#'
-#'}
+#' }
 check_git_repo <- function(repo_name,
                            token = NULL,
                            silent = TRUE,

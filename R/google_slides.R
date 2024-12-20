@@ -78,7 +78,6 @@ get_slide_page <- function(url) {
 #' @param output_dir path to output png
 #' @param overwrite should the slide PNG be overwritten?
 gs_png_download <- function(url, output_dir = ".", overwrite = TRUE) {
-
   id <- get_slide_id(url)
   slide_id <- get_slide_page(url)
   url <- gs_png_url(url)

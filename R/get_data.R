@@ -46,19 +46,19 @@ setup_ottr_template <- function(dir = ".", type, render = TRUE) {
 
   ## Render it
   if (render) {
-  if (type == "rmd") bookdown::render_book(output_dir)
-  if (type == "rmd_website") rmarkdown::render_site(output_dir)
+    if (type == "rmd") bookdown::render_book(output_dir)
+    if (type == "rmd_website") rmarkdown::render_site(output_dir)
 
-  if (type == "quarto" | type == "quarto_website") {
-    quarto::quarto_render(output_dir, as_job = FALSE)
-  }
-  if (type == "quarto") {
-    quarto::quarto_render(output_dir,
-      metadata = list(sidebar = F, toc = F),
-      quarto_args = c("--output-dir", "docs/no_toc/"),
-      as_job = FALSE
-    )
-  }
+    if (type == "quarto" | type == "quarto_website") {
+      quarto::quarto_render(output_dir, as_job = FALSE)
+    }
+    if (type == "quarto") {
+      quarto::quarto_render(output_dir,
+        metadata = list(sidebar = F, toc = F),
+        quarto_args = c("--output-dir", "docs/no_toc/"),
+        as_job = FALSE
+      )
+    }
   }
   return(output_dir)
 }

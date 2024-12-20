@@ -6,7 +6,7 @@
 #' Column names `url`, `chapt_title`, and `img_path` must be used.
 #' If no chapter title column supplied, the basename of the url will be used,
 #' If no image column supplied, default image used.
-#' @param clean_up Should the previous docs and manuscript folder be cleaned up? 
+#' @param clean_up Should the previous docs and manuscript folder be cleaned up?
 #' @param html_page The file path of the rendered index.html file
 #' @param base_url The base url of where the chapters are published -- the url to provide to the iframe in Leanpub
 #' e.g. https://jhudatascience.org/OTTR_Template/coursera
@@ -52,7 +52,6 @@ website_to_embed_leanpub <- function(path = ".",
                                      remove_resources_start = FALSE,
                                      verbose = TRUE,
                                      footer_text = "") {
-
   # Find the OTTR course
   root_dir <- course_path(path = path)
 
@@ -60,7 +59,6 @@ website_to_embed_leanpub <- function(path = ".",
   rooted_quiz_dir <- file.path(root_dir, quiz_dir)
 
   if (clean_up) {
-
     if (dir.exists(rooted_output_dir)) {
       message(paste("Clearing out old version of output files:", rooted_output_dir))
 
@@ -271,7 +269,6 @@ make_embed_markdown <- function(path = ".",
 get_chapters <- function(path = ".",
                          html_page = file.path("docs", "index.html"),
                          base_url = ".") {
-
   # Put this relative to project path
   html_page <- file.path(root_dir, html_page)
 

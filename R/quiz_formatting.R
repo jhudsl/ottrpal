@@ -844,7 +844,6 @@ check_quizzes <- function(path = ".",
                           write_report = TRUE,
                           verbose = TRUE,
                           ignore_coursera = TRUE) {
-
   files <- list.files(
     pattern = "\\.md",
     ignore.case = TRUE,
