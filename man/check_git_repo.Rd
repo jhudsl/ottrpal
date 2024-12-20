@@ -38,6 +38,5 @@ Given a repository name, check with git ls-remote whether the repository exists 
 
 authorize("github")
 check_git_repo("jhudsl/OTTR_Template")
-
 }
 }

@@ -12,7 +12,10 @@
 #' @return A file will be saved that lists the broken URLs will be saved to the specified output_dir.
 #' @export
 #'
-#' @importFrom magrittr
+#' @importFrom magrittr %>%
+#' @importFrom rprojroot find_root has_dir
+#' @importFrom tidyr unnest separate
+#' @importFrom readr write_tsv
 #'
 #' @examples
 #'
@@ -102,7 +105,18 @@ check_urls <- function(path = ".",
 #' @return a logical TRUE/FALSE for whether the URL is legitimate.
 #' @export
 #'
-#' @importFrom magrittr
+#' @importFrom magrittr %>%
+#' @importFrom httr GET
+#'
+#' @examples /dontrun {
+#'
+#' # This should print out "failed"
+#' test_url("https://notawebsiteaaaaaaa.com")
+#'
+#'
+#' # This should print out "success"
+#' test_url("https://github.com")
+#' }
 #'
 test_url <- function(url, ignore_urls = "") {
   if (url %in% ignore_urls) {
@@ -134,7 +148,16 @@ test_url <- function(url, ignore_urls = "") {
 #' @return a data.frame of all the URLs identified in the given rmd/qmd/md file
 #' @export
 #'
-#' @importFrom magrittr
+#' @importFrom magrittr %>%
+#' @importFrom rvest html_nodes read_html html_attr
+#' @import stringr
+#'
+#' @examples
+#'
+#' # Add in a URL error
+#  writeLines("A URL error: https://notawebsiteaaaaaaa.com", "url_test_error.md")
+#'
+#' get_urls("url_test_error.md")
 #'
 get_urls <- function(file, ignore_urls = "") {
   message(paste("##### Testing URLs from file:", file))

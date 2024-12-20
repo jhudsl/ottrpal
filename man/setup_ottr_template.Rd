@@ -4,12 +4,14 @@
 \alias{setup_ottr_template}
 \title{Download and render files from main OTTR_Template to test}
 \usage{
-setup_ottr_template(dir = "inst/extdata", type)
+setup_ottr_template(dir = ".", type, render = TRUE)
 }
 \arguments{
 \item{dir}{What relative file path should the files be downloaded}
 
 \item{type}{Which OTTR repo are we downloading? Options are "rmd", "quarto", "rmd_website", "quarto_website"}
+
+\item{render}{Should the OTTR repo be rendered after downloading? Default is TRUE}
 }
 \value{
 This downloads the main branch repo files from the respective repo for testing purposes
