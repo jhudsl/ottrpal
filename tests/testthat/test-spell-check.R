@@ -6,7 +6,7 @@ test_that("Test spell checks for OTTR main", {
   rmd_dir <- setup_ottr_template(type = "rmd", render = FALSE)
 
   # Add in a spelling error
-  writeLines("A spelling error: sauibguiabsduvbasuidbv", file.path(qmd_web, "spell_test_error.md"))
+  writeLines("A spelling error: sauibguiabsduvbasuidbv", file.path(rmd_dir, "spell_test_error.md"))
 
   status <- check_spelling(rmd_dir)
   testthat::expect_true(status > 0)
@@ -24,7 +24,7 @@ test_that("Test spell checks for OTTR Quarto main", {
   qmd_dir <- setup_ottr_template(type = "quarto", render = FALSE)
 
   # Add in a spelling error
-  writeLines("A spelling error: sauibguiabsduvbasuidbv", file.path(qmd_web, "spell_test_error.md"))
+  writeLines("A spelling error: sauibguiabsduvbasuidbv", file.path(qmd_dir, "spell_test_error.md"))
 
   status <- check_spelling(qmd_dir)
   testthat::expect_true(status > 0)
@@ -42,7 +42,7 @@ test_that("Test spell checks for OTTR web", {
   rmd_web <- setup_ottr_template(type = "rmd_website", render = FALSE)
 
   # Add in a spelling error
-  writeLines("A spelling error: sauibguiabsduvbasuidbv", file.path(qmd_web, "spell_test_error.md"))
+  writeLines("A spelling error: sauibguiabsduvbasuidbv", file.path(rmd_web, "spell_test_error.md"))
 
   status <- check_spelling(rmd_web)
   testthat::expect_true(status > 0)
