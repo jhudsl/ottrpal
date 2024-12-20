@@ -89,6 +89,8 @@ check_urls <- function(path = ".",
   readr::write_tsv(all_urls_df, output_file)
 
   message(paste0("Saved to: ", output_file))
+
+  return(nrow(all_urls_df))
 }
 
 

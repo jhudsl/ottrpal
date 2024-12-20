@@ -62,7 +62,7 @@ check_spelling <- function(path = ".",
   }
 
   # Only declare `.Rmd` files but not the ones in the style-sets directory
-  files <- list.files(pattern = file_pattern, recursive = TRUE, full.names = TRUE)
+  files <- list.files(path = path, pattern = file_pattern, recursive = TRUE, full.names = TRUE)
 
   if (exclude_file[1] != "") files <- grep(paste0(exclude_file, collapse = "|"), files, invert = TRUE, value = TRUE)
 
@@ -93,5 +93,5 @@ check_spelling <- function(path = ".",
 
   message(paste0("Saved to: ", output_file))
 
-  return(nrow(sp_errors))
+  return(as.numeric(nrow(sp_errors)))
 }
