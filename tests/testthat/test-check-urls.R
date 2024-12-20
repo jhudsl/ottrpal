@@ -19,7 +19,7 @@ test_that("Test URL checks for OTTR main", {
 })
 
 test_that("Test URL checks for OTTR Quarto main", {
-   qmd_dir <- setup_ottr_template(type = "qmd", render = FALSE)
+   qmd_dir <- setup_ottr_template(type = "quarto", render = FALSE)
 
    status <- check_urls(qmd_dir)
    testthat::expect_true(status == 0)
