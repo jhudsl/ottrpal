@@ -92,4 +92,6 @@ check_spelling <- function(path = ".",
   readr::write_tsv(sp_errors, output_file)
 
   message(paste0("Saved to: ", output_file))
+
+  return(nrow(sp_errors))
 }
