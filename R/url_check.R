@@ -74,9 +74,9 @@ check_urls <- function(path = ".",
 
   if (nrow(all_urls_df) > 0) {
     if (!report_all) {
-    all_urls_df <- all_urls_df %>%
-      dplyr::filter(urls_status == "failed") %>%
-      readr::write_tsv(output_file)
+      all_urls_df <- all_urls_df %>%
+        dplyr::filter(urls_status == "failed") %>%
+        readr::write_tsv(output_file)
     }
   } else {
     all_urls_df <- data.frame(errors = NA)
@@ -103,7 +103,6 @@ check_urls <- function(path = ".",
 #' @importFrom magrittr
 #'
 test_url <- function(url, ignore_urls = "") {
-
   if (url %in% ignore_urls) {
     message(paste0("Ignoring: ", url))
     return("ignored")

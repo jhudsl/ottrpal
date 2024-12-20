@@ -17,7 +17,6 @@ utils::globalVariables(c(
 #' @export
 #'
 course_path <- function(path = ".") {
-
   # Find .git root directory
   root_dir <- rprojroot::find_root(has_dir(".github"), path = path)
 
