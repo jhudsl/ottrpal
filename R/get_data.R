@@ -2,10 +2,10 @@
 #'
 #' @param dir What relative file path should the files be downloaded
 #' @param type Which OTTR repo are we downloading? Options are "rmd", "quarto", "rmd_website", "quarto_website"
-#'
+#' @param render Should the OTTR repo be rendered after downloading? Default is TRUE
 #' @return This downloads the main branch repo files from the respective repo for testing purposes
 #' @export
-setup_ottr_template <- function(dir = "inst/extdata", type) {
+setup_ottr_template <- function(dir = ".", type, render = TRUE) {
   if (!dir.exists(dir)) dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 
   possible_types <- c("rmd", "quarto", "rmd_website", "quarto_website")
@@ -45,6 +45,7 @@ setup_ottr_template <- function(dir = "inst/extdata", type) {
   }
 
   ## Render it
+  if (render) {
   if (type == "rmd") bookdown::render_book(output_dir)
   if (type == "rmd_website") rmarkdown::render_site(output_dir)
 
@@ -57,6 +58,7 @@ setup_ottr_template <- function(dir = "inst/extdata", type) {
       quarto_args = c("--output-dir", "docs/no_toc/"),
       as_job = FALSE
     )
+  }
   }
   return(output_dir)
 }
