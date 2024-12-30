@@ -6,8 +6,10 @@
 #' @return Message that says to no longer use this function
 #' @export
 set_knitr_image_path <- function() {
- message("The set_knitr_image_path() function will be deprecated from ottrpal",
-         "It is no longer needed. Please delete")
+  message(
+    "The set_knitr_image_path() function will be deprecated from ottrpal",
+    "It is no longer needed. Please delete"
+  )
 }
 
 utils::globalVariables(c(

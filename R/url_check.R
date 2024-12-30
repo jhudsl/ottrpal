@@ -1,4 +1,4 @@
-#' Check URLs of all md,rmd, and qmd files
+#' Check URLs of all md,rmd,and qmd files
 #'
 #' @param path path to the bookdown or quarto course repository, must have a
 #'   `.github` folder which will be used to establish the top of the repo.
@@ -17,7 +17,7 @@
 #' @importFrom tidyr unnest separate
 #' @importFrom readr write_tsv
 #'
-#' @examples
+#' @examples \dontrun{
 #'
 #' rmd_dir <- setup_ottr_template(dir = ".", type = "rmd", render = FALSE)
 #'
@@ -28,7 +28,7 @@
 #' qmd_dir <- setup_ottr_template(dir = ".", type = "qmd", render = FALSE)
 #'
 #' check_urls(qmd_dir)
-#'
+#' }
 check_urls <- function(path = ".",
                        output_dir = "check_reports",
                        resources_dir = "resources",
@@ -100,7 +100,7 @@ check_urls <- function(path = ".",
 #' Test a URL
 #'
 #' @param url A single URL that will be checked whether it is real.
-#' @param ignore_url A vector of URLs which to ignore.
+#' @param ignore_urls A vector of URLs which to ignore.
 #'
 #' @return a logical TRUE/FALSE for whether the URL is legitimate.
 #' @export
@@ -108,7 +108,7 @@ check_urls <- function(path = ".",
 #' @importFrom magrittr %>%
 #' @importFrom httr GET
 #'
-#' @examples /dontrun {
+#' @examples \dontrun{
 #'
 #' # This should print out "failed"
 #' test_url("https://notawebsiteaaaaaaa.com")
@@ -140,12 +140,12 @@ test_url <- function(url, ignore_urls = "") {
 }
 
 
-#' Identify and collect URLs in a single rmd/qmd/md file
+#' Identify and collect URLs in a single md,rmd, or qmd file
 #'
-#' @param file A file path to a rmd/qmd/md file that contains URLs to be check
-#' @param ignore_url A vector of URLs which to ignore.
+#' @param file A file path to a md,rmd, or qmd file that contains URLs to be check
+#' @param ignore_urls A vector of URLs which to ignore.
 #'
-#' @return a data.frame of all the URLs identified in the given rmd/qmd/md file
+#' @return a data.frame of all the URLs identified in the given md,rmd, or qmd file
 #' @export
 #'
 #' @importFrom magrittr %>%
@@ -155,13 +155,13 @@ test_url <- function(url, ignore_urls = "") {
 #' @importFrom utils head
 #'
 #'
-#' @examples
+#' @examples \dontrun{
 #'
 #' # Add in a URL error
-#  writeLines("A URL error: https://notawebsiteaaaaaaa.com", "url_test_error.md")
+#' # writeLines("A URL error: https://notawebsiteaaaaaaa.com", "url_test_error.md")
 #'
 #' get_urls("url_test_error.md")
-#'
+#' }
 get_urls <- function(file, ignore_urls = "") {
   message(paste("##### Testing URLs from file:", file))
 
