@@ -39,7 +39,7 @@ check_spelling(rmd_dir)
 
 # If there are broken URLs they will be printed in a list at "check_reports/url_checks.tsv"
 
-qmd_dir <- setup_ottr_template(dir = ".", type = "qmd", render = FALSE)
+qmd_dir <- setup_ottr_template(dir = ".", type = "quarto", render = FALSE)
 
 check_spelling(qmd_dir)
 
