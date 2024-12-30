@@ -2,11 +2,20 @@
   packageStartupMessage("Use the authorize() function to begin. This gives the package the proper credentials to run.")
 }
 
+#' set_knitr_image_path is being deprecated
+#' @return Message that says to no longer use this function
+#' @export
+set_knitr_image_path <- function() {
+  message(
+    "The set_knitr_image_path() function will be deprecated from ottrpal",
+    "It is no longer needed. Please delete"
+  )
+}
 
 utils::globalVariables(c(
   "num", "quiz_dir", "type_url", "file_name", "trimmed", "quiz",
   "quiz_path", "type", "q_num", "verbose", "chapt_title", "data_path", "image_dir",
-  "convert_footnotes", "rmd_files", "root_dir"
+  "convert_footnotes", "rmd_files", "root_dir", "found", "urls_status"
 ))
 
 #' Find root of OTTR course provided
@@ -17,7 +26,6 @@ utils::globalVariables(c(
 #' @export
 #'
 course_path <- function(path = ".") {
-
   # Find .git root directory
   root_dir <- rprojroot::find_root(has_dir(".github"), path = path)
 
@@ -28,6 +36,7 @@ course_path <- function(path = ".") {
 
   return(root_dir)
 }
+
 #' Pipe operator
 #'
 #' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.

@@ -1,4 +1,4 @@
-#' Check URLs of all md,rmd, and qmd files
+#' Check URLs of all md,rmd,and qmd files
 #'
 #' @param path path to the bookdown or quarto course repository, must have a
 #'   `.github` folder which will be used to establish the top of the repo.
@@ -12,9 +12,12 @@
 #' @return A file will be saved that lists the broken URLs will be saved to the specified output_dir.
 #' @export
 #'
-#' @importFrom magrittr
+#' @importFrom magrittr %>%
+#' @importFrom rprojroot find_root has_dir
+#' @importFrom tidyr unnest separate
+#' @importFrom readr write_tsv
 #'
-#' @examples
+#' @examples \dontrun{
 #'
 #' rmd_dir <- setup_ottr_template(dir = ".", type = "rmd", render = FALSE)
 #'
@@ -22,10 +25,10 @@
 #'
 #' # If there are broken URLs they will be printed in a list at "check_reports/url_checks.tsv"
 #'
-#' qmd_dir <- setup_ottr_template(dir = ".", type = "qmd", render = FALSE)
+#' qmd_dir <- setup_ottr_template(dir = ".", type = "quarto", render = FALSE)
 #'
 #' check_urls(qmd_dir)
-#'
+#' }
 check_urls <- function(path = ".",
                        output_dir = "check_reports",
                        resources_dir = "resources",
@@ -74,9 +77,9 @@ check_urls <- function(path = ".",
 
   if (nrow(all_urls_df) > 0) {
     if (!report_all) {
-    all_urls_df <- all_urls_df %>%
-      dplyr::filter(urls_status == "failed") %>%
-      readr::write_tsv(output_file)
+      all_urls_df <- all_urls_df %>%
+        dplyr::filter(urls_status == "failed") %>%
+        readr::write_tsv(output_file)
     }
   } else {
     all_urls_df <- data.frame(errors = NA)
@@ -89,21 +92,33 @@ check_urls <- function(path = ".",
   readr::write_tsv(all_urls_df, output_file)
 
   message(paste0("Saved to: ", output_file))
+
+  return(nrow(all_urls_df))
 }
 
 
 #' Test a URL
 #'
 #' @param url A single URL that will be checked whether it is real.
-#' @param ignore_url A vector of URLs which to ignore.
+#' @param ignore_urls A vector of URLs which to ignore.
 #'
 #' @return a logical TRUE/FALSE for whether the URL is legitimate.
 #' @export
 #'
-#' @importFrom magrittr
+#' @importFrom magrittr %>%
+#' @importFrom httr GET
+#'
+#' @examples \dontrun{
+#'
+#' # This should print out "failed"
+#' test_url("https://notawebsiteaaaaaaa.com")
+#'
+#'
+#' # This should print out "success"
+#' test_url("https://github.com")
+#' }
 #'
 test_url <- function(url, ignore_urls = "") {
-
   if (url %in% ignore_urls) {
     message(paste0("Ignoring: ", url))
     return("ignored")
@@ -125,16 +140,28 @@ test_url <- function(url, ignore_urls = "") {
 }
 
 
-#' Identify and collect URLs in a single rmd/qmd/md file
+#' Identify and collect URLs in a single md,rmd, or qmd file
 #'
-#' @param file A file path to a rmd/qmd/md file that contains URLs to be check
-#' @param ignore_url A vector of URLs which to ignore.
+#' @param file A file path to a md,rmd, or qmd file that contains URLs to be check
+#' @param ignore_urls A vector of URLs which to ignore.
 #'
-#' @return a data.frame of all the URLs identified in the given rmd/qmd/md file
+#' @return a data.frame of all the URLs identified in the given md,rmd, or qmd file
 #' @export
 #'
-#' @importFrom magrittr
+#' @importFrom magrittr %>%
+#' @importFrom rvest html_nodes read_html html_attr
+#' @import stringr
+#' @importFrom stats na.omit
+#' @importFrom utils head
 #'
+#'
+#' @examples \dontrun{
+#'
+#' # Add in a URL error
+#' # writeLines("A URL error: https://notawebsiteaaaaaaa.com", "url_test_error.md")
+#'
+#' get_urls("url_test_error.md")
+#' }
 get_urls <- function(file, ignore_urls = "") {
   message(paste("##### Testing URLs from file:", file))
 

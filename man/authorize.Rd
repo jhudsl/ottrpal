@@ -27,6 +27,5 @@ authorize()
 authorize("github")
 
 authorize("google")
-
 }
 }

@@ -17,40 +17,38 @@ Description: Tools for converting Open-Source Tools for Training Resources
 License: GPL-3
 URL: https://github.com/jhudsl/ottrpal
 BugReports: https://github.com/jhudsl/ottrpal/issues
-Depends:
-    R (>= 3.5.0)
 Imports:
-    bookdown,
-    curl,
-    dplyr,
-    fs,
-    httr,
-    gitcreds,
-    jsonlite,
-    knitr (>= 1.33),
-    magrittr,
-    openssl,
-    purrr,
-    quarto,
-    R.utils,
-    readr,
-    rmarkdown (>= 2.10),
-    rprojroot,
-    rvest,
-    stringr,
-    webshot2,
-    xml2,
-    yaml,
-    getPass,
-    googledrive,
-    googlesheets4,
-    withr,
+  bookdown,
+  curl,
+  dplyr,
+  fs,
+  httr,
+  gitcreds,
+  jsonlite,
+  knitr,
+  magrittr,
+  openssl,
+  purrr,
+  readr,
+  rmarkdown,
+  rprojroot,
+  rvest,
+  stringr,
+  webshot2,
+  xml2,
+  yaml,
+  getPass,
+  googledrive,
+  googlesheets4,
+  spelling,
+  tidyr, 
+  quarto, 
+  R.utils,
+  withr
 Suggests:
-    testthat (>= 3.0.0),
-    tibble,
-    utils,
-VignetteBuilder:
-    knitr
+  testthat,
+  tibble
+VignetteBuilder: knitr
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
