@@ -41,7 +41,8 @@ Imports:
   googledrive,
   googlesheets4,
   spelling,
-  tidyr 
+  tidyr, 
+  quarto
 Suggests:
   testthat,
   tibble
