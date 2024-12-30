@@ -2,7 +2,7 @@
 % Please edit documentation in R/spell_check.R
 \name{check_spelling}
 \alias{check_spelling}
-\title{Check spelling of all md,rmd, and qmd files}
+\title{Check spelling of all md, rmd, and qmd files}
 \usage{
 check_spelling(
   path = ".",
@@ -29,7 +29,7 @@ spelling should be tested. Default is "md$". Regex interpreted.}
 A file will be saved that lists the broken URLs will be saved to the specified output_dir.
 }
 \description{
-Check spelling of all md,rmd, and qmd files
+Check spelling of all md, rmd, and qmd files
 }
 \examples{
 

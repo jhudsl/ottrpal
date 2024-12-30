@@ -2,25 +2,27 @@
 % Please edit documentation in R/url_check.R
 \name{get_urls}
 \alias{get_urls}
-\title{Identify and collect URLs in a single rmd/qmd/md file}
+\title{Identify and collect URLs in a single md,rmd, or qmd file}
 \usage{
 get_urls(file, ignore_urls = "")
 }
 \arguments{
-\item{file}{A file path to a rmd/qmd/md file that contains URLs to be check}
+\item{file}{A file path to a md,rmd, or qmd file that contains URLs to be check}
 
-\item{ignore_url}{A vector of URLs which to ignore.}
+\item{ignore_urls}{A vector of URLs which to ignore.}
 }
 \value{
-a data.frame of all the URLs identified in the given rmd/qmd/md file
+a data.frame of all the URLs identified in the given md,rmd, or qmd file
 }
 \description{
-Identify and collect URLs in a single rmd/qmd/md file
+Identify and collect URLs in a single md,rmd, or qmd file
 }
 \examples{
+\dontrun{
 
 # Add in a URL error
+# writeLines("A URL error: https://notawebsiteaaaaaaa.com", "url_test_error.md")
 
 get_urls("url_test_error.md")
-
+}
 }

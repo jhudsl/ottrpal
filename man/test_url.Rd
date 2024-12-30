@@ -9,7 +9,7 @@ test_url(url, ignore_urls = "")
 \arguments{
 \item{url}{A single URL that will be checked whether it is real.}
 
-\item{ignore_url}{A vector of URLs which to ignore.}
+\item{ignore_urls}{A vector of URLs which to ignore.}
 }
 \value{
 a logical TRUE/FALSE for whether the URL is legitimate.
@@ -18,7 +18,7 @@ a logical TRUE/FALSE for whether the URL is legitimate.
 Test a URL
 }
 \examples{
-/dontrun {
+\dontrun{
 
 # This should print out "failed"
 test_url("https://notawebsiteaaaaaaa.com")

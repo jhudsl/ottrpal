@@ -2,7 +2,7 @@
 % Please edit documentation in R/url_check.R
 \name{check_urls}
 \alias{check_urls}
-\title{Check URLs of all md,rmd, and qmd files}
+\title{Check URLs of all md,rmd,and qmd files}
 \usage{
 check_urls(
   path = ".",
@@ -29,9 +29,10 @@ meaning only broken URLs will be reported in the url_checks.tsv file.}
 A file will be saved that lists the broken URLs will be saved to the specified output_dir.
 }
 \description{
-Check URLs of all md,rmd, and qmd files
+Check URLs of all md,rmd,and qmd files
 }
 \examples{
+\dontrun{
 
 rmd_dir <- setup_ottr_template(dir = ".", type = "rmd", render = FALSE)
 
@@ -42,5 +43,5 @@ check_urls(rmd_dir)
 qmd_dir <- setup_ottr_template(dir = ".", type = "qmd", render = FALSE)
 
 check_urls(qmd_dir)
-
+}
 }

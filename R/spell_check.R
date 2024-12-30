@@ -1,4 +1,4 @@
-#' Check spelling of all md,rmd, and qmd files
+#' Check spelling of all md, rmd, and qmd files
 #'
 #' @param path path to the bookdown or quarto course repository, must have a
 #'   `.github` folder which will be used to establish the top of the repo.
@@ -85,7 +85,7 @@ check_spelling <- function(path = ".",
       }
     },
     error = function(e) {
-      stop("Spell check did not work. Check that your dictionary is formatted correctly. You cannot have special characters (e.g., Diné) in the dictionary.txt file. You need to use HTML formatting (e.g., Din&eacute;) for these.")
+      stop("Spell check did not work. Check that your dictionary is formatted correctly. You cannot have special characters (non-ASCII) in the dictionary.txt file. You need to use HTML formatting (e.g., Din&eacute;) for these.")
     }
   )
 
