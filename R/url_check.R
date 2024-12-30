@@ -151,6 +151,9 @@ test_url <- function(url, ignore_urls = "") {
 #' @importFrom magrittr %>%
 #' @importFrom rvest html_nodes read_html html_attr
 #' @import stringr
+#' @importFrom stats na.omit
+#' @importFrom utils head
+#'
 #'
 #' @examples
 #'

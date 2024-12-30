@@ -42,7 +42,9 @@ Imports:
   googlesheets4,
   spelling,
   tidyr, 
-  quarto
+  quarto, 
+  R.utils,
+  withr
 Suggests:
   testthat,
   tibble
