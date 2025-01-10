@@ -151,72 +151,7 @@ gs_id_from_slide <- function(file) {
   return(x)
 }
 
-######################################
-# this returns the actual links in the text
-######################################
 #' @export
-#' @rdname gs_helpers
-get_image_link_from_slide <- function(file) {
-  x <- readLines(file, warn = FALSE)
-  x <- grep(x, pattern = "!\\[.*\\]\\(((resources/|)images.*)\\)", value = TRUE)
-  x <- sub(x, pattern = "!\\[(.*)\\]\\(((resources/|)images.*)\\)", replacement = "\\1")
-  # if (length(x) == 0) {
-  #   return(NA)
-  # }
-  return(x)
-}
-
-######################################
-# this returns the actual image filenames referenced
-# we will check to see if all images referenced exist
-######################################
-#' @export
-#' @rdname gs_helpers
-get_image_from_slide <- function(file) {
-  x <- readLines(file, warn = FALSE)
-  x <- grep(x, pattern = "!\\[.*\\]\\(((resources/|)images.*)\\)", value = TRUE)
-  x <- sub(x, pattern = "!\\[.*\\]\\(((resources/|)images.*)\\)", replacement = "\\1")
-  # if (length(x) == 0) {
-  #   return(NA)
-  # }
-  return(x)
-}
-
-is.Token <- function(token) {
-  inherits(token, "Token") ||
-    (inherits(token, "request") &&
-      inherits(token$auth_token, "Token"))
-}
-
-png_url <- function(id, page_id) {
-  paste0(
-    "https://docs.google.com/presentation/d/",
-    id, "/export/png?id=", id,
-    "&pageid=", page_id
-  )
-}
-
-download_png_urls <- function(urls) {
-  res <- vapply(urls, function(url) {
-    tfile <- tempfile(fileext = ".png")
-    out <- httr::GET(
-      url, httr::write_disk(tfile),
-      httr::content_type(".png")
-    )
-    httr::stop_for_status(out)
-    ctype <- out$headers$`content-type`
-    ctype <- strsplit(ctype, " ")[[1]]
-    ctype <- sub(";$", "", ctype)
-    if (any(ctype == "text/html") &&
-      !any(grepl("png", ctype))) {
-      stop("Output is not a PNG!")
-    }
-    tfile
-  }, FUN.VALUE = character(1))
-  return(res)
-}
-
-
 add_footer <- function(rmd_path, footer_text = NULL) {
   if (is.null(footer_text)) {
     stop("Need character string in footer_text argument to append to end of file.")

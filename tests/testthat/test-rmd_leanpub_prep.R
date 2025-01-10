@@ -24,6 +24,20 @@ test_that("Get chapters", {
 
 })
 
+test_that("Make book.txt", {
+
+  ### Set up the OTTR repo
+  dir <- setup_ottr_template(dir = ".", type = "rmd", render = FALSE)
+
+  course_to_book_txt(path = "OTTR_Template-main")
+
+  book_txt <- readLines(file.path("OTTR_Template-main", "manuscript", "Book.txt"))
+
+  testthat::expect_true(length(book_txt) == 5)
+
+  clean_up()
+})
+
 test_that("Make screenshots", {
   # We want to make screenshots from the course
   chapt_df_file <- make_screenshots(git_pat = Sys.getenv("secrets.GH_PAT"),

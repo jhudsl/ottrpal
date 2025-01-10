@@ -14,6 +14,15 @@ test_that("Get base URL - Quarto", {
   testthat::expect_true(base_url == "https://hutchdatascience.org/OTTR_Quarto/")
 })
 
+test_that("Make book.txt - Quarto", {
+  ### Set up the OTTR repo
+  dir <- setup_ottr_template(dir = ".", type = "quarto", render = FALSE)
+
+  course_to_book_txt(path = "OTTR_Quarto-main")
+
+})
+
+
 test_that("Get chapters - Quarto", {
   ### Set up the OTTR repo
   dir <- setup_ottr_template(dir = ".", type = "quarto")
@@ -43,7 +52,7 @@ test_that("Make screenshots - Quarto", {
   testthat::expect_number(nrow(chapt_df), 5)
 })
 
-test_that("Set Up Leanpub - fhdsl/OTTR_Quarto", {
+test_that("Set Up Leanpub - Quarto", {
   dir <- setup_ottr_template(dir = ".", type = "quarto")
 
   # We're going to delete this so we can test making it again

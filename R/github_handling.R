@@ -253,3 +253,109 @@ check_git_repo <- function(repo_name,
 
   return(exists)
 }
+
+#' Retrieve logs for a GitHub Action workflow
+#'
+#' Given an workflow job on GitHub Actions, download the logs file from the API
+#'
+#' @param repo_name The full name of the repo to get chapters from. e.g. 'jhudsl/OTTR_Template'
+#' @param token If private repositories are to be retrieved, a github personal
+#' access token needs to be supplied. Run `authorize("github")` to set this.
+#' @param run_id What is the run id of the github action being run?
+#' @param attempt What attempt number are we trying to retrieve the logs from?
+#' @param dest_file Where should the logs be saved to?
+#' @param verbose TRUE/FALSE do you want more progress messages?
+#' @param keep_json verbose TRUE/FALSE keep the json file locally?
+#'
+#' @return A zip file downloaded from the GitHub API of the logs for the run and attempt given.
+#'
+#' @importFrom httr
+#'
+#' @export
+#'
+#' @examples \dontrun{
+#'
+#' authorize("github")
+#'
+#' download_logs("jhudsl/OTTR_Template",
+#'               run_id = 12345678,
+#'               attempt = 1)
+#' }
+download_logs <- function(repo_name,
+                         token = NULL,
+                         run_id,
+                         run_attempt =  1,
+                         dest_file = "logs.zip",
+                         verbose = FALSE,
+                         keep_json = FALSE) {
+
+  # Try to get credentials other way
+  if (is.null(token)) {
+    # Get auth token
+    token <- get_token(app_name = "github")
+  }
+
+  # Declare URL
+  url <- paste0("https://api.github.com/repos/",
+  repo_name, "/actions/runs/",
+  run_id, "/attempts/",
+  run_attempt, "/logs")
+
+  # Github api get
+  result <- httr::GET(
+    url,
+    httr::add_headers(Authorization = paste0("Bearer ", token)),
+    httr::accept_json()
+  )
+
+  if (result$status_code == 404) {
+    warning("log not found")
+    return(result)
+  }
+
+  download.file(result$all_headers[[1]]$headers$location,
+                 destfile = dest_file)
+
+  message("Logs downloaded to: ", dest_file)
+
+  return(dest_file)
+}
+
+
+#' Trim up the Markdown linter log file for use
+#'
+#' Given an workflow job on GitHub Actions, download the logs file from the API where markdown-linter has been run
+#' This function will trim it up to be a little more useful.
+#'
+#' @param log_file The path to the log zip file downloaded by using download_logs() function
+#'
+#' @export
+#' @examples \dontrun{
+#'
+#' authorize("github")
+#'
+#' log_file <- download_logs("jhudsl/OTTR_Template",
+#'               run_id = 12716577174,
+#'               run_attempt = 1)
+#'
+#' md_df <- format_linter_log(log_file)
+#'
+#' }
+format_linter_log <- function(log_file = "logs.zip") {
+
+  unzip(log_file)
+
+  md_log_file <- list.files(pattern = "DavidAnsonmarkdownlint", recursive = TRUE, full.names = TRUE)
+
+  content <- readLines(md_log_file)
+  content <- grep("##\\[error\\]", content, value = TRUE)
+
+  trimmed_content <- stringr::word(content, sep = "##\\[error\\]", start = 2)
+
+  file_id <- stringr::word(trimmed_content, sep = " ", start = 1)
+  warning_message <- stringr::word(trimmed_content, sep = " ", start = 2)
+
+  md_lint <- data.frame(file_id, warning_message)
+
+  return(md_lint)
+}

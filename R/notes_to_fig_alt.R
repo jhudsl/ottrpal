@@ -1,3 +1,78 @@
+#' Collect all the google slide URLs from the docs folder
+#'
+#' @param path path to the bookdown or quarto course repository, must have a
+#'   `.github` folder which will be used to establish the top of the repo.
+#' @param pattern What is the pattern to be used to identify the strings in the html files?
+#' @param target What is the targeted file path?
+#' @param file_suffix What types of files should we be looking in?
+#' @param output_dir A relative file path to the folder (existing or not) that the
+#'   output check file should be saved to. Default is "check_reports"
+#' @param resources_dir A relative file path to the folder (existing or not) that the
+#'   ignore_urls.txt file and exclude_files.txt will be found. Default is "resources".
+#'   If no ignore_urls.txt file and exclude_files.txt files are found, we will download one.
+#' @param recursive TRUE or FALSE folders should be looked in recursively? Default is true.
+#' @return a file and data.frame of all the google slide URLs identified in the given html docs files
+#' @export
+#' @importFrom rprojroot find_root has_dir
+#' @importFrom tidyr unnest separate
+#' @importFrom readr write_tsv
+#' @importFrom magrittr %>%
+#' @importFrom rvest html_nodes read_html html_attr
+#' @import stringr
+#' @importFrom stats na.omit
+#' @importFrom utils head
+#'
+#'
+#' @examples \dontrun{
+#'
+#' rmd_dir <- setup_ottr_template(dir = ".", type = "rmd", render = FALSE)
+#' slide_deck <- "1YmwKdIy9BeQ3EShgZhvtb3MgR8P6iDX4DfFD65W_gdQ"
+#' slide_urls <- get_slide_urls(rmd_dir, pattern = slide_deck)
+#' }
+get_slide_urls <- function(path = ".",
+                           pattern,
+                           target = "docs",
+                           file_suffix = "html$",
+                           output_dir = "resources",
+                           resources_dir = "resources",
+                           exclude_files = "",
+                           recursive = TRUE) {
+  # Find .git root directory
+  root_dir <- rprojroot::find_root(path = path, rprojroot::has_dir(".github"))
+
+  target_dir <- file.path(root_dir, target)
+  resources_dir <- file.path(root_dir, resources_dir)
+  output_dir <- file.path(root_dir, output_dir)
+
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  }
+  if (!dir.exists(resources_dir)) {
+    dir.create(resources_dir, recursive = TRUE, showWarnings = FALSE)
+  }
+
+  output_file <- file.path(output_dir, "slide_urls.tsv")
+
+  # Only declare `.md` files but not the ones in the style-sets directory
+  files <- list.files(path =  target_dir, pattern = file_suffix, full.names = TRUE, recursive = recursive)
+
+  if (exclude_files[1] != "") files <- grep(paste0(exclude_files, collapse = "|"), files, invert = TRUE, value = TRUE)
+
+  # Run this for all mds
+  all_mds <- sapply(files, readLines)
+  all_slide_urls <- lapply(all_mds, grep, pattern = pattern, fixed = TRUE, value = TRUE)
+
+  # If after the manipulations there's not actually a URL, remove it.
+  all_slide_urls <- lapply(all_slide_urls, na.omit)
+
+  # collapse list
+  slide_urls_df <- data.frame(gs_slides = unlist(all_slide_urls)) %>%
+    tibble::rownames_to_column("file")
+
+  readr::write_tsv(slide_urls_df, file.path(resources_dir, "gs_urls.tsv"))
+  return(slide_urls_df)
+}
+
 #' Download Google Slides pptx file
 #'
 #' @param id Identifier of Google slides presentation, passed to
@@ -312,17 +387,9 @@ extract_object_id <- function(slide_url, token = NULL, access_token = NULL, refr
 
   # if token not provided, fetch token
   if (is.null(token)) {
-    token_try <- try(get_token(), silent = TRUE)
-
-    # We will supply credentials if none can be grabbed by get_token()
-    if (is.null(token_try)) {
-      auth_from_secret(
-        access_token = access_token,
-        refresh_token = refresh_token
-      )
-    }
-    token <- get_token()
-  } # else user provides token
+    # Get auth token
+    token <- get_token(app_name = "google")
+  }
 
   # Perform GET HTTP request
   config <- httr::config(token = token)

@@ -2,15 +2,9 @@
 % Please edit documentation in R/google_slides.R
 \name{gs_id_from_slide}
 \alias{gs_id_from_slide}
-\alias{get_image_link_from_slide}
-\alias{get_image_from_slide}
 \title{Google Slides Helper Functions}
 \usage{
 gs_id_from_slide(file)
-
-get_image_link_from_slide(file)
-
-get_image_from_slide(file)
 }
 \arguments{
 \item{file}{markdown file for manuscript}
