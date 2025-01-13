@@ -273,7 +273,13 @@ check_git_repo <- function(repo_name,
 #' @examples \dontrun{
 #'
 #' authorize("github")
-#' find_issue(text = "Broken URL", repo_name = "jhudsl/OTTR_Template")
+#' params <- '{"title":"TEST","body":"Some text"}'
+#'
+#' gh::gh("/repos/{repo_name}/issues", repo_name = "jhudsl/ottrpal",
+#' .token =  get_token(app_name = "github"),
+#' .params = params)
+#'
+#' find_issue(text = "TEST", repo_name = "jhudsl/ottrpal")
 #'
 #' }
 
