@@ -7,7 +7,7 @@ utils::globalVariables(c("question", "original", "n", "metadata_check", "index",
 #'
 #' @param path path to the bookdown or quarto course repository, must have a
 #'   `.github` folder which will be used to establish the top of the repo.
-#' @param quiz A relative file path to the folder (existing or not) that contains the quizzes
+#' @param quiz_dir A relative file path to the folder (existing or not) that contains the quizzes
 #' in Leanpub format. Default is "quizzes".
 #' @param output_dir A relative file path to the folder (existing or not) that the
 #'   output check file should be saved to. Default is "check_reports"

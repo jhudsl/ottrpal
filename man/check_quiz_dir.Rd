@@ -16,6 +16,9 @@ check_quiz_dir(
 \item{path}{path to the bookdown or quarto course repository, must have a
 `.github` folder which will be used to establish the top of the repo.}
 
+\item{quiz_dir}{A relative file path to the folder (existing or not) that contains the quizzes
+in Leanpub format. Default is "quizzes".}
+
 \item{output_dir}{A relative file path to the folder (existing or not) that the
 output check file should be saved to. Default is "check_reports"}
 
@@ -25,9 +28,6 @@ If no ignore_urls.txt file and exclude_files.txt files are found, we will downlo
 
 \item{report_all}{Should all URLs that were tested be returned? Default is FALSE
 meaning only broken URLs will be reported in the url_checks.tsv file.}
-
-\item{quiz}{A relative file path to the folder (existing or not) that contains the quizzes
-in Leanpub format. Default is "quizzes".}
 }
 \value{
 A file will be saved that lists the broken URLs will be saved to the specified output_dir.
