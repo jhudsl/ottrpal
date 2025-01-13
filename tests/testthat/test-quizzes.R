@@ -33,3 +33,21 @@ test_that("Make a quiz report", {
   # Should have a report saved to the quiz directory
   testthat::expect_true(file.exists(file.path(quiz_dir, "question_error_report.tsv")))
 })
+
+
+test_that("Test real quiz in directory", {
+  rmd_dir <- setup_ottr_template(dir = ".", type = "rmd", render = FALSE)
+
+  # it shouldn't have any errors with the template
+  all_quiz_results <- check_quiz_dir(path = rmd_dir, quiz_dir = "quizzes")
+
+  # Not put a bad quiz in there
+  file.copy(bad_quiz_path(), file.path(rmd_dir, "quizzes"))
+
+  ## Now check the quizzes in that directory
+  # The following checks *should also fail* because the bad quiz is in there
+  testthat::expect_warning(all_quiz_results <- check_quiz_dir(path = rmd_dir, quiz_dir = "quizzes"))
+
+  # Should have a report saved to the quiz directory
+  testthat::expect_true(file.exists(file.path(rmd_dir, "check_reports", "question_error_report.tsv")))
+})

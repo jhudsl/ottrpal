@@ -1,6 +1,86 @@
-# C. Savonen 2021
+# C. Savonen 2025
 
 utils::globalVariables(c("question", "original", "n", "metadata_check", "index", "ignore_coursera"))
+
+
+#' Check all quizzes' formatting for Leanpub
+#'
+#' @param path path to the bookdown or quarto course repository, must have a
+#'   `.github` folder which will be used to establish the top of the repo.
+#' @param quiz_dir A relative file path to the folder (existing or not) that contains the quizzes
+#' in Leanpub format. Default is "quizzes".
+#' @param output_dir A relative file path to the folder (existing or not) that the
+#'   output check file should be saved to. Default is "check_reports"
+#' @param resources_dir A relative file path to the folder (existing or not) that the
+#'   ignore_urls.txt file and exclude_files.txt will be found. Default is "resources".
+#'   If no ignore_urls.txt file and exclude_files.txt files are found, we will download one.
+#' @param report_all Should all URLs that were tested be returned? Default is FALSE
+#'   meaning only broken URLs will be reported in the url_checks.tsv file.
+#' @return A file will be saved that lists the broken URLs will be saved to the specified output_dir.
+#' @export
+#'
+#' @importFrom magrittr %>%
+#' @importFrom rprojroot find_root has_dir
+#' @importFrom tidyr unnest separate
+#' @importFrom readr write_tsv
+#'
+#' @examples \dontrun{
+#'
+#' rmd_dir <- setup_ottr_template(dir = ".", type = "rmd", render = FALSE)
+#'
+#' check_quiz_dir(rmd_dir)
+#'
+#' # If there are broken URLs they will be printed in a list at 'question_error_report.tsv'
+#'
+#' qmd_dir <- setup_ottr_template(dir = ".", type = "quarto", render = FALSE)
+#'
+#' check_quiz_dir(qmd_dir)
+#' }
+check_quiz_dir <- function(path = ".",
+                       quiz_dir =  "quizzes",
+                       output_dir = "check_reports",
+                       resources_dir = "resources",
+                       report_all = FALSE) {
+  # Find .git root directory
+  root_dir <- rprojroot::find_root(path = path, rprojroot::has_dir(".github"))
+
+  resources_dir <- file.path(root_dir, resources_dir)
+  output_dir <- file.path(root_dir, output_dir)
+
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  }
+  if (!dir.exists(resources_dir)) {
+    dir.create(resources_dir, recursive = TRUE, showWarnings = FALSE)
+  }
+
+  output_file <- file.path(output_dir, 'question_error_report.tsv')
+  ignore_urls_file <- file.path(resources_dir, "ignore-urls.txt")
+  exclude_file <- file.path(resources_dir, "exclude_files.txt")
+
+  ottrpal::check_quizzes(quiz_dir = file.path(root_dir, quiz_dir), write_report = TRUE, verbose = TRUE)
+
+  if (file.exists("question_error_report.tsv")) {
+    quiz_errors <- readr::read_tsv("question_error_report.tsv")
+
+    file.copy('question_error_report.tsv', file.path(root_dir, 'check_reports'))
+    file.remove('question_error_report.tsv')
+
+    # Print out how many quiz check errors
+    write(nrow(quiz_errors), stdout())
+
+  } else {
+    quiz_errors <- data.frame()
+
+    # Print out how many quiz check errors
+    write("1", stdout())
+  }
+
+  # Save question errors to file
+  readr::write_tsv(quiz_errors, output_file)
+
+  message(paste0("Saved to: ", output_file))
+}
 
 
 find_end_of_prompt <- function(start_prompt_index, type_vector) {
