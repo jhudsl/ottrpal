@@ -283,11 +283,6 @@ find_issue <- function(text, repo_name, token = NULL) {
   if (!is.character(repo_name)) {
     repo <- as.character(repo_name)
   }
-  # Try to get credentials other way
-  if (is.null(token)) {
-    # Get auth token
-    token <- get_token(app_name = "github")
-  }
 
   # Github api get
   result <- httr::GET(
