@@ -253,3 +253,53 @@ check_git_repo <- function(repo_name,
 
   return(exists)
 }
+
+
+
+
+#' Find an issue on GitHub with a particular title
+#'
+#' Given text and repository name, find if an issue exists.
+#'
+#' @param text What text to be searched for in the GitHub issues. Can be regex.
+#' @param repo_name the name of the repository, e.g. jhudsl/OTTR_Template
+#' @param token A personal access token from GitHub. Only necessary if the
+#' repository being checked is a private repository.
+#'
+#' @return A TRUE/FALSE whether or not the issue with this text on this repository exists.
+#'
+#' @export
+#'
+#' @examples \dontrun{
+#'
+#' authorize("github")
+#' find_issue(text = "Broken URL", repo_name = "jhudsl/OTTR_Template")
+#'
+#' }
+
+find_issue <- function(text, repo_name, token) {
+
+  if (!is.character(repo)) {
+    repo <- as.character(repo)
+  }
+
+  # Github api get
+  result <- httr::GET(
+    paste0("https://api.github.com/repos/", repo, "/issues"),
+    httr::add_headers(Authorization = paste0("Bearer ", token)),
+    httr::accept_json()
+    )
+
+  if (httr::status_code(result) != 200) {
+    httr::stop_for_status(result)
+  }
+
+  # Process and return results
+  result_content <- httr::content(result, "text")
+  result_list <- jsonlite::fromJSON(result_content)
+
+  issue_exists <- length(grep(text, result_list$title))
+
+  # Print out the result
+  write(issue_exists, stdout())
+}
