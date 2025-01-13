@@ -273,26 +273,26 @@ check_git_repo <- function(repo_name,
 #' @examples \dontrun{
 #'
 #' authorize("github")
-#' params <- '{"title":"TEST","body":"Some text"}'
-#'
-#' gh::gh("/repos/{repo_name}/issues", repo_name = "jhudsl/ottrpal",
-#' .token =  get_token(app_name = "github"),
-#' .params = params)
 #'
 #' find_issue(text = "TEST", repo_name = "jhudsl/ottrpal")
 #'
 #' }
 
-find_issue <- function(text, repo_name, token) {
+find_issue <- function(text, repo_name, token = NULL) {
 
-  if (!is.character(repo)) {
-    repo <- as.character(repo)
+  if (!is.character(repo_name)) {
+    repo <- as.character(repo_name)
+  }
+  # Try to get credentials other way
+  if (is.null(token)) {
+    # Get auth token
+    token <- get_token(app_name = "github")
   }
 
   # Github api get
   result <- httr::GET(
-    paste0("https://api.github.com/repos/", repo, "/issues"),
-    httr::add_headers(Authorization = paste0("Bearer ", token)),
+    paste0("https://api.github.com/repos/", repo_name, "/issues"),
+    #httr::add_headers(Authorization = paste0("Bearer ", token)),
     httr::accept_json()
     )
 
@@ -308,4 +308,6 @@ find_issue <- function(text, repo_name, token) {
 
   # Print out the result
   write(issue_exists, stdout())
+
+  return(result_list)
 }
