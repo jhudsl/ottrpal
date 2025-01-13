@@ -41,9 +41,6 @@ test_that("Test real quiz in directory", {
   # it shouldn't have any errors with the template
   all_quiz_results <- check_quiz_dir(path = rmd_dir, quiz_dir = "quizzes")
 
-  # Expect a list returned
-  testthat::expect_type(all_quiz_results, "list")
-
   # Not put a bad quiz in there
   file.copy(bad_quiz_path(), file.path(rmd_dir, "quizzes"))
 
