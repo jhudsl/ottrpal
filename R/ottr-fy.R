@@ -1,8 +1,9 @@
 #' OTTRfy your repository
 #' @description This script downloads all the files and sets up the folders you need to
 #' OTTR-fy a repository that has markdown or R Markdown files
-#' @param path What's the file path we are making an OTTR
-#' @param type Essentials
+#' @param path What's the file path we are making an OTTR. Needs to be a directory
+#' @param type Can be "rmd", "quarto"m "rmd_web", or "quarto_web" depending on what
+#' kind of OTTR site you'd like to make
 #' @return Information regarding a Github account
 #' @export
 #'
@@ -23,12 +24,15 @@ ottrfy <- function(path = ".", type = "rmd", git_commit = TRUE, overwrite = FALS
   stopifnot(
     "type must be one of rmd, quarto, rmd_web or quarto_web" = type %in% c("rmd", "quarto", "rmd_web", "quarto_web")
   )
-  if (git_commit) system("git checkout -b 'robot/ottr-fy'")
+  if (git_commit) {
+    system(paste("cd", path))
+    system("git checkout -b 'robot/ottr-fy'")
+  }
 
   # Find .git root directory
-  root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
+  root_dir <- rprojroot::find_root(rprojroot::has_dir(path))
 
-  always_needed_files <- c(
+  .always_needed_files <- c(
     ".github/workflows/check-url.yml",
     ".github/workflows/pull_request.yml",
     ".github/workflows/delete-preview.yml",
