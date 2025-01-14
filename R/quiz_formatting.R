@@ -37,10 +37,10 @@ utils::globalVariables(c("question", "original", "n", "metadata_check", "index",
 #' check_quiz_dir(qmd_dir)
 #' }
 check_quiz_dir <- function(path = ".",
-                       quiz_dir =  "quizzes",
-                       output_dir = "check_reports",
-                       resources_dir = "resources",
-                       report_all = FALSE) {
+                           quiz_dir = "quizzes",
+                           output_dir = "check_reports",
+                           resources_dir = "resources",
+                           report_all = FALSE) {
   # Find .git root directory
   root_dir <- rprojroot::find_root(path = path, rprojroot::has_dir(".github"))
 
@@ -54,7 +54,7 @@ check_quiz_dir <- function(path = ".",
     dir.create(resources_dir, recursive = TRUE, showWarnings = FALSE)
   }
 
-  output_file <- file.path(output_dir, 'question_error_report.tsv')
+  output_file <- file.path(output_dir, "question_error_report.tsv")
   ignore_urls_file <- file.path(resources_dir, "ignore-urls.txt")
   exclude_file <- file.path(resources_dir, "exclude_files.txt")
 
@@ -63,12 +63,11 @@ check_quiz_dir <- function(path = ".",
   if (file.exists("question_error_report.tsv")) {
     quiz_errors <- readr::read_tsv("question_error_report.tsv")
 
-    file.copy('question_error_report.tsv', file.path(root_dir, 'check_reports'))
-    file.remove('question_error_report.tsv')
+    file.copy("question_error_report.tsv", file.path(root_dir, "check_reports"))
+    file.remove("question_error_report.tsv")
 
     # Print out how many quiz check errors
     write(nrow(quiz_errors), stdout())
-
   } else {
     quiz_errors <- data.frame()
 
