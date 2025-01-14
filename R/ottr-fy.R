@@ -30,9 +30,9 @@ ottrfy <- function(path = ".", type = "rmd", git_commit = TRUE, overwrite = FALS
   }
 
   # Find .git root directory
-  root_dir <- rprojroot::find_root(rprojroot::has_dir(path))
+  root_dir <- file.path(rprojroot::find_root(rprojroot::has_dir(path)), basename(path))
 
-  .always_needed_files <- c(
+  always_needed_files <- c(
     ".github/workflows/check-url.yml",
     ".github/workflows/pull_request.yml",
     ".github/workflows/delete-preview.yml",
@@ -47,7 +47,7 @@ ottrfy <- function(path = ".", type = "rmd", git_commit = TRUE, overwrite = FALS
             "assets/big-image.html", "assets/footer.html", "book.bib",
             ".github/workflows/render-all.yml", "assets/open-new-tab.html"),
     quarto = c("index.qmd", "_quarto.yml", "references.bib",
-               ".github/workflows/render-all.yml"),
+               ".github/workflows/render-all.yml", "img/favicon.ico", "img/logo.png"),
     rmd_web = c("_site.yml", "styles.css", ".github/workflows/render-site.yml",
                 "resources/header.html"),
     quarto_web = c("_quarto.yml", "styles.css", ".github/workflows/render-site.yml")
@@ -83,6 +83,10 @@ ottrfy <- function(path = ".", type = "rmd", git_commit = TRUE, overwrite = FALS
         message(names(url_to_files)[index], ": Already exists and overwrite = FALSE so skipping download of this file.")
       }
     }
+  }
+
+  if (type == "quarto") {
+    dir.create(file.path("resources", "images", "figure"), recursive = TRUE, showWarnings= FALSE)
   }
 
   if (git_commit) {
@@ -126,9 +130,13 @@ update_chapters <- function(path = ".", ignore_files = NULL) {
   chapter_yml <- yaml::read_yaml(chapter_yml_file)
 
   if ("rmd_files" %in% names(chapter_yml)) chapter_yml$rmd_files <- chapters
-  if ("chapters" %in% names(chapter_yml)) chapter_yml$book$chapters <- chapters
 
+  if ("book" %in% names(chapter_yml)) {
+    chapter_yml$book$chapters <- yaml::as.yaml(lapply(chapters, function(x) x), indent = 4)
+    chapter_yml$knitr$opts_chunk$fig.path <- yaml::as.yaml("resources/images/figure/")
+  }
   yaml::write_yaml(chapter_yml, chapter_yml_file)
+
 
   message("yml file updated with new chapters: ", chapter_yml_file)
 
