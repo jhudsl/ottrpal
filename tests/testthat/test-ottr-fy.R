@@ -17,7 +17,7 @@ test_that("Test OTTRfy - Rmd", {
   testthat::expect_true(file.exists(file.path("rmd", "docs", "index.html")))
 })
 
-test_that("Test OTTRfy - Rmd", {
+test_that("Test OTTRfy - Quarto", {
 
   # Make a repository with Rmd files
   dir.create("quarto")
@@ -60,12 +60,25 @@ test_that("Test OTTRfy - Rmd web", {
   testthat::expect_true(file.exists(file.path("rmd", "docs", "index.html")))
 })
 
-  #' ottrfy(type = "quarto")
-  #'
-  #' ottrfy(type = "rmd_web")
-  #'
-  #' ottrfy(type = "quarto_web")
-  #'
-  #'
-  #'
+test_that("Test OTTRfy - Quarto Web", {
+
+  # Make a repository with Rmd files
+  dir.create("quarto_web")
+  writeLines("# A webpage", file.path("quarto_web", "index.qmd"))
+
+  # OTTR fy it
+  ottrfy(path = "quarto_web", type = "quarto_web", git_commit = FALSE, overwrite = TRUE)
+
+  writeLines(yaml::as.yaml(list(
+    name =  "OTTR Quarto Website",
+    output_dir = 'docs',
+    navbar = list(
+      left= list(href = "index.html")))
+  ),
+  "quarto_web/_quarto.yml")
+
+  # Render it
+  quarto::quarto_render("quarto_web", as_job = FALSE)
+
+  testthat::expect_true(file.exists(file.path("quarto_web", "index.html")))
 })
