@@ -37,6 +37,43 @@ course_path <- function(path = ".") {
   return(root_dir)
 }
 
+#' ottrpal checks
+#'
+#' @param lhs A value or the magrittr placeholder.
+#' @param rhs A function call using the magrittr semantics.
+#' @return The result of calling `rhs(lhs)`.
+
+
+check <- function(check_type,
+                  path = ".",
+                  output_dir = "check_reports",
+                  resources_dir = "resources",
+                  ...) {
+  if (check_type == "spelling") {
+    results <- check_spelling(
+      path = path,
+      output_dir = output_dir,
+      resources_dir = resources_dir,
+      ...
+    )
+  } else if (check_type == "urls") {
+    results <- check_urls(
+      path = path,
+      output_dir = output_dir,
+      resources_dir = resources_dir,
+      ...
+    )
+  } else if (check_type == "quiz_format") {
+    results <- check_quiz_dir(
+      path = path,
+      ...
+    )
+  }
+  return(results)
+}
+
+
+
 #' Pipe operator
 #'
 #' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
