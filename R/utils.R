@@ -37,6 +37,48 @@ course_path <- function(path = ".") {
   return(root_dir)
 }
 
+#' ottrpal checks
+#'
+#' @param path path to the bookdown or quarto course repository, must have a
+#'   `.github` folder which will be used to establish the top of the repo.
+#' @param output_dir A relative file path to the folder (existing or not) that the
+#'   output check file should be saved to. Default is "check_reports"
+#' @param resources_dir A relative file path to the folder (existing or not) that the
+#'   dictionary.txt file and exclude_files.txt will be found. Default is "resources".
+#'   If no dictionary.txt file and exclude_files.txt files are found, we will download one.
+#' @param ... All additional arguments passed to the respective check
+#' @return The result of the check being called
+#' @export
+ottr_check <- function(check_type,
+                  path = ".",
+                  output_dir = "check_reports",
+                  resources_dir = "resources",
+                  ...) {
+  if (check_type == "spelling") {
+    results <- check_spelling(
+      path = path,
+      output_dir = output_dir,
+      resources_dir = resources_dir,
+      ...
+    )
+  } else if (check_type == "urls") {
+    results <- check_urls(
+      path = path,
+      output_dir = output_dir,
+      resources_dir = resources_dir,
+      ...
+    )
+  } else if (check_type == "quiz_format") {
+    results <- check_quiz_dir(
+      path = path,
+      ...
+    )
+  }
+  return(results)
+}
+
+
+
 #' Pipe operator
 #'
 #' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
