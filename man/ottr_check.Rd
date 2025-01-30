@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{ottr_check}
 \alias{ottr_check}
-\title{ottrpal checks}
+\title{Ottrpal Checks}
 \usage{
 ottr_check(
   check_type,
@@ -13,6 +13,9 @@ ottr_check(
 )
 }
 \arguments{
+\item{check_type}{What check would you like to run "spelling", "urls" or
+"quiz_format".}
+
 \item{path}{path to the bookdown or quarto course repository, must have a
 `.github` folder which will be used to establish the top of the repo.}
 
@@ -29,5 +32,5 @@ If no dictionary.txt file and exclude_files.txt files are found, we will downloa
 The result of the check being called
 }
 \description{
-ottrpal checks
+Ottrpal Checks
 }

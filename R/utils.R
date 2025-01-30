@@ -37,8 +37,9 @@ course_path <- function(path = ".") {
   return(root_dir)
 }
 
-#' ottrpal checks
-#'
+#' Ottrpal Checks
+#' @param check_type What check would you like to run "spelling", "urls" or
+#' "quiz_format".
 #' @param path path to the bookdown or quarto course repository, must have a
 #'   `.github` folder which will be used to establish the top of the repo.
 #' @param output_dir A relative file path to the folder (existing or not) that the
