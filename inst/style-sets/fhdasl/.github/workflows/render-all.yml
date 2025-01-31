@@ -1,0 +1,133 @@
+name: Render All Output
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - '**/*.qmd'
+
+jobs:
+  yaml-check:
+    name: Load User Automation Choices
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+        # Use the yaml-env-action action.
+      - name: Load environment from YAML
+        uses: doughepi/yaml-env-action@v1.0.0
+        with:
+            files: config_automation.yml # Pass a space-separated list of configuration files. Rightmost files take precedence.
+    outputs:
+      toggle_coursera: "${{ env.RENDER_COURSERA }}"
+      toggle_leanpub: "${{ env.RENDER_LEANPUB }}"
+      rendering_docker_image: "${{ env.RENDERING_DOCKER_IMAGE }}"
+
+  clean-docs:
+    name: Clean docs folder
+    needs: yaml-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Delete all files inside docs
+        run: |
+          rm -rf docs/*
+          mkdir -p docs
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add docs/
+          git commit -m "Clean up docs directory" || echo "No changes to commit"
+          git push
+
+  render-quarto-book:
+    name: Render Quarto Book
+    needs: [yaml-check, clean-docs]
+    runs-on: ubuntu-latest
+    container:
+      image: ${{needs.yaml-check.outputs.rendering_docker_image}}
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Login as github actions bot
+        run: |
+          git config --global --add safe.directory $GITHUB_WORKSPACE
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          echo ${{needs.yaml-check.outputs.rendering_docker_image}}
+
+      # Run quarto::quarto_render()
+      - name: Run quarto render
+        id: quarto-render
+        run: |
+          Rscript -e "quarto::quarto_render()"
+
+      # This checks on the steps before it and makes sure that they completed.
+      # If the renders didn't complete we don't want to commit the file changes
+      - name: Check on render step
+        if: steps.quarto-render.outcome != 'success'
+        run: |
+          echo Quarto Render status ${{steps.quarto-render.outcome}}
+          exit 1
+
+      # Commit the rendered files inside docs/
+      - name: Commit rendered files
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git remote set-url origin https://${GH_PAT}@github.com/${GITHUB_REPOSITORY}
+          git fetch origin
+          git add --force docs/*
+          git commit -m 'Render Quarto Book' || echo "No changes to commit"
+          git pull --allow-unrelated-histories --strategy-option=ours
+          git push -u origin main  || echo "No changes to push"
+
+  render-tocless:
+    name: Render TOC-less Quarto Book
+    needs: [yaml-check, clean-docs, render-quarto-book]
+    runs-on: ubuntu-latest
+    container:
+      image: ${{needs.yaml-check.outputs.rendering_docker_image}}
+    if: ${{needs.yaml-check.outputs.toggle_coursera == 'yes' || needs.yaml-check.outputs.toggle_leanpub == 'yes'}}
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Login as github-actions bot
+        run: |
+          git config --global --add safe.directory $GITHUB_WORKSPACE
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      # Rendered content for Leanpub and Coursera is similar.
+      # This job creates a shared scaffold for both.
+      - name: Run TOC-less version of render
+        id: toc_less_quarto
+        run: Rscript -e "quarto::quarto_render('.', quarto_args = c('--output-dir', 'docs/no_toc'), metadata = list(sidebar = F, toc = F))"
+
+      # Commit the TOC-less version files
+      - name: Commit TOC-less Quarto files
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git remote set-url origin https://${GH_PAT}@github.com/${GITHUB_REPOSITORY}
+          git fetch origin
+          git add --force docs/no_toc/*
+          git commit -m 'Render TOC-less Quarto Book' || echo "No changes to commit"
+          git pull --allow-unrelated-histories --strategy-option=ours
+          git push -u origin main  || echo "No changes to push"
