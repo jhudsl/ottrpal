@@ -29,8 +29,6 @@
 #' 'https://raw.githubusercontent.com/'
 #' @param dest_dir A file path where the file should be stored upon arrival to
 #' the current repository.
-#' @param overwrite Only pertinent for local files -- we may want to make sure not
-#' to overwrite stuff.
 #'
 #' @return An Rmarkdown or markdown is knitted into the document from another repository
 #'
@@ -61,7 +59,8 @@
 #' tag_replacement_list <- list(
 #'   "{A_TAG}" = "replacement here",
 #'   "{TEMPLATE_URL}" = "https://www.ottrproject.org/",
-#'   "{SECOND_TAG}" = "some other replacement here")
+#'   "{SECOND_TAG}" = "some other replacement here"
+#' )
 #'
 #' # For replacing tags
 #' # ```{r, echo=FALSE, results='asis'}
@@ -81,7 +80,6 @@ borrow_chapter <- function(doc_path,
                            base_url = "https://raw.githubusercontent.com",
                            dest_dir = file.path("resources", "other_chapters"),
                            overwrite = FALSE) {
-
   # Declare file names
   # normalize relative to Rmd file calling this
   doc_path <- file.path(doc_path)
@@ -95,7 +93,6 @@ borrow_chapter <- function(doc_path,
   dest_file <- file.path(dest_dir, doc_name)
 
   if (!is.null(repo_name)) {
-
     # Is this a wiki page?
     is_wiki <- grepl("^wiki\\/", repo_name)
 
@@ -124,18 +121,17 @@ borrow_chapter <- function(doc_path,
 
     # Let us know if the url didn't work
     if (grepl("Error", response)) {
-      stop("URL failed: ", full_url,
-           "\n Double check doc_path and repo_name (and branch if set)")
+      stop(
+        "URL failed: ", full_url,
+        "\n Double check doc_path and repo_name (and branch if set)"
+      )
     }
   } else {
-    if(dest_file == doc_path & !overwrite) {
-      stop("The destination file and the original file are the same and overwrite
-           is set to FALSE")
-    }
+    file.copy(from = doc_path, to = dest_file)
   }
 
   # Remove leanbuild::set_knitr_image_path() from downloaded file
-  file_contents <- readLines(dest_file)
+  file_contents <- readLines(doc_path)
   file_contents <- gsub("leanbuild::set_knitr_image_path\\(\\)", "", file_contents)
 
   # If remove_header = TRUE
@@ -146,16 +142,19 @@ borrow_chapter <- function(doc_path,
   ### Do the replacment tags
 
   if (!is.null(tag_replacement)) {
-  tag_df <-
-    data.frame(tag = names(tag_replacement),
-               replacement = unlist(tag_replacement))
+    tag_df <-
+      data.frame(
+        tag = names(tag_replacement),
+        replacement = unlist(tag_replacement)
+      )
 
-  for (tag in 1:nrow(tag_df)) {
-    file_contents <- stringi::stri_replace_all_fixed(
-      str = file_contents,
-      replacement = tag_df$replacement[tag],
-      pattern = tag_df$tag[tag])
-  }
+    for (tag in 1:nrow(tag_df)) {
+      file_contents <- stringi::stri_replace_all_fixed(
+        str = file_contents,
+        replacement = tag_df$replacement[tag],
+        pattern = tag_df$tag[tag]
+      )
+    }
   }
   writeLines(file_contents, dest_file)
 
@@ -174,4 +173,4 @@ borrow_chapter <- function(doc_path,
     quiet = TRUE
   )
   cat(result, sep = "\n")
-  }
+}

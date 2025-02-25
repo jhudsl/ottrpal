@@ -13,3 +13,4 @@ run_test.R
 /Meta/
 .secrets
 inst/extdata/tmp/default*
+inst/extdata/tmp/parent_doc.html

@@ -9,4 +9,8 @@ test_that("Borrow chapter", {
 
   rmarkdown::render(parent_doc)
 
+  testthat::expect_true(
+    file.exists(
+      file.path(dirname(parent_doc), "parent_doc.html"))
+  )
 })
