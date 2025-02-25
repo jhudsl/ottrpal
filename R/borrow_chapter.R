@@ -131,6 +131,7 @@ borrow_chapter <- function(doc_path,
     if(dest_file == doc_path & !overwrite) {
       stop("The destination file and the original file are the same and overwrite
            is set to FALSE")
+    }
   }
 
   # Remove leanbuild::set_knitr_image_path() from downloaded file
@@ -173,4 +174,4 @@ borrow_chapter <- function(doc_path,
     quiet = TRUE
   )
   cat(result, sep = "\n")
-}
+  }
