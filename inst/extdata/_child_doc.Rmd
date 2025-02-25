@@ -1,0 +1,12 @@
+
+# This is an H1 header
+
+This is a bunch of cool text here that we want to reuse sometimes.
+
+Maybe sometimes we have {A_TAG} that we would like to be replaced. In fact, sometimes we might even have a {SECOND_TAG} here that needs replacing.
+
+Sometimes these tags might end up in a url: [{A_TAG}]({TEMPLATE_URL}).
+
+## [{A_TAG}({TEMPLATE_URL})
+
+Sometimes we might even have a url in a header like above.
