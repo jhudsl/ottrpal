@@ -336,6 +336,7 @@ get_chapters <- function(path = ".",
 #' @importFrom webshot2 webshot
 #' @importFrom magrittr %>%
 #' @importFrom rprojroot find_root has_dir
+#' @importFrom pagedown find_chrome
 #'
 #' @author Candace Savonen
 #'
@@ -354,7 +355,7 @@ make_screenshots <- function(path = ".",
                              output_dir = file.path(path, "resources", "chapt_screen_images"),
                              base_url = NULL) {
 
-  op <- options("CHROMOTE_CHROME" = find_chrome()[1])
+  op <- options("CHROMOTE_CHROME" = pagedown::find_chrome()[1])
   on.exit(options(op))
 
   # Find .github root directory
