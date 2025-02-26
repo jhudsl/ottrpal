@@ -44,7 +44,8 @@ Imports:
   tidyr, 
   quarto, 
   R.utils,
-  withr
+  withr, 
+  stringi
 Suggests:
   testthat,
   tibble
