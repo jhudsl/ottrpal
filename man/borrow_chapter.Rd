@@ -12,8 +12,7 @@ borrow_chapter(
   branch = "main",
   token = NULL,
   base_url = "https://raw.githubusercontent.com",
-  dest_dir = file.path("resources", "other_chapters"),
-  overwrite = FALSE
+  dest_dir = file.path("resources", "other_chapters")
 )
 }
 \arguments{
