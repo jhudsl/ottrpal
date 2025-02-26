@@ -23,7 +23,7 @@
 #' the child document upon bringing it into the render.
 #' @param branch Default is to pull from main branch, but need to declare if
 #' other branch is needed.
-#' @param git_pat A personal access token from GitHub. Only necessary if the
+#' @param token A personal access token from GitHub. Only necessary if the
 #' repository being checked is a private repository.
 #' @param base_url it's assumed this is coming from github so it is by default
 #' 'https://raw.githubusercontent.com/'
@@ -37,6 +37,7 @@
 #' @importFrom knitr current_input
 #' @importFrom utils download.file
 #' @importFrom rprojroot find_root
+#' @importFrom stringi stri_replace_all_fixed
 #' @export
 #'
 #' @examples \dontrun{
@@ -76,7 +77,7 @@ borrow_chapter <- function(doc_path,
                            remove_h1 = FALSE,
                            tag_replacement = NULL,
                            branch = "main",
-                           git_pat = NULL,
+                           token = NULL,
                            base_url = "https://raw.githubusercontent.com",
                            dest_dir = file.path("resources", "other_chapters"),
                            overwrite = FALSE) {
@@ -104,7 +105,7 @@ borrow_chapter <- function(doc_path,
     if (!is_wiki) {
       exists <- check_git_repo(
         repo_name = repo_name,
-        git_pat = git_pat,
+        token = token,
         verbose = FALSE,
         silent = TRUE
       )

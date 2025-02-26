@@ -10,7 +10,7 @@ borrow_chapter(
   remove_h1 = FALSE,
   tag_replacement = NULL,
   branch = "main",
-  git_pat = NULL,
+  token = NULL,
   base_url = "https://raw.githubusercontent.com",
   dest_dir = file.path("resources", "other_chapters"),
   overwrite = FALSE
@@ -35,7 +35,7 @@ the child document upon bringing it into the render.}
 \item{branch}{Default is to pull from main branch, but need to declare if
 other branch is needed.}
 
-\item{git_pat}{A personal access token from GitHub. Only necessary if the
+\item{token}{A personal access token from GitHub. Only necessary if the
 repository being checked is a private repository.}
 
 \item{base_url}{it's assumed this is coming from github so it is by default
@@ -43,9 +43,6 @@ repository being checked is a private repository.}
 
 \item{dest_dir}{A file path where the file should be stored upon arrival to
 the current repository.}
-
-\item{overwrite}{Only pertinent for local files -- we may want to make sure not
-to overwrite stuff.}
 }
 \value{
 An Rmarkdown or markdown is knitted into the document from another repository
@@ -82,7 +79,8 @@ borrow_chapter(doc_path = "02-chapter_of_course.Rmd")
 tag_replacement_list <- list(
   "{A_TAG}" = "replacement here",
   "{TEMPLATE_URL}" = "https://www.ottrproject.org/",
-  "{SECOND_TAG}" = "some other replacement here")
+  "{SECOND_TAG}" = "some other replacement here"
+)
 
 # For replacing tags
 # ```{r, echo=FALSE, results='asis'}
