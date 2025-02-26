@@ -353,6 +353,10 @@ make_screenshots <- function(path = ".",
                              repo,
                              output_dir = file.path(path, "resources", "chapt_screen_images"),
                              base_url = NULL) {
+
+  op <- options("CHROMOTE_CHROME" = "/usr/bin/vivaldi"))
+  on.exit(options(op))
+
   # Find .github root directory
   root_dir <- course_path(path = path)
 
