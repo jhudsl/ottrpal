@@ -79,8 +79,7 @@ borrow_chapter <- function(doc_path,
                            branch = "main",
                            token = NULL,
                            base_url = "https://raw.githubusercontent.com",
-                           dest_dir = file.path("resources", "other_chapters"),
-                           overwrite = FALSE) {
+                           dest_dir = file.path("resources", "other_chapters")) {
   # Declare file names
   # normalize relative to Rmd file calling this
   doc_path <- file.path(doc_path)
