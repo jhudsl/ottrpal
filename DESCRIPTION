@@ -45,7 +45,8 @@ Imports:
   quarto, 
   R.utils,
   withr, 
-  stringi
+  stringi, 
+  pagedown
 Suggests:
   testthat,
   tibble
