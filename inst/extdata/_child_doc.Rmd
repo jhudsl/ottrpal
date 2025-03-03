@@ -7,6 +7,6 @@ Maybe sometimes we have {A_TAG} that we would like to be replaced. In fact, some
 
 Sometimes these tags might end up in a url: [{A_TAG}]({TEMPLATE_URL}).
 
-## [{A_TAG}({TEMPLATE_URL})
+## [{A_TAG}]({TEMPLATE_URL})
 
 Sometimes we might even have a url in a header like above.
