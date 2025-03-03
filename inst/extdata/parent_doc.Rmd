@@ -1,0 +1,14 @@
+---
+title: "borrow chapter test"
+---
+
+
+```{r, echo=FALSE, results='asis'}
+tag_replacement_list <- list(
+  "{A_TAG}" = "replacement here",
+  "{TEMPLATE_URL}" = "https://www.ottrproject.org/",
+  "{SECOND_TAG}" = "some other replacement here")
+
+borrow_chapter(doc_path = "_child_doc.Rmd",
+               tag_replacement = tag_replacement_list)
+```
