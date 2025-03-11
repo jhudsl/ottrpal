@@ -27,9 +27,6 @@ test_that("Test OTTRfy - Quarto", {
   # OTTR fy it
   ottrfy(path = "quarto", type = "quarto", git_commit = FALSE, overwrite = TRUE)
 
-  # Update bookdown
-  update_chapters("quarto")
-
   # Render it
   quarto::quarto_render("quarto", as_job = FALSE)
 
@@ -46,12 +43,15 @@ test_that("Test OTTRfy - Rmd web", {
   # OTTR fy it
   ottrfy(path = "rmd_web", type = "rmd_web", git_commit = FALSE)
 
-  writeLines(yaml::as.yaml(list(
-    name =  "OTTR Template Website",
-    output_dir = 'docs',
-    navbar = list(
-    left= list(href = "index.html")))
-  ),
+  writeLines(
+"name: OTTR Template Website
+output_dir: 'docs'
+navbar:
+  title: OTTR Web
+  left:
+  - text: \"\"
+    href: index.html
+    icon: fa-home",
   "rmd_web/_site.yml")
 
   # Render it
