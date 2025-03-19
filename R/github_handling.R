@@ -275,11 +275,8 @@ check_git_repo <- function(repo_name,
 #' authorize("github")
 #'
 #' find_issue(text = "TEST", repo_name = "jhudsl/ottrpal")
-#'
 #' }
-
 find_issue <- function(text, repo_name, token = NULL) {
-
   if (!is.character(repo_name)) {
     repo <- as.character(repo_name)
   }
@@ -287,9 +284,8 @@ find_issue <- function(text, repo_name, token = NULL) {
   # Github api get
   result <- httr::GET(
     paste0("https://api.github.com/repos/", repo_name, "/issues"),
-    #httr::add_headers(Authorization = paste0("Bearer ", token)),
     httr::accept_json()
-    )
+  )
 
   if (httr::status_code(result) != 200) {
     httr::stop_for_status(result)
