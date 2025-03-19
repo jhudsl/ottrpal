@@ -4,6 +4,7 @@
 #' @param path What's the file path we are making an OTTR. Needs to be a directory
 #' @param type Can be "rmd", "quarto" "rmd_web", or "quarto_web" depending on what
 #' kind of OTTR site you'd like to make
+#' @param overwrite TRUE or FALSE existing files should be overwritten?
 #' @return Information regarding a Github account
 #' @export
 #'
@@ -19,7 +20,7 @@
 #'
 #' }
 #'
-ottrfy <- function(path = ".", type = "rmd", git_commit = TRUE, overwrite = FALSE) {
+ottrfy <- function(path = ".", type = "rmd", overwrite = FALSE) {
 
   stopifnot(
     "type must be one of rmd, quarto, rmd_web or quarto_web" = type %in%
