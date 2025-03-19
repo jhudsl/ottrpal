@@ -2,7 +2,7 @@
 #' @description This script downloads all the files and sets up the folders you need to
 #' OTTR-fy a repository that has markdown or R Markdown files
 #' @param path What's the file path we are making an OTTR. Needs to be a directory
-#' @param type Can be "rmd", "quarto"m "rmd_web", or "quarto_web" depending on what
+#' @param type Can be "rmd", "quarto" "rmd_web", or "quarto_web" depending on what
 #' kind of OTTR site you'd like to make
 #' @return Information regarding a Github account
 #' @export
@@ -22,7 +22,8 @@
 ottrfy <- function(path = ".", type = "rmd", git_commit = TRUE, overwrite = FALSE) {
 
   stopifnot(
-    "type must be one of rmd, quarto, rmd_web or quarto_web" = type %in% c("rmd", "quarto", "rmd_web", "quarto_web")
+    "type must be one of rmd, quarto, rmd_web or quarto_web" = type %in%
+    c("rmd", "quarto", "rmd_web", "quarto_web")
   )
   if (git_commit) {
     system(paste("cd", path))
