@@ -19,9 +19,6 @@ book:
     - part: "First Section"
       chapters:
         - first-section-new-chapter.qmd
-    - part: "Second Section"
-      chapters:
-        - second-section-new-chapter.qmd
     - conclusion.qmd
     - references.qmd
   
