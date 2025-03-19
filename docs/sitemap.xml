@@ -45,6 +45,7 @@
 <url><loc>/reference/bookdown_rmd_files.html</loc></url>
 <url><loc>/reference/bookdown_to_book_txt.html</loc></url>
 <url><loc>/reference/bookdown_to_leanpub.html</loc></url>
+<url><loc>/reference/borrow_chapter 2.html</loc></url>
 <url><loc>/reference/borrow_chapter.html</loc></url>
 <url><loc>/reference/cache_secrets_folder.html</loc></url>
 <url><loc>/reference/check_all_questions.html</loc></url>
@@ -52,11 +53,15 @@
 <url><loc>/reference/check_question.html</loc></url>
 <url><loc>/reference/check_quiz.html</loc></url>
 <url><loc>/reference/check_quiz_attributes.html</loc></url>
+<url><loc>/reference/check_quiz_dir 2.html</loc></url>
 <url><loc>/reference/check_quiz_dir.html</loc></url>
 <url><loc>/reference/check_quiz_question_attributes.html</loc></url>
 <url><loc>/reference/check_quizzes.html</loc></url>
+<url><loc>/reference/check_spelling 2.html</loc></url>
 <url><loc>/reference/check_spelling.html</loc></url>
+<url><loc>/reference/check_urls 2.html</loc></url>
 <url><loc>/reference/check_urls.html</loc></url>
+<url><loc>/reference/clean_up 2.html</loc></url>
 <url><loc>/reference/clean_up.html</loc></url>
 <url><loc>/reference/convert_coursera_quizzes.html</loc></url>
 <url><loc>/reference/convert_quiz.html</loc></url>
@@ -64,6 +69,7 @@
 <url><loc>/reference/course_path.html</loc></url>
 <url><loc>/reference/course_to_book_txt.html</loc></url>
 <url><loc>/reference/coursera.html</loc></url>
+<url><loc>/reference/delete_creds 2.html</loc></url>
 <url><loc>/reference/delete_creds.html</loc></url>
 <url><loc>/reference/download_gs_file.html</loc></url>
 <url><loc>/reference/download_ottr_template.html</loc></url>
@@ -73,16 +79,21 @@
 <url><loc>/reference/example_repo_setup.html</loc></url>
 <url><loc>/reference/extract_meta.html</loc></url>
 <url><loc>/reference/extract_object_id.html</loc></url>
+<url><loc>/reference/find_issue 2.html</loc></url>
 <url><loc>/reference/find_issue.html</loc></url>
 <url><loc>/reference/footnotes.html</loc></url>
 <url><loc>/reference/get_bookdown_spec.html</loc></url>
 <url><loc>/reference/get_chapters.html</loc></url>
+<url><loc>/reference/get_github 2.html</loc></url>
 <url><loc>/reference/get_github.html</loc></url>
 <url><loc>/reference/get_gs_pptx.html</loc></url>
 <url><loc>/reference/get_object_id_notes.html</loc></url>
+<url><loc>/reference/get_pages_url 2.html</loc></url>
 <url><loc>/reference/get_pages_url.html</loc></url>
+<url><loc>/reference/get_repo_info 2.html</loc></url>
 <url><loc>/reference/get_repo_info.html</loc></url>
 <url><loc>/reference/get_slide_id.html</loc></url>
+<url><loc>/reference/get_urls 2.html</loc></url>
 <url><loc>/reference/get_urls.html</loc></url>
 <url><loc>/reference/get_yaml_spec.html</loc></url>
 <url><loc>/reference/good_quiz_path.html</loc></url>
@@ -92,8 +103,11 @@
 <url><loc>/reference/key_encrypt_creds_path.html</loc></url>
 <url><loc>/reference/leanpub_check.html</loc></url>
 <url><loc>/reference/make_embed_markdown.html</loc></url>
+<url><loc>/reference/make_screenshots 2.html</loc></url>
 <url><loc>/reference/make_screenshots.html</loc></url>
+<url><loc>/reference/ottr_check 2.html</loc></url>
 <url><loc>/reference/ottr_check.html</loc></url>
+<url><loc>/reference/ottrfy 2.html</loc></url>
 <url><loc>/reference/ottrfy.html</loc></url>
 <url><loc>/reference/output_destination.html</loc></url>
 <url><loc>/reference/parse_q_tag.html</loc></url>
@@ -106,10 +120,14 @@
 <url><loc>/reference/replace_html.html</loc></url>
 <url><loc>/reference/set_knitr_image_path.html</loc></url>
 <url><loc>/reference/set_up_leanpub.html</loc></url>
+<url><loc>/reference/setup_ottr_template 2.html</loc></url>
 <url><loc>/reference/setup_ottr_template.html</loc></url>
 <url><loc>/reference/simple_references.html</loc></url>
+<url><loc>/reference/supported_endpoints 2.html</loc></url>
 <url><loc>/reference/supported_endpoints.html</loc></url>
+<url><loc>/reference/test_url 2.html</loc></url>
 <url><loc>/reference/test_url.html</loc></url>
+<url><loc>/reference/update_chapters 2.html</loc></url>
 <url><loc>/reference/update_chapters.html</loc></url>
 <url><loc>/reference/website_to_embed_leanpub.html</loc></url>
 <url><loc>/reference/xml_notes.html</loc></url>
