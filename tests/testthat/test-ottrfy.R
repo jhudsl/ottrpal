@@ -6,7 +6,7 @@ test_that("Test OTTRfy - Rmd", {
   writeLines("---\ntitle: An index \n--- \n# Intro", file.path("rmd", "index.Rmd"))
 
   # OTTR fy it
-  ottrfy(path = "rmd", type = "rmd", git_commit = FALSE)
+  ottrfy(path = "rmd", type = "rmd")
 
   # Update bookdown
   update_chapters("rmd")
@@ -25,7 +25,7 @@ test_that("Test OTTRfy - Quarto", {
   writeLines("# Intro", file.path("quarto", "index.qmd"))
 
   # OTTR fy it
-  ottrfy(path = "quarto", type = "quarto", git_commit = FALSE, overwrite = TRUE)
+  ottrfy(path = "quarto", type = "quarto", overwrite = TRUE)
 
   writeLines(
     "project:
@@ -54,7 +54,7 @@ test_that("Test OTTRfy - Rmd web", {
   writeLines("# Home Page", file.path("rmd_web", "index.Rmd"))
 
   # OTTR fy it
-  ottrfy(path = "rmd_web", type = "rmd_web", git_commit = FALSE)
+  ottrfy(path = "rmd_web", type = "rmd_web")
 
   writeLines(
 "name: OTTR Template Website
@@ -80,7 +80,7 @@ test_that("Test OTTRfy - Quarto Web", {
   writeLines("# A webpage", file.path("quarto_web", "index.qmd"))
 
   # OTTR fy it
-  ottrfy(path = "quarto_web", type = "quarto_web", git_commit = FALSE, overwrite = TRUE)
+  ottrfy(path = "quarto_web", type = "quarto_web", overwrite = TRUE)
 
   writeLines(yaml::as.yaml(list(
     name =  "OTTR Quarto Website",
