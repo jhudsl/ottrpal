@@ -26,6 +26,5 @@ Given text and repository name, find if an issue exists.
 authorize("github")
 
 find_issue(text = "TEST", repo_name = "jhudsl/ottrpal")
-
 }
 }

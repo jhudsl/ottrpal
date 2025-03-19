@@ -7,7 +7,7 @@
 #' @return Information regarding a Github account
 #' @export
 #'
-#' examples \dontrun{
+#' @examples \dontrun{
 #'
 #' ottrfy(type = "rmd")
 #'
@@ -107,7 +107,7 @@ ottrfy <- function(path = ".", type = "rmd", git_commit = TRUE, overwrite = FALS
 #' @return an updated _bookdown.yml or _quarto.yml with all chapters.
 #' @export
 #'
-#' examples \dontrun{
+#' @examples \dontrun{
 #'
 #' update_chapters()
 #'
