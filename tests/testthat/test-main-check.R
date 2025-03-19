@@ -1,4 +1,4 @@
-test_that("multiplication works", {
+test_that("Test Checks overall", {
 
   rmd_dir <- setup_ottr_template(type = "rmd", render = FALSE)
 
