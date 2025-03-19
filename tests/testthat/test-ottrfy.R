@@ -21,11 +21,24 @@ test_that("Test OTTRfy - Quarto", {
 
   # Make a repository with Rmd files
   dir.create("quarto")
-  writeLines("# A title", file.path("quarto", "01-intro.qmd"))
+  writeLines("# A title", file.path("quarto", "intro.qmd"))
   writeLines("# Intro", file.path("quarto", "index.qmd"))
 
   # OTTR fy it
   ottrfy(path = "quarto", type = "quarto", git_commit = FALSE, overwrite = TRUE)
+
+  writeLines(
+    "project:
+  type: book
+  output-dir: docs
+
+book:
+  title: Quarto Based OTTR Course
+
+  chapters:
+    - index.qmd
+    - intro.qmd",
+    "quarto/_quarto.yml")
 
   # Render it
   quarto::quarto_render("quarto", as_job = FALSE)
