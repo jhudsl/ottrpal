@@ -1,5 +1,9 @@
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+[ FAIL 0 | WARN 4 | SKIP 1 | PASS 45 ]
 
-* This update allows for differential handling to help with the windows curl test failing
+- New check functions here! spell_check(), url_check(), quiz_check()
+- borrow_chapter() with tag replacement functionality
+- Better testing!
+- OTTRfy your repositories
+- Refactored code!
