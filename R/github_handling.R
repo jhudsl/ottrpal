@@ -284,7 +284,6 @@ find_issue <- function(text, repo_name, token = NULL) {
   # Github api get
   result <- httr::GET(
     paste0("https://api.github.com/repos/", repo_name, "/issues"),
-    # httr::add_headers(Authorization = paste0("Bearer ", token)),
     httr::accept_json()
   )
 
