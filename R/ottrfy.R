@@ -26,10 +26,6 @@ ottrfy <- function(path = ".", type = "rmd", overwrite = FALSE) {
     "type must be one of rmd, quarto, rmd_web or quarto_web" = type %in%
     c("rmd", "quarto", "rmd_web", "quarto_web")
   )
-  if (git_commit) {
-    system(paste("cd", path))
-    system("git checkout -b 'robot/ottr-fy'")
-  }
 
   # Find .git root directory
   root_dir <- file.path(rprojroot::find_root(rprojroot::has_dir(path)), basename(path))
@@ -91,12 +87,6 @@ ottrfy <- function(path = ".", type = "rmd", overwrite = FALSE) {
     dir.create(file.path("resources", "images", "figure"), recursive = TRUE, showWarnings= FALSE)
   }
 
-  if (git_commit) {
-    system("git add .")
-    system("git config commit.gpgsign false")
-    system("git commit -m 'Add ottr-fying files'")
-    system("git push --set-upstream origin robot/ottr-fy")
-  }
 }
 
 
