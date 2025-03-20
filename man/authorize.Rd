@@ -7,17 +7,21 @@
 authorize(app_name = NULL, cache = FALSE, ...)
 }
 \arguments{
-\item{app_name}{app would you like to authorize? Supported apps are 'google' 'calendly' and 'github'}
+\item{app_name}{app would you like to authorize? Supported apps are 'google'
+'calendly' and 'github'}
 
-\item{cache}{Should the token be cached as an .httr-oauth file or API keys stored as global options?}
+\item{cache}{Should the token be cached as an .httr-oauth file or API keys
+stored as global options?}
 
-\item{...}{Additional arguments to send to \code{\link{oauth2.0_token}}}
+\item{...}{Additional arguments to send to oauth2.0_token}
 }
 \value{
 API token saved to the environment or the cache so it can be grabbed by functions
 }
 \description{
-This is a function to authorize the R package to access APIs interactively. To learn more about the privacy policy for ottrpal [read here](https://www.ottrproject.org/privacypolicy.html)
+This is a function to authorize the R package to access APIs
+interactively. To learn more about the privacy policy for ottrpal
+[read here](https://www.ottrproject.org/privacypolicy.html)
 }
 \examples{
 \dontrun{
