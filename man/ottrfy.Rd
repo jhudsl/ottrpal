@@ -4,13 +4,15 @@
 \alias{ottrfy}
 \title{OTTRfy your repository}
 \usage{
-ottrfy(path = ".", type = "rmd", git_commit = TRUE, overwrite = FALSE)
+ottrfy(path = ".", type = "rmd", overwrite = FALSE)
 }
 \arguments{
 \item{path}{What's the file path we are making an OTTR. Needs to be a directory}
 
 \item{type}{Can be "rmd", "quarto" "rmd_web", or "quarto_web" depending on what
 kind of OTTR site you'd like to make}
+
+\item{overwrite}{TRUE or FALSE existing files should be overwritten?}
 }
 \value{
 Information regarding a Github account
