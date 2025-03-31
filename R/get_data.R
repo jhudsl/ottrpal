@@ -68,20 +68,35 @@ setup_ottr_template <- function(dir = ".", type, render = TRUE) {
 #' @return Looks for dangling zips and directories downloaded for testing and removes them
 #' @export
 clean_up <- function() {
+
+  # root_dir <- rprojroot::find_root(rprojroot::has_file("DESCRIPTION"))
   dirs <- c(
     "OTTR_Template-main",
     "OTTR_Quarto-main",
     "OTTR_Template_Website-main",
-    "OTTR_Quarto_Website-main"
+    "OTTR_Quarto_Website-main",
+    "^quarto$",
+    "^rmd$",
+    "^quarto_web$",
+    "^rmd_web$"
   )
+  # dirs <- file.path(root_dir, dirs)
+  test.dir <- file.path("tests", "testthat")
+
+  # Which zips are out there?
+  existing_dirs <- grep(paste0(dirs, collapse = "|"), dir(), value = TRUE)
+  existing_dirs <- c(existing_dirs, file.path(test.dir, existing_dirs))
+
+  # Remove dirs and their files
+  sapply(existing_dirs, unlink, recursive = TRUE)
 
   zips <- paste0(dirs, ".zip")
 
-  # Remove dirs and their files
-  sapply(dirs, unlink, recursive = TRUE)
-
   # Which zips are out there?
-  existing_zips <- list.files(pattern = paste0(zips, collapse = "|"))
+  existing_zips <- list.files(pattern = paste0(zips, collapse = "|"),
+                              recursive = TRUE)
+
+  existing_zips <- c(existing_zips, file.path(test.dir, existing_zips))
 
   # Remove any dangling zips
   sapply(existing_zips, unlink)

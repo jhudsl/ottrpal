@@ -7,6 +7,6 @@ Maybe sometimes we have replacement here that we would like to be replaced. In f
 
 Sometimes these tags might end up in a url: [replacement here](https://www.ottrproject.org/).
 
-## [replacement here(https://www.ottrproject.org/)
+## [replacement here](https://www.ottrproject.org/)
 
 Sometimes we might even have a url in a header like above.

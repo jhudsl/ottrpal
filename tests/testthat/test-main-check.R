@@ -8,4 +8,5 @@ test_that("Test Checks overall", {
 
   ottr_check(path = rmd_dir, check_type = "quiz_format")
 
+  clean_up()
 })

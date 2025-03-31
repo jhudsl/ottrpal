@@ -50,4 +50,6 @@ test_that("Test real quiz in directory", {
 
   # Should have a report saved to the quiz directory
   testthat::expect_true(file.exists(file.path(rmd_dir, "check_reports", "question_error_report.tsv")))
+
+  clean_up()
 })

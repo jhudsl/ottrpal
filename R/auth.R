@@ -64,7 +64,7 @@ authorize <- function(app_name = NULL,
     message("On the opened page, scroll down and click 'Generate Token'.")
 
     # Store api key here
-    token <- getPass::getPass(msg = "Paste token here and press enter: ")
+    token <- readline(prompt = "Paste token here and press enter: ")
 
     # Check that token
     if (!grepl("ghp", token)) stop("This doesn't look like a GitHub Personal Access token. https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens")
@@ -84,7 +84,6 @@ authorize <- function(app_name = NULL,
       ...
     )
     googledrive::drive_auth(token = token)
-    googlesheets4::gs4_auth(token = token)
 
     # If they chose to cache it, we'll store it in rds file format
     if (cache_it == 1) cache_token(token, "google")

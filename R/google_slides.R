@@ -84,7 +84,7 @@ gs_png_download <- function(url, output_dir = ".", overwrite = TRUE) {
   dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   outfile <- file.path(output_dir, paste0(id, "_", slide_id, ".png"))
   if (!file.exists(outfile) || overwrite) {
-    curl::curl_download(url, destfile = outfile, quiet = FALSE)
+    download.file(url, destfile = outfile, quiet = FALSE)
   }
   stopifnot(file.exists(outfile))
   outfile

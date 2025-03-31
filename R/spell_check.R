@@ -12,7 +12,7 @@
 #' @return A file will be saved that lists the broken URLs will be saved to the specified output_dir.
 #' @export
 #'
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @importFrom spelling spell_check_files
 #' @importFrom rprojroot find_root has_dir
 #' @importFrom tidyr unnest separate

@@ -8,13 +8,17 @@ test_that("Test OTTRfy - Rmd", {
   # OTTR fy it
   ottrfy(path = "rmd", type = "rmd")
 
-  # Update bookdown
-  update_chapters("rmd")
+  writeLines(
+    "book_filename: 'Course_Name'
+rmd_files: ['index.Rmd', '01-intro.Rmd']",
+    file.path("rmd", "_bookdown.yml"))
 
   # Render it
-  bookdown::render_book("rmd")
+  bookdown::render_book("rmd", output_dir = "docs")
 
   testthat::expect_true(file.exists(file.path("rmd", "docs", "index.html")))
+
+  clean_up()
 })
 
 test_that("Test OTTRfy - Quarto", {
@@ -44,6 +48,8 @@ book:
   quarto::quarto_render("quarto", as_job = FALSE)
 
   testthat::expect_true(file.exists(file.path("quarto", "docs", "index.html")))
+
+  clean_up()
 })
 
 test_that("Test OTTRfy - Rmd web", {
@@ -70,7 +76,9 @@ navbar:
   # Render it
   rmarkdown::render_site("rmd_web")
 
-  testthat::expect_true(file.exists(file.path("rmd", "docs", "index.html")))
+  testthat::expect_true(file.exists(file.path("rmd_web", "docs", "index.html")))
+
+  clean_up()
 })
 
 test_that("Test OTTRfy - Quarto Web", {
@@ -94,4 +102,6 @@ test_that("Test OTTRfy - Quarto Web", {
   quarto::quarto_render("quarto_web", as_job = FALSE)
 
   testthat::expect_true(file.exists(file.path("quarto_web", "index.html")))
+
+  clean_up()
 })

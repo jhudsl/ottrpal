@@ -16,38 +16,29 @@ License: GPL-3
 URL: https://github.com/jhudsl/ottrpal
 BugReports: https://github.com/jhudsl/ottrpal/issues
 Imports:
-  bookdown,
-  curl,
   dplyr,
-  fs,
   httr,
-  gitcreds,
-  jsonlite,
-  knitr,
-  magrittr,
-  openssl,
-  purrr,
   readr,
-  rmarkdown,
-  rprojroot,
   rvest,
   stringr,
+  tidyr,
+  gitcreds,
+  knitr,
+  purrr,
+  rmarkdown,
+  rprojroot,
   webshot2,
-  xml2,
-  yaml,
-  getPass,
-  googledrive,
-  googlesheets4,
+  openssl,
   spelling,
-  tidyr, 
-  quarto, 
+  xml2,
   R.utils,
-  withr, 
-  stringi, 
-  pagedown
+  googledrive, 
+  jsonlite,
+  yaml
 Suggests:
   testthat,
-  tibble
+  bookdown,
+  quarto
 VignetteBuilder: knitr
 ByteCompile: true
 Encoding: UTF-8

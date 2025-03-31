@@ -19,7 +19,7 @@ utils::globalVariables(c("question", "original", "n", "metadata_check", "index",
 #' @return A file will be saved that lists the broken URLs will be saved to the specified output_dir.
 #' @export
 #'
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @importFrom rprojroot find_root has_dir
 #' @importFrom tidyr unnest separate
 #' @importFrom readr write_tsv
@@ -295,7 +295,7 @@ convert_coursera_quizzes <- function(input_quiz_dir = "quizzes",
 #' quiz_df <- parse_quiz_df(quiz_lines)
 #' }
 parse_quiz_df <- function(quiz_lines, remove_tags = FALSE) {
-  quiz_df <- tibble::tibble(
+  quiz_df <- data.frame(
     original = quiz_lines,
     trimmed = trimws(quiz_lines, which = "left"),
     index = 1:length(quiz_lines)
@@ -550,7 +550,7 @@ check_quiz_attributes <- function(quiz_specs, quiz_name = NULL, verbose = TRUE) 
   # Assume good until otherwise
   metadata_msg <- "good"
 
-  # Set up as tibble
+  # Set up as data frame
   quiz_metadata <- quiz_specs$quiz_metadata
 
   # These are the accepted quiz attributes

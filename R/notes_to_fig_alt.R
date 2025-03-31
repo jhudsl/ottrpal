@@ -291,7 +291,6 @@ xml_notes <- function(file, collapse_text = TRUE, xpath = "//a:r//a:t") {
 #' @importFrom httr GET
 #' @importFrom httr accept_json
 #' @importFrom httr content
-#' @importFrom jsonlite fromJSON
 #' @export
 #' @examples
 #' \dontrun{
@@ -328,8 +327,7 @@ extract_object_id <- function(slide_url, token = NULL, access_token = NULL, refr
   config <- httr::config(token = token)
   result <- httr::GET(get_url, config = config, httr::accept_json())
   # Read in result
-  result_content <- httr::content(result, "text")
-  result_list <- jsonlite::fromJSON(result_content)
+  result_content <- httr::content(result, "application/json")
 
   result_list$slides$objectId
 }

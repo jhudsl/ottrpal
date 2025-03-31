@@ -82,7 +82,8 @@ render_without_toc <- function(path = ".",
       stop(paste0("Needed directory:", needed_dir, "does not exist in the current path."))
     }
     if (!dir.exists(file.path(output_dir, needed_dir))) {
-      fs::dir_copy(needed_dir, file.path(output_dir, needed_dir), overwrite = TRUE)
+      dir.create(file.path(output_dir, needed_dir), showWarnings = FALSE)
+      file.copy(needed_dir, file.path(output_dir, needed_dir), recursive=TRUE)
     }
   })
 
@@ -92,7 +93,8 @@ render_without_toc <- function(path = ".",
     if (verbose) {
       message(file.path("docs", "libs"))
     }
-    fs::dir_copy(libs_path, file.path(output_dir, "libs"), overwrite = TRUE)
+    dir.create(file.path(output_dir, "libs"), showWarnings = FALSE)
+    file.copy(libs_path, file.path(output_dir, "libs"), recursive=TRUE)
   }
 
   ###### Copy over CSS file ######
@@ -118,7 +120,7 @@ render_without_toc <- function(path = ".",
     css_file <- file.path(output_dir, org_css_file)
 
     # Write it as "style.css"
-    fs::file_copy(org_css_file,
+    file.copy(org_css_file,
       css_file,
       overwrite = TRUE
     )

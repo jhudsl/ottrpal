@@ -12,8 +12,6 @@
 ^\.httr-oauth$
 ^\.coveralls\.yml$
 ^codecov\.yml$
-^googlesheets_token.rds.enc$
-tests/testthat/googlesheets_token.rds.enc
 vignettes/.httr-oauth$
 ^_pkgdown\.yml$
 ^docs$
@@ -37,4 +35,8 @@ quarto-session*
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
 SECURITY.md
-
+quarto-session*
+OTTR_Quarto-main
+OTTR_Quarto-main.zip
+OTTR_Template-main
+OTTR_Template-main.zip

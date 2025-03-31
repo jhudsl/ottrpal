@@ -37,7 +37,7 @@
 #' @importFrom knitr current_input
 #' @importFrom utils download.file
 #' @importFrom rprojroot find_root
-#' @importFrom stringi stri_replace_all_fixed
+#' @importFrom stringr str_replace_all
 #' @export
 #'
 #' @examples \dontrun{
@@ -149,10 +149,10 @@ borrow_chapter <- function(doc_path,
       )
 
     for (tag in 1:nrow(tag_df)) {
-      file_contents <- stringi::stri_replace_all_fixed(
+      file_contents <- stringr::str_replace_all(
         str = file_contents,
         replacement = tag_df$replacement[tag],
-        pattern = tag_df$tag[tag]
+        pattern = fixed(tag_df$tag[tag])
       )
     }
   }

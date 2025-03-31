@@ -12,7 +12,7 @@
 #' @return A file will be saved that lists the broken URLs will be saved to the specified output_dir.
 #' @export
 #'
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @importFrom rprojroot find_root has_dir
 #' @importFrom tidyr unnest separate
 #' @importFrom readr write_tsv
@@ -105,7 +105,7 @@ check_urls <- function(path = ".",
 #' @return a logical TRUE/FALSE for whether the URL is legitimate.
 #' @export
 #'
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @importFrom httr GET
 #'
 #' @examples \dontrun{
@@ -148,7 +148,7 @@ test_url <- function(url, ignore_urls = "") {
 #' @return a data.frame of all the URLs identified in the given md,rmd, or qmd file
 #' @export
 #'
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @importFrom rvest html_nodes read_html html_attr
 #' @import stringr
 #' @importFrom stats na.omit

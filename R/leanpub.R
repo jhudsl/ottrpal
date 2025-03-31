@@ -29,6 +29,7 @@
 #'
 #' @return A directory of output files in a folder 'manuscript' for publishing on Leanpub.
 #' @export
+#' @import rvest
 #'
 #' @examples \dontrun{
 #'
@@ -118,7 +119,7 @@ website_to_embed_leanpub <- function(path = ".",
     img_dir <- file.path(rooted_output_dir, "embed_chapt_images")
 
     if (!dir.exists(img_dir)) {
-      dir.create(img_dir, recursive = TRUE)
+      dir.create(img_dir, recursive = TRUE, showWarnings = FALSE)
     }
 
     # Download default image
@@ -219,7 +220,7 @@ make_embed_markdown <- function(path = ".",
   output_file <- file.path(root_dir, output_dir, paste0(chapt_file_name, ".md"))
 
   if (!dir.exists(output_dir)) {
-    dir.create(output_dir, recursive = TRUE)
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
 
   file_contents <- c(
@@ -334,9 +335,8 @@ get_chapters <- function(path = ".",
 #'
 #' @import dplyr
 #' @importFrom webshot2 webshot
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @importFrom rprojroot find_root has_dir
-#' @importFrom pagedown find_chrome
 #'
 #' @author Candace Savonen
 #'
@@ -354,9 +354,6 @@ make_screenshots <- function(path = ".",
                              repo,
                              output_dir = file.path(path, "resources", "chapt_screen_images"),
                              base_url = NULL) {
-
-  op <- options("CHROMOTE_CHROME" = pagedown::find_chrome()[1])
-  on.exit(options(op))
 
   # Find .github root directory
   root_dir <- course_path(path = path)
@@ -423,8 +420,8 @@ copy_quizzes <- function(path = ".", quiz_dir = "quizzes", output_dir = "manuscr
     }
     quizzes <- list.files(path = file.path(quiz_dir), full.names = TRUE, pattern = "\\.md$")
     if (length(quizzes) > 0) {
-      fs::file_copy(quizzes, file.path(output_dir, basename(quizzes)),
-        overwrite = TRUE
+      dir.create(file.path(output_dir, basename(quizzes)), showWarnings = FALSE)
+      file.copy(quizzes, file.path(output_dir, basename(quizzes)), recursive = TRUE
       )
     }
   }

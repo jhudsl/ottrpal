@@ -12,8 +12,11 @@ set_token <- function(token, app_name, in_test = FALSE) {
 
   if (in_test) {
     # Store it
-    if (app_name == "github") withr::local_options(github = token)
-    if (app_name == "google") withr::local_options(google = token)
+    # IDEALLY we'd be using withr::local_options but we have too many dependencies
+    # and everywhere we run this the options are erased anyway because its on
+    # github actions instances
+    if (app_name == "github") options(github = token)
+    if (app_name == "google") options(google = token)
   } else {
     # Store it
     if (app_name == "github") options(github = token)
@@ -29,7 +32,6 @@ cache_token <- function(token, app_name) {
 remove_token <- function(app_name) {
   .Env$ottr_tokens[[app_name]] <- NULL
   googledrive::drive_deauth()
-  googlesheets4::gs4_deauth()
   if (app_name == "github") options(github = NULL)
   if (app_name == "google") options(google = NULL)
 }
@@ -67,7 +69,6 @@ get_token <- function(app_name, try = FALSE, silent = FALSE) {
     if (!silent) message("Using user-supplied cached tokens stored using authorize(\"", app_name, "\")")
     if (app_name == "google") {
       googledrive::drive_auth(token = .Env$ottr_tokens[[app_name]])
-      googlesheets4::gs4_auth(token = .Env$ottr_tokens[[app_name]])
     }
   }
 

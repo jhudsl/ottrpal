@@ -43,7 +43,7 @@ get_github <- function(token = NULL, url) {
 #' @return a data frame with the repository with the following columns:
 #' data_level, data_path, chapt_name, url, repository name
 #'
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @import dplyr
 #'
 #' @export

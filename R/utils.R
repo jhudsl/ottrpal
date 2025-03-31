@@ -15,7 +15,7 @@ set_knitr_image_path <- function() {
 utils::globalVariables(c(
   "num", "quiz_dir", "type_url", "file_name", "trimmed", "quiz",
   "quiz_path", "type", "q_num", "verbose", "chapt_title", "data_path", "image_dir",
-  "convert_footnotes", "rmd_files", "root_dir", "found", "urls_status"
+  "convert_footnotes", "rmd_files", "root_dir", "found", "urls_status", "result_list"
 ))
 
 #' Find root of OTTR course provided
@@ -82,15 +82,13 @@ ottr_check <- function(check_type,
 
 #' Pipe operator
 #'
-#' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
-#'
 #' @name %>%
 #' @rdname pipe
 #' @keywords internal
 #' @export
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @usage lhs \%>\% rhs
-#' @param lhs A value or the magrittr placeholder.
-#' @param rhs A function call using the magrittr semantics.
+#' @param lhs A value or the dplyr placeholder.
+#' @param rhs A function call using the dplyr semantics.
 #' @return The result of calling `rhs(lhs)`.
 NULL
