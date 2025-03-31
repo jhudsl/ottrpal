@@ -51,7 +51,7 @@ If you have two courses that the content and topics overlap,
 you may want to share written material between the two.
 But, if you copy and paste to share material this would create a maintenance
 problem because if you update one you will need to remember to copy over the
-other! 😱
+other! 
 To borrow a chapter from another course, create an .Rmd as you normally would,
  with an [`H1` title](https://www.markdownguide.org/basic-syntax/) if you wish.
 Then in a code chunk, use cow::borrow_chapter() to have the content from an

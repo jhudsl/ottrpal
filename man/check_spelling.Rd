@@ -32,6 +32,7 @@ A file will be saved that lists the broken URLs will be saved to the specified o
 Check spelling of all md, rmd, and qmd files
 }
 \examples{
+\dontrun {
 
 rmd_dir <- setup_ottr_template(dir = ".", type = "rmd", render = FALSE)
 
@@ -42,5 +43,5 @@ check_spelling(rmd_dir)
 qmd_dir <- setup_ottr_template(dir = ".", type = "quarto", render = FALSE)
 
 check_spelling(qmd_dir)
-
+}
 }

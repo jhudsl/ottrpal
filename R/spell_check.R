@@ -18,7 +18,7 @@
 #' @importFrom tidyr unnest separate
 #' @importFrom readr write_tsv
 #'
-#' @examples
+#' @examples \dontrun {
 #'
 #' rmd_dir <- setup_ottr_template(dir = ".", type = "rmd", render = FALSE)
 #'
@@ -29,7 +29,7 @@
 #' qmd_dir <- setup_ottr_template(dir = ".", type = "quarto", render = FALSE)
 #'
 #' check_spelling(qmd_dir)
-#'
+#' }
 check_spelling <- function(path = ".",
                            output_dir = "check_reports",
                            resources_dir = "resources",
