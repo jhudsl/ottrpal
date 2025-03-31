@@ -2,7 +2,7 @@
 output_file <- file.path("check_reports", "url_checks.tsv")
 
 test_that("Test URL checks for OTTR main", {
-
+   testthat::skip_on_cran()
    rmd_dir <- setup_ottr_template(type = "rmd", render = FALSE)
 
    # Add in a URL error
@@ -22,6 +22,7 @@ test_that("Test URL checks for OTTR main", {
 })
 
 test_that("Test URL checks for OTTR Quarto main", {
+   testthat::skip_on_cran()
    qmd_dir <- setup_ottr_template(type = "quarto", render = FALSE)
 
    # Add in a URL error
@@ -40,6 +41,8 @@ test_that("Test URL checks for OTTR Quarto main", {
 })
 
 test_that("Test URL checks for OTTR web", {
+   testthat::skip_on_cran()
+
    rmd_web <- setup_ottr_template(type = "rmd_website", render = FALSE)
 
    # Add in a URL error
@@ -58,6 +61,7 @@ test_that("Test URL checks for OTTR web", {
 })
 
 test_that("Test URL checks for OTTR Quarto web", {
+   testthat::skip_on_cran()
    ## Test URL
    qmd_web <- setup_ottr_template(type = "quarto_website", render = FALSE)
 

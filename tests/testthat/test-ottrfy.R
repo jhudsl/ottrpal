@@ -1,5 +1,5 @@
 test_that("Test OTTRfy - Rmd", {
-
+  testthat::skip_on_cran()
   # Make a repository with Rmd files
   dir.create("rmd")
   writeLines("# A title", file.path("rmd", "01-intro.Rmd"))
@@ -22,7 +22,7 @@ rmd_files: ['index.Rmd', '01-intro.Rmd']",
 })
 
 test_that("Test OTTRfy - Quarto", {
-
+  testthat::skip_on_cran()
   # Make a repository with Rmd files
   dir.create("quarto")
   writeLines("# A title", file.path("quarto", "intro.qmd"))
@@ -53,7 +53,7 @@ book:
 })
 
 test_that("Test OTTRfy - Rmd web", {
-
+  testthat::skip_on_cran()
   # Make a repository with Rmd files
   dir.create("rmd_web")
   writeLines("# A page", file.path("rmd_web", "page1.Rmd"))
@@ -82,7 +82,7 @@ navbar:
 })
 
 test_that("Test OTTRfy - Quarto Web", {
-
+  testthat::skip_on_cran()
   # Make a repository with Rmd files
   dir.create("quarto_web")
   writeLines("# A webpage", file.path("quarto_web", "index.qmd"))

@@ -1,6 +1,7 @@
 if (Sys.getenv("GH_PAT") != "") {
 
 test_that("Get base URL - Quarto", {
+  testthat::skip_on_cran()
   # Authorize GitHub
   auth_from_secret("github",
                    token = Sys.getenv("GH_PAT"),
@@ -15,6 +16,7 @@ test_that("Get base URL - Quarto", {
 })
 
 test_that("Get chapters - Quarto", {
+  testthat::skip_on_cran()
   ### Set up the OTTR repo
   dir <- setup_ottr_template(dir = ".", type = "quarto")
 
@@ -25,6 +27,7 @@ test_that("Get chapters - Quarto", {
 })
 
 test_that("Make screenshots - Quarto", {
+  testthat::skip_on_cran()
   # We want to make screenshots from the course
   chapt_df_file <- make_screenshots(git_pat = Sys.getenv("secrets.GH_PAT"),
                                     repo = "fhdsl/OTTR_Quarto",
@@ -44,6 +47,7 @@ test_that("Make screenshots - Quarto", {
 })
 
 test_that("Set Up Leanpub - fhdsl/OTTR_Quarto", {
+  testthat::skip_on_cran()
   dir <- setup_ottr_template(dir = ".", type = "quarto")
 
   # We're going to delete this so we can test making it again

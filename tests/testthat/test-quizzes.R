@@ -1,4 +1,5 @@
 test_that("Check good quiz", {
+  testthat::skip_on_cran()
   # Using good quiz md example
 
   quiz_path <- good_quiz_path()
@@ -11,6 +12,7 @@ test_that("Check good quiz", {
 })
 
 test_that("Check bad quiz", {
+  testthat::skip_on_cran()
   # Using bad quiz md example
   bad_quiz <- readLines(bad_quiz_path())
   bad_quiz_specs <- parse_quiz(bad_quiz)
@@ -23,6 +25,7 @@ test_that("Check bad quiz", {
 })
 
 test_that("Make a quiz report", {
+  testthat::skip_on_cran()
   ## Make a temporary quiz directory
   quiz_dir <- dirname(good_quiz_path())
 
@@ -36,6 +39,7 @@ test_that("Make a quiz report", {
 
 
 test_that("Test real quiz in directory", {
+  testthat::skip_on_cran()
   rmd_dir <- setup_ottr_template(dir = ".", type = "rmd", render = FALSE)
 
   # it shouldn't have any errors with the template
